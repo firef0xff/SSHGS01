@@ -1,6 +1,7 @@
 #include "test_case.h"
 #include "test.h"
 
+
 namespace test
 {
 TestCase::TestCase(QString const& name, const QString &descr):
@@ -30,11 +31,16 @@ QString const& TestCase::Descr() const
     return mDescr;
 }
 
-void TestCase::Subscribe( Test* t )
+examinee::DeviceCollection& TestCase::Devices()
+{
+    return mCollection;
+}
+
+void TestCase::Register( Test* t )
 {
     mData.insert( t->Number(), t );
 }
-void TestCase::Unsubscribe( Test* t )
+void TestCase::UnRegister( Test* t )
 {
     auto it = mData.find( t->Number() );
     if ( it != mData.end() )

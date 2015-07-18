@@ -1,6 +1,7 @@
 #pragma once
 #include "test_case.h"
 #include "test.h"
+#include "../devices/device.h"
 
 namespace test
 {

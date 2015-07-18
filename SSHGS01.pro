@@ -15,18 +15,23 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    defines/examinee.cpp \
-    title_info.cpp \
     test_case/test_case.cpp \
     test_case/test.cpp \
-    test_case/tests.cpp
+    test_case/tests.cpp \
+    hydro_title_info.cpp \
+    devices/device_collection.cpp \
+    devices/device.cpp \
+    servo_title_info.cpp
 
 HEADERS  += mainwindow.h \
-    defines/examinee.h \
-    title_info.h \
     test_case/test_case.h \
     test_case/test.h \
-    test_case/tests.h
+    test_case/tests.h \
+    hydro_title_info.h \
+    devices/device_collection.h \
+    devices/device.h \
+    servo_title_info.h
 
 FORMS    += mainwindow.ui \
-    title_info.ui
+    hydro_title_info.ui \
+    servo_title_info.ui

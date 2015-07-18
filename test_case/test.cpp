@@ -8,13 +8,13 @@ Test::Test(TestCase *test_case, QString const& name, uint8_t number )
     : mName(name), mNumber(number), mCase(test_case)
 {
     if (mCase)
-        mCase -> Subscribe( this );
+        mCase -> Register( this );
 }
 
 Test::~Test()
 {
     if (mCase)
-        mCase -> Unsubscribe( this );
+        mCase -> UnRegister( this );
 }
 
 void Test::Free()

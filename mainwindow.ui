@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Выбор действия</string>
   </property>
   <property name="documentMode">
    <bool>false</bool>
@@ -32,19 +32,19 @@
      </widget>
     </item>
     <item row="1" column="0">
+     <widget class="QCommandLinkButton" name="TestCase2">
+      <property name="text">
+       <string>CommandLinkButton</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
      <widget class="QCommandLinkButton" name="ManualControl">
       <property name="text">
        <string>CommandLinkButton</string>
       </property>
       <property name="description">
        <string/>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="2">
-     <widget class="QCommandLinkButton" name="TestCase2">
-      <property name="text">
-       <string>CommandLinkButton</string>
       </property>
      </widget>
     </item>

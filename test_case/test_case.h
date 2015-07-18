@@ -1,5 +1,6 @@
 #pragma once
 #include <QMap>
+#include "../devices/device_collection.h"
 
 namespace test
 {
@@ -15,7 +16,7 @@ public:
     DataType const& Tests() const;
     QString const& Name() const;
     QString const& Descr() const;
-
+    examinee::DeviceCollection& Devices();
 private:
 
     TestCase( TestCase const& );
@@ -23,12 +24,14 @@ private:
 
     static TestCase& Instance();
 
-    void Subscribe( Test* );
-    void Unsubscribe( Test* );
+    void Register( Test* );
+    void UnRegister( Test* );
 
     DataType mData;
     QString mName;
     QString mDescr;
+
+    examinee::DeviceCollection mCollection;
 };
 
 }//namespace test

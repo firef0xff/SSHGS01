@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-#include "title_info.h"
+#include "hydro_title_info.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])

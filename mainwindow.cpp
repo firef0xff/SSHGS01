@@ -1,7 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "test_case/tests.h"
-#include "title_info.h"
+#include "hydro_title_info.h"
+#include "servo_title_info.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -26,21 +27,20 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_TestCase1_clicked()
 {
-    mChildWindow.reset( new TitleInfo() );
     hide();
+    mChildWindow.reset( new HydroTitleInfo() );
+    QObject::connect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(show()) );
     mChildWindow->show();
 }
 
 void MainWindow::on_TestCase2_clicked()
 {
-    mChildWindow.reset( new TitleInfo() );
     hide();
+    mChildWindow.reset( new ServoTitleInfo() );
+    QObject::connect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(show()) );
     mChildWindow->show();
 }
 
 void MainWindow::on_ManualControl_clicked()
 {
-    mChildWindow.reset( new TitleInfo() );
-    hide();
-    mChildWindow->show();
 }
