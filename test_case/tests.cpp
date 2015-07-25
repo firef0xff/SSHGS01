@@ -1,5 +1,6 @@
 #include "tests.h"
 #include "../devices/device.h"
+#include <thread>
 
 namespace fake
 {
@@ -12,8 +13,19 @@ public:
         Test(tc, name, number)
     {}
 
-    bool Run()
+    bool Run( LogFunction to_log, bool const& stop )
     {
+        to_log( "SucsessTest started" );
+        for( int i=0; i<10; ++i)
+        {
+            to_log( "tic" );
+            std::this_thread::sleep_for( std::chrono::seconds(1) );
+            if (stop)
+            {
+                to_log( "SucsessTest interrupted" );
+                return false;
+            }
+        }
         return true;
     }
 };
@@ -25,8 +37,19 @@ public:
         Test(tc, name, number)
     {}
 
-    bool Run()
+    bool Run( LogFunction to_log, bool const& stop )
     {
+        to_log( "UnSucsessTest started" );
+        for( int i=0; i<10; ++i)
+        {
+            to_log( "tic" );
+            std::this_thread::sleep_for( std::chrono::seconds(1) );
+            if (stop)
+            {
+                to_log( "UnSucsessTest interrupted" );
+                return false;
+            }
+        }
         return false;
     }
 };
@@ -78,7 +101,7 @@ static UnSucsessTest t3( &HydroTests, "Проверка внутренней г�
 static SucsessTest t4( &HydroTests, "Проверка перепада давления и зависимость перепада давления от расхода", 4);
 static SucsessTest t5( &HydroTests, "Проверка максимального расхода", 5);
 static UnSucsessTest t6( &HydroTests, "Проверка переключения запорно-регулирующего элемента пониженным напряжением", 6);
-static SucsessTest t7( &HydroTests, "Проверка диапазона давления управления (для направляющей гидроаппаратуры с электрогидравлическим управлением)", 7);
+static SucsessTest t7( &HydroTests, "Проверка диапазона давления управления\n(для направляющей гидроаппаратуры с электрогидравлическим управлением)", 7);
 static SucsessTest t8( &HydroTests, "Время срабатывания", 8 );
 
 }//namespace fake_case

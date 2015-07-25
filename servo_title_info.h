@@ -2,6 +2,7 @@
 #define SERVO_TITLE_INFO_H
 
 #include <QWidget>
+#include <memory>
 
 namespace Ui {
 class ServoTitleInfo;
@@ -18,6 +19,7 @@ public:
 private:
     Ui::ServoTitleInfo *ui;
     void closeEvent(QCloseEvent *);
+    std::unique_ptr< QWidget > mChildWindow;
 
 signals:
     void closed();

@@ -22,11 +22,11 @@ void Test::Free()
     mCase = nullptr;
 }
 
-QString const& Test::Name()
+QString const& Test::Name() const
 {
     return mName;
 }
-uint8_t const& Test::Number()
+uint8_t const& Test::Number() const
 {
     return mNumber;
 }

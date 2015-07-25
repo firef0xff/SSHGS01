@@ -23,30 +23,27 @@
       <enum>QLayout::SetDefaultConstraint</enum>
      </property>
      <item row="0" column="0">
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="l_ser_no">
        <property name="text">
         <string>Серийный номер</string>
        </property>
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QLineEdit" name="lineEdit"/>
+      <widget class="QLineEdit" name="SerNo"/>
      </item>
      <item row="1" column="0">
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel" name="l_sygnal_type">
        <property name="text">
         <string>Тип управления (упр. сигнал)</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="lineEdit_2"/>
-     </item>
      <item row="2" column="1">
-      <widget class="QLineEdit" name="lineEdit_3"/>
+      <widget class="QLineEdit" name="SygnalSetA"/>
      </item>
      <item row="2" column="0">
-      <widget class="QLabel" name="label_3">
+      <widget class="QLabel" name="l_SygnalSetA">
        <property name="text">
         <string>Сигнал, соответствующий
 полному переключению
@@ -55,7 +52,7 @@
       </widget>
      </item>
      <item row="3" column="0">
-      <widget class="QLabel" name="label_4">
+      <widget class="QLabel" name="l_SygnalSetB">
        <property name="text">
         <string>Сигнал, соответствующий
 полному переключению 
@@ -64,31 +61,25 @@
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="QLineEdit" name="lineEdit_4"/>
+      <widget class="QLineEdit" name="SygnalSetB"/>
      </item>
      <item row="4" column="0">
-      <widget class="QLabel" name="label_5">
+      <widget class="QLabel" name="l_PessureTest">
        <property name="text">
         <string>Давления при испытании
 аппарата пробным давлением</string>
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
-      <widget class="QLineEdit" name="lineEdit_5"/>
-     </item>
      <item row="5" column="0">
-      <widget class="QLabel" name="label_6">
+      <widget class="QLabel" name="l_Pessure">
        <property name="text">
         <string>Номинальное давление</string>
        </property>
       </widget>
      </item>
-     <item row="5" column="1">
-      <widget class="QLineEdit" name="lineEdit_6"/>
-     </item>
      <item row="6" column="0">
-      <widget class="QLabel" name="label_7">
+      <widget class="QLabel" name="l_MaxExpenditureA">
        <property name="text">
         <string>Максимальный расход в канале А,
 при следующем опорном сигнале, 
@@ -97,7 +88,7 @@ X_max_A</string>
       </widget>
      </item>
      <item row="7" column="0">
-      <widget class="QLabel" name="label_8">
+      <widget class="QLabel" name="l_NullExpenditureA">
        <property name="text">
         <string>Нулевой расход в канале А,
 при опорном сигнале, X_0_A:</string>
@@ -105,7 +96,7 @@ X_max_A</string>
       </widget>
      </item>
      <item row="8" column="0">
-      <widget class="QLabel" name="label_9">
+      <widget class="QLabel" name="l_MaxExpenditureB">
        <property name="text">
         <string>Максимальный расход в канале В,
 при следующем опорном сигнале,
@@ -114,7 +105,7 @@ X_max_B</string>
       </widget>
      </item>
      <item row="9" column="0">
-      <widget class="QLabel" name="label_10">
+      <widget class="QLabel" name="l_NullExpenditureB">
        <property name="text">
         <string>Нулевой расход в канале В,
 при опорном сигнале, X_0_B:</string>
@@ -122,7 +113,7 @@ X_max_B</string>
       </widget>
      </item>
      <item row="10" column="0">
-      <widget class="QLabel" name="label_11">
+      <widget class="QLabel" name="l_ExpenditureResolution">
        <property name="text">
         <string>Расход при испытании
 определения разрешающей
@@ -131,7 +122,7 @@ X_max_B</string>
       </widget>
      </item>
      <item row="11" column="0">
-      <widget class="QLabel" name="label_12">
+      <widget class="QLabel" name="l_SygnalResolution">
        <property name="text">
         <string>Опорный сигнал для
 определения разрешающей
@@ -140,22 +131,86 @@ X_max_B</string>
       </widget>
      </item>
      <item row="6" column="1">
-      <widget class="QLineEdit" name="lineEdit_7"/>
+      <widget class="QLineEdit" name="Expenditure"/>
      </item>
      <item row="7" column="1">
-      <widget class="QLineEdit" name="lineEdit_8"/>
+      <widget class="QLineEdit" name="NullExpenditureA"/>
      </item>
      <item row="8" column="1">
-      <widget class="QLineEdit" name="lineEdit_9"/>
+      <widget class="QLineEdit" name="MaxExpenditureB"/>
      </item>
      <item row="9" column="1">
-      <widget class="QLineEdit" name="lineEdit_10"/>
-     </item>
-     <item row="10" column="1">
-      <widget class="QLineEdit" name="lineEdit_11"/>
+      <widget class="QLineEdit" name="NullExpenditureB"/>
      </item>
      <item row="11" column="1">
-      <widget class="QLineEdit" name="lineEdit_12"/>
+      <widget class="QLineEdit" name="SygnalResolution"/>
+     </item>
+     <item row="1" column="1">
+      <widget class="QComboBox" name="SignalType">
+       <property name="editable">
+        <bool>true</bool>
+       </property>
+       <property name="currentIndex">
+        <number>-1</number>
+       </property>
+       <item>
+        <property name="text">
+         <string>4..20 мА</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>0..20 мА</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>+-10 В</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QSpinBox" name="PessureTest">
+       <property name="suffix">
+        <string>, Бар</string>
+       </property>
+       <property name="minimum">
+        <number>315</number>
+       </property>
+       <property name="maximum">
+        <number>400</number>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QSpinBox" name="Pessure">
+       <property name="suffix">
+        <string>, Бар</string>
+       </property>
+       <property name="minimum">
+        <number>100</number>
+       </property>
+       <property name="maximum">
+        <number>350</number>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="1">
+      <widget class="QSpinBox" name="ExpenditureResolution">
+       <property name="suffix">
+        <string> л/мин</string>
+       </property>
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>1000</number>
+       </property>
+       <property name="value">
+        <number>20</number>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

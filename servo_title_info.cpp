@@ -1,5 +1,7 @@
 #include "servo_title_info.h"
 #include "ui_servo_title_info.h"
+#include "test_case/tests.h"
+#include "test_form.h"
 
 ServoTitleInfo::ServoTitleInfo(QWidget *parent) :
     QWidget(parent),
@@ -16,7 +18,11 @@ ServoTitleInfo::~ServoTitleInfo()
 void ServoTitleInfo::on_buttonBox_accepted()
 {
     hide();
-    close();
+    if ( mChildWindow.get() )
+        QObject::disconnect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
+    mChildWindow.reset( new TestForm( test::ServoTests ) );
+    QObject::connect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
+    mChildWindow->show();
 }
 
 void ServoTitleInfo::on_buttonBox_rejected()

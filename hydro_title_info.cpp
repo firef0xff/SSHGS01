@@ -1,6 +1,8 @@
 #include "hydro_title_info.h"
 #include "ui_hydro_title_info.h"
 #include "test_case/tests.h"
+#include "test_form.h"
+
 
 
 HydroTitleInfo::HydroTitleInfo(QWidget *parent) :
@@ -25,7 +27,11 @@ HydroTitleInfo::~HydroTitleInfo()
 void HydroTitleInfo::on_buttonBox_accepted()
 {
     hide();
-    close();
+    if ( mChildWindow.get() )
+        QObject::disconnect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
+    mChildWindow.reset( new TestForm( test::HydroTests ) );
+    QObject::connect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
+    mChildWindow->show();
 }
 
 void HydroTitleInfo::on_buttonBox_rejected()

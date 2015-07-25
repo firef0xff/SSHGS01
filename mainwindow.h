@@ -20,6 +20,7 @@ private:
     std::unique_ptr< QWidget > mChildWindow;
 private slots:
 
+
     void on_TestCase1_clicked();
     void on_TestCase2_clicked();
     void on_ManualControl_clicked();

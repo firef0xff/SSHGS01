@@ -28,6 +28,8 @@ MainWindow::~MainWindow()
 void MainWindow::on_TestCase1_clicked()
 {
     hide();
+    if ( mChildWindow.get() )
+        QObject::disconnect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
     mChildWindow.reset( new HydroTitleInfo() );
     QObject::connect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(show()) );
     mChildWindow->show();
