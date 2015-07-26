@@ -43,30 +43,24 @@ private slots:
     void on_Start_clicked();
     void on_Abort_clicked();
     void on_Cancel_clicked();
+    void on_progress();
 };
 
 class Worker : public QThread
 {
     Q_OBJECT
 public:
-    typedef std::function< void(bool const&) > Runner;
-    Worker( Runner funk ):
-        mStopSignal(false),
-        mFunction(funk)
-    {}
-    void run()
-    {
-        mStopSignal = false;
-        mFunction( mStopSignal );
-    }
-    void stop()
-    {
-        mStopSignal = true;
-        wait();
-    }
+    Worker( TestRunner::TestCase const& test_case );
+    void run();
+    void stop();
 private:
     mutable bool mStopSignal;
-    Runner mFunction;
+    TestRunner::TestCase mTestCase;
+    void LogIt( QString const& str );
+signals:
+    to_log( QString const& );
+    progress();
+
 };
 
 #endif // TEST_RUNNER_H

@@ -39,28 +39,15 @@ void TestRunner::closeEvent(QCloseEvent *e)
 void TestRunner::on_Start_clicked()
 {
     ui->progressBar->setRange( 0, mTestCase.size() - 1 );
+    ui->progressBar->setValue(0);
     ui->progressBar->reset();
     ui->LogBox->clear();
     if ( mWorker.get() )
         StopWorker();
 
-    mWorker.reset( new Worker(
-    [&](bool const& stop_signal )->void
-    {
-        foreach (test::Test* to_run, mTestCase)
-        {
-            if (stop_signal)
-                break;
-            ui->LogBox->append( QStringLiteral("Запущен тест: ") + to_run->Name() );
-            bool result = to_run->Run( std::bind( &QTextBrowser::append, ui->LogBox, std::placeholders::_1 ), stop_signal );
-            ui->progressBar->setValue( ui->progressBar->value() + 1 );
-            if (result)
-                ui->LogBox->append( QStringLiteral("Тест пройден") );
-            else
-                ui->LogBox->append( QStringLiteral("Тест не пройден") );
-            ui->LogBox->append( QString() );
-        }
-    }));
+    mWorker.reset( new Worker( mTestCase ));
+    QObject::connect( mWorker.get(), &Worker::to_log, ui->LogBox, &QTextBrowser::append );
+    QObject::connect( mWorker.get(), &Worker::progress, this, &TestRunner::on_progress );
     mWorker->start();
 }
 
@@ -69,6 +56,8 @@ void TestRunner::StopWorker()
     if ( mWorker.get() )
     {
         mWorker->stop();
+        QObject::disconnect( mWorker.get(), &Worker::to_log, ui->LogBox, &QTextBrowser::append );
+        QObject::disconnect( mWorker.get(), &Worker::progress, this, &TestRunner::on_progress );
         mWorker.reset();
     }
 }
@@ -82,3 +71,43 @@ void TestRunner::on_Cancel_clicked()
 {
     close();
 }
+
+void TestRunner::on_progress()
+{
+    ui->progressBar->setValue( ui->progressBar->value() + 1 );
+}
+
+
+
+Worker::Worker( TestRunner::TestCase const& test_case ):
+    mStopSignal(false),
+    mTestCase(test_case)
+{}
+void Worker::run()
+{
+    mStopSignal = false;
+    foreach (test::Test* to_run, mTestCase)
+    {
+        if (mStopSignal)
+            break;
+        LogIt( QStringLiteral("Запущен тест: ") + to_run->Name() );
+        bool result = to_run->Run( std::bind( &Worker::LogIt, this, std::placeholders::_1 ), mStopSignal );
+        emit progress();
+        if (result)
+            LogIt( QStringLiteral("Тест пройден") );
+        else
+            LogIt( QStringLiteral("Тест не пройден") );
+        LogIt( QString() );
+    }
+}
+void Worker::stop()
+{
+    mStopSignal = true;
+    wait();
+}
+
+void Worker::LogIt( QString const& str )
+{
+    emit to_log( str );
+}
+

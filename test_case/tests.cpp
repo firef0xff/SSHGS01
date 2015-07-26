@@ -26,6 +26,7 @@ public:
                 return false;
             }
         }
+        to_log( "BOOOOMMMMM!!!!!!" );
         return true;
     }
 };
@@ -50,6 +51,7 @@ public:
                 return false;
             }
         }
+        to_log( "Phshshshshs!" );
         return false;
     }
 };
