@@ -90,13 +90,13 @@ void Worker::run()
     {
         if (mStopSignal)
             break;
-        LogIt( QStringLiteral("Запущен тест: ") + to_run->Name() );
+        LogIt( "Запущен тест: " + to_run->Name() );
         bool result = to_run->Run( std::bind( &Worker::LogIt, this, std::placeholders::_1 ), mStopSignal );
         emit progress();
         if (result)
-            LogIt( QStringLiteral("Тест пройден") );
+            LogIt( "Тест пройден" );
         else
-            LogIt( QStringLiteral("Тест не пройден") );
+            LogIt( "Тест не пройден" );
         LogIt( QString() );
     }
 }

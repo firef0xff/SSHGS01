@@ -38,7 +38,7 @@ private:
     void StopWorker();
 
 signals:
-    closed();
+    void closed();
 private slots:
     void on_Start_clicked();
     void on_Abort_clicked();
@@ -58,8 +58,8 @@ private:
     TestRunner::TestCase mTestCase;
     void LogIt( QString const& str );
 signals:
-    to_log( QString const& );
-    progress();
+    void to_log( QString const& );
+    void progress();
 
 };
 

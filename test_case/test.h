@@ -2,6 +2,7 @@
 #include <QString>
 #include <QVariant>
 #include <functional>
+#include <stdint.h>
 
 namespace test
 {
@@ -13,10 +14,15 @@ public:
     typedef std::function< void( QString const& ) > LogFunction;
     Test( TestCase* test_case, QString const& name, uint8_t number );
     virtual ~Test();
-    virtual bool Run( LogFunction, bool const& ) = 0;
+    bool Run( LogFunction, bool const& );
+    virtual bool Run() = 0;
 
     QString const& Name() const;
     uint8_t const& Number() const;
+
+protected:
+    bool IsStopped();
+    LogFunction Log;
 
 private:
     friend class TestCase;
@@ -28,6 +34,8 @@ private:
     QString mName;
     uint8_t mNumber;
     TestCase *mCase;
+
+    bool* mStopMarker;
 };
 
 }//namespace test

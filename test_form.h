@@ -39,7 +39,7 @@ private:
     void closeEvent(QCloseEvent *e);
 
 signals:
-    closed();
+    void closed();
 private slots:
     void on_buttonBox_rejected();
     void on_buttonBox_accepted();

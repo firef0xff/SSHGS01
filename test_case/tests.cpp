@@ -1,6 +1,7 @@
 #include "tests.h"
 #include "../devices/device.h"
 #include <thread>
+#include "implementation/hydro/functional_test.h"
 
 namespace fake
 {
@@ -13,20 +14,20 @@ public:
         Test(tc, name, number)
     {}
 
-    bool Run( LogFunction to_log, bool const& stop )
+    bool Run()
     {
-        to_log( "SucsessTest started" );
+        Log( "SucsessTest started" );
         for( int i=0; i<10; ++i)
         {
-            to_log( "tic" );
+            Log( "tic" );
             std::this_thread::sleep_for( std::chrono::seconds(1) );
-            if (stop)
+            if (IsStopped())
             {
                 to_log( "SucsessTest interrupted" );
                 return false;
             }
         }
-        to_log( "BOOOOMMMMM!!!!!!" );
+        Log( "BOOOOMMMMM!!!!!!" );
         return true;
     }
 };
@@ -38,20 +39,20 @@ public:
         Test(tc, name, number)
     {}
 
-    bool Run( LogFunction to_log, bool const& stop )
+    bool Run()
     {
-        to_log( "UnSucsessTest started" );
+        Log( "UnSucsessTest started" );
         for( int i=0; i<10; ++i)
         {
-            to_log( "tic" );
+            Log( "tic" );
             std::this_thread::sleep_for( std::chrono::seconds(1) );
-            if (stop)
+            if ( IsStopped() )
             {
-                to_log( "UnSucsessTest interrupted" );
+                Log( "UnSucsessTest interrupted" );
                 return false;
             }
         }
-        to_log( "Phshshshshs!" );
+        Log( "Phshshshshs!" );
         return false;
     }
 };
@@ -94,10 +95,13 @@ static Device d23( &HydroTests.Devices(), "4WE10",    "REXROTH" );
 static Device d24( &HydroTests.Devices(), "4WEH10…32","REXROTH" );
 }//namespace devices
 
+namespace test_case
+{
+static hydro::FunctionalTest t1( &HydroTests, 1 );
+}
 namespace fake_case
 {
 using namespace fake;
-static SucsessTest t1( &HydroTests, "Испытание функционирования", 1 );
 static SucsessTest t2( &HydroTests, "Проверка наружной герметичности", 2 );
 static UnSucsessTest t3( &HydroTests, "Проверка внутренней герметичности", 3);
 static SucsessTest t4( &HydroTests, "Проверка перепада давления и зависимость перепада давления от расхода", 4);
