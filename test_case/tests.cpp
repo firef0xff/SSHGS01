@@ -23,7 +23,7 @@ public:
             std::this_thread::sleep_for( std::chrono::seconds(1) );
             if (IsStopped())
             {
-                to_log( "SucsessTest interrupted" );
+                Log( "SucsessTest interrupted" );
                 return false;
             }
         }
@@ -97,7 +97,7 @@ static Device d24( &HydroTests.Devices(), "4WEH10…32","REXROTH" );
 
 namespace test_case
 {
-static hydro::FunctionalTest t1( &HydroTests, 1 );
+static ::hydro::FunctionalTest t1( &HydroTests, 1 );
 }
 namespace fake_case
 {

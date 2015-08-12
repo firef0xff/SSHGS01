@@ -31,7 +31,7 @@ uint8_t const& Test::Number() const
     return mNumber;
 }
 
-bool Test::Run( LogFunction to_log, bool const& stop )
+bool Test::Run( LogFunction to_log, bool& stop )
 {
     Log = to_log;
     mStopMarker = &stop;

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../../test.h"
+#include "../../test_case.h"
+
 
 namespace shema
 {
@@ -41,7 +43,7 @@ namespace hydro
 class FunctionalTest :public test::Test
 {
 public:
-    FunctionalTest( TestCase* test_case, QString const& name, uint8_t number );
+    FunctionalTest( test::TestCase* test_case, uint8_t number );
     bool Run();
 
 private:
@@ -55,5 +57,3 @@ private:
 };
 
 }
-
-#endif // FUNCTIONALTEST_H

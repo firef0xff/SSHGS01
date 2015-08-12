@@ -14,7 +14,7 @@ public:
     typedef std::function< void( QString const& ) > LogFunction;
     Test( TestCase* test_case, QString const& name, uint8_t number );
     virtual ~Test();
-    bool Run( LogFunction, bool const& );
+    bool Run( LogFunction, bool& );
     virtual bool Run() = 0;
 
     QString const& Name() const;

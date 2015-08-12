@@ -3,7 +3,7 @@
 namespace hydro
 {
 
-FunctionalTest::FunctionalTest( TestCase* test_case, uint8_t number ):
+FunctionalTest::FunctionalTest( test::TestCase* test_case, uint8_t number ):
     test::Test( test_case, "Испытание функционирования", number )
 {}
 
