@@ -9,7 +9,7 @@ FunctionalTest::FunctionalTest( test::TestCase* test_case, uint8_t number ):
 
 bool FunctionalTest::Run()
 {
-    bool k1,k2 = true;
+   /* bool k1,k2 = true;
     if ( k1 || k2 )
     {
         //1 привести к виду
@@ -76,7 +76,8 @@ bool FunctionalTest::Run()
             //12 ожидание динамики 3 сек
             WaitPressure( 3 );
         }
-    }
+    }*/
+    return false;
 }
 
 bool SetSchema( shema::State const& state );

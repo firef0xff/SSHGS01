@@ -40,6 +40,13 @@ bool Test::Run( LogFunction to_log, bool& stop )
 
     Log = LogFunction();
     mStopMarker = nullptr;
+
+    return res;
+}
+
+bool Test::IsStopped()
+{
+    return  mStopMarker && *mStopMarker;
 }
 
 }//namespace test
