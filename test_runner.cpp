@@ -37,17 +37,20 @@ void TestRunner::closeEvent(QCloseEvent *e)
 
 
 void TestRunner::on_Start_clicked()
-{
+{    
+    if ( mWorker.get() )
+        StopWorker();
+
     ui->progressBar->setRange( 0, mTestCase.size() - 1 );
     ui->progressBar->setValue(0);
     ui->progressBar->reset();
     ui->LogBox->clear();
-    if ( mWorker.get() )
-        StopWorker();
 
     mWorker.reset( new Worker( mTestCase ));
     QObject::connect( mWorker.get(), &Worker::to_log, ui->LogBox, &QTextBrowser::append );
     QObject::connect( mWorker.get(), &Worker::progress, this, &TestRunner::on_progress );
+    QObject::connect( mWorker.get(), &Worker::started, this, &TestRunner::on_test_start );
+    QObject::connect( mWorker.get(), &Worker::finished, this, &TestRunner::on_test_stop );
     mWorker->start();
 }
 
@@ -58,8 +61,11 @@ void TestRunner::StopWorker()
         mWorker->stop();
         QObject::disconnect( mWorker.get(), &Worker::to_log, ui->LogBox, &QTextBrowser::append );
         QObject::disconnect( mWorker.get(), &Worker::progress, this, &TestRunner::on_progress );
+        QObject::disconnect( mWorker.get(), &Worker::started, this, &TestRunner::on_test_start );
+        QObject::disconnect( mWorker.get(), &Worker::finished, this, &TestRunner::on_test_stop );
         mWorker.reset();
     }
+    ui->Start->setEnabled( true );
 }
 
 void TestRunner::on_Abort_clicked()
@@ -77,7 +83,14 @@ void TestRunner::on_progress()
     ui->progressBar->setValue( ui->progressBar->value() + 1 );
 }
 
-
+void TestRunner::on_test_start()
+{
+    ui->Start->setEnabled( false );
+}
+void TestRunner::on_test_stop()
+{
+    ui->Start->setEnabled( true );
+}
 
 Worker::Worker( TestRunner::TestCase const& test_case ):
     mStopSignal(false),

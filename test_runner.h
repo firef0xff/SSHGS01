@@ -44,6 +44,8 @@ private slots:
     void on_Abort_clicked();
     void on_Cancel_clicked();
     void on_progress();
+    void on_test_start();
+    void on_test_stop();
 };
 
 class Worker : public QThread
