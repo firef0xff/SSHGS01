@@ -21,10 +21,14 @@ private slots:
 
     void on_buttonBox_rejected();
 
+    void on_ControlType_activated(int index);
+
 private:
     Ui::HydroTitleInfo *ui;
     void closeEvent(QCloseEvent *);
     std::unique_ptr< QWidget > mChildWindow;
+
+    bool SaveInputParams();
 
 signals:
     void closed();

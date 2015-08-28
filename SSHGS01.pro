@@ -25,7 +25,8 @@ SOURCES += main.cpp\
     servo_title_info.cpp \
     test_form.cpp \
     test_runner.cpp \
-    test_case/implementation/hydro/functional_test.cpp
+    test_case/implementation/hydro/functional_test.cpp \
+    stand_params.cpp
 
 HEADERS  += mainwindow.h \
     test_case/test_case.h \
@@ -37,10 +38,14 @@ HEADERS  += mainwindow.h \
     servo_title_info.h \
     test_form.h \
     test_runner.h \
-    test_case/implementation/hydro/functional_test.h
+    test_case/implementation/hydro/functional_test.h \
+    stand_params.h
 
 FORMS    += mainwindow.ui \
     hydro_title_info.ui \
     servo_title_info.ui \
     test_form.ui \
-    test_runner.ui
+    test_runner.ui \
+    stand_params.ui
+
+DISTFILES +=
