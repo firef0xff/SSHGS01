@@ -26,7 +26,9 @@ SOURCES += main.cpp\
     test_form.cpp \
     test_runner.cpp \
     test_case/implementation/hydro/functional_test.cpp \
-    stand_params.cpp
+    stand_params.cpp \
+    test_case/test_device.cpp \
+    test_case/test_params.cpp
 
 HEADERS  += mainwindow.h \
     test_case/test_case.h \
@@ -39,7 +41,9 @@ HEADERS  += mainwindow.h \
     test_form.h \
     test_runner.h \
     test_case/implementation/hydro/functional_test.h \
-    stand_params.h
+    stand_params.h \
+    test_case/test_device.h \
+    test_case/test_params.h
 
 FORMS    += mainwindow.ui \
     hydro_title_info.ui \

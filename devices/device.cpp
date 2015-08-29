@@ -30,5 +30,10 @@ QString const& Device::Manufacturer() const
     return mManufacturer;
 }
 
+Device::PropList const& Device::Properties() const
+{
+    return mProperties;
+}
+
 }//namespace examinee
 

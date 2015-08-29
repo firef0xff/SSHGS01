@@ -1,5 +1,5 @@
 #include "tests.h"
-#include "../devices/device.h"
+#include "test_device.h"
 #include <thread>
 #include "implementation/hydro/functional_test.h"
 
@@ -68,31 +68,32 @@ namespace hydro
 
 namespace devices
 {
-using namespace examinee;
-static Device d1 ( &HydroTests.Devices(), "DS3",      "DUPLOMATIC" );
-static Device d2 ( &HydroTests.Devices(), "DL3",      "DUPLOMATIC" );
-static Device d3 ( &HydroTests.Devices(), "DL3B",     "DUPLOMATIC" );
-static Device d4 ( &HydroTests.Devices(), "MDS3",     "DUPLOMATIC" );
-static Device d5 ( &HydroTests.Devices(), "MDF3",     "DUPLOMATIC" );
-static Device d6 ( &HydroTests.Devices(), "DS5",      "DUPLOMATIC" );
-static Device d7 ( &HydroTests.Devices(), "DL5",      "DUPLOMATIC" );
-static Device d8 ( &HydroTests.Devices(), "DL5B",     "DUPLOMATIC" );
-static Device d9 ( &HydroTests.Devices(), "DD44",     "DUPLOMATIC" );
-static Device d10( &HydroTests.Devices(), "E*P4",     "DUPLOMATIC" );
-static Device d11( &HydroTests.Devices(), "DSP7",     "DUPLOMATIC" );
-static Device d12( &HydroTests.Devices(), "DSP10",    "DUPLOMATIC" );
-static Device d13( &HydroTests.Devices(), "DS(P)*M",  "DUPLOMATIC" );
-static Device d14( &HydroTests.Devices(), "П6",       "РОССИЯ" );
-static Device d15( &HydroTests.Devices(), "В6",       "РОССИЯ" );
-static Device d16( &HydroTests.Devices(), "1Р6",      "РОССИЯ" );
-static Device d17( &HydroTests.Devices(), "В10",      "РОССИЯ" );
-static Device d18( &HydroTests.Devices(), "1Р10",     "РОССИЯ" );
-static Device d19( &HydroTests.Devices(), "В16",      "РОССИЯ" );
-static Device d20( &HydroTests.Devices(), "1Р203",    "REXROTH" );
-static Device d21( &HydroTests.Devices(), "1Р323",    "REXROTH" );
-static Device d22( &HydroTests.Devices(), "4WE6",     "REXROTH" );
-static Device d23( &HydroTests.Devices(), "4WE10",    "REXROTH" );
-static Device d24( &HydroTests.Devices(), "4WEH10…32","REXROTH" );
+
+using namespace examinee::hydro;
+static ElectroDevice d1 ( &HydroTests.Devices(), "DS3",      "DUPLOMATIC" );
+static ElectroDevice d2 ( &HydroTests.Devices(), "DL3",      "DUPLOMATIC" );
+static ElectroDevice d3 ( &HydroTests.Devices(), "DL3B",     "DUPLOMATIC" );
+static ElectroDevice d4 ( &HydroTests.Devices(), "MDS3",     "DUPLOMATIC" );
+static ElectroDevice d5 ( &HydroTests.Devices(), "MDF3",     "DUPLOMATIC" );
+static ElectroDevice d6 ( &HydroTests.Devices(), "DS5",      "DUPLOMATIC" );
+static ElectroDevice d7 ( &HydroTests.Devices(), "DL5",      "DUPLOMATIC" );
+static ElectroDevice d8 ( &HydroTests.Devices(), "DL5B",     "DUPLOMATIC" );
+static ElectroDevice d9 ( &HydroTests.Devices(), "DD44",     "DUPLOMATIC" );
+static ElectroDevice d10( &HydroTests.Devices(), "E*P4",     "DUPLOMATIC" );
+static ElectroHydroDevice d11( &HydroTests.Devices(), "DSP7",     "DUPLOMATIC", 12, 210 );
+static ElectroHydroDevice d12( &HydroTests.Devices(), "DSP10",    "DUPLOMATIC", 12, 280 );
+static ElectroDevice d13( &HydroTests.Devices(), "DS(P)*M",  "DUPLOMATIC" );
+static ElectroDevice d14( &HydroTests.Devices(), "П6",       "РОССИЯ" );
+static ElectroDevice d15( &HydroTests.Devices(), "В6",       "РОССИЯ" );
+static ElectroDevice d16( &HydroTests.Devices(), "1Р6",      "РОССИЯ" );
+static ElectroDevice d17( &HydroTests.Devices(), "В10",      "РОССИЯ" );
+static ElectroDevice d18( &HydroTests.Devices(), "1Р10",     "РОССИЯ" );
+static ElectroDevice d19( &HydroTests.Devices(), "В16",      "РОССИЯ" );
+static ElectroDevice d20( &HydroTests.Devices(), "1Р203",    "REXROTH" );
+static ElectroDevice d21( &HydroTests.Devices(), "1Р323",    "REXROTH" );
+static ElectroDevice d22( &HydroTests.Devices(), "4WE6",     "REXROTH" );
+static ElectroDevice d23( &HydroTests.Devices(), "4WE10",    "REXROTH" );
+static ElectroHydroDevice d24( &HydroTests.Devices(), "4WEH10…32","REXROTH", 14, 280 );
 }//namespace devices
 
 namespace test_case

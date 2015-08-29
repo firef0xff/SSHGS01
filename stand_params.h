@@ -1,7 +1,6 @@
-#ifndef STAND_PARAMS_H
-#define STAND_PARAMS_H
-
+#pragma once
 #include <QWidget>
+#include <memory>
 
 namespace Ui {
 class StandParams;
@@ -17,6 +16,14 @@ public:
 
 private:
     Ui::StandParams *ui;
-};
+    std::unique_ptr< QWidget > mChildWindow;
 
-#endif // STAND_PARAMS_H
+    void closeEvent(QCloseEvent *);
+    bool SaveInputParams();
+
+signals:
+    void closed();
+private slots:
+    void on_buttonBox_accepted();
+    void on_buttonBox_rejected();
+};
