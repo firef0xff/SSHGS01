@@ -34,6 +34,7 @@ HydroTitleInfo::~HydroTitleInfo()
 bool HydroTitleInfo::SaveInputParams()
 {
     test::hydro::Parameters& params = test::hydro::Parameters::Instance();
+    test::CURRENT_PARAMS = &params;
     params.Reset();
 
     bool res = true;

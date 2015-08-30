@@ -46,15 +46,25 @@ bool ParseValue ( qint32& param, QString const& val );
 bool ParseValue ( DYNAMIC& param, QString const& val );
 bool ParseValue ( DYNAMIC_CONTROL& param, QString const& val );
 
+class Parameters
+{
+public:
+    virtual ~Parameters(){}
+    virtual QString ToString() = 0;
+};
+
+extern Parameters* CURRENT_PARAMS;
+
 namespace hydro
 {
 
-class Parameters
+class Parameters : public test::Parameters
 {
 public:
     static Parameters& Instance();
 
     void Reset();
+    QString ToString();
 
     bool SerNo ( QString const& val );
     QString const& SerNo () const;
@@ -143,7 +153,7 @@ private:
     qint32 mMaxWorkPressure;    //максимальное рабочее давление
 
     qint32 mMinTestPressure;    //давление для испытания функционирования минимальным давлением
-    qint32 mHermPressure;       //давление для испытания наружной герметичности
+    qint32 mHermPressure;       //давление для испытания функционирования минимальным давлением
 
     CONTROL_SIGNAL mHermSignal; //сигнал проверки внутренней герметичности
     CONTROL_SIGNAL mPABTSignal; //сигнал PABT
@@ -173,7 +183,7 @@ private:
 namespace servo
 {
 
-class Parameters
+class Parameters : public test::Parameters
 {
 public:
     static Parameters& Instance();

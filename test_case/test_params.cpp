@@ -5,6 +5,8 @@
 namespace test
 {
 
+Parameters* CURRENT_PARAMS = nullptr;
+
 bool ParseValue ( CONTROL_SIGNAL& sig, QString const& val )
 {
     if ( !val.compare( "Отсутствует", Qt::CaseInsensitive ) )
@@ -95,6 +97,90 @@ bool ParseValue ( DYNAMIC_CONTROL& param, QString const& val )
     return false;
 }
 
+namespace
+{
+QString ToString( qint32 const& v )
+{
+    if ( v >= 0 )
+        return QString::number( v );
+    else
+        return "не задано";
+}
+QString ToString( VOLTAGE_TYPE const& v )
+{
+    switch (v)
+    {
+        case VT_UNKNOWN:
+            return "не задано";
+        case VT_AC:
+            return "переменное";
+        case VT_DC:
+            return "постоянное";
+    default:
+        return "неизвестное значение";
+    }
+}
+QString ToString( CONTROL_TYPE const& v )
+{
+    switch (v)
+    {
+        case CT_UNKNOWN:
+            return "не задано";
+        case CT_ELECTRIC:
+            return "электронное";
+        case CT_HYDRO_ELECTRIC:
+            return "электрогидравлическое";
+    default:
+        return "неизвестное значение";
+    }
+}
+QString ToString( CONTROL_SIGNAL const& v )
+{
+    switch (v)
+    {
+        case CS_UNKNOWN:
+            return "не задано";
+        case CS_NONE:
+            return "отсутствует";
+        case CS_REEL_A:
+            return "катушка А";
+        case CS_REEL_B:
+            return "катушка Б";
+    default:
+        return "неизвестное значение";
+    }
+}
+QString ToString( DYNAMIC const& v )
+{
+    switch (v)
+    {
+        case DN_UNKNOWN:
+            return "не задано";
+        case DN_UP:
+            return "увеличение давления";
+        case DN_DOWN:
+            return "уменьшение давления";
+    default:
+        return "неизвестное значение";
+    }
+}
+QString ToString( DYNAMIC_CONTROL const& v )
+{
+    switch (v)
+    {
+        case DC_UNKNOWN:
+            return "не задано";
+        case DC_DD1:
+            return "ДД1";
+        case DC_DD2:
+            return "ДД2";
+        case DC_DD3:
+            return "ДД3";
+    default:
+        return "неизвестное значение";
+    }
+}
+}//namespace
 
 namespace hydro
 {
@@ -176,6 +262,47 @@ void Parameters::Reset()
     mOffDynamic_1 = DN_UNKNOWN;
     mOnDynamic_2 = DN_UNKNOWN;
     mOffDynamic_2 = DN_UNKNOWN;
+}
+
+QString Parameters::ToString()
+{
+    QString res;
+    res+= "Параметры гидрораспределителя:\n";
+    res+= "  Серийный номер: " + mSerNo +"\n" ;
+    res+= "  Тип: " + mGsType +"\n";
+    res+= "  Напряжение питания, В: " + test::ToString( mVoltage ) +"\n";
+    res+= "  Тип питающего напряжения: " + test::ToString( mVoltageType ) + "\n";
+    res+= "  Допустимое отклонение напрядения питания, %: " + test::ToString( mVoltageRange ) + "\n";
+    res+= "  Количество катушек питания: " + test::ToString( mReelCount ) + "\n";
+    res+= "  Тип управления: " + test::ToString( mControlType ) + "\n";
+    res+= "  Максимальное давление управления, Бар: " + test::ToString( mMaxControlPressure ) + "\n";
+    res+= "  Минимальное давление управления, Бар: " + test::ToString( mMinControlPressure ) + "\n";
+    res+= "\n";
+    res+= "Параметры стенда:\n";
+    res+= "  Максимальный расход, л/мин: " + test::ToString( mMaxExpenditure ) + "\n";
+    res+= "  Максимальное рабочее давление, Бар: " + test::ToString( mMaxWorkPressure ) + "\n";
+    res+= "  Время срабатывания включения распределителя, мсек: " + test::ToString( mActuationOnTime ) + "\n";
+    res+= "  Время срабатывания выключения распределителя, мсек: " + test::ToString( mActuationOffTime ) + "\n";
+    res+= "\n";
+    res+= "Параметры испытаний:\n";
+    res+= "  Давление для испытания функционирования минимальным давлением, Бар: " + test::ToString( mMinTestPressure ) + "\n";
+    res+= "  Давление для испытания функционирования минимальным давлением, Бар: " + test::ToString( mHermPressure ) + "\n";
+    res+= "  Сигнал проверки внутренней герметичности: " + test::ToString( mHermSignal ) + "\n";
+    res+= "  Сигнал PABT: " + test::ToString( mPABTSignal ) + "\n";
+    res+= "  Сигнал PBAT: " + test::ToString( mPBATSignal ) + "\n";
+    res+= "  Диагностика включения катушки:\n";
+    res+= "    Катушка А:\n";
+    res+= "      Датчик по которому определяется включение: " + test::ToString( mOnControl_1 ) + "\n";
+    res+= "      Датчик по которому определяется выключение: " + test::ToString( mOffControl_1 ) + "\n";
+    res+= "      Ожидаемая динамика после включения: " + test::ToString( mOnDynamic_1 ) + "\n";
+    res+= "      Ожидаемая динамика после выключения: " + test::ToString( mOffDynamic_1 ) + "\n";
+    res+= "    Катушка Б:\n";
+    res+= "      Датчик по которому определяется включение: " + test::ToString( mOnControl_2 ) + "\n";
+    res+= "      Датчик по которому определяется выключение: " + test::ToString( mOffControl_2 ) + "\n";
+    res+= "      Ожидаемая динамика после включения: " + test::ToString( mOnDynamic_2 ) + "\n";
+    res+= "      Ожидаемая динамика после выключения: " + test::ToString( mOffDynamic_2 ) + "\n";
+
+    return res;
 }
 
 bool Parameters::SerNo ( QString const& val )

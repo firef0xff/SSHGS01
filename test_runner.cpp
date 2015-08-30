@@ -1,6 +1,7 @@
 #include "test_runner.h"
 #include "ui_test_runner.h"
 #include "test_case/test.h"
+#include "test_case/test_params.h"
 #include <QLabel>
 #include <QThread>
 
@@ -41,10 +42,13 @@ void TestRunner::on_Start_clicked()
     if ( mWorker.get() )
         StopWorker();
 
-    ui->progressBar->setRange( 0, mTestCase.size() - 1 );
-    ui->progressBar->setValue(0);
     ui->progressBar->reset();
+    ui->progressBar->setRange( 0, mTestCase.size() );
+    ui->progressBar->setValue(0);
     ui->LogBox->clear();
+
+    if ( test::CURRENT_PARAMS )
+        ui->LogBox->append( test::CURRENT_PARAMS->ToString() );
 
     mWorker.reset( new Worker( mTestCase ));
     QObject::connect( mWorker.get(), &Worker::to_log, ui->LogBox, &QTextBrowser::append );
