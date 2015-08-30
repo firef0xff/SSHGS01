@@ -96,6 +96,29 @@ bool ParseValue ( DYNAMIC_CONTROL& param, QString const& val )
     }
     return false;
 }
+bool ParseValue ( RELL_CONTROL& param, QString const& val )
+{
+    if ( !val.compare( "Напрямую катушками управления", Qt::CaseInsensitive ) )
+    {
+        param = RC_REEL;
+        return true;
+    }
+    else if ( !val.compare( "Через блок управления", Qt::CaseInsensitive ) )
+    {
+        param = RC_CONTROL_BOX;
+        return true;
+    }
+    return false;
+}
+bool ParseValue ( double_t& param, QString const& val )
+{
+    bool t = false;
+    auto b =  val.toDouble( &t );
+
+    if ( t )
+        param = b;
+    return t;
+}
 
 namespace
 {
@@ -180,7 +203,103 @@ QString ToString( DYNAMIC_CONTROL const& v )
         return "неизвестное значение";
     }
 }
+QString ToString( RELL_CONTROL const& v )
+{
+    switch (v)
+    {
+        case RC_UNKNOWN:
+            return "не задано";
+        case RC_REEL:
+            return "напрямую катушками управления";
+        case RC_CONTROL_BOX:
+            return "через блок управления";
+    default:
+        return "неизвестное значение";
+    }
+}
+QString ToString( double_t const& v )
+{
+    if ( v >= 0 )
+        return QString::number( v, 'g', 2 );
+    else
+        return "не задано";
+}
+
 }//namespace
+
+Parameters::Parameters():
+    mSerNo(""),
+    mReelCount( -1 ),
+    mMaxExpenditure ( -1 ),
+    mControlType ( CT_UNKNOWN ),
+    mMinControlPressure ( -1 ),
+    mMaxControlPressure ( -1 )
+{}
+void Parameters::Reset()
+{
+    mSerNo = "";
+    mReelCount =  -1;
+    mMaxExpenditure  =  -1;
+    mControlType  =  CT_UNKNOWN;
+    mMinControlPressure  =  -1;
+    mMaxControlPressure  =  -1;
+}
+
+bool Parameters::SerNo ( QString const& val )
+{
+    mSerNo = val;
+    return true;
+}
+QString const& Parameters::SerNo () const
+{
+    return mSerNo;
+}
+
+bool Parameters::ReelCount ( QString const& val )
+{
+    return ParseValue( mReelCount, val );
+}
+qint32 const& Parameters::ReelCount () const
+{
+    return mReelCount;
+}
+
+bool Parameters::MaxExpenditure ( QString const& val )
+{
+    return ParseValue( mMaxExpenditure, val );
+}
+qint32 const& Parameters::MaxExpenditure () const
+{
+    return mMaxExpenditure;
+}
+
+bool Parameters::ControlType ( QString const& val )
+{
+    return ParseValue( mControlType, val );
+}
+CONTROL_TYPE const& Parameters::ControlType () const
+{
+    return mControlType;
+}
+
+bool Parameters::MinControlPressure ( QString const& val )
+{
+    return ParseValue( mMinControlPressure, val );
+}
+qint32 const& Parameters::MinControlPressure () const
+{
+    return mMinControlPressure;
+}
+
+bool Parameters::MaxControlPressure ( QString const& val )
+{
+    return ParseValue( mMaxControlPressure, val );
+}
+qint32 const& Parameters::MaxControlPressure () const
+{
+    return mMaxControlPressure;
+}
+
 
 namespace hydro
 {
@@ -204,13 +323,10 @@ Parameters& Parameters::Instance()
 }
 
 Parameters::Parameters():
-    mSerNo(""),
     mGsType(""),
     mVoltage( -1 ),
     mVoltageRange( -1 ),
-    mVoltageType( VT_UNKNOWN ),
-    mReelCount( -1 ),
-    mMaxExpenditure ( -1 ),
+    mVoltageType( VT_UNKNOWN ),       
     mMaxWorkPressure ( -1 ),
     mMinTestPressure ( -1 ),
     mHermPressure( -1 ),
@@ -219,9 +335,6 @@ Parameters::Parameters():
     mPBATSignal ( CS_UNKNOWN ),
     mActuationOnTime ( -1 ),
     mActuationOffTime ( -1 ),
-    mControlType ( CT_UNKNOWN ),
-    mMinControlPressure ( -1 ),
-    mMaxControlPressure ( -1 ),
     mOnControl_1 ( DC_UNKNOWN ),
     mOffControl_1 ( DC_UNKNOWN ),
     mOnControl_2 ( DC_UNKNOWN ),
@@ -235,14 +348,12 @@ Parameters::Parameters():
 }
 
 void Parameters::Reset()
-{
-    mSerNo = "";
+{    
+    test::Parameters::Reset();
     mGsType = "";
     mVoltage =  -1;
     mVoltageRange =  -1;
-    mVoltageType = VT_UNKNOWN;
-    mReelCount =  -1;
-    mMaxExpenditure  =  -1;
+    mVoltageType = VT_UNKNOWN;    
     mMaxWorkPressure  =  -1;
     mMinTestPressure  =  -1;
     mHermPressure =  -1;
@@ -251,9 +362,6 @@ void Parameters::Reset()
     mPBATSignal  =  CS_UNKNOWN;
     mActuationOnTime  =  -1;
     mActuationOffTime  =  -1;
-    mControlType  =  CT_UNKNOWN;
-    mMinControlPressure  =  -1;
-    mMaxControlPressure  =  -1;
     mOnControl_1 = DC_UNKNOWN;
     mOffControl_1 = DC_UNKNOWN;
     mOnControl_2 = DC_UNKNOWN;
@@ -305,15 +413,6 @@ QString Parameters::ToString()
     return res;
 }
 
-bool Parameters::SerNo ( QString const& val )
-{
-    mSerNo = val;
-    return true;
-}
-QString const& Parameters::SerNo () const
-{
-    return mSerNo;
-}
 
 bool Parameters::GsType ( QString const& val )
 {
@@ -352,23 +451,6 @@ VOLTAGE_TYPE const& Parameters::VoltageType () const
     return mVoltageType;
 }
 
-bool Parameters::ReelCount ( QString const& val )
-{
-    return ParseValue( mReelCount, val );
-}
-qint32 const& Parameters::ReelCount () const
-{
-    return mReelCount;
-}
-
-bool Parameters::MaxExpenditure ( QString const& val )
-{
-    return ParseValue( mMaxExpenditure, val );
-}
-qint32 const& Parameters::MaxExpenditure () const
-{
-    return mMaxExpenditure;
-}
 
 bool Parameters::MaxWorkPressure ( QString const& val )
 {
@@ -441,34 +523,6 @@ qint32 const& Parameters::ActuationOffTime () const
 {
     return mActuationOffTime;
 }
-
-bool Parameters::ControlType ( QString const& val )
-{
-    return ParseValue( mControlType, val );
-}
-CONTROL_TYPE const& Parameters::ControlType () const
-{
-    return mControlType;
-}
-
-bool Parameters::MinControlPressure ( QString const& val )
-{
-    return ParseValue( mMinControlPressure, val );
-}
-qint32 const& Parameters::MinControlPressure () const
-{
-    return mMinControlPressure;
-}
-
-bool Parameters::MaxControlPressure ( QString const& val )
-{
-    return ParseValue( mMaxControlPressure, val );
-}
-qint32 const& Parameters::MaxControlPressure () const
-{
-    return mMaxControlPressure;
-}
-
 
 bool Parameters::OnControl_1 ( QString const& val )
 {
@@ -543,6 +597,127 @@ DYNAMIC const& Parameters::OffDynamic_2 () const
 }
 
 }//namespace hydro
+
+namespace servo
+{
+
+static std::shared_ptr< Parameters > PARAMS_INSTANCE;
+static std::mutex PARAMS_INIT_MUTEX;
+
+
+Parameters& Parameters::Instance()
+{
+    if ( !PARAMS_INSTANCE )
+    {
+        std::lock_guard< std::mutex > lock( PARAMS_INIT_MUTEX );
+        if ( !PARAMS_INSTANCE )
+        {
+            PARAMS_INSTANCE.reset( new Parameters() );
+        }
+    }
+
+    return *PARAMS_INSTANCE.get();
+}
+
+Parameters::Parameters():
+    mReelControl( RC_UNKNOWN ),
+    mPressureNominal( -1 ),
+    mPressureTesting( -1 ),
+    mMaxExpenditureA( -1 ),
+    mMaxExpenditureB( -1 ),
+    mFrequencyInc( -1.0 )
+{}
+
+void Parameters::Reset()
+{
+    test::Parameters::Reset();
+
+    mReelControl = RC_UNKNOWN;
+    mPressureNominal = -1;
+    mPressureTesting = -1;
+    mMaxExpenditureA = -1;
+    mMaxExpenditureB = -1;
+    mFrequencyInc = -1.0;
+}
+QString Parameters::ToString()
+{
+    QString res;
+    res+= "Параметры аппаратуры управления направлением расхода:\n";
+    res+= "  Серийный номер: " + mSerNo +"\n" ;
+    res+= "  Тип управления: " + test::ToString( mReelControl ) + "\n";
+    res+= "  Количество катушек питания: " + test::ToString( mReelCount ) + "\n";
+    res+= "  Тип управления распределителем: " + test::ToString( mControlType ) + "\n";
+    res+= "  Максимальное давление управления, Бар: " + test::ToString( mMaxControlPressure ) + "\n";
+    res+= "  Минимальное давление управления, Бар: " + test::ToString( mMinControlPressure ) + "\n";
+    res+= "\n";
+    res+= "Параметры стенда:\n";
+    res+= "  Максимальный расход, л/мин: " + test::ToString( mMaxExpenditure ) + "\n";
+    res+= "  Номинальное давление, Бар: " + test::ToString( mPressureNominal ) + "\n";
+    res+= "\n";
+    res+= "Параметры испытаний:\n";
+    res+= "  Давления при испытании аппарата пробным давлением, Бар: " + test::ToString( mPressureTesting ) + "\n";
+    res+= "  Максимальный расход в канале А, при следующем опорном сигнале, X_max_A, л/мин: " + test::ToString( mMaxExpenditureA ) + "\n";
+    res+= "  Максимальный расход в канале Б, при следующем опорном сигнале, X_max_Б, л/мин: " + test::ToString( mMaxExpenditureB ) + "\n";
+    res+= "  Инкремент частоты при построении частотных характеристик, Гц: " + test::ToString( mFrequencyInc ) + "\n";
+
+    return res;
+}
+
+bool Parameters::ReelControl ( QString const& val )
+{
+    return ParseValue( mReelControl, val );
+}
+RELL_CONTROL const& Parameters::ReelControl () const
+{
+    return mReelControl;
+}
+
+bool Parameters::PressureNominal ( QString const& val )
+{
+    return ParseValue( mPressureNominal, val );
+}
+qint32 const& Parameters::PressureNominal () const
+{
+    return mPressureNominal;
+}
+
+bool Parameters::PressureTesting ( QString const& val )
+{
+    return ParseValue( mPressureTesting, val );
+}
+qint32 const& Parameters::PressureTesting () const
+{
+    return mPressureTesting;
+}
+
+bool Parameters::MaxExpenditureA ( QString const& val )
+{
+    return ParseValue( mMaxExpenditureA, val );
+}
+qint32 const& Parameters::MaxExpenditureA () const
+{
+    return mMaxExpenditureA;
+}
+
+bool Parameters::MaxExpenditureB ( QString const& val )
+{
+    return ParseValue( mMaxExpenditureB, val );
+}
+qint32 const& Parameters::MaxExpenditureB () const
+{
+    return mMaxExpenditureB;
+}
+
+bool Parameters::FrequencyInc ( QString const& val )
+{
+    return ParseValue( mFrequencyInc, val );
+}
+const double_t &Parameters::FrequencyInc() const
+{
+    return mFrequencyInc;
+}
+
+}//namespace servo
 
 }//namespace test
 

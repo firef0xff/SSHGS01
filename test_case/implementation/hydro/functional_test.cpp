@@ -1,10 +1,13 @@
 #include "functional_test.h"
 
+namespace test
+{
+
 namespace hydro
 {
 
-FunctionalTest::FunctionalTest( test::TestCase* test_case, uint8_t number ):
-    test::Test( test_case, "Испытание функционирования", number )
+FunctionalTest::FunctionalTest():
+    test::hydro::Test( "Испытание функционирования" )
 {}
 
 bool FunctionalTest::Run()
@@ -86,4 +89,7 @@ bool SetVoltage( double voltage );
 bool WaitPressure( uint sec );
 bool CalckParams( );
 
-}
+}//namespace hydro
+
+}//namespace test
+

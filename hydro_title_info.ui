@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>817</width>
+    <width>842</width>
     <height>551</height>
    </rect>
   </property>
@@ -153,7 +153,7 @@
       <widget class="QLabel" name="l_actuation_on_time">
        <property name="text">
         <string>Время срабатывания
-включения распределителя</string>
+включения распределителя, мс</string>
        </property>
       </widget>
      </item>
@@ -186,7 +186,7 @@
      <item row="7" column="0">
       <widget class="QLabel" name="l_max_expenditure">
        <property name="text">
-        <string>Максимальный расход</string>
+        <string>Максимальный расход, л/мин</string>
        </property>
       </widget>
      </item>
@@ -237,7 +237,7 @@
       <widget class="QLabel" name="l_actuation_off_time">
        <property name="text">
         <string>Время срабатывания
-выключения распределителя</string>
+выключения распределителя, мс</string>
        </property>
       </widget>
      </item>
@@ -361,7 +361,7 @@
       <widget class="QLabel" name="l_max_work_pressure">
        <property name="text">
         <string>Максимальное рабочее
-давление</string>
+давление, Бар</string>
        </property>
       </widget>
      </item>

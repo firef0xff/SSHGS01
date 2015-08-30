@@ -38,6 +38,13 @@ enum DYNAMIC_CONTROL
     DC_DD2,
     DC_DD3
 };
+enum RELL_CONTROL
+{
+    RC_UNKNOWN = -1,
+    RC_REEL,
+    RC_CONTROL_BOX
+};
+
 
 bool ParseValue ( CONTROL_SIGNAL& sig, QString const& val );
 bool ParseValue ( CONTROL_TYPE& sig, QString const& val );
@@ -45,12 +52,46 @@ bool ParseValue ( VOLTAGE_TYPE& sig, QString const& val );
 bool ParseValue ( qint32& param, QString const& val );
 bool ParseValue ( DYNAMIC& param, QString const& val );
 bool ParseValue ( DYNAMIC_CONTROL& param, QString const& val );
+bool ParseValue ( RELL_CONTROL& param, QString const& val );
+bool ParseValue ( double_t& param, QString const& val );
 
 class Parameters
 {
 public:
+    Parameters();
     virtual ~Parameters(){}
     virtual QString ToString() = 0;
+
+    void Reset();
+
+    bool SerNo ( QString const& val );
+    QString const& SerNo () const;
+
+    bool ReelCount ( QString const& val );
+    qint32 const& ReelCount () const;
+
+    bool MaxExpenditure ( QString const& val );
+    qint32 const& MaxExpenditure () const;
+
+    bool ControlType ( QString const& val );
+    CONTROL_TYPE const& ControlType () const;
+
+    bool MinControlPressure ( QString const& val );
+    qint32 const& MinControlPressure () const;
+
+    bool MaxControlPressure ( QString const& val );
+    qint32 const& MaxControlPressure () const;
+
+protected:
+    QString mSerNo;             //Серийный номер
+    qint32 mReelCount;          //Количество катушек питания
+
+    qint32 mMaxExpenditure;     //максимальный расход
+
+    CONTROL_TYPE mControlType;  //Тип управления гидрораспределителем
+    qint32 mMinControlPressure; //минимальное давление управления
+    qint32 mMaxControlPressure; //максимальное давление управления
+
 };
 
 extern Parameters* CURRENT_PARAMS;
@@ -66,9 +107,6 @@ public:
     void Reset();
     QString ToString();
 
-    bool SerNo ( QString const& val );
-    QString const& SerNo () const;
-
     bool GsType ( QString const& val );
     QString const& GsType () const;
 
@@ -80,12 +118,6 @@ public:
 
     bool VoltageType ( QString const& val );
     const VOLTAGE_TYPE &VoltageType() const;
-
-    bool ReelCount ( QString const& val );
-    qint32 const& ReelCount () const;
-
-    bool MaxExpenditure ( QString const& val );
-    qint32 const& MaxExpenditure () const;
 
     bool MaxWorkPressure ( QString const& val );
     qint32 const& MaxWorkPressure () const;
@@ -111,15 +143,6 @@ public:
     bool ActuationOffTime ( QString const& val );
     qint32 const& ActuationOffTime () const;
 
-    bool ControlType ( QString const& val );
-    CONTROL_TYPE const& ControlType () const;
-
-    bool MinControlPressure ( QString const& val );
-    qint32 const& MinControlPressure () const;
-
-    bool MaxControlPressure ( QString const& val );
-    qint32 const& MaxControlPressure () const;
-
     bool OnControl_1 ( QString const& val );
     DYNAMIC_CONTROL const& OnControl_1 () const;
     bool OffControl_1 ( QString const& val );
@@ -143,13 +166,10 @@ private:
     Parameters( Parameters const& ) = delete;
     void operator = ( Parameters& ) = delete;
 
-    QString mSerNo;             //Серийный номер
     QString mGsType;            //тип гидрораспределителя
     qint32 mVoltage;            //Напряжение питания
     qint32 mVoltageRange;       //Допустимое отклонение напрядения питания
-    VOLTAGE_TYPE mVoltageType;  //тип напряжения
-    qint32 mReelCount;          //Количество катушек питания
-    qint32 mMaxExpenditure;     //максимальный расход
+    VOLTAGE_TYPE mVoltageType;  //тип напряжения    
     qint32 mMaxWorkPressure;    //максимальное рабочее давление
 
     qint32 mMinTestPressure;    //давление для испытания функционирования минимальным давлением
@@ -161,11 +181,6 @@ private:
 
     qint32 mActuationOnTime;    //время срабатывания включения распределителя
     qint32 mActuationOffTime;   //время срабатывания выключения распределителя
-
-    CONTROL_TYPE mControlType;  //Тип управления гидрораспределителем
-
-    qint32 mMinControlPressure; //минимальное давление управления
-    qint32 mMaxControlPressure; //максимальное давление управления
 
     DYNAMIC_CONTROL mOnControl_1; //датчик контроля включения 1
     DYNAMIC_CONTROL mOffControl_1;//датчик контроля выключения 1
@@ -188,11 +203,38 @@ class Parameters : public test::Parameters
 public:
     static Parameters& Instance();
 
+    void Reset();
+    QString ToString();
+
+    bool ReelControl ( QString const& val );
+    RELL_CONTROL const& ReelControl () const;
+
+    bool PressureNominal ( QString const& val );
+    qint32 const& PressureNominal () const;
+
+    bool PressureTesting ( QString const& val );
+    qint32 const& PressureTesting () const;
+
+    bool MaxExpenditureA ( QString const& val );
+    qint32 const& MaxExpenditureA () const;
+
+    bool MaxExpenditureB ( QString const& val );
+    qint32 const& MaxExpenditureB () const;
+
+    bool FrequencyInc ( QString const& val );
+    const double_t &FrequencyInc() const;
+
 private:
     Parameters();
     Parameters( Parameters const& )  = delete;
     void operator = ( Parameters& ) = delete;
 
+    RELL_CONTROL mReelControl;
+    qint32 mPressureNominal;
+    qint32 mPressureTesting;
+    qint32 mMaxExpenditureA;
+    qint32 mMaxExpenditureB;
+    double_t mFrequencyInc;
 };
 
 }//namespace servo

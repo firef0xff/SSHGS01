@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../test.h"
-#include "../../test_case.h"
+#include "../test_base.h"
+
 
 
 namespace shema
@@ -37,13 +37,17 @@ private:
 };
 
 }
+
+namespace test
+{
+
 namespace hydro
 {
 
-class FunctionalTest :public test::Test
+class FunctionalTest :public test::hydro::Test
 {
 public:
-    FunctionalTest( test::TestCase* test_case, uint8_t number );
+    FunctionalTest();
     bool Run();
 
 private:
@@ -56,4 +60,6 @@ private:
 
 };
 
-}
+}//namespace hydro
+
+}//namespace test

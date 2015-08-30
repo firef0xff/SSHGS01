@@ -18,14 +18,17 @@ public:
 
 private:
     Ui::ServoTitleInfo *ui;
-    void closeEvent(QCloseEvent *);
     std::unique_ptr< QWidget > mChildWindow;
+
+    void closeEvent(QCloseEvent *);
+    bool SaveInputParams();
 
 signals:
     void closed();
 private slots:
     void on_buttonBox_accepted();
     void on_buttonBox_rejected();
+    void on_RaspredControl_activated(int index);
 };
 
 #endif // SERVO_TITLE_INFO_H
