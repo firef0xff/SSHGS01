@@ -24,6 +24,7 @@ HydroTitleInfo::HydroTitleInfo(QWidget *parent) :
     ui->MaxWorkPressure->setValidator( new QIntValidator( 10, 400, this ) );
 
     on_ControlType_activated( ui->ControlType->currentIndex() );
+    on_ReelCount_valueChanged( ui->ReelCount->value() );
 }
 
 HydroTitleInfo::~HydroTitleInfo()
@@ -198,5 +199,28 @@ void HydroTitleInfo::on_GsType_activated(int index)
         auto index = ui->ControlType->findText( it->toString(), Qt::MatchExactly );
         ui->ControlType->setCurrentIndex( index );
         on_ControlType_activated( index );
+    }
+}
+
+
+void HydroTitleInfo::on_ReelCount_valueChanged(int arg1)
+{
+    switch ( arg1 )
+    {
+    case 1:
+        ui->HermSignal->removeItem( 2 );
+        ui->PABTSignal->removeItem( 2 );
+        ui->PBATSignal->removeItem( 2 );
+        break;
+    case 2:
+        if ( ui->HermSignal->findText( "Катушка Б" ) == -1 )
+        {
+            ui->HermSignal->insertItem( 2, "Катушка Б" );
+            ui->PABTSignal->insertItem( 2, "Катушка Б" );
+            ui->PBATSignal->insertItem( 2, "Катушка Б" );
+        }
+        break;
+    default:
+        break;
     }
 }

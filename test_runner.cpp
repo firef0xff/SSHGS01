@@ -26,6 +26,7 @@ TestRunner::TestRunner( TestCase test_case, QWidget *parent) :
 
 TestRunner::~TestRunner()
 {
+    close();
     delete ui;
 }
 

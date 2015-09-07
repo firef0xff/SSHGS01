@@ -25,6 +25,8 @@ private slots:
 
     void on_GsType_activated(int index);
 
+    void on_ReelCount_valueChanged(int arg1);
+
 private:
     Ui::HydroTitleInfo *ui;
     void closeEvent(QCloseEvent *);

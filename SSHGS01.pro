@@ -14,6 +14,8 @@ QMAKE_LFLAGS += '-Wl,-rpath,\'\$$ORIGIN/lib\''
 TARGET = SSHGS01
 TEMPLATE = app
 
+INCLUDEPATH += ../mylib/Widgets\
+
 SOURCES += main.cpp\
         mainwindow.cpp \
     test_case/test_case.cpp \
@@ -29,7 +31,9 @@ SOURCES += main.cpp\
     stand_params.cpp \
     test_case/test_device.cpp \
     test_case/test_params.cpp \
-    test_case/implementation/test_base.cpp
+    test_case/implementation/test_base.cpp \
+    ../mylib/Widgets/RoundDial/round_dial.cpp \
+    settings/settings.cpp
 
 HEADERS  += mainwindow.h \
     test_case/test_case.h \
@@ -45,7 +49,9 @@ HEADERS  += mainwindow.h \
     stand_params.h \
     test_case/test_device.h \
     test_case/test_params.h \
-    test_case/implementation/test_base.h
+    test_case/implementation/test_base.h \
+    ../mylib/Widgets/RoundDial/round_dial.h \
+    settings/settings.h
 
 FORMS    += mainwindow.ui \
     hydro_title_info.ui \

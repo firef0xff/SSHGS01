@@ -3,6 +3,7 @@
 #include <QApplication>
 #include <QFileInfo>
 #include <QDir>
+#include "settings/settings.h"
 
 
 int main(int argc, char *argv[])
@@ -12,6 +13,8 @@ int main(int argc, char *argv[])
     QApplication::setLibraryPaths( paths );
 
     QApplication a(argc, argv);
+
+    app::Settings::Instance().Load();
 
     MainWindow w;
     w.show();

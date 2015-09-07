@@ -24,6 +24,7 @@ public:
             if (IsStopped())
             {
                 Log( "SucsessTest interrupted" );
+                std::this_thread::sleep_for( std::chrono::seconds(10) );
                 return false;
             }
         }
@@ -49,6 +50,7 @@ public:
             if ( IsStopped() )
             {
                 Log( "UnSucsessTest interrupted" );
+                std::this_thread::sleep_for( std::chrono::seconds(10) );
                 return false;
             }
         }
