@@ -22,7 +22,7 @@ class TestForm : public QWidget
     Q_OBJECT
 
 public:
-    explicit TestForm( test::TestCase const&,  QWidget *parent = 0);
+    explicit TestForm( test::TestCase const&, bool new_mode,  QWidget *parent = 0);
     ~TestForm();
 
 private:

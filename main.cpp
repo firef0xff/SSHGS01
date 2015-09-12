@@ -14,8 +14,6 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
 
-    app::Settings::Instance().Load();
-
     MainWindow w;
     w.show();
 

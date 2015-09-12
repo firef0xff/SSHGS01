@@ -3,7 +3,10 @@
 #include "test_case/tests.h"
 #include "hydro_title_info.h"
 #include "servo_title_info.h"
-
+#include "test_case/test_params.h"
+#include "settings/settings_wnd.h"
+#include <QFileDialog>
+#include "settings/settings.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -14,9 +17,18 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->TestCase1->setText( test::HydroTests.Name() );
     ui->TestCase1->setDescription( test::HydroTests.Descr() );
+    ui->act_test_case1->setToolTip( test::HydroTests.Name() );
+    ui->act_test_case1->setText( test::HydroTests.Name() );
+    ui->act_test_case1->setIconText( test::HydroTests.Name() );
+
 
     ui->TestCase2->setText( test::ServoTests.Name() );
     ui->TestCase2->setDescription( test::ServoTests.Descr() );
+    ui->act_test_case2->setToolTip( test::ServoTests.Name() );
+    ui->act_test_case2->setText( test::ServoTests.Name() );
+    ui->act_test_case2->setIconText( test::ServoTests.Name() );
+
+
 
     ui->ManualControl->setText( "Ручное управление" );
     ui->ManualControl->setDescription( "Запуск стенда в режиме ручного управления для администрирования и обслуживания" );
@@ -113,38 +125,96 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_TestCase1_clicked()
-{
-    enable_modes(false);
-    if ( mChildWindow.get() )
-        QObject::disconnect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
-    mChildWindow.reset( new HydroTitleInfo() );
-    QObject::connect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(enable_modes()) );
-    mChildWindow->show();
-}
-
-void MainWindow::on_TestCase2_clicked()
-{
-    enable_modes(false);
-    mChildWindow.reset( new ServoTitleInfo() );
-    QObject::connect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(enable_modes()) );
-    mChildWindow->show();
-}
-
-void MainWindow::on_ManualControl_clicked()
-{
-
-}
-
-void MainWindow::enable_modes(bool enabled)
-{
-    ui->TestCase1->setEnabled( enabled );
-    ui->TestCase2->setEnabled( enabled );
-    ui->ManualControl->setEnabled( enabled );
-}
-
 void MainWindow::closeEvent(QCloseEvent *e)
 {
     mChildWindow.reset();
     QWidget::closeEvent( e );
+}
+
+void MainWindow::ShowChildWindow( std::unique_ptr< QWidget > child )
+{
+    enable_modes(false);
+    if ( mChildWindow.get() )
+        QObject::disconnect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
+    mChildWindow.reset( child.release() );
+    QObject::connect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(enable_modes()) );
+    mChildWindow->show();
+}
+
+void MainWindow::StartHydroTest( bool new_test )
+{
+    ShowChildWindow( ChildPtr( new HydroTitleInfo( new_test ) ) );
+}
+void MainWindow::StartServoTest( bool new_test )
+{
+    ShowChildWindow( ChildPtr( new ServoTitleInfo( new_test ) ) );
+}
+void MainWindow::StartManualControl()
+{
+
+}
+void MainWindow::SettringsFileStorage ()
+{
+    ShowChildWindow( ChildPtr( new settings_wnd() ) );
+}
+
+void MainWindow::enable_modes(bool enabled)
+{
+    ui->act_test_case1->setEnabled( enabled );
+    ui->act_test_case2->setEnabled( enabled );
+    ui->TestCase1->setEnabled( enabled );
+    ui->TestCase2->setEnabled( enabled );
+    ui->ManualControl->setEnabled( enabled );
+    ui->file_storage->setEnabled( enabled );
+}
+
+void MainWindow::on_act_test_case1_triggered()
+{
+    on_TestCase1_clicked();
+}
+void MainWindow::on_TestCase1_clicked()
+{
+    StartHydroTest( true );
+}
+
+void MainWindow::on_act_test_case2_triggered()
+{
+    on_TestCase2_clicked();
+}
+void MainWindow::on_TestCase2_clicked()
+{
+    StartServoTest( true );
+}
+
+void MainWindow::on_ManualControl_clicked()
+{
+    StartManualControl();
+}
+
+void MainWindow::on_load_isp_params_triggered()
+{
+    QString file_name;
+    QFileDialog dlg;
+    dlg.setFileMode( QFileDialog::ExistingFile );
+    dlg.setDirectory( app::Settings::Instance().TestPath() );
+    dlg.setNameFilter( "Параметры испытаний (*.isx )" );
+    dlg.setViewMode( QFileDialog::Detail );
+    if ( dlg.exec() )
+        file_name = dlg.selectedFiles().front();
+
+    test::Parameters* ptr = test::FromFile( file_name );
+
+    if ( ptr == &test::hydro::Parameters::Instance() )
+    {
+        StartHydroTest( false );
+    }
+    else if ( ptr == &test::servo::Parameters::Instance() )
+    {
+        StartServoTest( false );
+    }
+}
+
+void MainWindow::on_file_storage_triggered()
+{
+    SettringsFileStorage();
 }

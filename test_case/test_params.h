@@ -2,8 +2,12 @@
 #include <QString>
 #include "devices/device.h"
 
+
 namespace test
 {
+
+class Test;
+class TestCase;
 
 enum CONTROL_SIGNAL
 {
@@ -55,14 +59,34 @@ bool ParseValue ( DYNAMIC_CONTROL& param, QString const& val );
 bool ParseValue ( RELL_CONTROL& param, QString const& val );
 bool ParseValue ( double_t& param, QString const& val );
 
+QString ToString( qint32 const& v );
+QString ToString( VOLTAGE_TYPE const& v );
+QString ToString( CONTROL_TYPE const& v );
+QString ToString( CONTROL_SIGNAL const& v );
+QString ToString( DYNAMIC const& v );
+QString ToString( DYNAMIC_CONTROL const& v );
+QString ToString( RELL_CONTROL const& v );
+QString ToString( double_t const& v );
+
+
 class Parameters
 {
 public:
+    typedef QList< test::Test* > TestsList;
+
     Parameters();
     virtual ~Parameters(){}
     virtual QString ToString() = 0;
 
+    virtual test::TestCase const& TestCollection() const = 0;
+
+    virtual QJsonObject Serialise() const;
+    virtual bool Deserialize( QJsonObject const& obj );
+
     void Reset();
+
+    void TestCase ( TestsList const& test_case);
+    TestsList const& TestCase ();
 
     bool SerNo ( QString const& val );
     QString const& SerNo () const;
@@ -92,9 +116,14 @@ protected:
     qint32 mMinControlPressure; //минимальное давление управления
     qint32 mMaxControlPressure; //максимальное давление управления
 
+    TestsList mTestCase;        //набор тестов для выполнения
 };
 
 extern Parameters* CURRENT_PARAMS;
+
+void ToFile( QString fname, Parameters const& params );
+Parameters* FromFile( QString fname );
+
 
 namespace hydro
 {
@@ -106,6 +135,11 @@ public:
 
     void Reset();
     QString ToString();
+
+    test::TestCase const& TestCollection() const;
+
+    QJsonObject Serialise() const;
+    bool Deserialize(const QJsonObject &obj );
 
     bool GsType ( QString const& val );
     QString const& GsType () const;
@@ -205,6 +239,11 @@ public:
 
     void Reset();
     QString ToString();
+
+    virtual test::TestCase const& TestCollection() const;
+
+    virtual QJsonObject Serialise() const;
+    virtual bool Deserialize( QJsonObject const& obj );
 
     bool ReelControl ( QString const& val );
     RELL_CONTROL const& ReelControl () const;

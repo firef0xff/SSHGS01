@@ -13,6 +13,7 @@ class MainWindow : public QMainWindow
 
 public:
     typedef std::shared_ptr< ff0x::RoundDial > ControlPtr;
+    typedef std::unique_ptr< QWidget > ChildPtr;
 
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
@@ -22,8 +23,16 @@ private:
 
     void closeEvent(QCloseEvent *e);
 
+    void StartHydroTest( bool new_test );
+    void StartServoTest( bool new_test );
+    void StartManualControl();
+    void SettringsFileStorage ();
+
+    void ShowChildWindow( ChildPtr child );
+
+
     Ui::MainWindow *ui;
-    std::unique_ptr< QWidget > mChildWindow;
+    ChildPtr mChildWindow;
 
     QList< ControlPtr > mChildControls;
 
@@ -54,4 +63,8 @@ private slots:
     void on_ManualControl_clicked();
 
     void enable_modes( bool enabled = true );
+    void on_act_test_case1_triggered();
+    void on_act_test_case2_triggered();
+    void on_load_isp_params_triggered();
+    void on_file_storage_triggered();
 };

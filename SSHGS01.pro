@@ -33,7 +33,8 @@ SOURCES += main.cpp\
     test_case/test_params.cpp \
     test_case/implementation/test_base.cpp \
     ../mylib/Widgets/RoundDial/round_dial.cpp \
-    settings/settings.cpp
+    settings/settings.cpp \
+    settings/settings_wnd.cpp
 
 HEADERS  += mainwindow.h \
     test_case/test_case.h \
@@ -51,13 +52,15 @@ HEADERS  += mainwindow.h \
     test_case/test_params.h \
     test_case/implementation/test_base.h \
     ../mylib/Widgets/RoundDial/round_dial.h \
-    settings/settings.h
+    settings/settings.h \
+    settings/settings_wnd.h
 
 FORMS    += mainwindow.ui \
     hydro_title_info.ui \
     servo_title_info.ui \
     test_form.ui \
     test_runner.ui \
-    stand_params.ui
+    stand_params.ui \
+    settings/settings_wnd.ui
 
 DISTFILES +=

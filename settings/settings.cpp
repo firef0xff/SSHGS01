@@ -6,6 +6,7 @@
 #include <fstream>
 #include <QDebug>
 #include <QDateTime>
+#include <QFile>
 
 namespace app
 {
@@ -13,14 +14,26 @@ namespace app
 namespace
 {
 
-std::mutex CREATE_MUTEX;
+std::recursive_mutex CREATE_MUTEX;
 
 static std::unique_ptr< Settings > INSTANCE;
 
+QtMsgType ToMsgType ( QString const& level )
+{
+    if ( level.compare( "Информация", Qt::CaseInsensitive ) )
+        return QtInfoMsg;
+    else if ( level.compare( "Предупреждения", Qt::CaseInsensitive ) )
+        return QtWarningMsg;
+    else if ( level.compare( "Ошибки", Qt::CaseInsensitive ) )
+        return QtCriticalMsg;
+    else if ( level.compare( "Все", Qt::CaseInsensitive ) )
+        return QtDebugMsg;
+    return static_cast< QtMsgType > (-1);
+}
 
 void myLogHandler(QtMsgType type, const QMessageLogContext &where, const QString &msg)
 {
-    if ( Settings::Instance().LogLevel() < type )
+    if ( ToMsgType( Settings::Instance().LogLevel() ) < type )
         return;
 
     std::ofstream f( "log.txt", std::ios_base::out | std::ios_base::app );
@@ -31,25 +44,31 @@ void myLogHandler(QtMsgType type, const QMessageLogContext &where, const QString
     {
     case QtDebugMsg:
         f << date.c_str()
-          << " Debug: [" << where.file << ":" << where.line << " - " << where.function << "]" << localMsg.constData() << std::endl;
-        break;
+          << " Debug: [";
     case QtInfoMsg:
         f << date.c_str()
-          << " Info: [" << where.file << ":" << where.line << " - " << where.function  <<  "]" << localMsg.constData() << std::endl;
+          << " Info: [";
         break;
     case QtWarningMsg:
         f << date.c_str()
-          << " Warn: [" << where.file << ":" << where.line << " - " << where.function  <<  "]" << localMsg.constData() << std::endl;
+          << " Warn: [";
         break;
     case QtCriticalMsg:
         f << date.c_str()
-          << " Error: [" << where.file << ":" << where.line << " - " << where.function  <<  "]" << localMsg.constData() << std::endl;
+          << " Error: [";
         break;
     case QtFatalMsg:
         f << date.c_str()
-          << " Fatal: [" << where.file << ":" << where.line << " - " << where.function  <<  "]" << localMsg.constData() << std::endl;
-        abort();
+          << " Error: [";
+        break;
     }
+    if (where.file)
+        f<< where.file << ":" << where.line;
+    if (where.function)
+        f<< " - " << where.function;
+    f<< "]" << localMsg.constData() << std::endl;
+    f.flush();
+    f.close();
 }
 
 
@@ -59,7 +78,7 @@ Settings& Settings::Instance()
 {
     if ( !INSTANCE )
     {
-        std::lock_guard< std::mutex > lock( CREATE_MUTEX );
+        std::lock_guard< std::recursive_mutex > lock( CREATE_MUTEX );
         if ( !INSTANCE )
         {
             INSTANCE.reset( new Settings() );
@@ -71,74 +90,67 @@ Settings& Settings::Instance()
 
 QString Settings::ResultPath() const
 {
-    QJsonObject const& obj = mDocument.object();
-    QJsonValue const& val = obj.value("ResultPath");
-    return val.toString();
+    return mDocument.object().value("ResultPath").toString();
 }
+void Settings::ResultPath( QString const& val)
+{
+    auto obj = mDocument.object();
+    obj.insert( "ResultPath", val );
+    mDocument.setObject( obj );
+}
+
 QString Settings::TestPath() const
 {
-    QJsonObject const& obj = mDocument.object();
-    QJsonValue const& val = obj.value("TestPath");
-    return val.toString();
+    return mDocument.object().value("TestPath").toString();
 }
-QtMsgType Settings::LogLevel() const
+void Settings::TestPath( QString const& val)
 {
-    QJsonObject const& obj = mDocument.object();
-    QJsonValue const& val = obj.value("LogLevel");
-
-    if ( val.toString().compare( "Info", Qt::CaseInsensitive ) )
-        return QtInfoMsg;
-    else if ( val.toString().compare( "Warning", Qt::CaseInsensitive ) )
-        return QtWarningMsg;
-    else if ( val.toString().compare( "Error", Qt::CaseInsensitive ) )
-        return QtCriticalMsg;
-    else if ( val.toString().compare( "Fatal", Qt::CaseInsensitive ) )
-        return QtFatalMsg;
-    else if ( val.toString().compare( "Debug", Qt::CaseInsensitive ) )
-        return QtDebugMsg;
-    return QtWarningMsg;
+    auto obj = mDocument.object();
+    obj.insert( "TestPath", val );
+    mDocument.setObject( obj );
 }
+
+QString Settings::LogLevel() const
+{
+    return mDocument.object().value("LogLevel").toString();
+}
+void Settings::LogLevel( QString const& val)
+{
+    auto obj = mDocument.object();
+    obj.insert( "LogLevel", val );
+    mDocument.setObject( obj );
+}
+
+
 void Settings::Save()
 {
 
-    std::ofstream f( mFileName.c_str(), std::ios_base::binary| std::ios_base::out );
-
+    QFile f( mFileName );
     if ( mDocument.isNull() )
     {
         QJsonObject obj;
-        obj.insert("ResultPath", "results");
-        obj.insert("TestPath", "test_cases");
-        obj.insert("LogLevel", "Error");
         mDocument.setObject( obj );
+        ResultPath( "results" );
+        TestPath( "test_cases" );
+        LogLevel( "Ошибки" );
     }
-
-    auto data = mDocument.toJson();
-    f.write( data.constData(), data.size() );
-
+    f.open(QIODevice::WriteOnly);
+    f.write( mDocument.toJson() );
     f.close();
 }
 void Settings::Load()
 {
-    std::ifstream f( mFileName.c_str(), std::ios_base::binary| std::ios_base::in );
-    if ( f )
-    {
-        f.seekg( 0, f.end );
-        auto lenght = f.tellg();
-        f.seekg( 0, f.beg );
-
-        char* buf = new char[lenght]();
-
-        f.read ( buf, lenght );
-
-        QByteArray json( buf, lenght );
+    QFile f( mFileName );
+    if ( f.exists() )
+    {        
+        f.open(QIODevice::ReadOnly);
         QJsonParseError err;
-        mDocument = QJsonDocument::fromJson( json , &err );
+        mDocument = QJsonDocument::fromJson( f.readAll() , &err );
 
         if ( err.error != QJsonParseError::NoError )
         {
             qWarning() << err.errorString()<<" позиция: " << QString::number(err.offset);
         }
-        delete[] buf;
         f.close();
     }
     else
@@ -149,6 +161,7 @@ Settings::Settings():
     mFileName("settings.json")
 {
     qInstallMessageHandler( myLogHandler );
+    Load();
 }
 
 

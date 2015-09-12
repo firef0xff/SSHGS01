@@ -23,14 +23,12 @@ class TestRunner : public QWidget
     Q_OBJECT
 
 public:
-    typedef std::shared_ptr< QLabel > ControlPtr;
-    typedef QList< test::Test* > TestCase;
-    explicit TestRunner( TestCase test_case, QWidget *parent = 0);
+    typedef std::shared_ptr< QLabel > ControlPtr;    
+    explicit TestRunner( QWidget *parent = 0);
     ~TestRunner();
 
 private:
     Ui::TestRunner *ui;
-    TestCase mTestCase;
     QList< ControlPtr > mChilds;
     std::unique_ptr< Worker > mWorker;
 
@@ -46,18 +44,18 @@ private slots:
     void on_progress();
     void on_test_start();
     void on_test_stop();
+    void on_SaveTest_clicked();
 };
 
 class Worker : public QThread
 {
     Q_OBJECT
 public:
-    Worker( TestRunner::TestCase const& test_case );
+    Worker();
     void run();
     void stop();
 private:
     mutable bool mStopSignal;
-    TestRunner::TestCase mTestCase;
     void LogIt( QString const& str );
 signals:
     void to_log( QString const& );

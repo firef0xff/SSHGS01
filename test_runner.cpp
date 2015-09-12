@@ -4,16 +4,17 @@
 #include "test_case/test_params.h"
 #include <QLabel>
 #include <QThread>
+#include <QFileDialog>
+#include "settings/settings.h"
 
-TestRunner::TestRunner( TestCase test_case, QWidget *parent) :
+TestRunner::TestRunner(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::TestRunner),
-    mTestCase( test_case )
+    ui(new Ui::TestRunner)
 {
     ui->setupUi(this);
 
     uint32_t num = 0;
-    foreach ( auto test_ptr, mTestCase )
+    foreach ( auto test_ptr, test::CURRENT_PARAMS->TestCase() )
     {
         ControlPtr ptr( new QLabel( ui->scrollAreaWidgetContents ) );
         ptr->setObjectName( QStringLiteral("l_") + QString::number( test_ptr->Number() ) );
@@ -44,14 +45,16 @@ void TestRunner::on_Start_clicked()
         StopWorker();
 
     ui->progressBar->reset();
-    ui->progressBar->setRange( 0, mTestCase.size() );
+    ui->progressBar->setRange( 0, test::CURRENT_PARAMS->TestCase().size() );
     ui->progressBar->setValue(0);
     ui->LogBox->clear();
 
     if ( test::CURRENT_PARAMS )
         ui->LogBox->append( test::CURRENT_PARAMS->ToString() );
 
-    mWorker.reset( new Worker( mTestCase ));
+    test::ToFile( "last_test_settings.isx", *test::CURRENT_PARAMS );
+
+    mWorker.reset( new Worker());
     QObject::connect( mWorker.get(), &Worker::to_log, ui->LogBox, &QTextBrowser::append );
     QObject::connect( mWorker.get(), &Worker::progress, this, &TestRunner::on_progress );
     QObject::connect( mWorker.get(), &Worker::started, this, &TestRunner::on_test_start );
@@ -97,14 +100,32 @@ void TestRunner::on_test_stop()
     ui->Start->setEnabled( true );
 }
 
-Worker::Worker( TestRunner::TestCase const& test_case ):
-    mStopSignal(false),
-    mTestCase(test_case)
+void TestRunner::on_SaveTest_clicked()
+{
+    QString file_name;
+    QFileDialog dlg;
+    dlg.setFileMode( QFileDialog::AnyFile );
+    dlg.setDirectory( app::Settings::Instance().TestPath() );
+    dlg.setNameFilter( "Параметры испытаний (*.isx )" );
+    dlg.setAcceptMode( QFileDialog::AcceptSave );
+    dlg.setViewMode( QFileDialog::Detail );
+    if ( dlg.exec() )
+        file_name = dlg.selectedFiles().front();
+    if ( !file_name.isEmpty() )
+    {
+        if ( !file_name.endsWith(".isx", Qt::CaseInsensitive) )
+            file_name += ".isx";
+        test::ToFile( file_name, *test::CURRENT_PARAMS );
+    }
+}
+
+Worker::Worker():
+    mStopSignal(false)
 {}
 void Worker::run()
 {
     mStopSignal = false;
-    foreach (test::Test* to_run, mTestCase)
+    foreach (test::Test* to_run, test::CURRENT_PARAMS->TestCase())
     {
         if (mStopSignal)
             break;
@@ -128,4 +149,6 @@ void Worker::LogIt( QString const& str )
 {
     emit to_log( str );
 }
+
+
 

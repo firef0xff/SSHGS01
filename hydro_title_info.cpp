@@ -7,9 +7,10 @@
 #include <test_case/test_params.h>
 
 
-HydroTitleInfo::HydroTitleInfo(QWidget *parent) :
+HydroTitleInfo::HydroTitleInfo(bool new_mode, QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::HydroTitleInfo)
+    ui(new Ui::HydroTitleInfo),
+    mNewMode( new_mode )
 {
     ui->setupUi(this);
 
@@ -25,6 +26,11 @@ HydroTitleInfo::HydroTitleInfo(QWidget *parent) :
 
     on_ControlType_activated( ui->ControlType->currentIndex() );
     on_ReelCount_valueChanged( ui->ReelCount->value() );
+
+    if ( !mNewMode )
+    {
+        FromParams();
+    }
 }
 
 HydroTitleInfo::~HydroTitleInfo()
@@ -36,7 +42,9 @@ bool HydroTitleInfo::SaveInputParams()
 {
     test::hydro::Parameters& params = test::hydro::Parameters::Instance();
     test::CURRENT_PARAMS = &params;
-    params.Reset();
+
+    if ( mNewMode )
+        params.Reset();
 
     bool res = true;
 
@@ -88,6 +96,36 @@ bool HydroTitleInfo::SaveInputParams()
     return res;
 }
 
+void HydroTitleInfo::FromParams()
+{
+    test::hydro::Parameters& params = test::hydro::Parameters::Instance();
+    ui->SerNo->setText( params.SerNo() );
+    ui->GsType->setCurrentIndex( ui->GsType->findText( params.GsType() ) );
+    on_GsType_activated( ui->GsType->currentIndex() );
+    ui->Voltage->setCurrentIndex( ui->Voltage->findText( QString::number( params.Voltage()  ) ) );
+    ui->VoltageType->setCurrentIndex( ui->VoltageType->findText( test::ToString( params.VoltageType() ) ) );
+    ui->ReelCount->setValue( params.ReelCount() );
+    on_ReelCount_valueChanged( ui->ReelCount->value() );
+    ui->ControlType->setCurrentIndex( ui->ControlType->findText( test::ToString( params.ControlType() ) ) );
+    on_ControlType_activated( ui->ControlType->currentIndex() );
+    ui->MinControlPressure->setValue( params.MinControlPressure() );
+    ui->MaxControlPressure->setValue( params.MaxControlPressure() );
+
+    ui->VoltageRange->setValue( params.VoltageRange() );
+    ui->MaxExpenditure->setText( QString::number( params.MaxExpenditure() ) );
+    ui->MaxWorkPressure->setText( QString::number( params.MaxWorkPressure() ) );
+
+    ui->MinPressure->setValue( params.MinTestPressure() );
+    ui->HermPressure->setValue( params.HermPressure() );
+
+    ui->HermSignal->setCurrentIndex( ui->HermSignal->findText( test::ToString( params.HermSignal() ) ) );
+    ui->PABTSignal->setCurrentIndex( ui->PABTSignal->findText( test::ToString( params.PABTSignal() ) ) );
+    ui->PBATSignal->setCurrentIndex( ui->PBATSignal->findText( test::ToString( params.PBATSignal() ) ) );
+
+    ui->ActuationOnTime->setText( QString::number( params.ActuationOnTime() ) );
+    ui->ActuationOffTime->setText( QString::number( params.ActuationOffTime() ) );
+}
+
 void HydroTitleInfo::on_buttonBox_accepted()
 {
     if ( SaveInputParams() )
@@ -95,7 +133,7 @@ void HydroTitleInfo::on_buttonBox_accepted()
         hide();
         if ( mChildWindow.get() )
             QObject::disconnect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
-        mChildWindow.reset( new StandParams() );
+        mChildWindow.reset( new StandParams( mNewMode ) );
         QObject::connect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
         mChildWindow->show();
     }

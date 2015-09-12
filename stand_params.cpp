@@ -5,9 +5,10 @@
 #include "test_case/test_params.h"
 #include <QMessageBox>
 
-StandParams::StandParams(QWidget *parent) :
+StandParams::StandParams(bool new_mode, QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::StandParams)
+    ui(new Ui::StandParams),
+    mNewMode( new_mode )
 {
     ui->setupUi(this);
 
@@ -21,6 +22,9 @@ StandParams::StandParams(QWidget *parent) :
         ui->OffControl_2->setVisible( false );
         ui->OffDynamic_2->setVisible( false );
     }
+
+    if (!mNewMode)
+        FromParams();
 }
 
 StandParams::~StandParams()
@@ -75,6 +79,21 @@ bool StandParams::SaveInputParams()
     return res;
 }
 
+void StandParams::FromParams()
+{
+    test::hydro::Parameters& params = test::hydro::Parameters::Instance();
+
+    ui->OnControl_1->setCurrentIndex( ui->OnControl_1->findText( test::ToString( params.OnControl_1() ) ) );
+    ui->OnDynamic_1->setCurrentIndex( ui->OnDynamic_1->findText( test::ToString( params.OnDynamic_1() ) ) );
+    ui->OffControl_1->setCurrentIndex( ui->OffControl_1->findText( test::ToString( params.OffControl_1() ) ) );
+    ui->OffDynamic_1->setCurrentIndex( ui->OffDynamic_1->findText( test::ToString( params.OffDynamic_1() ) ) );
+
+    ui->OnControl_2->setCurrentIndex( ui->OnControl_2->findText( test::ToString( params.OnControl_2() ) ) );
+    ui->OnDynamic_2->setCurrentIndex( ui->OnDynamic_2->findText( test::ToString( params.OnDynamic_2() ) ) );
+    ui->OffControl_2->setCurrentIndex( ui->OffControl_2->findText( test::ToString( params.OffControl_2() ) ) );
+    ui->OffDynamic_2->setCurrentIndex( ui->OffDynamic_2->findText( test::ToString( params.OffDynamic_2() ) ) );
+}
+
 void StandParams::on_buttonBox_accepted()
 {
     if ( SaveInputParams() )
@@ -82,7 +101,7 @@ void StandParams::on_buttonBox_accepted()
         hide();
         if ( mChildWindow.get() )
             QObject::disconnect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
-        mChildWindow.reset( new TestForm( test::HydroTests ) );
+        mChildWindow.reset( new TestForm( test::HydroTests, mNewMode ) );
         QObject::connect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
         mChildWindow->show();
     }

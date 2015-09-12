@@ -3,9 +3,10 @@
 #include "test_case/test_case.h"
 #include "test_case/test.h"
 #include "test_runner.h"
+#include "test_case/test_params.h"
 #include <QCheckBox>
 
-TestForm::TestForm( test::TestCase const& test_case, QWidget *parent) :
+TestForm::TestForm(test::TestCase const& test_case, bool new_mode, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::TestForm),
     mTestCase( &test_case )
@@ -18,7 +19,24 @@ TestForm::TestForm( test::TestCase const& test_case, QWidget *parent) :
         ptr->setObjectName( QStringLiteral("TestBox") + QString::number( test_ptr->Number() ) );
         ptr->setProperty("object", QVariant::fromValue( test_ptr ) );
         ptr->setText( test_ptr->Name() );
-        ptr->setChecked( true );
+
+        bool check = true;
+        if ( !new_mode )
+        {
+            test::Parameters::TestsList const& lnk = test::CURRENT_PARAMS->TestCase();
+            bool find = false;
+            foreach ( test::Test* ptr , lnk )
+            {
+                if ( ptr->Number() == test_ptr->Number() )
+                {
+                    find = true;
+                    break;
+                }
+            }
+            check *= find;
+        }
+        ptr->setChecked( check );
+
         ui->gridLayout->addWidget( ptr.get() , test_ptr->Number() - 1 , 0, 1, 1 );
         mControls.append( ptr );
         mChilds.append( ptr );
@@ -28,7 +46,7 @@ TestForm::TestForm( test::TestCase const& test_case, QWidget *parent) :
     mHorisontal = new QSpacerItem( 40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
 
     ui->gridLayout->addItem( mVertical, ui->gridLayout->rowCount() + 1, 0, 1, 1 );
-    ui->gridLayout->addItem( mHorisontal, 0, ui->gridLayout->rowCount() + 1, 1, 1 );
+    ui->gridLayout->addItem( mHorisontal, 0, ui->gridLayout->rowCount() + 1, 1, 1 );        
 }
 
 TestForm::~TestForm()
@@ -49,7 +67,7 @@ void TestForm::on_buttonBox_rejected()
 
 void TestForm::on_buttonBox_accepted()
 {
-    QList< test::Test* > selected;
+    test::Parameters::TestsList selected;
     foreach (ControlPtr check_box, mControls)
     {
         if ( check_box->isChecked() )
@@ -60,9 +78,10 @@ void TestForm::on_buttonBox_accepted()
     }
     if ( mChildWindow.get() )
         QObject::disconnect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
-    mChildWindow.reset( new TestRunner( selected ) );
+    test::CURRENT_PARAMS->TestCase( selected );
+    mChildWindow.reset( new TestRunner() );
     QObject::connect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
 
     hide();
-    mChildWindow->show();
+    mChildWindow->show();    
 }

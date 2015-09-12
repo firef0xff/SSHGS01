@@ -5,9 +5,10 @@
 #include "test_case/test_params.h"
 #include <QMessageBox>
 
-ServoTitleInfo::ServoTitleInfo(QWidget *parent) :
+ServoTitleInfo::ServoTitleInfo(bool new_mode, QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::ServoTitleInfo)
+    ui(new Ui::ServoTitleInfo),
+    mNewMode( new_mode )
 {
     ui->setupUi(this);
     ui->PressureNominal->setValidator( new QIntValidator( 100, 350, this ) );
@@ -15,6 +16,9 @@ ServoTitleInfo::ServoTitleInfo(QWidget *parent) :
     ui->MaxExpenditureA->setValidator( new QIntValidator( 1, 1000, this ) );
     ui->MaxExpenditureB->setValidator( new QIntValidator( 1, 1000, this ) );
     on_RaspredControl_activated( ui->RaspredControl->currentIndex() );
+
+    if ( !mNewMode )
+        FromParams();
 }
 
 ServoTitleInfo::~ServoTitleInfo()
@@ -26,7 +30,9 @@ bool ServoTitleInfo::SaveInputParams()
 {
     test::servo::Parameters& params = test::servo::Parameters::Instance();
     test::CURRENT_PARAMS = &params;
-    params.Reset();
+
+    if (mNewMode)
+        params.Reset();
 
     bool res = true;
 
@@ -90,6 +96,30 @@ bool ServoTitleInfo::SaveInputParams()
 
     return res;
 }
+void ServoTitleInfo::FromParams()
+{
+    test::servo::Parameters& params = test::servo::Parameters::Instance();
+
+    ui->SerNo->setText( params.SerNo() );
+    ui->RaspredControl->setCurrentIndex( ui->RaspredControl->findText( test::ToString( params.ControlType() ) ) );
+    on_RaspredControl_activated( ui->RaspredControl->currentIndex() );
+    ui->MinControlPressure->setValue( params.MinControlPressure() );
+    ui->MaxControlPressure->setValue( params.MaxControlPressure() );
+
+    ui->MaxExpenditure->setText( QString::number( params.MaxExpenditure() ) );
+
+    ui->ControlType->setCurrentIndex( ui->ControlType->findText( test::ToString( params.ReelControl() ) ) );
+
+    ui->PressureTesting->setValue( params.PressureTesting() );
+    ui->FrequencyInc->setValue( params.FrequencyInc() );
+
+    ui->PressureNominal->setText( QString::number( params.PressureNominal() ) );
+    ui->MaxExpenditureA->setText( QString::number( params.MaxExpenditureA() ) );
+    ui->MaxExpenditureB->setText( QString::number( params.MaxExpenditureB() ) );
+
+    params.MaxExpenditureB( ui->MaxExpenditureB->text() );
+
+}
 
 void ServoTitleInfo::on_buttonBox_accepted()
 {
@@ -98,7 +128,7 @@ void ServoTitleInfo::on_buttonBox_accepted()
         hide();
         if ( mChildWindow.get() )
             QObject::disconnect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
-        mChildWindow.reset( new TestForm( test::ServoTests ) );
+        mChildWindow.reset( new TestForm( test::ServoTests, mNewMode ) );
         QObject::connect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
         mChildWindow->show();
     }

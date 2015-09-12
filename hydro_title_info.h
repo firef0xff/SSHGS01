@@ -13,7 +13,7 @@ class HydroTitleInfo : public QWidget
     Q_OBJECT
 
 public:
-    explicit HydroTitleInfo(QWidget *parent = 0);
+    explicit HydroTitleInfo(bool new_mode, QWidget *parent = 0);
     ~HydroTitleInfo();
 
 private slots:
@@ -31,8 +31,10 @@ private:
     Ui::HydroTitleInfo *ui;
     void closeEvent(QCloseEvent *);
     std::unique_ptr< QWidget > mChildWindow;
+    bool mNewMode;
 
     bool SaveInputParams();
+    void FromParams();
 
 signals:
     void closed();

@@ -25,7 +25,7 @@
         <x>0</x>
         <y>0</y>
         <width>620</width>
-        <height>429</height>
+        <height>423</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -58,7 +58,35 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout_2">
-     <item row="0" column="1">
+     <item row="2" column="5">
+      <widget class="QPushButton" name="Cancel">
+       <property name="text">
+        <string>Отмена</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QPushButton" name="Save">
+       <property name="text">
+        <string>Сохранить отчет</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="3">
+      <widget class="QPushButton" name="Start">
+       <property name="text">
+        <string>Начать тест</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="4">
+      <widget class="QPushButton" name="Abort">
+       <property name="text">
+        <string>Прервать</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -71,31 +99,10 @@
        </property>
       </spacer>
      </item>
-     <item row="0" column="2">
-      <widget class="QPushButton" name="Start">
+     <item row="2" column="1">
+      <widget class="QPushButton" name="SaveTest">
        <property name="text">
-        <string>Начать тест</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="4">
-      <widget class="QPushButton" name="Cancel">
-       <property name="text">
-        <string>Отмена</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QPushButton" name="Save">
-       <property name="text">
-        <string>Сохранить отчет</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="3">
-      <widget class="QPushButton" name="Abort">
-       <property name="text">
-        <string>Прервать</string>
+        <string>Сохранить тест</string>
        </property>
       </widget>
      </item>

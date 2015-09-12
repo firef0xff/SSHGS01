@@ -1,6 +1,11 @@
 #include "test_params.h"
+#include "tests.h"
 #include <memory>
 #include <mutex>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QFile>
 
 namespace test
 {
@@ -120,8 +125,6 @@ bool ParseValue ( double_t& param, QString const& val )
     return t;
 }
 
-namespace
-{
 QString ToString( qint32 const& v )
 {
     if ( v >= 0 )
@@ -134,13 +137,13 @@ QString ToString( VOLTAGE_TYPE const& v )
     switch (v)
     {
         case VT_UNKNOWN:
-            return "не задано";
+            return "Не задано";
         case VT_AC:
-            return "переменное";
+            return "Переменное";
         case VT_DC:
-            return "постоянное";
+            return "Постоянное";
     default:
-        return "неизвестное значение";
+        return "Неизвестное значение";
     }
 }
 QString ToString( CONTROL_TYPE const& v )
@@ -148,13 +151,13 @@ QString ToString( CONTROL_TYPE const& v )
     switch (v)
     {
         case CT_UNKNOWN:
-            return "не задано";
+            return "Не задано";
         case CT_ELECTRIC:
-            return "электронное";
+            return "Электронное";
         case CT_HYDRO_ELECTRIC:
-            return "электрогидравлическое";
+            return "Электрогидравлическое";
     default:
-        return "неизвестное значение";
+        return "Неизвестное значение";
     }
 }
 QString ToString( CONTROL_SIGNAL const& v )
@@ -162,15 +165,15 @@ QString ToString( CONTROL_SIGNAL const& v )
     switch (v)
     {
         case CS_UNKNOWN:
-            return "не задано";
+            return "Не задано";
         case CS_NONE:
-            return "отсутствует";
+            return "Отсутствует";
         case CS_REEL_A:
-            return "катушка А";
+            return "Катушка А";
         case CS_REEL_B:
-            return "катушка Б";
+            return "Катушка Б";
     default:
-        return "неизвестное значение";
+        return "Неизвестное значение";
     }
 }
 QString ToString( DYNAMIC const& v )
@@ -178,13 +181,13 @@ QString ToString( DYNAMIC const& v )
     switch (v)
     {
         case DN_UNKNOWN:
-            return "не задано";
+            return "Не задано";
         case DN_UP:
-            return "увеличение давления";
+            return "Увеличение давления";
         case DN_DOWN:
-            return "уменьшение давления";
+            return "Уменьшение давления";
     default:
-        return "неизвестное значение";
+        return "Неизвестное значение";
     }
 }
 QString ToString( DYNAMIC_CONTROL const& v )
@@ -192,7 +195,7 @@ QString ToString( DYNAMIC_CONTROL const& v )
     switch (v)
     {
         case DC_UNKNOWN:
-            return "не задано";
+            return "Не задано";
         case DC_DD1:
             return "ДД1";
         case DC_DD2:
@@ -200,7 +203,7 @@ QString ToString( DYNAMIC_CONTROL const& v )
         case DC_DD3:
             return "ДД3";
     default:
-        return "неизвестное значение";
+        return "Неизвестное значение";
     }
 }
 QString ToString( RELL_CONTROL const& v )
@@ -208,24 +211,22 @@ QString ToString( RELL_CONTROL const& v )
     switch (v)
     {
         case RC_UNKNOWN:
-            return "не задано";
+            return "Не задано";
         case RC_REEL:
-            return "напрямую катушками управления";
+            return "Напрямую катушками управления";
         case RC_CONTROL_BOX:
-            return "через блок управления";
+            return "Через блок управления";
     default:
-        return "неизвестное значение";
+        return "Неизвестное значение";
     }
 }
 QString ToString( double_t const& v )
 {
     if ( v >= 0 )
-        return QString::number( v, 'g', 2 );
+        return QString::number( v );
     else
         return "не задано";
 }
-
-}//namespace
 
 Parameters::Parameters():
     mSerNo(""),
@@ -243,6 +244,16 @@ void Parameters::Reset()
     mControlType  =  CT_UNKNOWN;
     mMinControlPressure  =  -1;
     mMaxControlPressure  =  -1;
+    mTestCase.clear();
+}
+
+void Parameters::TestCase ( TestsList const& test_case)
+{
+    mTestCase = test_case;
+}
+Parameters::TestsList const& Parameters::TestCase ()
+{
+    return mTestCase;
 }
 
 bool Parameters::SerNo ( QString const& val )
@@ -298,6 +309,89 @@ bool Parameters::MaxControlPressure ( QString const& val )
 qint32 const& Parameters::MaxControlPressure () const
 {
     return mMaxControlPressure;
+}
+
+
+QJsonObject Parameters::Serialise() const
+{
+    QJsonObject obj;
+    obj.insert("SerNo", mSerNo);
+    obj.insert("ReelCount", mReelCount);
+    obj.insert("MaxExpenditure", mMaxExpenditure);
+    obj.insert("ControlType",mControlType);
+    obj.insert("MinControlPressure",mMinControlPressure);
+    obj.insert("MaxControlPressure",mMaxControlPressure);
+
+    QJsonArray tests;
+    foreach (test::Test* ptr, mTestCase)
+    {
+        tests.push_back( ptr->Number() );
+    }
+    obj.insert("TestCase", tests);
+    return obj;
+}
+bool Parameters::Deserialize(const QJsonObject &obj )
+{
+    bool res = true;
+    mSerNo = obj.value("SerNo").toString();
+    mReelCount = obj.value("ReelCount").toInt();
+    mMaxExpenditure = obj.value("MaxExpenditure").toInt();
+    mControlType = static_cast<CONTROL_TYPE>( obj.value("ControlType").toInt() );
+    mMinControlPressure = obj.value("MinControlPressure").toInt();
+    mMaxControlPressure = obj.value("MaxControlPressure").toInt();
+
+    QJsonArray tests = obj.value("TestCase").toArray();
+
+    test::TestCase const& Collection = TestCollection();
+    foreach ( QJsonValue const& val, tests )
+    {
+        bool find = false;
+        for ( auto it = Collection.Tests().cbegin(), end = Collection.Tests().cend();
+              it != end && !find ; ++it)
+        {
+            test::Test* ptr = *it;
+            if ( ptr->Number() == val.toInt() )
+            {
+                mTestCase.push_back( ptr );
+                find = true;
+            }
+        }
+        res *= find;
+    }
+
+    return res;
+}
+
+
+void ToFile( QString fname, Parameters const& params )
+{
+    QFile f( fname );
+    f.open(QIODevice::WriteOnly);
+    QJsonDocument doc;
+    doc.setObject( params.Serialise() );
+
+    f.write( doc.toJson() );
+
+    f.close();
+}
+Parameters* FromFile( QString fname )
+{
+    QFile f( fname );
+    Parameters* ret = nullptr;
+    if ( f.exists() )
+    {
+        f.open(QIODevice::ReadOnly);
+        auto doc = QJsonDocument::fromJson( f.readAll() );
+        QJsonObject obj = doc.object();
+
+        if ( hydro::Parameters::Instance().Deserialize( obj ) )
+            ret = &hydro::Parameters::Instance();
+        if ( servo::Parameters::Instance().Deserialize( obj ) )
+            ret = &servo::Parameters::Instance();
+        f.close();
+    }
+
+    return ret;
 }
 
 
@@ -413,6 +507,74 @@ QString Parameters::ToString()
     return res;
 }
 
+test::TestCase const& Parameters::TestCollection() const
+{
+    return HydroTests;
+}
+
+QJsonObject Parameters::Serialise() const
+{
+    QJsonObject obj;
+    obj.insert("GsType", mGsType);
+    obj.insert("Voltage", mVoltage);
+    obj.insert("VoltageRange", mVoltageRange);
+    obj.insert("VoltageType", mVoltageType);
+    obj.insert("MaxWorkPressure", mMaxWorkPressure);
+    obj.insert("MinTestPressure", mMinTestPressure);
+    obj.insert("HermPressure", mHermPressure);
+    obj.insert("HermSignal", mHermSignal);
+    obj.insert("PABTSignal", mPABTSignal);
+    obj.insert("PBATSignal", mPBATSignal);
+    obj.insert("ActuationOnTime", mActuationOnTime);
+    obj.insert("ActuationOffTime", mActuationOffTime);
+    obj.insert("OnControl_1", mOnControl_1);
+    obj.insert("OffControl_1", mOffControl_1);
+    obj.insert("OnControl_2", mOnControl_2);
+    obj.insert("OffControl_2", mOffControl_2);
+    obj.insert("OnDynamic_1", mOnDynamic_1);
+    obj.insert("OffDynamic_1", mOffDynamic_1);
+    obj.insert("OnDynamic_2", mOnDynamic_2);
+    obj.insert("OffDynamic_2", mOffDynamic_2);
+
+    QJsonObject ret = test::Parameters::Serialise();
+    ret.insert("hydro", obj);
+
+    return ret;
+}
+bool Parameters::Deserialize(const QJsonObject &obj )
+{
+    bool ret = test::Parameters::Deserialize( obj );
+    auto val = obj.value("hydro");
+    if ( val.isObject() )
+    {
+        QJsonObject obj = val.toObject();
+        mGsType = obj.value("GsType").toString();
+        mVoltage =  obj.value("Voltage").toInt();
+        mVoltageRange =  obj.value("VoltageRange").toInt();
+        mVoltageType = static_cast<VOLTAGE_TYPE>( obj.value("VoltageType").toInt() );
+        mMaxWorkPressure  =  obj.value("MaxWorkPressure").toInt();
+        mMinTestPressure  =  obj.value("MinTestPressure").toInt();
+        mHermPressure =  obj.value("HermPressure").toInt();
+        mHermSignal  =  static_cast<CONTROL_SIGNAL>( obj.value("HermSignal").toInt() );
+        mPABTSignal  =  static_cast<CONTROL_SIGNAL>( obj.value("PABTSignal").toInt() );
+        mPBATSignal  =  static_cast<CONTROL_SIGNAL>( obj.value("PBATSignal").toInt() );
+        mActuationOnTime  =  obj.value("ActuationOnTime").toInt();
+        mActuationOffTime  =  obj.value("ActuationOffTime").toInt();
+        mOnControl_1 = static_cast<DYNAMIC_CONTROL>( obj.value("OnControl_1").toInt() );
+        mOffControl_1 = static_cast<DYNAMIC_CONTROL>( obj.value("OffControl_1").toInt() );
+        mOnControl_2 = static_cast<DYNAMIC_CONTROL>( obj.value("OnControl_2").toInt() );
+        mOffControl_2 = static_cast<DYNAMIC_CONTROL>( obj.value("OffControl_2").toInt() );
+        mOnDynamic_1 = static_cast<DYNAMIC>( obj.value("OnDynamic_1").toInt() );
+        mOffDynamic_1 = static_cast<DYNAMIC>( obj.value("OffDynamic_1").toInt() );
+        mOnDynamic_2 = static_cast<DYNAMIC>( obj.value("OnDynamic_2").toInt() );
+        mOffDynamic_2 = static_cast<DYNAMIC>( obj.value("OffDynamic_2").toInt() );
+        ret = true;
+    }
+    else
+        ret = false;
+
+    return ret;
+}
 
 bool Parameters::GsType ( QString const& val )
 {
@@ -659,6 +821,48 @@ QString Parameters::ToString()
     res+= "  Максимальный расход в канале А, при следующем опорном сигнале, X_max_A, л/мин: " + test::ToString( mMaxExpenditureA ) + "\n";
     res+= "  Максимальный расход в канале Б, при следующем опорном сигнале, X_max_Б, л/мин: " + test::ToString( mMaxExpenditureB ) + "\n";
     res+= "  Инкремент частоты при построении частотных характеристик, Гц: " + test::ToString( mFrequencyInc ) + "\n";
+
+    return res;
+}
+
+test::TestCase const& Parameters::TestCollection() const
+{
+    return ServoTests;
+}
+
+QJsonObject Parameters::Serialise() const
+{
+    QJsonObject res = test::Parameters::Serialise();
+    QJsonObject servo;
+    servo.insert("ReelControl", mReelControl);
+    servo.insert("PressureNominal", mPressureNominal);
+    servo.insert("PressureTesting", mPressureTesting);
+    servo.insert("MaxExpenditureA", mMaxExpenditureA);
+    servo.insert("MaxExpenditureB", mMaxExpenditureB);
+    servo.insert("FrequencyInc", mFrequencyInc);
+
+    res.insert("servo", servo);
+    return res;
+}
+bool Parameters::Deserialize( QJsonObject const& obj )
+{
+    bool res = test::Parameters::Deserialize( obj );
+
+    auto val = obj.value("servo");
+    if ( val.isObject() )
+    {
+        QJsonObject obj = val.toObject();
+
+        mReelControl = static_cast<RELL_CONTROL>(obj.value("ReelControl").toInt());
+        mPressureNominal = obj.value("PressureNominal").toInt();
+        mPressureTesting = obj.value("PressureTesting").toInt();
+        mMaxExpenditureA = obj.value("MaxExpenditureA").toInt();
+        mMaxExpenditureB = obj.value("MaxExpenditureB").toInt();
+        mFrequencyInc = obj.value("FrequencyInc").toDouble();
+        res = true;
+    }
+    else
+        res = false;
 
     return res;
 }

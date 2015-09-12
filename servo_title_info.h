@@ -13,15 +13,17 @@ class ServoTitleInfo : public QWidget
     Q_OBJECT
 
 public:
-    explicit ServoTitleInfo(QWidget *parent = 0);
+    explicit ServoTitleInfo(bool new_mode, QWidget *parent = 0);
     ~ServoTitleInfo();
 
 private:
     Ui::ServoTitleInfo *ui;
     std::unique_ptr< QWidget > mChildWindow;
+    bool mNewMode;
 
     void closeEvent(QCloseEvent *);
     bool SaveInputParams();
+    void FromParams();
 
 signals:
     void closed();
