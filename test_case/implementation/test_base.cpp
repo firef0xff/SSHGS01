@@ -9,8 +9,8 @@ namespace hydro
 
 uint8_t Test::mTestsCount = 1;
 
-Test::Test( QString const& name ):
-    test::Test( &HydroTests, name, mTestsCount )
+Test::Test( QString const& name, uint8_t id ):
+    test::Test( &HydroTests, name, mTestsCount, id )
 {
     ++mTestsCount;
 }
@@ -23,8 +23,8 @@ namespace servo
 
 uint8_t Test::mTestsCount = 1;
 
-Test::Test( QString const& name ):
-    test::Test( &ServoTests, name, mTestsCount )
+Test::Test( QString const& name, uint8_t id ):
+    test::Test( &ServoTests, name, mTestsCount, id )
 {
     ++mTestsCount;
 }

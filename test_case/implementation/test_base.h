@@ -11,7 +11,7 @@ namespace hydro
 class Test :public test::Test
 {
 public:
-    Test( QString const& name );
+    Test( QString const& name, uint8_t id );
 private:
     static uint8_t mTestsCount;
 };
@@ -24,7 +24,7 @@ namespace servo
 class Test :public test::Test
 {
 public:
-    Test( QString const& name );
+    Test( QString const& name, uint8_t id );
 private:
     static uint8_t mTestsCount;
 };

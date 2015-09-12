@@ -7,7 +7,7 @@ namespace hydro
 {
 
 FunctionalTest::FunctionalTest():
-    test::hydro::Test( "Испытание функционирования" )
+    test::hydro::Test( "Испытание функционирования", 15 )
 {}
 
 bool FunctionalTest::Run()

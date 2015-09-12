@@ -4,8 +4,8 @@
 namespace test
 {
 
-Test::Test(TestCase *test_case, QString const& name, uint8_t number )
-    : mName(name), mNumber(number), mCase(test_case),mStopMarker(nullptr)
+Test::Test(TestCase *test_case, QString const& name, uint8_t number , uint8_t id)
+    : mName(name), mNumber(number), mId(id), mCase(test_case),mStopMarker(nullptr)
 {
     if (mCase)
         mCase -> Register( this );
@@ -30,7 +30,10 @@ uint8_t const& Test::Number() const
 {
     return mNumber;
 }
-
+uint8_t const& Test::ID() const
+{
+    return mId;
+}
 bool Test::Run( LogFunction to_log, bool& stop )
 {
     Log = to_log;

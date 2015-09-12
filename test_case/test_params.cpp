@@ -350,7 +350,7 @@ bool Parameters::Deserialize(const QJsonObject &obj )
               it != end && !find ; ++it)
         {
             test::Test* ptr = *it;
-            if ( ptr->Number() == val.toInt() )
+            if ( ptr->ID() == val.toInt() )
             {
                 mTestCase.push_back( ptr );
                 find = true;

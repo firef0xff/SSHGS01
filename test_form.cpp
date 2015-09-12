@@ -27,7 +27,7 @@ TestForm::TestForm(test::TestCase const& test_case, bool new_mode, QWidget *pare
             bool find = false;
             foreach ( test::Test* ptr , lnk )
             {
-                if ( ptr->Number() == test_ptr->Number() )
+                if ( ptr->ID() == test_ptr->ID() )
                 {
                     find = true;
                     break;
