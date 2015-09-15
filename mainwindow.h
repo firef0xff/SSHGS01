@@ -3,6 +3,11 @@
 #include <memory>
 #include "RoundDial/round_dial.h"
 
+namespace examinee
+{
+class DeviceCollection;
+}
+
 namespace Ui {
 class MainWindow;
 }
@@ -26,7 +31,8 @@ private:
     void StartHydroTest( bool new_test );
     void StartServoTest( bool new_test );
     void StartManualControl();
-    void SettringsFileStorage ();
+    void AppSettrings ();
+    void DeviceLists( examinee::DeviceCollection &devices );
 
     void ShowChildWindow( ChildPtr child );
 
@@ -66,5 +72,7 @@ private slots:
     void on_act_test_case1_triggered();
     void on_act_test_case2_triggered();
     void on_load_isp_params_triggered();
-    void on_file_storage_triggered();
+    void on_app_settings_triggered();
+    void on_hydro_list_triggered();
+    void on_servo_list_triggered();
 };

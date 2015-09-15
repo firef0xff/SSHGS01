@@ -115,7 +115,7 @@ bool ParseValue ( RELL_CONTROL& param, QString const& val )
     }
     return false;
 }
-bool ParseValue ( double_t& param, QString const& val )
+bool ParseValue ( double& param, QString const& val )
 {
     bool t = false;
     auto b =  val.toDouble( &t );
@@ -220,7 +220,7 @@ QString ToString( RELL_CONTROL const& v )
         return "Неизвестное значение";
     }
 }
-QString ToString( double_t const& v )
+QString ToString( double const& v )
 {
     if ( v >= 0 )
         return QString::number( v );
@@ -420,6 +420,7 @@ Parameters::Parameters():
     mGsType(""),
     mVoltage( -1 ),
     mVoltageRange( -1 ),
+    mLost( -1.0 ),
     mVoltageType( VT_UNKNOWN ),       
     mMaxWorkPressure ( -1 ),
     mMinTestPressure ( -1 ),
@@ -447,6 +448,7 @@ void Parameters::Reset()
     mGsType = "";
     mVoltage =  -1;
     mVoltageRange =  -1;
+    mLost = -1.0;
     mVoltageType = VT_UNKNOWN;    
     mMaxWorkPressure  =  -1;
     mMinTestPressure  =  -1;
@@ -475,6 +477,7 @@ QString Parameters::ToString()
     res+= "  Напряжение питания, В: " + test::ToString( mVoltage ) +"\n";
     res+= "  Тип питающего напряжения: " + test::ToString( mVoltageType ) + "\n";
     res+= "  Допустимое отклонение напрядения питания, %: " + test::ToString( mVoltageRange ) + "\n";
+    res+= "  Допустимое значение утечки, %: " + test::ToString( mLost ) + "\n";
     res+= "  Количество катушек питания: " + test::ToString( mReelCount ) + "\n";
     res+= "  Тип управления: " + test::ToString( mControlType ) + "\n";
     res+= "  Максимальное давление управления, Бар: " + test::ToString( mMaxControlPressure ) + "\n";
@@ -518,6 +521,7 @@ QJsonObject Parameters::Serialise() const
     obj.insert("GsType", mGsType);
     obj.insert("Voltage", mVoltage);
     obj.insert("VoltageRange", mVoltageRange);
+    obj.insert("Lost", mLost);
     obj.insert("VoltageType", mVoltageType);
     obj.insert("MaxWorkPressure", mMaxWorkPressure);
     obj.insert("MinTestPressure", mMinTestPressure);
@@ -551,6 +555,7 @@ bool Parameters::Deserialize(const QJsonObject &obj )
         mGsType = obj.value("GsType").toString();
         mVoltage =  obj.value("Voltage").toInt();
         mVoltageRange =  obj.value("VoltageRange").toInt();
+        mLost = obj.value("Lost").toDouble();
         mVoltageType = static_cast<VOLTAGE_TYPE>( obj.value("VoltageType").toInt() );
         mMaxWorkPressure  =  obj.value("MaxWorkPressure").toInt();
         mMinTestPressure  =  obj.value("MinTestPressure").toInt();
@@ -602,6 +607,15 @@ bool Parameters::VoltageRange ( QString const& val )
 qint32 const& Parameters::VoltageRange () const
 {
     return mVoltageRange;
+}
+
+bool Parameters::Lost ( QString const& val )
+{
+    return ParseValue( mLost, val );
+}
+double const& Parameters::Lost () const
+{
+    return mLost;
 }
 
 bool Parameters::VoltageType ( QString const& val )
@@ -916,7 +930,7 @@ bool Parameters::FrequencyInc ( QString const& val )
 {
     return ParseValue( mFrequencyInc, val );
 }
-const double_t &Parameters::FrequencyInc() const
+const double &Parameters::FrequencyInc() const
 {
     return mFrequencyInc;
 }

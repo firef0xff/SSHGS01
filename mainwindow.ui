@@ -408,7 +408,17 @@ X</string>
     <property name="title">
      <string>Настройки</string>
     </property>
-    <addaction name="file_storage"/>
+    <widget class="QMenu" name="device_list">
+     <property name="title">
+      <string>Списки оборудования</string>
+     </property>
+     <addaction name="separator"/>
+     <addaction name="separator"/>
+     <addaction name="hydro_list"/>
+     <addaction name="servo_list"/>
+    </widget>
+    <addaction name="app_settings"/>
+    <addaction name="device_list"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
@@ -447,9 +457,19 @@ X</string>
     <string>isp_2</string>
    </property>
   </action>
-  <action name="file_storage">
+  <action name="app_settings">
    <property name="text">
-    <string>Раположение файлов</string>
+    <string>Настройка приложения</string>
+   </property>
+  </action>
+  <action name="hydro_list">
+   <property name="text">
+    <string>Гидроаппаратура</string>
+   </property>
+  </action>
+  <action name="servo_list">
+   <property name="text">
+    <string>Пропорциональная аппаратура</string>
    </property>
   </action>
  </widget>

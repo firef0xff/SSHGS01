@@ -1,0 +1,656 @@
+[
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "DSE3",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "DSE3B",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "DSE3G",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "DSE3J",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "DSE5",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "DSE5-C60/10N-D24K1",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "DSE5G",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "DSE5J",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "DSPE*",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "DSPE7-C150/11N-IE/D24K1",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "DSPE*G",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "DSPE*J",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "DXJ3",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "DXJ5",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "DS(P)*M",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "PRE25",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "PRE25-350/10N-D24K1",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "RQE5",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "RQE5-P6/53-24",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "REXROTH",
+        "name": "4WRAE6",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "REXROTH",
+        "name": "4WRAE10",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "REXROTH",
+        "name": "4WRE6",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRE 6 2X/G24K4/V",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRE 6 E32-2X/G24K4/V",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "REXROTH",
+        "name": "4WRE10",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRE 10 E50-2X/G24K4/V",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "REXROTH",
+        "name": "4WREE6",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WREE 6 E1-16-22/G24K31/F1V",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WREE 6 E16-22/G24K31/A1V",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WREE 6 E32-22/G24K31/F1V",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "REXROTH",
+        "name": "4WREE10",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "REXROTH",
+        "name": "4WRSE6",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRSE 6 V10-31/G24K0/A1V",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRSE 6V10-3X/G24K0 A1 V12V",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "REXROTH",
+        "name": "4WRSEH6",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRSEH 6 C3B24LD-30/G24K0/A1V",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRSEH 6 C3B24LD-3X/G24K0/A1V",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "REXROTH",
+        "name": "4WRSEH10",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "REXROTH",
+        "name": "4WRPEH6",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRPEH 6 C3 B12L-20/G24K0/A1M",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRPEH 6 C3 B24L-2X/G24K0/A1M",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "REXROTH",
+        "name": "4WRPEH10",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRPEH 10 C4 B100L-2X/G24K0/A1M",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "REXROTH",
+        "name": "4WRZ10...25",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRZ 25 W8-325-70/6EG24N9EK4/M",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRZ 25 W6-220-70/6EG24N9EK4/M",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRZ 25 W6-220-7X/6EG24EK4/M",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRZ 25 W8-325-7X/6EG24EK4/M",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRZ 10 E-85-70/6EG24N9TK4/D3M",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRZ 10 W6-85-7X/6E G24 E K4/M",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRZ 10 E-85-7X/6EG24N9TK4/D3M",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "REXROTH",
+        "name": "4WRTE10...35",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRTE 10 E50L-41/6EG24K31/A5M",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRTE 10 W825L-40/6EG24ETK31/A1M",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "REXROTH",
+        "name": "4WRKE16",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRKE 16 W8125L-3X/6EG24EK31F1D3M",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "REXROTH",
+        "name": "4WRZE25",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRZE 25 W6325-7X/6EG24N9K31D3M",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "REXROTH",
+        "name": "4WRPH6",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRPH 6 C3 B12L-2X/G24Z4/M",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRPH 6 C3 B04L-20/G24Z4/M",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRPH 6 C B40L-20/G24Z4/M-859",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRPH 6 C B40L-2X/G24Z4/M-859",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "REXROTH",
+        "name": "4WRPH10",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRPH 10 C3 B100L-2X/G24Z4/M",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "REXROTH",
+        "name": "4WRP10",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRP 10 W63S-1X/G24Z4/M",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "REXROTH",
+        "name": "4WRLE10",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRLE10 V-85M-3X/G24 K0/A1M",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "REXROTH",
+        "name": "4WRLE16",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRLE 16 V200M-30/G24K0/A1M",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRLE 16 V200M-3X/G24/K0/A1M",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "REXROTH",
+        "name": "4WRL16",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRL 16-W1Z180S-30/G24Z4/M",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRL 16 W1Z180S-3X/G24Z4/M",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "REXROTH",
+        "name": "4WRL25",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRL 25 W12-350S-3X/G24Z4/M",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRL 25 W1Z350S-3X/G24Z4/M",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WRL 25 WZ350S-3X/G24Z4/M",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "REXROTH",
+        "name": "4WSE3EE16",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "4WSE3EE16-15/200B9T315K9EV",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "REXROTH",
+        "name": "4WSE3E16",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "EMG",
+        "name": "SV1-10-210-01",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "SV1-10/16/315/6",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "SV1-10/8/315/6",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "SV1-10/8/100/6",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "SV1-10/32/315/6 ",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "Vickers(ETON)",
+        "name": "KADG5V",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "MOOG",
+        "name": "D631, G631",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "D631-176C Type P20FDFMANBR",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "G631-3009B Type H20JDFM4VBR",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "D631-502С Type PХХFDGMANBR",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "MOOG",
+        "name": "D633, D634",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "D633-419B Type R16KO1F0NSP2",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "D633-333B Type R16KO1F0NSS2",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "MOOG",
+        "name": "D661",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "D661-5626C Type G18HOAO6VSB0-P",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "G661-623А, Type G15F0E08V6BO",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "D661-xxxx, Type G35JXAA6VSX2HA - 1,5:1 (90/60L)",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "D662-XXXX Type P02JXMF6VSX2-A",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "D662-Z4333K Type P01JXMF6VSX2-A -2:1",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "D661-6316C Type G23JXAA6VSX2HA - 2:1",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "MOOG",
+        "name": "D682, D683",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "MOOG",
+        "name": "D760, D761, G761",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "G761-3602 Type S63JOGM5UPL",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "G761-3602 Type S63JOGM5UP",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "D760F342A Type S57FOGM4VPY",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "F760 Type S53COFMAVPY",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "",
+        "name": "D760-938A, Type S063J0200NG",
+        "properties": {
+        }
+    }
+]

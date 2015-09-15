@@ -1,0 +1,176 @@
+[
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "DS3",
+        "properties": {
+            "ТипУправления": "Электронное"
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "DL3",
+        "properties": {
+            "ТипУправления": "Электронное"
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "DL3B",
+        "properties": {
+            "ТипУправления": "Электронное"
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "MDS3",
+        "properties": {
+            "ТипУправления": "Электронное"
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "MDF3",
+        "properties": {
+            "ТипУправления": "Электронное"
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "DS5",
+        "properties": {
+            "ТипУправления": "Электронное"
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "DL5",
+        "properties": {
+            "ТипУправления": "Электронное"
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "DL5B",
+        "properties": {
+            "ТипУправления": "Электронное"
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "DD44",
+        "properties": {
+            "ТипУправления": "Электронное"
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "E*P4",
+        "properties": {
+            "ТипУправления": "Электронное"
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "DSP7",
+        "properties": {
+            "ДавлениеУправления.Максимум": 210,
+            "ДавлениеУправления.Минимум": 12,
+            "ТипУправления": "Электрогидравлическое"
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "DSP10",
+        "properties": {
+            "ДавлениеУправления.Максимум": 280,
+            "ДавлениеУправления.Минимум": 12,
+            "ТипУправления": "Электрогидравлическое"
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "DS(P)*M",
+        "properties": {
+            "ТипУправления": "Электронное"
+        }
+    },
+    {
+        "manufacturer": "РОССИЯ",
+        "name": "П6",
+        "properties": {
+            "ТипУправления": "Электронное"
+        }
+    },
+    {
+        "manufacturer": "РОССИЯ",
+        "name": "В6",
+        "properties": {
+            "ТипУправления": "Электронное"
+        }
+    },
+    {
+        "manufacturer": "РОССИЯ",
+        "name": "1Р6",
+        "properties": {
+            "ТипУправления": "Электронное"
+        }
+    },
+    {
+        "manufacturer": "РОССИЯ",
+        "name": "В10",
+        "properties": {
+            "ТипУправления": "Электронное"
+        }
+    },
+    {
+        "manufacturer": "РОССИЯ",
+        "name": "1Р10",
+        "properties": {
+            "ТипУправления": "Электронное"
+        }
+    },
+    {
+        "manufacturer": "РОССИЯ",
+        "name": "В16",
+        "properties": {
+            "ТипУправления": "Электронное"
+        }
+    },
+    {
+        "manufacturer": "REXROTH",
+        "name": "1Р203",
+        "properties": {
+            "ТипУправления": "Электронное"
+        }
+    },
+    {
+        "manufacturer": "REXROTH",
+        "name": "1Р323",
+        "properties": {
+            "ТипУправления": "Электронное"
+        }
+    },
+    {
+        "manufacturer": "REXROTH",
+        "name": "4WE6",
+        "properties": {
+            "ТипУправления": "Электронное"
+        }
+    },
+    {
+        "manufacturer": "REXROTH",
+        "name": "4WE10",
+        "properties": {
+            "ТипУправления": "Электронное"
+        }
+    },
+    {
+        "manufacturer": "REXROTH",
+        "name": "4WEH10…32",
+        "properties": {
+            "ДавлениеУправления.Максимум": 280,
+            "ДавлениеУправления.Минимум": 14,
+            "ТипУправления": "Электрогидравлическое"
+        }
+    }
+]

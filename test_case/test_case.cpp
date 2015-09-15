@@ -4,9 +4,11 @@
 
 namespace test
 {
-TestCase::TestCase(QString const& name, const QString &descr):
-    mName( name ), mDescr( descr )
-{}
+TestCase::TestCase(QString const& name, const QString &devices, const QString &descr):
+    mName( name ), mDescr( descr ), mCollection ( devices )
+{
+    mCollection.Load();
+}
 
 TestCase::~TestCase()
 {

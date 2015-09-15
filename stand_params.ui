@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1016</width>
-    <height>628</height>
+    <height>663</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -45,9 +45,6 @@
      </property>
      <property name="wordWrap">
       <bool>true</bool>
-     </property>
-     <property name="buddy">
-      <cstring></cstring>
      </property>
     </widget>
    </item>

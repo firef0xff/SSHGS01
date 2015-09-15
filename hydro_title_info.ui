@@ -107,7 +107,7 @@
      <item row="9" column="3">
       <widget class="QSpinBox" name="HermPressure">
        <property name="toolTip">
-        <string>10...400 Бар</string>
+        <string>10...315 Бар</string>
        </property>
        <property name="toolTipDuration">
         <number>1000</number>
@@ -119,7 +119,7 @@
         <number>10</number>
        </property>
        <property name="maximum">
-        <number>400</number>
+        <number>315</number>
        </property>
        <property name="value">
         <number>315</number>
@@ -465,7 +465,7 @@
      <item row="7" column="1">
       <widget class="QLineEdit" name="MaxExpenditure">
        <property name="toolTip">
-        <string>10...1100 л/мин.</string>
+        <string>10...660 л/мин.</string>
        </property>
        <property name="toolTipDuration">
         <number>1000</number>
@@ -484,13 +484,28 @@
      <item row="7" column="3">
       <widget class="QLineEdit" name="MaxWorkPressure">
        <property name="toolTip">
-        <string>10...400 Бар</string>
+        <string>10...315 Бар</string>
        </property>
        <property name="toolTipDuration">
         <number>1000</number>
        </property>
        <property name="clearButtonEnabled">
         <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="2">
+      <widget class="QLabel" name="l_lost">
+       <property name="text">
+        <string>Допустимое значение
+утечки, л/мин</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="3">
+      <widget class="QLineEdit" name="Lost">
+       <property name="toolTip">
+        <string>0,01..10  л/мин.</string>
        </property>
       </widget>
      </item>

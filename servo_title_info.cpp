@@ -11,10 +11,11 @@ ServoTitleInfo::ServoTitleInfo(bool new_mode, QWidget *parent) :
     mNewMode( new_mode )
 {
     ui->setupUi(this);
-    ui->PressureNominal->setValidator( new QIntValidator( 100, 350, this ) );
-    ui->MaxExpenditure->setValidator( new QIntValidator( 1, 1000, this ) );
-    ui->MaxExpenditureA->setValidator( new QIntValidator( 1, 1000, this ) );
-    ui->MaxExpenditureB->setValidator( new QIntValidator( 1, 1000, this ) );
+
+    ui->PressureNominal->setValidator( new QIntValidator( 10, 315, this ) );
+    ui->MaxExpenditure->setValidator( new QIntValidator( 1, 660, this ) );
+    ui->MaxExpenditureA->setValidator( new QIntValidator( 1, 660, this ) );
+    ui->MaxExpenditureB->setValidator( new QIntValidator( 1, 660, this ) );
     on_RaspredControl_activated( ui->RaspredControl->currentIndex() );
 
     if ( !mNewMode )

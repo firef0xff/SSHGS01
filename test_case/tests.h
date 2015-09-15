@@ -2,6 +2,7 @@
 #include "test_case.h"
 #include "test.h"
 #include "../devices/device.h"
+#include <QJsonObject>
 
 namespace test
 {

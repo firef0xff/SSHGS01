@@ -1,5 +1,6 @@
 #pragma once
 #include <QList>
+#include <QJsonArray>
 
 namespace examinee
 {
@@ -9,21 +10,28 @@ class DeviceCollection
 {
 public:
     typedef QList< Device* > DataType;
-    DeviceCollection();
+    DeviceCollection( QString const& f_name );
     ~DeviceCollection();
 
     DataType const& Get();
+    void Set( DataType const& data );
+
+    bool Load();
+    void Save();
 
 private:
-    friend class Device;
+    friend class Device;    
 
     DeviceCollection( DeviceCollection const& );
     void operator = ( DeviceCollection const& );
 
-    void Register( Device* );
-    void UnRegister( Device* );
+    QJsonArray Serialize();
+    bool DeSerialize( QJsonArray const& arr );
+
+    void Clear();
 
     DataType mDevices;
+    QString mFileName;
 };
 
 }//namespace examinee

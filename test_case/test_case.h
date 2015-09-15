@@ -11,7 +11,7 @@ public:
     friend class Test;
     typedef QMap< int, Test* > DataType;
 
-    TestCase( const QString &name, QString const& descr = QString() );
+    TestCase( const QString &name, QString const& devices, QString const& descr = QString() );
     ~TestCase();
     DataType const& Tests() const;
     QString const& Name() const;

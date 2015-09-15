@@ -21,8 +21,9 @@ HydroTitleInfo::HydroTitleInfo(bool new_mode, QWidget *parent) :
     ui->GsType->setCurrentIndex( -1 );
     ui->ActuationOnTime->setValidator( new QIntValidator( 1, 2000, this ) );
     ui->ActuationOffTime->setValidator( new QIntValidator( 1, 2000, this ) );
-    ui->MaxExpenditure->setValidator( new QIntValidator( 10, 1100, this ) );
-    ui->MaxWorkPressure->setValidator( new QIntValidator( 10, 400, this ) );
+    ui->MaxExpenditure->setValidator( new QIntValidator( 10, 660, this ) );
+    ui->MaxWorkPressure->setValidator( new QIntValidator( 10, 315, this ) );
+    ui->Lost->setValidator( new QDoubleValidator( 0.01, 10.0, 2, this ) );
 
     on_ControlType_activated( ui->ControlType->currentIndex() );
     on_ReelCount_valueChanged( ui->ReelCount->value() );
@@ -83,6 +84,7 @@ bool HydroTitleInfo::SaveInputParams()
         res *= ParamChecker( ui->l_max_control_pressure, params.MaxControlPressure( QString::number( ui->MaxControlPressure->value() ) ) );
     }
     res *= ParamChecker( ui->l_voltage_range,      params.VoltageRange( QString::number( ui->VoltageRange->value() ) ) );
+    res *= ParamChecker( ui->l_lost,  ValidateRange( ui->Lost, params.Lost( ui->Lost->text() ) ) );
     res *= ParamChecker( ui->l_max_expenditure,    ValidateRange( ui->MaxExpenditure, params.MaxExpenditure( ui->MaxExpenditure->text() ) ) );
     res *= ParamChecker( ui->l_max_work_pressure,  ValidateRange( ui->MaxWorkPressure, params.MaxWorkPressure( ui->MaxWorkPressure->text() ) ) );
     res *= ParamChecker( ui->l_min_pressure,       params.MinTestPressure( QString::number( ui->MinPressure->value() ) ) );
@@ -112,6 +114,7 @@ void HydroTitleInfo::FromParams()
     ui->MaxControlPressure->setValue( params.MaxControlPressure() );
 
     ui->VoltageRange->setValue( params.VoltageRange() );
+    ui->Lost->setText( QString::number( params.Lost() ) );
     ui->MaxExpenditure->setText( QString::number( params.MaxExpenditure() ) );
     ui->MaxWorkPressure->setText( QString::number( params.MaxWorkPressure() ) );
 
@@ -205,7 +208,7 @@ void HydroTitleInfo::on_GsType_activated(int index)
     if ( it != prop.end() )
     {
         bool t = false;
-        qint32 val = it->toInt( &t );
+        double val = it->toDouble( &t );
         if ( val )
             max_pressure_control.second = val;
     }
@@ -214,7 +217,7 @@ void HydroTitleInfo::on_GsType_activated(int index)
     if ( it != prop.end() )
     {
         bool t = false;
-        qint32 val = it->toInt( &t );
+        double val = it->toDouble( &t );
         if ( val )
             min_pressure_control.first = val;
     }

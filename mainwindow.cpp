@@ -7,6 +7,7 @@
 #include "settings/settings_wnd.h"
 #include <QFileDialog>
 #include "settings/settings.h"
+#include "devices/device_collection_wnd.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -153,10 +154,15 @@ void MainWindow::StartManualControl()
 {
 
 }
-void MainWindow::SettringsFileStorage ()
+void MainWindow::AppSettrings ()
 {
     ShowChildWindow( ChildPtr( new settings_wnd() ) );
 }
+void MainWindow::DeviceLists( examinee::DeviceCollection &devices )
+{
+    ShowChildWindow( ChildPtr( new DeviceCollectionWND( devices ) ) );
+}
+
 
 void MainWindow::enable_modes(bool enabled)
 {
@@ -165,7 +171,11 @@ void MainWindow::enable_modes(bool enabled)
     ui->TestCase1->setEnabled( enabled );
     ui->TestCase2->setEnabled( enabled );
     ui->ManualControl->setEnabled( enabled );
-    ui->file_storage->setEnabled( enabled );
+    ui->app_settings->setEnabled( enabled );
+    ui->device_list->setEnabled( enabled );
+    ui->hydro_list->setEnabled( enabled );
+    ui->servo_list->setEnabled( enabled );
+    ui->load_isp_params->setEnabled( enabled );
 }
 
 void MainWindow::on_act_test_case1_triggered()
@@ -214,7 +224,17 @@ void MainWindow::on_load_isp_params_triggered()
     }
 }
 
-void MainWindow::on_file_storage_triggered()
+void MainWindow::on_app_settings_triggered()
 {
-    SettringsFileStorage();
+    AppSettrings();
+}
+
+void MainWindow::on_hydro_list_triggered()
+{
+    DeviceLists( test::HydroTests.Devices() );
+}
+
+void MainWindow::on_servo_list_triggered()
+{
+    DeviceLists( test::ServoTests.Devices() );
 }

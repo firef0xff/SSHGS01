@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>820</width>
+    <width>942</width>
     <height>534</height>
    </rect>
   </property>
@@ -230,7 +230,7 @@ X_max_A, л/мин</string>
      <item row="5" column="3">
       <widget class="QSpinBox" name="PressureTesting">
        <property name="toolTip">
-        <string>315...400 Бар</string>
+        <string>300...315 Бар</string>
        </property>
        <property name="toolTipDuration">
         <number>1000</number>
@@ -239,10 +239,10 @@ X_max_A, л/мин</string>
         <string> Бар</string>
        </property>
        <property name="minimum">
-        <number>315</number>
+        <number>300</number>
        </property>
        <property name="maximum">
-        <number>400</number>
+        <number>315</number>
        </property>
       </widget>
      </item>
@@ -258,7 +258,7 @@ X_max_A, л/мин</string>
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>100...350 Бар</string>
+        <string>10...315 Бар</string>
        </property>
        <property name="toolTipDuration">
         <number>1000</number>
@@ -277,7 +277,7 @@ X_max_A, л/мин</string>
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>1...1000 л/мин</string>
+        <string>1...660 л/мин</string>
        </property>
        <property name="toolTipDuration">
         <number>1000</number>
@@ -296,7 +296,7 @@ X_max_A, л/мин</string>
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>1...1000 л/мин</string>
+        <string>1...660 л/мин</string>
        </property>
        <property name="toolTipDuration">
         <number>1000</number>
@@ -315,7 +315,7 @@ X_max_A, л/мин</string>
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>1...1000 л/мин</string>
+        <string>1...660 л/мин</string>
        </property>
        <property name="toolTipDuration">
         <number>1000</number>

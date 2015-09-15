@@ -57,7 +57,7 @@ bool ParseValue ( qint32& param, QString const& val );
 bool ParseValue ( DYNAMIC& param, QString const& val );
 bool ParseValue ( DYNAMIC_CONTROL& param, QString const& val );
 bool ParseValue ( RELL_CONTROL& param, QString const& val );
-bool ParseValue ( double_t& param, QString const& val );
+bool ParseValue (double &param, QString const& val );
 
 QString ToString( qint32 const& v );
 QString ToString( VOLTAGE_TYPE const& v );
@@ -66,7 +66,7 @@ QString ToString( CONTROL_SIGNAL const& v );
 QString ToString( DYNAMIC const& v );
 QString ToString( DYNAMIC_CONTROL const& v );
 QString ToString( RELL_CONTROL const& v );
-QString ToString( double_t const& v );
+QString ToString( double const& v );
 
 
 class Parameters
@@ -150,6 +150,9 @@ public:
     bool VoltageRange ( QString const& val );
     qint32 const& VoltageRange () const;
 
+    bool Lost ( QString const& val );
+    const double &Lost() const;
+
     bool VoltageType ( QString const& val );
     const VOLTAGE_TYPE &VoltageType() const;
 
@@ -203,6 +206,7 @@ private:
     QString mGsType;            //тип гидрораспределителя
     qint32 mVoltage;            //Напряжение питания
     qint32 mVoltageRange;       //Допустимое отклонение напрядения питания
+    double mLost;             //Допустимое значение утечки
     VOLTAGE_TYPE mVoltageType;  //тип напряжения    
     qint32 mMaxWorkPressure;    //максимальное рабочее давление
 
@@ -261,7 +265,7 @@ public:
     qint32 const& MaxExpenditureB () const;
 
     bool FrequencyInc ( QString const& val );
-    const double_t &FrequencyInc() const;
+    const double &FrequencyInc() const;
 
 private:
     Parameters();
@@ -273,7 +277,7 @@ private:
     qint32 mPressureTesting;
     qint32 mMaxExpenditureA;
     qint32 mMaxExpenditureB;
-    double_t mFrequencyInc;
+    double mFrequencyInc;
 };
 
 }//namespace servo
