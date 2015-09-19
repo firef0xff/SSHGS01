@@ -107,7 +107,6 @@ MainWindow::MainWindow(QWidget *parent) :
     };
     addRoundControl2( &R_P, "R_P", ui->p_p);
     addRoundControl2( &R_Lost, "R_Lost", ui->p_lost);
-    addRoundControl2( &R_Cilindr, "R_Cilindr", ui->p_c);
 }
 
 MainWindow::~MainWindow()
