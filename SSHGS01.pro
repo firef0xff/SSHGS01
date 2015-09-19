@@ -65,6 +65,7 @@ FORMS    += mainwindow.ui \
     devices/device_collection_wnd.ui
 
 OTHER_FILES += devices/*.json\
+    тз/*\
 
 
 DISTFILES +=
