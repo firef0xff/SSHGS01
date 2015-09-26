@@ -6,14 +6,13 @@
 #include "test_case/test_params.h"
 #include <QCheckBox>
 
-TestForm::TestForm(test::TestCase const& test_case, bool new_mode, QWidget *parent) :
+TestForm::TestForm( bool new_mode, QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::TestForm),
-    mTestCase( &test_case )
+    ui(new Ui::TestForm)
 {
     ui->setupUi( this );
 
-    foreach ( auto test_ptr, mTestCase->Tests() )
+    foreach ( auto test_ptr, test::CURRENT_PARAMS->TestCollection().Tests() )
     {
         ControlPtr ptr( new QCheckBox( ui->scrollAreaWidgetContents ) );
         ptr->setObjectName( QStringLiteral("TestBox") + QString::number( test_ptr->Number() ) );

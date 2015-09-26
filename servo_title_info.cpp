@@ -1,9 +1,8 @@
 #include "servo_title_info.h"
 #include "ui_servo_title_info.h"
-#include "test_case/tests.h"
 #include "test_form.h"
-#include "test_case/test_params.h"
 #include <QMessageBox>
+#include "test_case/implementation/test_params_servo.h"
 
 ServoTitleInfo::ServoTitleInfo(bool new_mode, QWidget *parent) :
     QWidget(parent),
@@ -129,7 +128,7 @@ void ServoTitleInfo::on_buttonBox_accepted()
         hide();
         if ( mChildWindow.get() )
             QObject::disconnect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
-        mChildWindow.reset( new TestForm( test::ServoTests, mNewMode ) );
+        mChildWindow.reset( new TestForm( mNewMode ) );
         QObject::connect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
         mChildWindow->show();
     }
@@ -184,4 +183,39 @@ void ServoTitleInfo::on_RaspredControl_activated(int index)
         set_control_pressure_visible( false );
         break;
     }
+}
+
+void ServoTitleInfo::on_ControlSignal_activated(int index)
+{
+#warning сюда вставить переключатели ограничений на входный параметры для
+    /// SignalStateA
+    /// SignalStateB
+    /// SignalState0
+    /// SignalResolution
+    /// пробросить сигнал в структуру для сохранения
+    ///
+#warning неясна сутьба поля с амплитудами
+
+}
+
+void ServoTitleInfo::on_ControlType_activated(int index)
+{
+#warning сделать переключение между режимами интерфейса
+///=ControlSignal
+/// +sig_x_max
+/// +Сопротивление катушки управления(где нет блока управления)
+///=PressureTesting
+///=PressureNominal
+///=MaxExpenditure
+///=ControlSignalAmplitude
+///=FrequencyInc
+///=RaspredControl
+///=MinControlPressure
+///=MaxControlPressure
+///
+/// -SignalStateA
+/// -SignalStateB
+/// -SignalState0
+/// -MaxExpenditureA
+/// -MaxExpenditureB
 }

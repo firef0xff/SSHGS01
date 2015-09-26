@@ -31,6 +31,8 @@ private slots:
     void on_buttonBox_accepted();
     void on_buttonBox_rejected();
     void on_RaspredControl_activated(int index);
+    void on_ControlSignal_activated(int index);
+    void on_ControlType_activated(int index);
 };
 
 #endif // SERVO_TITLE_INFO_H

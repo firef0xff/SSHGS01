@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ControlPanelsTitleInfo</class>
+ <widget class="QWidget" name="ControlPanelsTitleInfo">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>640</width>
+    <height>166</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="focusPolicy">
+   <enum>Qt::NoFocus</enum>
+  </property>
+  <property name="windowTitle">
+   <string>Параметры испытания</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="sizeConstraint">
+    <enum>QLayout::SetFixedSize</enum>
+   </property>
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="1">
+      <widget class="QComboBox" name="GsType"/>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLabel" name="l_voltage">
+       <property name="text">
+        <string>Напряжение питания, В</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="l_gs_type">
+       <property name="text">
+        <string>Плата управления</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="l_signal_type">
+       <property name="text">
+        <string>Тип входного сигнала</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QComboBox" name="SignalType">
+       <property name="currentIndex">
+        <number>-1</number>
+       </property>
+       <item>
+        <property name="text">
+         <string>4..20 мА</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>0..20 мА</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>+-10 В</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>+-10мА</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>+-40 мА</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="1" column="3">
+      <widget class="QLineEdit" name="Voltage">
+       <property name="toolTip">
+        <string>1..40 VDC</string>
+       </property>
+       <property name="toolTipDuration">
+        <number>1000</number>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="l_max_amperage">
+       <property name="text">
+        <string>Максимальный
+выходной ток, А</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="MaxAmperage">
+       <property name="toolTip">
+        <string>0..3 A</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QLabel" name="l_reel_resist">
+       <property name="text">
+        <string>Сопротивление катушки
+распредилителя, Ом</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="3">
+      <widget class="QComboBox" name="ReelResist">
+       <property name="currentIndex">
+        <number>-1</number>
+       </property>
+       <item>
+        <property name="text">
+         <string>8,65</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>17,6</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

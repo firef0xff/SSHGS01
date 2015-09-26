@@ -97,7 +97,7 @@ using namespace fake;
 static SucsessTest t1( &ServoTests, "Проверка аппарата пробным давлением", 1, 8 );
 static UnSucsessTest t2( &ServoTests, "Внутренняя утечка", 2, 9 );
 static SucsessTest t3( &ServoTests, "Зависимость расхода «к потребителю» от входного тока без нагрузки", 3, 10 );
-static UnSucsessTest t4( &ServoTests, "Разрешающая способность и порог вне нулевой зоны", 4, 11 );
+//static UnSucsessTest t4( &ServoTests, "Разрешающая способность и порог вне нулевой зоны", 4, 11 );
 static SucsessTest t5( &ServoTests, "Зависимость расхода «к потребителю» от перепада давлений нагрузки", 5, 12 );
 static UnSucsessTest t6( &ServoTests, "Частотные характеристики", 6, 13 );
 static SucsessTest t7( &ServoTests, "Переходные характеристики", 7, 14 );
@@ -105,6 +105,26 @@ static SucsessTest t7( &ServoTests, "Переходные характерист
 
 }//namespace servo
 
+TestCase ControlBoardTests( "Платы управления",
+                                   "devices/control_board.json",
+                                   "Испытание плат управления пропорциональной аппарутуры");
+namespace control_board
+{
+using namespace fake;
+static SucsessTest t1( &ControlBoardTests, "Питание платы. Отсутствие ошибок", 1, 16 );
+static UnSucsessTest t2( &ControlBoardTests, "Построение зависимости выходного тока на катушку от входного опорного сигнала", 2, 17 );
+
+}//namespace control_board
+
+TestCase HydroCylinder( "Гидроцилиндры",
+                               "",
+                               "Испытание гидроцилиндров");
+
+namespace hydro_cylinder
+{
+using namespace fake;
+static SucsessTest t1( &HydroCylinder, "Испытание функционирования", 1, 18 );
+}//namespace hydro_cylinder
 
 }
 

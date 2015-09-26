@@ -22,14 +22,13 @@ class TestForm : public QWidget
     Q_OBJECT
 
 public:
-    explicit TestForm( test::TestCase const&, bool new_mode,  QWidget *parent = 0);
+    explicit TestForm( bool new_mode,  QWidget *parent = 0);
     ~TestForm();
 
 private:
     typedef std::shared_ptr< QCheckBox > ControlPtr;
     typedef QLayoutItem* SpaserPtr;
     Ui::TestForm *ui;
-    const test::TestCase *mTestCase;
     QList< ControlPtr > mControls;
     QList< ControlPtr > mChilds;
     SpaserPtr mHorisontal;

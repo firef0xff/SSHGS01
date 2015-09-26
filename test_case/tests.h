@@ -9,6 +9,8 @@ namespace test
 
 extern TestCase HydroTests;
 extern TestCase ServoTests;
+extern TestCase ControlBoardTests;
+extern TestCase HydroCylinder;
 
 }//namespace test
 

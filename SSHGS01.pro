@@ -34,7 +34,13 @@ SOURCES += main.cpp\
     ../mylib/Widgets/RoundDial/round_dial.cpp \
     settings/settings.cpp \
     settings/settings_wnd.cpp \
-    devices/device_collection_wnd.cpp
+    devices/device_collection_wnd.cpp \
+    control_panels_title_info.cpp \
+    hydro_cilinder_title_info.cpp \
+    test_case/implementation/test_params_hydro.cpp \
+    test_case/implementation/test_params_servo.cpp \
+    test_case/implementation/test_params_control_panel.cpp \
+    test_case/implementation/test_params_hydro_cilinder.cpp
 
 HEADERS  += mainwindow.h \
     test_case/test_case.h \
@@ -53,7 +59,13 @@ HEADERS  += mainwindow.h \
     ../mylib/Widgets/RoundDial/round_dial.h \
     settings/settings.h \
     settings/settings_wnd.h \
-    devices/device_collection_wnd.h
+    devices/device_collection_wnd.h \
+    control_panels_title_info.h \
+    hydro_cilinder_title_info.h \
+    test_case/implementation/test_params_hydro.h \
+    test_case/implementation/test_params_servo.h \
+    test_case/implementation/test_params_control_panel.h \
+    test_case/implementation/test_params_hydro_cilinder.h
 
 FORMS    += mainwindow.ui \
     hydro_title_info.ui \
@@ -62,7 +74,9 @@ FORMS    += mainwindow.ui \
     test_runner.ui \
     stand_params.ui \
     settings/settings_wnd.ui \
-    devices/device_collection_wnd.ui
+    devices/device_collection_wnd.ui \
+    control_panels_title_info.ui \
+    hydro_cilinder_title_info.ui
 
 OTHER_FILES += devices/*.json\
     тз/*\

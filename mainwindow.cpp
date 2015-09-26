@@ -1,14 +1,19 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "test_case/tests.h"
 #include "hydro_title_info.h"
 #include "servo_title_info.h"
-#include "test_case/test_params.h"
+#include "control_panels_title_info.h"
+#include "hydro_cilinder_title_info.h"
+
+#include "settings/settings.h"
 #include "settings/settings_wnd.h"
 #include <QFileDialog>
-#include "settings/settings.h"
 #include "devices/device_collection_wnd.h"
 
+#include "test_case/implementation/test_params_hydro.h"
+#include "test_case/implementation/test_params_servo.h"
+#include "test_case/implementation/test_params_control_panel.h"
+#include "test_case/implementation/test_params_hydro_cilinder.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -16,18 +21,30 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->TestCase1->setText( test::HydroTests.Name() );
-    ui->TestCase1->setDescription( test::HydroTests.Descr() );
-    ui->act_test_case1->setToolTip( test::HydroTests.Name() );
-    ui->act_test_case1->setText( test::HydroTests.Name() );
-    ui->act_test_case1->setIconText( test::HydroTests.Name() );
+    ui->TestCase1->setText( test::hydro::Parameters::Instance().TestCollection().Name() );
+    ui->TestCase1->setDescription( test::hydro::Parameters::Instance().TestCollection().Descr() );
+    ui->act_test_case1->setToolTip( test::hydro::Parameters::Instance().TestCollection().Name() );
+    ui->act_test_case1->setText( test::hydro::Parameters::Instance().TestCollection().Name() );
+    ui->act_test_case1->setIconText( test::hydro::Parameters::Instance().TestCollection().Name() );
 
 
-    ui->TestCase2->setText( test::ServoTests.Name() );
-    ui->TestCase2->setDescription( test::ServoTests.Descr() );
-    ui->act_test_case2->setToolTip( test::ServoTests.Name() );
-    ui->act_test_case2->setText( test::ServoTests.Name() );
-    ui->act_test_case2->setIconText( test::ServoTests.Name() );
+    ui->TestCase2->setText( test::servo::Parameters::Instance().TestCollection().Name() );
+    ui->TestCase2->setDescription( test::servo::Parameters::Instance().TestCollection().Descr() );
+    ui->act_test_case2->setToolTip( test::servo::Parameters::Instance().TestCollection().Name() );
+    ui->act_test_case2->setText( test::servo::Parameters::Instance().TestCollection().Name() );
+    ui->act_test_case2->setIconText( test::servo::Parameters::Instance().TestCollection().Name() );
+
+    ui->TestCase3->setText( test::control_board::Parameters::Instance().TestCollection().Name() );
+    ui->TestCase3->setDescription( test::control_board::Parameters::Instance().TestCollection().Descr() );
+    ui->act_test_case3->setToolTip( test::control_board::Parameters::Instance().TestCollection().Name() );
+    ui->act_test_case3->setText( test::control_board::Parameters::Instance().TestCollection().Name() );
+    ui->act_test_case3->setIconText( test::control_board::Parameters::Instance().TestCollection().Name() );
+
+    ui->TestCase4->setText( test::hydro_cylinder::Parameters::Instance().TestCollection().Name() );
+    ui->TestCase4->setDescription( test::hydro_cylinder::Parameters::Instance().TestCollection().Descr() );
+    ui->act_test_case4->setToolTip( test::hydro_cylinder::Parameters::Instance().TestCollection().Name() );
+    ui->act_test_case4->setText( test::hydro_cylinder::Parameters::Instance().TestCollection().Name() );
+    ui->act_test_case4->setIconText( test::hydro_cylinder::Parameters::Instance().TestCollection().Name() );
 
 
 
@@ -149,6 +166,15 @@ void MainWindow::StartServoTest( bool new_test )
 {
     ShowChildWindow( ChildPtr( new ServoTitleInfo( new_test ) ) );
 }
+void MainWindow::StartControlPanelsTest( bool new_test )
+{
+    ShowChildWindow( ChildPtr( new ControlPanelsTitleInfo( new_test ) ) );
+}
+void MainWindow::StartHydroCilinderTest( bool new_test )
+{
+    ShowChildWindow( ChildPtr( new HydroCilinderTitleInfo( new_test ) ) );
+}
+
 void MainWindow::StartManualControl()
 {
 
@@ -157,7 +183,7 @@ void MainWindow::AppSettrings ()
 {
     ShowChildWindow( ChildPtr( new settings_wnd() ) );
 }
-void MainWindow::DeviceLists( examinee::DeviceCollection &devices )
+void MainWindow::DeviceLists( examinee::DeviceCollection& devices )
 {
     ShowChildWindow( ChildPtr( new DeviceCollectionWND( devices ) ) );
 }
@@ -167,13 +193,21 @@ void MainWindow::enable_modes(bool enabled)
 {
     ui->act_test_case1->setEnabled( enabled );
     ui->act_test_case2->setEnabled( enabled );
+    ui->act_test_case3->setEnabled( enabled );
+    ui->act_test_case4->setEnabled( enabled );
+
     ui->TestCase1->setEnabled( enabled );
     ui->TestCase2->setEnabled( enabled );
+    ui->TestCase3->setEnabled( enabled );
+    ui->TestCase4->setEnabled( enabled );
+
     ui->ManualControl->setEnabled( enabled );
     ui->app_settings->setEnabled( enabled );
     ui->device_list->setEnabled( enabled );
+
     ui->hydro_list->setEnabled( enabled );
     ui->servo_list->setEnabled( enabled );
+
     ui->load_isp_params->setEnabled( enabled );
 }
 
@@ -195,11 +229,31 @@ void MainWindow::on_TestCase2_clicked()
     StartServoTest( true );
 }
 
+void MainWindow::on_act_test_case3_triggered()
+{
+    on_TestCase3_clicked();
+}
+void MainWindow::on_TestCase3_clicked()
+{
+    StartControlPanelsTest( true );
+}
+
+void MainWindow::on_act_test_case4_triggered()
+{
+    on_TestCase4_clicked();
+}
+void MainWindow::on_TestCase4_clicked()
+{
+    StartHydroCilinderTest( true );
+}
+
 void MainWindow::on_ManualControl_clicked()
 {
     StartManualControl();
 }
 
+
+//ACTIONS
 void MainWindow::on_load_isp_params_triggered()
 {
     QString file_name;
@@ -221,6 +275,14 @@ void MainWindow::on_load_isp_params_triggered()
     {
         StartServoTest( false );
     }
+    else if ( ptr == &test::control_board::Parameters::Instance() )
+    {
+        StartControlPanelsTest( false );
+    }
+    else if ( ptr == &test::hydro_cylinder::Parameters::Instance() )
+    {
+        StartHydroCilinderTest( false );
+    }
 }
 
 void MainWindow::on_app_settings_triggered()
@@ -230,10 +292,14 @@ void MainWindow::on_app_settings_triggered()
 
 void MainWindow::on_hydro_list_triggered()
 {
-    DeviceLists( test::HydroTests.Devices() );
+    DeviceLists( test::hydro::Parameters::Instance().TestCollection().Devices() );
 }
-
 void MainWindow::on_servo_list_triggered()
 {
-    DeviceLists( test::ServoTests.Devices() );
+    DeviceLists( test::servo::Parameters::Instance().TestCollection().Devices() );
 }
+void MainWindow::on_control_panels_list_triggered()
+{
+    DeviceLists( test::control_board::Parameters::Instance().TestCollection().Devices() );
+}
+

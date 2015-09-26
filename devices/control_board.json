@@ -1,0 +1,68 @@
+[
+    {
+        "manufacturer": "PARKER",
+        "name": "PCD00 A-400-18",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "PARKER",
+        "name": "PWD00 A-400",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "EPA-M211",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "EPA-M221",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "EDM-M211/10E1",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "EDM-M221/10E1",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "EPC-110/10E0",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "EPC-120/10E0",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "DUPLOMATIC",
+        "name": "EPC-110/10E1",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "VOLKER",
+        "name": "HCX 2/A",
+        "properties": {
+        }
+    },
+    {
+        "manufacturer": "VOLKER",
+        "name": "HCX_13_S",
+        "properties": {
+        }
+    }
+]

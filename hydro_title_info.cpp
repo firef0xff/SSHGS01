@@ -1,10 +1,8 @@
 #include "hydro_title_info.h"
 #include "ui_hydro_title_info.h"
-#include "test_case/tests.h"
-//#include "test_form.h"
 #include "stand_params.h"
 #include <QMessageBox>
-#include <test_case/test_params.h>
+#include "test_case/implementation/test_params_hydro.h"
 
 
 HydroTitleInfo::HydroTitleInfo(bool new_mode, QWidget *parent) :
@@ -14,7 +12,7 @@ HydroTitleInfo::HydroTitleInfo(bool new_mode, QWidget *parent) :
 {
     ui->setupUi(this);
 
-    foreach ( examinee::Device const* device, test::HydroTests.Devices().Get())
+    foreach ( examinee::Device const* device, test::hydro::Parameters::Instance().TestCollection().Devices().Get() )
     {
         ui->GsType->addItem( device->Name() + " " + device->Manufacturer(), QVariant::fromValue( device ) );
     }
@@ -73,7 +71,7 @@ bool HydroTitleInfo::SaveInputParams()
     };
 
     res *= ParamChecker( ui->l_sn,              params.SerNo( ui->SerNo->text() ) );
-    res *= ParamChecker( ui->l_gs_type,         params.GsType( ui->GsType->currentText() ) );
+    res *= ParamChecker( ui->l_gs_type,         params.GsType( ui->GsType->currentText() ) && ui->GsType->currentIndex() >= 0 );
     res *= ParamChecker( ui->l_voltage,         params.Voltage( ui->Voltage->currentText() ) );
     res *= ParamChecker( ui->l_voltage_type,    params.VoltageType( ui->VoltageType->currentText() ) );
     res *= ParamChecker( ui->l_reel_count,      params.ReelCount( QString::number( ui->ReelCount->value() ) ) );
@@ -104,7 +102,7 @@ void HydroTitleInfo::FromParams()
     ui->SerNo->setText( params.SerNo() );
     ui->GsType->setCurrentIndex( ui->GsType->findText( params.GsType() ) );
     on_GsType_activated( ui->GsType->currentIndex() );
-    ui->Voltage->setCurrentIndex( ui->Voltage->findText( QString::number( params.Voltage()  ) ) );
+    ui->Voltage->setCurrentIndex( ui->Voltage->findText( test::ToString( params.Voltage()  ) ) );
     ui->VoltageType->setCurrentIndex( ui->VoltageType->findText( test::ToString( params.VoltageType() ) ) );
     ui->ReelCount->setValue( params.ReelCount() );
     on_ReelCount_valueChanged( ui->ReelCount->value() );
@@ -114,9 +112,9 @@ void HydroTitleInfo::FromParams()
     ui->MaxControlPressure->setValue( params.MaxControlPressure() );
 
     ui->VoltageRange->setValue( params.VoltageRange() );
-    ui->Lost->setText( QString::number( params.Lost() ) );
-    ui->MaxExpenditure->setText( QString::number( params.MaxExpenditure() ) );
-    ui->MaxWorkPressure->setText( QString::number( params.MaxWorkPressure() ) );
+    ui->Lost->setText( test::ToString( params.Lost() ) );
+    ui->MaxExpenditure->setText( test::ToString( params.MaxExpenditure() ) );
+    ui->MaxWorkPressure->setText( test::ToString( params.MaxWorkPressure() ) );
 
     ui->MinPressure->setValue( params.MinTestPressure() );
     ui->HermPressure->setValue( params.HermPressure() );
@@ -125,8 +123,8 @@ void HydroTitleInfo::FromParams()
     ui->PABTSignal->setCurrentIndex( ui->PABTSignal->findText( test::ToString( params.PABTSignal() ) ) );
     ui->PBATSignal->setCurrentIndex( ui->PBATSignal->findText( test::ToString( params.PBATSignal() ) ) );
 
-    ui->ActuationOnTime->setText( QString::number( params.ActuationOnTime() ) );
-    ui->ActuationOffTime->setText( QString::number( params.ActuationOffTime() ) );
+    ui->ActuationOnTime->setText( test::ToString( params.ActuationOnTime() ) );
+    ui->ActuationOffTime->setText( test::ToString( params.ActuationOffTime() ) );
 }
 
 void HydroTitleInfo::on_buttonBox_accepted()

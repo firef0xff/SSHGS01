@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>992</width>
+    <width>1045</width>
     <height>266</height>
    </rect>
   </property>
@@ -68,6 +68,20 @@
           <height>16777215</height>
          </size>
         </property>
+        <property name="text">
+         <string>CommandLinkButton</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCommandLinkButton" name="TestCase3">
+        <property name="text">
+         <string>CommandLinkButton</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCommandLinkButton" name="TestCase4">
         <property name="text">
          <string>CommandLinkButton</string>
         </property>
@@ -151,20 +165,20 @@
        </widget>
       </item>
       <item>
-       <widget class="QProgressBar" name="progressBar_2">
-        <property name="value">
-         <number>24</number>
+       <widget class="QLCDNumber" name="lcdNumber_4"/>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
         </property>
-        <property name="textVisible">
-         <bool>true</bool>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
         </property>
-        <property name="invertedAppearance">
-         <bool>false</bool>
-        </property>
-        <property name="textDirection">
-         <enum>QProgressBar::TopToBottom</enum>
-        </property>
-       </widget>
+       </spacer>
       </item>
      </layout>
     </item>
@@ -374,7 +388,7 @@ X</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>992</width>
+     <width>1045</width>
      <height>26</height>
     </rect>
    </property>
@@ -389,6 +403,8 @@ X</string>
      <addaction name="separator"/>
      <addaction name="act_test_case1"/>
      <addaction name="act_test_case2"/>
+     <addaction name="act_test_case3"/>
+     <addaction name="act_test_case4"/>
     </widget>
     <addaction name="menu_3"/>
     <addaction name="load_isp_params"/>
@@ -413,6 +429,7 @@ X</string>
      <addaction name="separator"/>
      <addaction name="hydro_list"/>
      <addaction name="servo_list"/>
+     <addaction name="control_panels_list"/>
     </widget>
     <addaction name="app_settings"/>
     <addaction name="device_list"/>
@@ -467,6 +484,21 @@ X</string>
   <action name="servo_list">
    <property name="text">
     <string>Пропорциональная аппаратура</string>
+   </property>
+  </action>
+  <action name="act_test_case3">
+   <property name="text">
+    <string>isp_3</string>
+   </property>
+  </action>
+  <action name="act_test_case4">
+   <property name="text">
+    <string>isp_4</string>
+   </property>
+  </action>
+  <action name="control_panels_list">
+   <property name="text">
+    <string>Контрольные панели</string>
    </property>
   </action>
  </widget>

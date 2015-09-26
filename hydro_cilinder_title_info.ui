@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>HydroCilinderTitleInfo</class>
+ <widget class="QWidget" name="HydroCilinderTitleInfo">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>688</width>
+    <height>218</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Параметры испытания</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="sizeConstraint">
+    <enum>QLayout::SetFixedSize</enum>
+   </property>
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="1" column="2">
+      <widget class="QLabel" name="l_test_pressure">
+       <property name="text">
+        <string>Давление при
+испытании функционирования, Бар</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="MaxPressure">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>10..315 Бар.</string>
+       </property>
+       <property name="toolTipDuration">
+        <number>1000</number>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="l_ser_no">
+       <property name="text">
+        <string>Серийный номер</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="l_max_pressure">
+       <property name="text">
+        <string>Максимальное давление
+нагрузки гидроцилиндра, Бар</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="SerNo"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="l_move_time">
+       <property name="text">
+        <string>Время перемещения
+в каждую сторону
+при испытании
+функционирования, с</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="MoveTime">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>0,1..10 с</string>
+       </property>
+       <property name="toolTipDuration">
+        <number>1000</number>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QLabel" name="l_herm_test_time">
+       <property name="text">
+        <string>Время испытания
+наружной герметичности, с</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="3">
+      <widget class="QSpinBox" name="HermTestTime">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>1..300</string>
+       </property>
+       <property name="toolTipDuration">
+        <number>1000</number>
+       </property>
+       <property name="suffix">
+        <string> с</string>
+       </property>
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>300</number>
+       </property>
+       <property name="value">
+        <number>180</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="3">
+      <widget class="QSpinBox" name="TestPressure">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>10..315 Бар.</string>
+       </property>
+       <property name="toolTipDuration">
+        <number>1000</number>
+       </property>
+       <property name="suffix">
+        <string> Бар</string>
+       </property>
+       <property name="minimum">
+        <number>10</number>
+       </property>
+       <property name="maximum">
+        <number>315</number>
+       </property>
+       <property name="singleStep">
+        <number>1</number>
+       </property>
+       <property name="value">
+        <number>30</number>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLabel" name="l_expenditure">
+       <property name="text">
+        <string>Номинальный расход</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="QLineEdit" name="Expenditure">
+       <property name="toolTip">
+        <string>1..300 л/мин</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

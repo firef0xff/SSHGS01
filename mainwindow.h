@@ -30,9 +30,11 @@ private:
 
     void StartHydroTest( bool new_test );
     void StartServoTest( bool new_test );
+    void StartControlPanelsTest( bool new_test );
+    void StartHydroCilinderTest( bool new_test );
     void StartManualControl();
     void AppSettrings ();
-    void DeviceLists( examinee::DeviceCollection &devices );
+    void DeviceLists( examinee::DeviceCollection& devices );
 
     void ShowChildWindow( ChildPtr child );
 
@@ -75,4 +77,9 @@ private slots:
     void on_app_settings_triggered();
     void on_hydro_list_triggered();
     void on_servo_list_triggered();
+    void on_control_panels_list_triggered();
+    void on_TestCase3_clicked();
+    void on_TestCase4_clicked();
+    void on_act_test_case3_triggered();
+    void on_act_test_case4_triggered();
 };

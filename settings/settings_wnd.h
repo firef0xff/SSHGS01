@@ -1,6 +1,4 @@
-#ifndef SETTINGS_WND_H
-#define SETTINGS_WND_H
-
+#pragma once
 #include <QWidget>
 
 namespace Ui {
@@ -31,4 +29,3 @@ private slots:
     void on_buttonBox_accepted();
 };
 
-#endif // SETTINGS_WND_H

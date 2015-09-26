@@ -1,9 +1,10 @@
 #include "stand_params.h"
 #include "ui_stand_params.h"
 #include "test_form.h"
-#include "test_case/tests.h"
 #include "test_case/test_params.h"
 #include <QMessageBox>
+#include "test_case/implementation/test_params_hydro.h"
+
 
 StandParams::StandParams(bool new_mode, QWidget *parent) :
     QWidget(parent),
@@ -101,7 +102,7 @@ void StandParams::on_buttonBox_accepted()
         hide();
         if ( mChildWindow.get() )
             QObject::disconnect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
-        mChildWindow.reset( new TestForm( test::HydroTests, mNewMode ) );
+        mChildWindow.reset( new TestForm( mNewMode ) );
         QObject::connect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
         mChildWindow->show();
     }
