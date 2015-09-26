@@ -157,15 +157,32 @@ bool ParseValue (SIGNAL_TYPE &param, QString const& val )
         param = ST_10_10_V;
         return true;
     }
+    else if( !val.compare( "100 мА", Qt::CaseInsensitive ) )
+    {
+        param = ST_100_mA;
+        return true;
+    }
+    else if( !val.compare( "300 мА", Qt::CaseInsensitive ) )
+    {
+        param = ST_300_mA;
+        return true;
+    }
+    else if( !val.compare( "600 мА", Qt::CaseInsensitive ) )
+    {
+        param = ST_600_mA;
+        return true;
+    }
+    else if( !val.compare( "860 мА", Qt::CaseInsensitive ) )
+    {
+        param = ST_860_mA;
+        return true;
+    }
     return false;
 }
 
 QString ToString( qint32 const& v )
-{
-    if ( v >= 0 )
-        return QString::number( v );
-    else
-        return "не задано";
+{   
+    return QString::number( v );
 }
 QString ToString( VOLTAGE_TYPE const& v )
 {
@@ -258,10 +275,7 @@ QString ToString( RELL_CONTROL const& v )
 QString ToString( double const& v )
 {
     QChar const decimalsep = QLocale::system().decimalPoint();
-    if ( v >= 0 )
-        return QString::number( v ).replace( ".", decimalsep );
-    else
-        return "не задано";
+    return QString::number( v ).replace( ".", decimalsep );
 }
 QString ToString( SIGNAL_TYPE const& v )
 {
@@ -279,6 +293,14 @@ QString ToString( SIGNAL_TYPE const& v )
             return "+-40 мА";
         case ST_10_10_V:
             return "+-10 В";
+        case ST_100_mA:
+            return "100 мА";
+        case ST_300_mA:
+            return "300 мА";
+        case ST_600_mA:
+            return "600 мА";
+        case ST_860_mA:
+            return "860 мА";
     default:
         return "Неизвестное значение";
     }
@@ -341,21 +363,21 @@ bool Parameters::Deserialize(const QJsonObject &obj )
 
 CommonParameters::CommonParameters():
     mSerNo(""),
-    mReelCount( -1 ),
-    mMaxExpenditure ( -1 ),
+    mReelCount( 0 ),
+    mMaxExpenditure ( 0 ),
     mControlType ( CT_UNKNOWN ),
-    mMinControlPressure ( -1 ),
-    mMaxControlPressure ( -1 )
+    mMinControlPressure ( 0 ),
+    mMaxControlPressure ( 0 )
 {}
 
 void CommonParameters::Reset()
 {
     mSerNo = "";
-    mReelCount =  -1;
-    mMaxExpenditure  =  -1;
+    mReelCount =  0;
+    mMaxExpenditure  =  0;
     mControlType  =  CT_UNKNOWN;
-    mMinControlPressure  =  -1;
-    mMaxControlPressure  =  -1;
+    mMinControlPressure  =  0;
+    mMaxControlPressure  =  0;
 }
 
 bool CommonParameters::SerNo ( QString const& val )

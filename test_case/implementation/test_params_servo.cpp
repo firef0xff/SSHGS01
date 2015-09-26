@@ -29,11 +29,17 @@ Parameters& Parameters::Instance()
 
 Parameters::Parameters():
     mReelControl( RC_UNKNOWN ),
-    mPressureNominal( -1 ),
-    mPressureTesting( -1 ),
-    mMaxExpenditureA( -1 ),
-    mMaxExpenditureB( -1 ),
-    mFrequencyInc( -1.0 )
+    mPressureNominal( 0 ),
+    mPressureTesting( 0 ),
+    mMaxExpenditureA( 0 ),
+    mMaxExpenditureB( 0 ),
+    mFrequencyInc( 0 ),
+    mControlSignal(ST_UNKNOWN),
+    mSignalStateA(0),
+    mSignalStateB(0),
+    mSignalState0(0),
+    mEndSgnal(0),
+    mControlReelResist(0)
 {}
 
 void Parameters::Reset()
@@ -41,11 +47,19 @@ void Parameters::Reset()
     test::Parameters::Reset();
 
     mReelControl = RC_UNKNOWN;
-    mPressureNominal = -1;
-    mPressureTesting = -1;
-    mMaxExpenditureA = -1;
-    mMaxExpenditureB = -1;
-    mFrequencyInc = -1.0;
+    mPressureNominal = 0;
+    mPressureTesting = 0;
+    mMaxExpenditureA = 0;
+    mMaxExpenditureB = 0;
+    mFrequencyInc = 0;
+
+    mControlSignal = ST_UNKNOWN;
+    mSignalStateA = 0;
+    mSignalStateB = 0;
+    mSignalState0 = 0;
+
+    mEndSgnal = 0;
+    mControlReelResist = 0;
 }
 QString Parameters::ToString()
 {
@@ -57,6 +71,14 @@ QString Parameters::ToString()
     res+= "  Тип управления распределителем: " + test::ToString( mControlType ) + "\n";
     res+= "  Максимальное давление управления, Бар: " + test::ToString( mMaxControlPressure ) + "\n";
     res+= "  Минимальное давление управления, Бар: " + test::ToString( mMinControlPressure ) + "\n";
+    res+= "  Уровень управляющих сигналов: " + test::ToString( mControlSignal ) + "\n";
+    res+= "Парамеры для аппаратуры с типом управления: " + test::ToString( RC_CONTROL_BOX );
+    res+= "  Сигнал, соответствующий полному переключению в состояние А: " + test::ToString( mSignalStateA ) + "\n";
+    res+= "  Сигнал, соответствующий полному переключению в состояние Б: " + test::ToString( mSignalStateB ) + "\n";
+    res+= "  Сигнал, соответствующий нулевому положению: " + test::ToString( mSignalState0 ) + "\n";
+    res+= "Парамеры для аппаратуры с типом управления: " + test::ToString( RC_REEL );
+    res+= "  Сигнал, соответствующий переключению аппарата в конечное состоние: " + test::ToString( mEndSgnal ) + "\n";
+    res+= "  Сопротивление катушки управления, Ом: " + test::ToString( mSignalState0 ) + "\n";
     res+= "\n";
     res+= "Параметры стенда:\n";
     res+= "  Максимальный расход, л/мин: " + test::ToString( mMaxExpenditure ) + "\n";
@@ -87,6 +109,14 @@ QJsonObject Parameters::Serialise() const
     servo.insert("MaxExpenditureB", mMaxExpenditureB);
     servo.insert("FrequencyInc", mFrequencyInc);
 
+    servo.insert("ControlSignal", mControlSignal);
+    servo.insert("SignalStateA", mSignalStateA);
+    servo.insert("SignalStateB", mSignalStateB);
+    servo.insert("SignalState0", mSignalState0);
+
+    servo.insert("EndSgnal", mEndSgnal);
+    servo.insert("ControlReelResist", mControlReelResist);
+
     res.insert("servo", servo);
     return res;
 }
@@ -106,6 +136,14 @@ bool Parameters::Deserialize( QJsonObject const& obj )
         mMaxExpenditureA = obj.value("MaxExpenditureA").toInt();
         mMaxExpenditureB = obj.value("MaxExpenditureB").toInt();
         mFrequencyInc = obj.value("FrequencyInc").toDouble();
+
+        mControlSignal = static_cast<SIGNAL_TYPE>(obj.value("ControlSignal").toInt());
+        mSignalStateA = obj.value("SignalStateA").toDouble();
+        mSignalStateB = obj.value("SignalStateB").toDouble();
+        mSignalState0 = obj.value("SignalState0").toDouble();
+
+        mEndSgnal = obj.value("EndSgnal").toDouble();
+        mControlReelResist = obj.value("ControlReelResist").toDouble();
         res = true;
     }
     else
@@ -166,6 +204,60 @@ bool Parameters::FrequencyInc ( QString const& val )
 const double &Parameters::FrequencyInc() const
 {
     return mFrequencyInc;
+}
+
+bool Parameters::ControlSignal ( QString const& val )
+{
+    return ParseValue( mControlSignal, val );
+}
+const SIGNAL_TYPE &Parameters::ControlSignal() const
+{
+    return mControlSignal;
+}
+
+bool Parameters::SignalStateA ( QString const& val )
+{
+    return ParseValue( mSignalStateA, val );
+}
+const double &Parameters::SignalStateA() const
+{
+    return mSignalStateA;
+}
+
+bool Parameters::SignalStateB ( QString const& val )
+{
+    return ParseValue( mSignalStateB, val );
+}
+const double &Parameters::SignalStateB() const
+{
+    return mSignalStateB;
+}
+
+bool Parameters::SignalState0 ( QString const& val )
+{
+    return ParseValue( mSignalState0, val );
+}
+const double &Parameters::SignalState0() const
+{
+    return mSignalState0;
+}
+
+bool Parameters::EndSgnal ( QString const& val )
+{
+    return ParseValue( mEndSgnal, val );
+}
+const double &Parameters::EndSgnal() const
+{
+    return mEndSgnal;
+}
+
+bool Parameters::ControlReelResist ( QString const& val )
+{
+    return ParseValue( mControlReelResist, val );
+}
+const double &Parameters::ControlReelResist() const
+{
+    return mControlReelResist;
 }
 
 }//namespace servo

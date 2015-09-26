@@ -26,11 +26,11 @@ Parameters& Parameters::Instance()
 }
 Parameters::Parameters():
     mSerNo(""),
-    mMaxPressure(-1),
-    mMoveTime(-1),
-    mTestPressure(-1),
-    mHermTestTime(-1),
-    mExpenditure(-1)
+    mMaxPressure(0),
+    mMoveTime(0),
+    mTestPressure(0),
+    mHermTestTime(0),
+    mExpenditure(0)
 {
     Reset();
 }
@@ -39,11 +39,11 @@ void Parameters::Reset()
 {
     test::Parameters::Reset();
     mSerNo = "";
-    mMaxPressure = -1;
-    mMoveTime = -1;
-    mTestPressure = -1;
-    mHermTestTime = -1;
-    mExpenditure = -1;
+    mMaxPressure = 0;
+    mMoveTime = 0;
+    mTestPressure = 0;
+    mHermTestTime = 0;
+    mExpenditure = 0;
 }
 
 QString Parameters::ToString()

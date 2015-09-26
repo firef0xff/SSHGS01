@@ -37,6 +37,23 @@ public:
     bool FrequencyInc ( QString const& val );
     const double &FrequencyInc() const;
 
+    bool ControlSignal ( QString const& val );
+    const SIGNAL_TYPE &ControlSignal() const;
+
+    bool SignalStateA ( QString const& val );
+    const double &SignalStateA() const;
+
+    bool SignalStateB ( QString const& val );
+    const double &SignalStateB() const;
+
+    bool SignalState0 ( QString const& val );
+    const double &SignalState0() const;
+
+    bool EndSgnal ( QString const& val );
+    const double &EndSgnal() const;
+
+    bool ControlReelResist ( QString const& val );
+    const double &ControlReelResist() const;
 private:
     Parameters();
     Parameters( Parameters const& )  = delete;
@@ -48,6 +65,14 @@ private:
     qint32 mMaxExpenditureA;
     qint32 mMaxExpenditureB;
     double mFrequencyInc;
+
+    SIGNAL_TYPE mControlSignal;
+    double mSignalStateA;
+    double mSignalStateB;
+    double mSignalState0;
+
+    double mEndSgnal;
+    double mControlReelResist;
 };
 
 }//namespace servo

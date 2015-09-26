@@ -29,18 +29,18 @@ Parameters& Parameters::Instance()
 
 Parameters::Parameters():
     mGsType(""),
-    mVoltage( -1 ),
-    mVoltageRange( -1 ),
-    mLost( -1.0 ),
+    mVoltage( 0 ),
+    mVoltageRange( 0 ),
+    mLost( 0),
     mVoltageType( VT_UNKNOWN ),
-    mMaxWorkPressure ( -1 ),
-    mMinTestPressure ( -1 ),
-    mHermPressure( -1 ),
+    mMaxWorkPressure ( 0 ),
+    mMinTestPressure ( 0 ),
+    mHermPressure( 0 ),
     mHermSignal ( CS_UNKNOWN ),
     mPABTSignal ( CS_UNKNOWN ),
     mPBATSignal ( CS_UNKNOWN ),
-    mActuationOnTime ( -1 ),
-    mActuationOffTime ( -1 ),
+    mActuationOnTime ( 0 ),
+    mActuationOffTime ( 0 ),
     mOnControl_1 ( DC_UNKNOWN ),
     mOffControl_1 ( DC_UNKNOWN ),
     mOnControl_2 ( DC_UNKNOWN ),
@@ -57,18 +57,18 @@ void Parameters::Reset()
 {
     test::Parameters::Reset();
     mGsType = "";
-    mVoltage =  -1;
-    mVoltageRange =  -1;
-    mLost = -1.0;
+    mVoltage =  0;
+    mVoltageRange =  0;
+    mLost = 0;
     mVoltageType = VT_UNKNOWN;
-    mMaxWorkPressure  =  -1;
-    mMinTestPressure  =  -1;
-    mHermPressure =  -1;
+    mMaxWorkPressure  =  0;
+    mMinTestPressure  =  0;
+    mHermPressure =  0;
     mHermSignal  =  CS_UNKNOWN;
     mPABTSignal  =  CS_UNKNOWN;
     mPBATSignal  =  CS_UNKNOWN;
-    mActuationOnTime  =  -1;
-    mActuationOffTime  =  -1;
+    mActuationOnTime  =  0;
+    mActuationOffTime  =  0;
     mOnControl_1 = DC_UNKNOWN;
     mOffControl_1 = DC_UNKNOWN;
     mOnControl_2 = DC_UNKNOWN;

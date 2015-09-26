@@ -3,6 +3,7 @@
 #include "test_form.h"
 #include <QMessageBox>
 #include "test_case/implementation/test_params_servo.h"
+//#include <climits>
 
 ServoTitleInfo::ServoTitleInfo(bool new_mode, QWidget *parent) :
     QWidget(parent),
@@ -15,7 +16,9 @@ ServoTitleInfo::ServoTitleInfo(bool new_mode, QWidget *parent) :
     ui->MaxExpenditure->setValidator( new QIntValidator( 1, 660, this ) );
     ui->MaxExpenditureA->setValidator( new QIntValidator( 1, 660, this ) );
     ui->MaxExpenditureB->setValidator( new QIntValidator( 1, 660, this ) );
-    on_RaspredControl_activated( ui->RaspredControl->currentIndex() );
+    ui->ControlReelResist->setValidator( new QDoubleValidator( INT32_MIN, INT32_MAX , 2, this ) );
+    on_RaspredControl_activated( ui->RaspredControl->currentIndex() );    
+    on_ControlType_activated( ui->ControlType->currentIndex() );
 
     if ( !mNewMode )
         FromParams();
@@ -74,24 +77,39 @@ bool ServoTitleInfo::SaveInputParams()
     res *= ParamChecker( ui->l_frequency_inc,       params.FrequencyInc( QString::number( ui->FrequencyInc->value() ) ) );
 
     res *= ParamChecker( ui->l_nominal_pressure,     ValidateRange( ui->PressureNominal, params.PressureNominal( ui->PressureNominal->text() ) ) );
-    res *= ParamChecker( ui->l_max_expenditure_a,    ValidateRange( ui->MaxExpenditureA, params.MaxExpenditureA( ui->MaxExpenditureA->text() ) ) );
 
+    res *= ParamChecker( ui->l_control_signal,    params.ControlSignal( ui->ControlSignal->currentText() ) );
 
-    //определим используется ли вторая катушка
-    bool p1 = params.MaxExpenditureB( ui->MaxExpenditureB->text() );
-    bool p2 = false;
-    if ( p1 || p2 )
-        params.ReelCount( "2" );
-    else
+    if ( params.ReelControl() == test::RC_REEL )
+    {
+        res *= ParamChecker( ui->l_end_signal,          ValidateRange( ui->EndSgnal, params.EndSgnal( ui->EndSgnal->text() ) ) );
+        res *= ParamChecker( ui->l_control_reel_resist, ValidateRange( ui->ControlReelResist, params.ControlReelResist( ui->ControlReelResist->text() ) ) );
         params.ReelCount( "1" );
-
-    if ( params.ReelCount() > 1  )
-    {
-        res *= ParamChecker( ui->l_max_expenditure_b,    ValidateRange( ui->MaxExpenditureB, p1 ) );
     }
-    else
+
+    if ( params.ReelControl() == test::RC_CONTROL_BOX )
     {
-        ParamChecker( ui->l_max_expenditure_b, true );
+        res *= ParamChecker( ui->l_max_expenditure_a,    ValidateRange( ui->MaxExpenditureA, params.MaxExpenditureA( ui->MaxExpenditureA->text() ) ) );
+        res *= ParamChecker( ui->l_signal_state_a,    ValidateRange( ui->SignalStateA, params.SignalStateA( ui->SignalStateA->text() ) ) );
+        res *= ParamChecker( ui->l_signal_state_0,    ValidateRange( ui->SignalState0, params.SignalState0( ui->SignalState0->text() ) ) );
+
+        //определим используется ли вторая катушка
+        bool p1 = params.MaxExpenditureB( ui->MaxExpenditureB->text() );
+        bool p2 = params.SignalStateB( ui->SignalStateB->text() );
+        if ( p1 || p2 )
+            params.ReelCount( "2" );
+        else
+            params.ReelCount( "1" );
+
+        if ( params.ReelCount() > 1  )
+        {
+            res *= ParamChecker( ui->l_max_expenditure_b,    ValidateRange( ui->MaxExpenditureB, p1 ) );
+            res *= ParamChecker( ui->l_signal_state_b,    ValidateRange( ui->SignalStateB, p2 ) );
+        }
+        else
+        {
+            ParamChecker( ui->l_max_expenditure_b, true );
+        }
     }
 
     return res;
@@ -106,19 +124,36 @@ void ServoTitleInfo::FromParams()
     ui->MinControlPressure->setValue( params.MinControlPressure() );
     ui->MaxControlPressure->setValue( params.MaxControlPressure() );
 
-    ui->MaxExpenditure->setText( QString::number( params.MaxExpenditure() ) );
+    ui->MaxExpenditure->setText( test::ToString( params.MaxExpenditure() ) );
 
     ui->ControlType->setCurrentIndex( ui->ControlType->findText( test::ToString( params.ReelControl() ) ) );
+    on_ControlType_activated( ui->ControlType->currentIndex() );
 
     ui->PressureTesting->setValue( params.PressureTesting() );
     ui->FrequencyInc->setValue( params.FrequencyInc() );
 
-    ui->PressureNominal->setText( QString::number( params.PressureNominal() ) );
-    ui->MaxExpenditureA->setText( QString::number( params.MaxExpenditureA() ) );
-    ui->MaxExpenditureB->setText( QString::number( params.MaxExpenditureB() ) );
+    ui->PressureNominal->setText( test::ToString( params.PressureNominal() ) );
 
-    params.MaxExpenditureB( ui->MaxExpenditureB->text() );
+    ui->ControlSignal->setCurrentIndex( ui->ControlSignal->findText( test::ToString( params.ControlSignal() ) ) );
+    on_ControlSignal_activated( ui->ControlSignal->currentIndex() );
 
+    if ( params.ReelControl() == test::RC_REEL )
+    {
+        ui->EndSgnal->setText( test::ToString( params.EndSgnal() ) );
+        ui->ControlReelResist->setText( test::ToString( params.ControlReelResist() ) );
+    }
+
+    if ( params.ReelControl() == test::RC_CONTROL_BOX )
+    {
+        ui->MaxExpenditureA->setText( test::ToString( params.MaxExpenditureA() ) );
+        if ( params.ReelCount() == 2)
+            ui->MaxExpenditureB->setText( test::ToString( params.MaxExpenditureB() ) );
+
+        ui->SignalStateA->setText( test::ToString( params.SignalStateA() ) );
+        if ( params.ReelCount() == 2)
+            ui->SignalStateB->setText( test::ToString( params.SignalStateB() ) );
+        ui->SignalState0->setText( test::ToString( params.SignalState0() ) );
+    }
 }
 
 void ServoTitleInfo::on_buttonBox_accepted()
@@ -187,19 +222,118 @@ void ServoTitleInfo::on_RaspredControl_activated(int index)
 
 void ServoTitleInfo::on_ControlSignal_activated(int index)
 {
-#warning сюда вставить переключатели ограничений на входный параметры для
-    /// SignalStateA
-    /// SignalStateB
-    /// SignalState0
-    /// SignalResolution
-    /// пробросить сигнал в структуру для сохранения
-    ///
+    test::SIGNAL_TYPE s_type = test::ST_UNKNOWN;
+    auto text = ui->ControlSignal->itemText( index );
+    test::ParseValue( s_type, text );
+    ui->SignalStateA->setEnabled(true);
+    ui->SignalStateB->setEnabled(true);
+    ui->SignalState0->setEnabled(true);
+    ui->EndSgnal->setEnabled(true);
+
+    ui->SignalStateA->setText("");
+    ui->SignalStateB->setText("");
+    ui->SignalState0->setText("");
+    ui->EndSgnal->setText("");
+
+    ui->SignalStateA->setToolTip( text );
+    ui->SignalStateB->setToolTip( text );
+    ui->SignalState0->setToolTip( text );
+    ui->EndSgnal->setText("");
+
+    switch (s_type)
+    {
+        case test::ST_0_20_mA:
+            ui->SignalStateA->setValidator( new QDoubleValidator( 0, 20, 2, this ) );
+            ui->SignalStateB->setValidator( new QDoubleValidator( 0, 20, 2, this ) );
+            ui->SignalState0->setValidator( new QDoubleValidator( 0, 20, 2, this ) );
+            break;
+        case test::ST_4_20_mA:
+            ui->SignalStateA->setValidator( new QDoubleValidator( 4, 20, 2, this ) );
+            ui->SignalStateB->setValidator( new QDoubleValidator( 4, 20, 2, this ) );
+            ui->SignalState0->setValidator( new QDoubleValidator( 4, 20, 2, this ) );
+            break;
+        case test::ST_10_10_mA:
+            ui->SignalStateA->setValidator( new QDoubleValidator( -10, 10, 2, this ) );
+            ui->SignalStateB->setValidator( new QDoubleValidator( -10, 10, 2, this ) );
+            ui->SignalState0->setValidator( new QDoubleValidator( -10, 10, 2, this ) );
+            break;
+        case test::ST_10_10_V:
+            ui->SignalStateA->setValidator( new QDoubleValidator( -10, 10, 2, this ) );
+            ui->SignalStateB->setValidator( new QDoubleValidator( -10, 10, 2, this ) );
+            ui->SignalState0->setValidator( new QDoubleValidator( -10, 10, 2, this ) );
+            break;
+        case test::ST_40_40_mA:
+            ui->SignalStateA->setValidator( new QDoubleValidator( -40, 40, 2, this ) );
+            ui->SignalStateB->setValidator( new QDoubleValidator( -40, 40, 2, this ) );
+            ui->SignalState0->setValidator( new QDoubleValidator( -40, 40, 2, this ) );
+            break;
+        case test::ST_100_mA:
+            ui->EndSgnal->setValidator( new QDoubleValidator( 0, 100, 2, this ) );
+            break;
+        case test::ST_300_mA:
+            ui->EndSgnal->setValidator( new QDoubleValidator( 0, 300, 2, this ) );
+            break;
+        case test::ST_600_mA:
+            ui->EndSgnal->setValidator( new QDoubleValidator( 0, 600, 2, this ) );
+            break;
+        case test::ST_860_mA:
+            ui->EndSgnal->setValidator( new QDoubleValidator( 0, 860, 2, this ) );
+            break;
+        default:
+            ui->SignalStateA->setEnabled(false);
+            ui->SignalStateB->setEnabled(false);
+            ui->SignalState0->setEnabled(false);
+            ui->EndSgnal->setEnabled(false);
+            break;
+    }
 #warning неясна сутьба поля с амплитудами
 
 }
 
 void ServoTitleInfo::on_ControlType_activated(int index)
 {
+    test::RELL_CONTROL control = test::RC_UNKNOWN;
+    auto text = ui->ControlType->itemText( index );
+    test::ParseValue( control, text );
+
+    ui->SignalStateA->setVisible( control == test::RC_CONTROL_BOX );
+    ui->SignalStateB->setVisible( control == test::RC_CONTROL_BOX );
+    ui->SignalState0->setVisible( control == test::RC_CONTROL_BOX );
+    ui->MaxExpenditureA->setVisible( control == test::RC_CONTROL_BOX );
+    ui->MaxExpenditureB->setVisible( control == test::RC_CONTROL_BOX );
+
+    ui->l_signal_state_a->setVisible( control == test::RC_CONTROL_BOX );
+    ui->l_signal_state_b->setVisible( control == test::RC_CONTROL_BOX );
+    ui->l_signal_state_0->setVisible( control == test::RC_CONTROL_BOX );
+    ui->l_max_expenditure_a->setVisible( control == test::RC_CONTROL_BOX );
+    ui->l_max_expenditure_b->setVisible( control == test::RC_CONTROL_BOX );
+
+    ui->EndSgnal->setVisible( control == test::RC_REEL );
+    ui->l_end_signal->setVisible( control == test::RC_REEL );
+
+    ui->ControlReelResist->setVisible( control == test::RC_REEL );
+    ui->l_control_reel_resist->setVisible( control == test::RC_REEL );
+
+    ui->ControlSignal->clear();
+    if ( control == test::RC_CONTROL_BOX )
+    {
+        ui->ControlSignal->addItem( test::ToString( test::ST_0_20_mA ) );
+        ui->ControlSignal->addItem( test::ToString( test::ST_4_20_mA ) );
+        ui->ControlSignal->addItem( test::ToString( test::ST_10_10_mA ) );
+        ui->ControlSignal->addItem( test::ToString( test::ST_40_40_mA ) );
+        ui->ControlSignal->addItem( test::ToString( test::ST_10_10_V ) );
+    }
+    else if ( control == test::RC_REEL )
+    {
+        ui->ControlSignal->addItem( test::ToString( test::ST_100_mA ) );
+        ui->ControlSignal->addItem( test::ToString( test::ST_300_mA ) );
+        ui->ControlSignal->addItem( test::ToString( test::ST_600_mA ) );
+        ui->ControlSignal->addItem( test::ToString( test::ST_860_mA ) );
+    }
+    ui->ControlSignal->setCurrentIndex( -1 );
+    on_ControlSignal_activated( ui->ControlSignal->currentIndex() );
+
+
 #warning сделать переключение между режимами интерфейса
 ///=ControlSignal
 /// +sig_x_max

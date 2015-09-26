@@ -55,7 +55,10 @@ enum SIGNAL_TYPE
     ST_10_10_V = 2,
     ST_10_10_mA = 3,
     ST_40_40_mA = 4,
-
+    ST_100_mA = 5,
+    ST_300_mA = 6,
+    ST_600_mA = 7,
+    ST_860_mA = 8,
 };
 
 bool ParseValue ( CONTROL_SIGNAL& sig, QString const& val );
@@ -65,8 +68,8 @@ bool ParseValue ( qint32& param, QString const& val );
 bool ParseValue ( DYNAMIC& param, QString const& val );
 bool ParseValue ( DYNAMIC_CONTROL& param, QString const& val );
 bool ParseValue ( RELL_CONTROL& param, QString const& val );
-bool ParseValue (double &param, QString const& val );
-bool ParseValue (SIGNAL_TYPE &param, QString const& val );
+bool ParseValue ( double &param, QString const& val );
+bool ParseValue ( SIGNAL_TYPE &param, QString const& val );
 
 QString ToString( qint32 const& v );
 QString ToString( VOLTAGE_TYPE const& v );

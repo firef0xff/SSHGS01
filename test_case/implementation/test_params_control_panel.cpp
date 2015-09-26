@@ -28,9 +28,9 @@ Parameters& Parameters::Instance()
 Parameters::Parameters():
     mGsType(""),
     mSignalType( ST_UNKNOWN ),
-    mVoltage( -1.0 ),
-    mMaxAmperage( -1 ),
-    mReelResist( -1 )
+    mVoltage( 0 ),
+    mMaxAmperage( 0 ),
+    mReelResist( 0 )
 {
     Reset();
 }
@@ -41,9 +41,9 @@ void Parameters::Reset()
 
     mGsType = "";
     mSignalType = ST_UNKNOWN;
-    mVoltage = -1.0;
-    mMaxAmperage = -1.0;
-    mReelResist = -1.0;
+    mVoltage = 0;
+    mMaxAmperage = 0;
+    mReelResist = 0;
 }
 
 QString Parameters::ToString()
