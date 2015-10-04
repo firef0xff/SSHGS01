@@ -265,7 +265,7 @@ void MainWindow::on_load_isp_params_triggered()
     if ( dlg.exec() )
         file_name = dlg.selectedFiles().front();
 
-    test::Parameters* ptr = test::FromFile( file_name );
+    test::Parameters* ptr = test::ParamsFromFile( file_name );
 
     if ( ptr == &test::hydro::Parameters::Instance() )
     {

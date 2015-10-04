@@ -318,7 +318,7 @@ void Parameters::TestCase ( TestsList const& test_case)
 {
     mTestCase = test_case;
 }
-Parameters::TestsList const& Parameters::TestCase ()
+Parameters::TestsList const& Parameters::TestCase () const
 {
     return mTestCase;
 }
@@ -462,7 +462,7 @@ bool CommonParameters::Deserialize(const QJsonObject &obj )
 }
 
 
-void ToFile( QString fname, Parameters const& params )
+void ParamsToFile( QString fname, Parameters const& params )
 {
     QFile f( fname );
     f.open(QIODevice::WriteOnly);
@@ -473,7 +473,7 @@ void ToFile( QString fname, Parameters const& params )
 
     f.close();
 }
-Parameters* FromFile( QString fname )
+Parameters* ParamsFromFile( QString fname )
 {
     QFile f( fname );
     Parameters* ret = nullptr;
@@ -495,6 +495,78 @@ Parameters* FromFile( QString fname )
     }
 
     return ret;
+}
+
+void DataToFile( QString fname, Parameters const& params )
+{
+    QFile f( fname );
+    f.open(QIODevice::WriteOnly);
+    QJsonDocument doc;
+
+    QJsonObject data;
+    data.insert( "Params", params.Serialise() );
+
+    QJsonArray tests_data;
+    foreach ( Test *d, params.TestCase() )
+    {
+        QJsonObject obj;
+        obj.insert("id", d->ID() );
+        obj.insert("data", d->Serialise() );
+
+        tests_data.push_back( obj );
+    }
+    data.insert( "Results", tests_data );
+    doc.setObject( data );
+    f.write( doc.toJson() );
+
+    f.close();
+}
+
+bool DataFromFile( QString fname )
+{
+    QFile f( fname );
+    Parameters* ret = nullptr;
+    if ( f.exists() )
+    {
+        f.open(QIODevice::ReadOnly);
+        auto doc = QJsonDocument::fromJson( f.readAll() );
+        QJsonObject params = doc.object().value("Params").toObject();
+        QJsonArray tests_data = doc.object().value("Results").toArray();
+
+        if ( hydro::Parameters::Instance().Deserialize( params ) )
+            ret = &hydro::Parameters::Instance();
+        else if ( servo::Parameters::Instance().Deserialize( params ) )
+            ret = &servo::Parameters::Instance();
+        else if ( hydro_cylinder::Parameters::Instance().Deserialize( params ) )
+            ret = &hydro_cylinder::Parameters::Instance();
+        else if ( control_board::Parameters::Instance().Deserialize( params ) )
+            ret = &control_board::Parameters::Instance();
+
+        if ( ret )
+        {
+            foreach (QJsonValue const& val, tests_data)
+            {
+                QJsonObject obj = val.toObject();
+                uint8_t id = obj.value("id").toInt();
+                QJsonObject data = obj.value("data").toObject();
+
+                auto it = std::find_if( ret->TestCase().begin(), ret->TestCase().end(),
+                [ &id ]( Test* ptr )
+                {
+                    return ptr->ID() == id;
+                } );
+
+                if ( it != ret->TestCase().end() )
+                {
+                    Test* ptr = *it;
+                    ptr->Deserialize( data );
+                }
+            }
+        }
+        f.close();
+    }
+
+    return ret != nullptr;
 }
 
 }//namespace test

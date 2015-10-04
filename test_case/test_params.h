@@ -97,7 +97,7 @@ public:
     void Reset();
 
     void TestCase ( TestsList const& test_case);
-    TestsList const& TestCase ();
+    TestsList const& TestCase () const;
 
 protected:
     TestsList mTestCase;        //набор тестов для выполнения
@@ -148,7 +148,10 @@ protected:
 
 extern Parameters* CURRENT_PARAMS;
 
-void ToFile( QString fname, Parameters const& params );
-Parameters* FromFile( QString fname );
+void ParamsToFile( QString fname, Parameters const& params );
+Parameters* ParamsFromFile( QString fname );
+
+void DataToFile( QString fname, Parameters const& params );
+bool DataFromFile( QString fname );
 
 }//namespace test

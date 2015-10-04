@@ -45,6 +45,7 @@ private slots:
     void on_test_start();
     void on_test_stop();
     void on_SaveTest_clicked();
+    void on_Save_clicked();
 };
 
 class Worker : public QThread

@@ -332,24 +332,4 @@ void ServoTitleInfo::on_ControlType_activated(int index)
     }
     ui->ControlSignal->setCurrentIndex( -1 );
     on_ControlSignal_activated( ui->ControlSignal->currentIndex() );
-
-
-#warning сделать переключение между режимами интерфейса
-///=ControlSignal
-/// +sig_x_max
-/// +Сопротивление катушки управления(где нет блока управления)
-///=PressureTesting
-///=PressureNominal
-///=MaxExpenditure
-///=ControlSignalAmplitude
-///=FrequencyInc
-///=RaspredControl
-///=MinControlPressure
-///=MaxControlPressure
-///
-/// -SignalStateA
-/// -SignalStateB
-/// -SignalState0
-/// -MaxExpenditureA
-/// -MaxExpenditureB
 }

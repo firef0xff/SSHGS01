@@ -52,7 +52,7 @@ void TestRunner::on_Start_clicked()
     if ( test::CURRENT_PARAMS )
         ui->LogBox->append( test::CURRENT_PARAMS->ToString() );
 
-    test::ToFile( "last_test_settings.isx", *test::CURRENT_PARAMS );
+    test::ParamsToFile( "last_test_settings.isx", *test::CURRENT_PARAMS );
 
     mWorker.reset( new Worker());
     QObject::connect( mWorker.get(), &Worker::to_log, ui->LogBox, &QTextBrowser::append );
@@ -115,7 +115,7 @@ void TestRunner::on_SaveTest_clicked()
     {
         if ( !file_name.endsWith(".isx", Qt::CaseInsensitive) )
             file_name += ".isx";
-        test::ToFile( file_name, *test::CURRENT_PARAMS );
+        test::ParamsToFile( file_name, *test::CURRENT_PARAMS );
     }
 }
 
@@ -151,4 +151,21 @@ void Worker::LogIt( QString const& str )
 }
 
 
-
+void TestRunner::on_Save_clicked()
+{
+    QString file_name;
+    QFileDialog dlg;
+    dlg.setFileMode( QFileDialog::AnyFile );
+    dlg.setDirectory( app::Settings::Instance().TestPath() );
+    dlg.setNameFilter( "Результаты испытаний (*.res )" );
+    dlg.setAcceptMode( QFileDialog::AcceptSave );
+    dlg.setViewMode( QFileDialog::Detail );
+    if ( dlg.exec() )
+        file_name = dlg.selectedFiles().front();
+    if ( !file_name.isEmpty() )
+    {
+        if ( !file_name.endsWith(".res", Qt::CaseInsensitive) )
+            file_name += ".res";
+        test::DataToFile( file_name, *test::CURRENT_PARAMS );
+    }
+}

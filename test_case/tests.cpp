@@ -1,7 +1,23 @@
 #include "tests.h"
 #include <thread>
 #include "implementation/hydro/functional_test.h"
+#include "implementation/hydro/herm_test.h"
+#include "implementation/hydro/pressure_duration_from_expediture.h"
+#include "implementation/hydro/max_expenditure.h"
+#include "implementation/hydro/switchtest.h"
+#include "implementation/hydro/pressure_range.h"
+#include "implementation/hydro/activation_time.h"
 
+#include "implementation/servo/herm_tests.h"
+#include "implementation/servo/expenditure_from_input.h"
+#include "implementation/servo/expenditure_from_pressure_duration.h"
+#include "implementation/servo/frequency_characteristics.h"
+#include "implementation/servo/transient_performance.h"
+
+#include "implementation/control_board/power_test.h"
+#include "implementation/control_board/va_characteristic.h"
+
+#include "implementation/hydro_cylinder/cylinder_test.h"
 namespace fake
 {
 using namespace test;
@@ -12,6 +28,9 @@ public:
     SucsessTest(TestCase* tc, QString const& name, uint8_t number, uint8_t id):
         Test(tc, name, number, id)
     {}
+
+    virtual QJsonObject Serialise(){ return QJsonObject(); }
+    virtual bool Deserialize( QJsonObject const& ){ return true; }
 
     bool Run()
     {
@@ -38,6 +57,9 @@ public:
     UnSucsessTest(TestCase* tc, QString const& name, uint8_t number, uint8_t id):
         Test(tc, name, number, id)
     {}
+
+    virtual QJsonObject Serialise(){ return QJsonObject(); }
+    virtual bool Deserialize( QJsonObject const& ){ return true; }
 
     bool Run()
     {
@@ -70,19 +92,14 @@ namespace hydro
 namespace test_case
 {
 static FunctionalTest t1;
+static OutsideHermTest t2;
+static InsideHermTest t3;
+static PressureDurationFromExpenditure t4;
+static MaxExpenditureTest t5;
+static SwitchTest t6;
+static PressureRange t7;
+static ActivationTime t8;
 }
-namespace fake_case
-{
-using namespace fake;
-static SucsessTest t2( &HydroTests, "Проверка наружной герметичности", 2, 1 );
-static UnSucsessTest t3( &HydroTests, "Проверка внутренней герметичности", 3, 2);
-static SucsessTest t4( &HydroTests, "Проверка перепада давления и зависимость перепада давления от расхода", 4, 3);
-static SucsessTest t5( &HydroTests, "Проверка максимального расхода", 5, 4);
-static UnSucsessTest t6( &HydroTests, "Проверка переключения запорно-регулирующего элемента пониженным напряжением", 6, 5);
-static SucsessTest t7( &HydroTests, "Проверка диапазона давления управления\n(для направляющей гидроаппаратуры с электрогидравлическим управлением)", 7, 6);
-static SucsessTest t8( &HydroTests, "Время срабатывания", 8, 7 );
-
-}//namespace fake_case
 
 }//namespace hydro
 
@@ -91,17 +108,16 @@ TestCase ServoTests( "Направление расхода",
                      "Испытание пропорциональной и сервоаппаратуры управления направлением расхода"                      );
 namespace servo
 {
-namespace fake_case
+namespace test_case
 {
-using namespace fake;
-static SucsessTest t1( &ServoTests, "Проверка аппарата пробным давлением", 1, 8 );
-static UnSucsessTest t2( &ServoTests, "Внутренняя утечка", 2, 9 );
-static SucsessTest t3( &ServoTests, "Зависимость расхода «к потребителю» от входного тока без нагрузки", 3, 10 );
-//static UnSucsessTest t4( &ServoTests, "Разрешающая способность и порог вне нулевой зоны", 4, 11 );
-static SucsessTest t5( &ServoTests, "Зависимость расхода «к потребителю» от перепада давлений нагрузки", 5, 12 );
-static UnSucsessTest t6( &ServoTests, "Частотные характеристики", 6, 13 );
-static SucsessTest t7( &ServoTests, "Переходные характеристики", 7, 14 );
-}//namespace fake2_case
+static OutsideHermTest t1;
+static InsideHermTest t2;
+static ExpeditureFromInput t3;
+static ExpeditureFromPressureDuration t4;
+static FrequencyCharacteristics t5;
+static TransientPerformance t6;
+}//namespace test_case
+
 
 }//namespace servo
 
@@ -110,9 +126,14 @@ TestCase ControlBoardTests( "Платы управления",
                                    "Испытание плат управления пропорциональной аппарутуры");
 namespace control_board
 {
+namespace test_case
+{
+
+static PowerTest t1;
+static VACharacteristic t2;
+
+}//namespace test_case
 using namespace fake;
-static SucsessTest t1( &ControlBoardTests, "Питание платы. Отсутствие ошибок", 1, 16 );
-static UnSucsessTest t2( &ControlBoardTests, "Построение зависимости выходного тока на катушку от входного опорного сигнала", 2, 17 );
 
 }//namespace control_board
 
@@ -122,8 +143,10 @@ TestCase HydroCylinder( "Гидроцилиндры",
 
 namespace hydro_cylinder
 {
-using namespace fake;
-static SucsessTest t1( &HydroCylinder, "Испытание функционирования", 1, 18 );
+namespace test_case
+{
+static FunctionalTest t1;
+}//namespace test_case
 }//namespace hydro_cylinder
 
 }

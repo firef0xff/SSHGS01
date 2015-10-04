@@ -40,7 +40,21 @@ SOURCES += main.cpp\
     test_case/implementation/test_params_hydro.cpp \
     test_case/implementation/test_params_servo.cpp \
     test_case/implementation/test_params_control_panel.cpp \
-    test_case/implementation/test_params_hydro_cilinder.cpp
+    test_case/implementation/test_params_hydro_cilinder.cpp \
+    test_case/implementation/hydro/herm_test.cpp \
+    test_case/implementation/hydro/pressure_duration_from_expediture.cpp \
+    test_case/implementation/hydro/max_expenditure.cpp \
+    test_case/implementation/hydro/switchtest.cpp \
+    test_case/implementation/hydro/pressure_range.cpp \
+    test_case/implementation/hydro/activation_time.cpp \
+    test_case/implementation/servo/herm_tests.cpp \
+    test_case/implementation/servo/expenditure_from_input.cpp \
+    test_case/implementation/servo/expenditure_from_pressure_duration.cpp \
+    test_case/implementation/servo/frequency_characteristics.cpp \
+    test_case/implementation/servo/transient_performance.cpp \
+    test_case/implementation/control_board/power_test.cpp \
+    test_case/implementation/control_board/va_characteristic.cpp \
+    test_case/implementation/hydro_cylinder/cylinder_test.cpp
 
 HEADERS  += mainwindow.h \
     test_case/test_case.h \
@@ -65,7 +79,21 @@ HEADERS  += mainwindow.h \
     test_case/implementation/test_params_hydro.h \
     test_case/implementation/test_params_servo.h \
     test_case/implementation/test_params_control_panel.h \
-    test_case/implementation/test_params_hydro_cilinder.h
+    test_case/implementation/test_params_hydro_cilinder.h \
+    test_case/implementation/hydro/herm_test.h \
+    test_case/implementation/hydro/pressure_duration_from_expediture.h \
+    test_case/implementation/hydro/max_expenditure.h \
+    test_case/implementation/hydro/switchtest.h \
+    test_case/implementation/hydro/pressure_range.h \
+    test_case/implementation/hydro/activation_time.h \
+    test_case/implementation/servo/herm_tests.h \
+    test_case/implementation/servo/expenditure_from_input.h \
+    test_case/implementation/servo/expenditure_from_pressure_duration.h \
+    test_case/implementation/servo/frequency_characteristics.h \
+    test_case/implementation/servo/transient_performance.h \
+    test_case/implementation/control_board/power_test.h \
+    test_case/implementation/control_board/va_characteristic.h \
+    test_case/implementation/hydro_cylinder/cylinder_test.h
 
 FORMS    += mainwindow.ui \
     hydro_title_info.ui \

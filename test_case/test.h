@@ -21,6 +21,9 @@ public:
     uint8_t const& Number() const;
     uint8_t const& ID() const;
 
+    virtual QJsonObject Serialise() const = 0;
+    virtual bool Deserialize( QJsonObject const& obj ) = 0;
+
 protected:
     bool IsStopped();
     LogFunction Log;

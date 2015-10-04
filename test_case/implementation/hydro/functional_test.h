@@ -1,42 +1,5 @@
 #pragma once
-
 #include "../test_base.h"
-
-
-
-namespace shema
-{
-
-class State
-{
-public:
-    State( bool p, bool a, bool b ):
-        A(a),B(b),P(p),T(true)
-    {}
-    bool IsOpen_A()
-    {
-        return A;
-    }
-    bool IsOpen_B()
-    {
-        return B;
-    }
-    bool IsOpen_P()
-    {
-        return P;
-    }
-    bool IsOpen_T()
-    {
-        return T;
-    }
-private:
-    bool A;
-    bool B;
-    bool P;
-    bool T;
-};
-
-}
 
 namespace test
 {
@@ -50,14 +13,36 @@ public:
     FunctionalTest();
     bool Run();
 
+    QJsonObject Serialise() const;
+    bool Deserialize( QJsonObject const& obj );
 private:
+    struct ReelResult
+    {
+        ReelResult():
+            work_on_min_pressure(false),
+            work_on_max_pressure(false),
+            I(0),
+            U(0),
+            R(0),
+            P(0)
+        {}
 
-    bool SetSchema( shema::State const& state );
-    bool SetPressure( double pressure );
-    bool SetVoltage( double voltage );
-    bool WaitPressure( uint sec );
-    bool CalckParams( );
+        QJsonObject Serialise() const;
+        bool Deserialize( QJsonObject const& obj );
 
+        bool work_on_min_pressure; //Функционирование при минимальном давлении : Да/Нет
+        bool work_on_max_pressure; //Функционирование при максимальном давлении : Да/Нет
+        //Характеристики
+        double I; //Ток I, А
+        double U; //Напряжение U, В
+        double R; //Сопротивление R, Ом
+        double P; //Мощьность P, Ват
+    };
+
+    //Катушка А:
+    ReelResult ReelA;
+    //Катушка Б:
+    ReelResult ReelB;
 };
 
 }//namespace hydro

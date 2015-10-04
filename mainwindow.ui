@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1045</width>
+    <width>904</width>
     <height>266</height>
    </rect>
   </property>
@@ -30,9 +30,6 @@
   </property>
   <property name="windowTitle">
    <string>Испытательный стенд</string>
-  </property>
-  <property name="documentMode">
-   <bool>false</bool>
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="contextMenuPolicy">
@@ -388,8 +385,8 @@ X</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1045</width>
-     <height>26</height>
+     <width>904</width>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
