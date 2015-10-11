@@ -6,6 +6,7 @@
 #include <QThread>
 #include <QFileDialog>
 #include "settings/settings.h"
+#include <QtPrintSupport/QPrinter>
 
 TestRunner::TestRunner(QWidget *parent) :
     QWidget(parent),
@@ -168,4 +169,48 @@ void TestRunner::on_Save_clicked()
             file_name += ".res";
         test::DataToFile( file_name, *test::CURRENT_PARAMS );
     }
+
+
+    QPixmap pixmap( 1024, 1024);
+    QPainter p(&pixmap);
+    QRect r(0,0,1024,1024);
+    p.fillRect( r, Qt::white );
+    foreach (test::Test* test, test::CURRENT_PARAMS->TestCase())
+    {
+        test->ResetDrawLine();
+        test->Draw( p, r );
+    }
+    pixmap.save("img1.png","PNG");
+
+
+    QPrinter printer;
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    printer.setOrientation( QPrinter::Portrait );
+    printer.setPaperSize( QPrinter::A4 );
+    printer.setPageMargins( 20, 5, 10, 5, QPrinter::Millimeter );
+    printer.setOutputFileName("file.pdf");
+
+    QPainter painter(&printer);
+    QRect rc( 0, 0, printer.pageRect().width(), printer.pageRect().height() );
+
+    foreach (test::Test* test, test::CURRENT_PARAMS->TestCase())
+    {
+        test->ResetDrawLine();
+
+        bool draw = false;
+        while( !draw )
+        {
+            draw = test->Draw( painter, rc );
+            if ( !draw )
+            {
+                printer.newPage();
+                rc = QRect( 0, 0, printer.pageRect().width(), printer.pageRect().height() );
+            }
+            QFontMetrics m (painter.font());
+            rc.setTop( rc.top() + m.height() );
+        }
+    }
+    painter.end();
+
+
 }

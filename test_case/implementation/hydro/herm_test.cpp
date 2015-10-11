@@ -31,6 +31,37 @@ bool OutsideHermTest::Deserialize( QJsonObject const& obj )
     return true;
 }
 
+bool OutsideHermTest::Draw( QPainter& painter, QRect &free_rect ) const
+{
+    QFont header_font = painter.font();
+    QFont text_font = painter.font();
+    header_font.setPointSize( 14 );
+    text_font.setPointSize( 12 );
+
+    QFontMetrics head_metrix( header_font );
+
+    uint32_t num = 0;
+    bool res = DrawLine( num, free_rect, header_font,
+    [ this, &painter, &head_metrix, &header_font ]( QRect const& rect )
+    {
+        QPoint start_point( rect.center().x() - head_metrix.width( mName ) / 2, rect.bottom() );
+        painter.setFont( header_font );
+        painter.drawText( start_point, mName );
+    });
+
+    painter.setFont( text_font );
+    res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter ]( QRect const& rect )
+    {
+        QString s;
+        s += LeakFounded ? "Испытание внешней герметичности не пройдено" : "Течь при испытании наружной герметичности не обнаружена";
+        painter.drawText( rect, s );
+    });
+
+    return res;
+}
+
 void OutsideHermTest::Question()
 {
 #warning найти как обойти падение
@@ -69,6 +100,36 @@ bool InsideHermTest::Deserialize( QJsonObject const& obj )
     Seconds = obj.value("Seconds").toInt();
     Leak = obj.value("Leak").toDouble();
     return true;
+}
+
+bool InsideHermTest::Draw( QPainter& painter, QRect &free_rect ) const
+{
+    QFont header_font = painter.font();
+    QFont text_font = painter.font();
+    header_font.setPointSize( 14 );
+    text_font.setPointSize( 12 );
+
+    QFontMetrics head_metrix( header_font );
+
+    uint32_t num = 0;
+    bool res = DrawLine( num, free_rect, header_font,
+    [ this, &painter, &head_metrix, &header_font ]( QRect const& rect )
+    {
+        QPoint start_point( rect.center().x() - head_metrix.width( mName ) / 2, rect.bottom() );
+        painter.setFont( header_font );
+        painter.drawText( start_point, mName );
+    });
+
+    painter.setFont( text_font );
+    res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter ]( QRect const& rect )
+    {
+        QString s = "Средний расчет расход утечки за " + QString::number( Seconds ) + " сек, " + QString::number( Leak ) + " л/мин";
+        painter.drawText( rect, s );
+    });
+
+    return res;
 }
 
 }//namespace hydro

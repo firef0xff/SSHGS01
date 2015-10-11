@@ -15,6 +15,8 @@ public:
 
     QJsonObject Serialise() const;
     bool Deserialize( QJsonObject const& obj );
+
+    bool Draw(QPainter &painter, QRect &free_rect ) const;
 private:
     void Question();
     bool LeakFounded; //Течь при испытании наружной герметичности не обнаружена / Испытание внешней герметичности не пройдено
@@ -28,6 +30,8 @@ public:
 
     QJsonObject Serialise() const;
     bool Deserialize( QJsonObject const& obj );
+
+    bool Draw(QPainter &painter, QRect &free_rect ) const;
 private:
     // Средний расчет расход утечки за %s сек, %s л/мин
     int Seconds;

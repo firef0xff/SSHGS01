@@ -2,6 +2,7 @@
 #include "../test_base.h"
 #include <QVector>
 
+
 namespace test
 {
 namespace hydro
@@ -15,6 +16,9 @@ public:
 
     QJsonObject Serialise() const;
     bool Deserialize( QJsonObject const& obj );
+
+    void ResetDrawLine();
+    bool Draw(QPainter &painter, QRect &free_rect ) const;
 private:
     struct Data
     {
@@ -32,9 +36,11 @@ private:
         QJsonObject Serialise() const;
         bool Deserialize( QJsonObject const& obj );
     };
+    typedef std::pair<Data, Data> Channels;
 
-    QVector< Data > ChannelA;
-    QVector< Data > ChannelB;
+    QVector< Channels > mData;
+
+    mutable int mRowsPrinted;
 
     //Зависимость перепада давления от расхода
     /// |--------------------------------------------|--------------------------------------------|

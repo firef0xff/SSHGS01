@@ -1,7 +1,6 @@
 #pragma once
 #include "../test.h"
 
-
 namespace test
 {
 

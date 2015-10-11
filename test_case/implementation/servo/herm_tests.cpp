@@ -3,6 +3,9 @@
 #include <QJsonArray>
 #include <QMessageBox>
 #include <QPushButton>
+#include "../test_params_servo.h"
+
+#include "../../../../mylib/Widgets/GraphBuilder/graph_builder.h"
 namespace test
 {
 namespace servo
@@ -32,6 +35,39 @@ bool OutsideHermTest::Deserialize( QJsonObject const& obj )
     return true;
 }
 
+bool OutsideHermTest::Draw( QPainter& painter, QRect &free_rect ) const
+{
+    QFont header_font = painter.font();
+    QFont text_font = painter.font();
+    header_font.setPointSize( 14 );
+    text_font.setPointSize( 12 );
+
+    QFontMetrics head_metrix( header_font );
+
+    uint32_t num = 0;
+    bool res = DrawLine( num, free_rect, header_font,
+    [ this, &painter, &head_metrix, &header_font ]( QRect const& rect )
+    {
+        QPoint start_point( rect.center().x() - head_metrix.width( mName ) / 2, rect.bottom() );
+        painter.setFont( header_font );
+        painter.drawText( start_point, mName );
+    });
+
+    painter.setFont( text_font );
+    res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter ]( QRect const& rect )
+    {
+        QString s = "Наружная течь (не)замечена";
+        s += LeakFounded ? "" : "не";
+        s += "замечена";
+        painter.drawText( rect, s );
+    });
+
+    return res;
+}
+
+
 void OutsideHermTest::Question()
 {
 #warning найти как обойти падение
@@ -55,6 +91,50 @@ InsideHermTest::InsideHermTest():
 
 bool InsideHermTest::Run()
 {
+    Data d;
+    d.Leak = 1;
+    d.Signal = 0.25;
+
+    Graph.push_back( d );
+    d.Leak += 0.1;
+    d.Signal += 0.01;
+
+    Graph.push_back( d );
+    d.Leak += 0.1;
+    d.Signal += 0.01;
+
+    Graph.push_back( d );
+    d.Leak += 0.1;
+    d.Signal += 0.01;
+
+    Graph.push_back( d );
+    d.Leak += 0.1;
+    d.Signal += 0.01;
+
+    Graph.push_back( d );
+    d.Leak += 0.1;
+    d.Signal += 0.01;
+
+    Graph.push_back( d );
+    d.Leak += 0.1;
+    d.Signal += 0.01;
+
+    Graph.push_back( d );
+    d.Leak += 0.1;
+    d.Signal += 0.01;
+
+    Graph.push_back( d );
+    d.Leak += 0.1;
+    d.Signal += 0.01;
+
+    Graph.push_back( d );
+    d.Leak += 0.1;
+    d.Signal += 0.01;
+
+    Graph.push_back( d );
+    d.Leak += 0.1;
+    d.Signal += 0.01;
+
     return true;
 }
 QJsonObject InsideHermTest::Serialise() const
@@ -79,6 +159,68 @@ bool InsideHermTest::Deserialize( QJsonObject const& obj )
             Graph.insert( Graph.end(), d );
     }
     return true;
+}
+
+bool InsideHermTest::Draw( QPainter& painter, QRect &free_rect ) const
+{
+    test::servo::Parameters *params = static_cast< test::servo::Parameters * >( CURRENT_PARAMS );
+    if ( !params )
+        return true;
+
+    QFont header_font = painter.font();
+    QFont text_font = painter.font();
+    header_font.setPointSize( 14 );
+    text_font.setPointSize( 12 );
+
+    QFontMetrics head_metrix( header_font );
+
+    uint32_t num = 0;
+    bool res = DrawLine( num, free_rect, header_font,
+    [ this, &painter, &head_metrix, &header_font ]( QRect const& rect )
+    {
+        QPoint start_point( rect.center().x() - head_metrix.width( mName ) / 2, rect.bottom() );
+        painter.setFont( header_font );
+        painter.drawText( start_point, mName );
+    });
+
+    painter.setFont( text_font );
+    res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter ]( QRect const& rect )
+    {
+        QString s = "Графиг опорного сигнала и расхода в канале утечки ( Т )";
+        painter.drawText( rect, s );
+    });
+
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter, &text_font, params ]( QRect const& rect )
+    {
+        ff0x::GraphBuilder::GraphDataType data;
+
+        double max_signal = 0;
+        double max_Leak = 0;
+
+        foreach ( Data const& item, Graph )
+        {
+            double abs_sig = std::abs( item.Signal );
+            double abs_leak = std::abs( item.Leak );
+
+            if ( max_signal < abs_sig )
+                max_signal = abs_sig;
+
+            if ( max_Leak < abs_leak )
+                max_Leak = abs_leak;
+
+            data.push_back( QPointF( item.Signal, item.Leak ) );
+        }
+
+        ff0x::GraphBuilder builder ( 1024, 768, text_font );
+        painter.drawPixmap( rect, builder.Draw( data, max_signal * 1.25, max_Leak * 1.25, 0.05, 0.5, "л/мин", params->ControlSignal() == ST_10_10_V ? "В" : "мА", true ) );
+    }, free_rect.width()/4*3  );
+
+    free_rect.setHeight( 0 );
+
+    return res;
 }
 
 QJsonObject InsideHermTest::Data::Serialise() const

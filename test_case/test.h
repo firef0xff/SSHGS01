@@ -3,6 +3,8 @@
 #include <QVariant>
 #include <functional>
 #include <stdint.h>
+#include <QPainter>
+#include <functional>
 
 namespace test
 {
@@ -24,9 +26,20 @@ public:
     virtual QJsonObject Serialise() const = 0;
     virtual bool Deserialize( QJsonObject const& obj ) = 0;
 
+    // true если больше нечего выводить ecли false то предоставленного куска мало
+    virtual bool Draw( QPainter& painter, QRect &free_rect ) const = 0;
+
+    virtual void ResetDrawLine();
+
 protected:
     bool IsStopped();
     LogFunction Log;
+    QString mName;
+
+    bool AllocatePlace(QRect& place, int height, QRect& source ) const;
+
+    typedef std::function< void ( QRect const& ) > DrawLineHandler;
+    bool DrawLine ( uint32_t &num, QRect& source, QFont font, DrawLineHandler do_draw, int custom_height = 0 ) const;
 
 private:
     friend class TestCase;
@@ -35,12 +48,12 @@ private:
 
     void Free();
 
-    QString mName;
     uint8_t mNumber;
     uint8_t mId;
     TestCase *mCase;
 
     bool* mStopMarker;
+    mutable uint32_t mDrawLine; //отметка на которой остановилась печать
 };
 
 }//namespace test

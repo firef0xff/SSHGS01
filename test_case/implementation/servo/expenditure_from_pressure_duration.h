@@ -15,6 +15,9 @@ public:
 
     QJsonObject Serialise() const;
     bool Deserialize( QJsonObject const& obj );
+
+    bool Draw(QPainter &painter, QRect &free_rect ) const;
+
 private:
     struct Data
     {

@@ -16,6 +16,9 @@ public:
 
     QJsonObject Serialise() const;
     bool Deserialize( QJsonObject const& obj );
+
+    bool Draw(QPainter &painter, QRect &free_rect ) const;
+
 private:
     void Question();
     bool LeakFounded; //наружная течь (не)замечена -- диалоговое окно
@@ -29,6 +32,9 @@ public:
 
     QJsonObject Serialise() const;
     bool Deserialize( QJsonObject const& obj );
+
+    bool Draw(QPainter &painter, QRect &free_rect ) const;
+
 private:
     struct Data
     {

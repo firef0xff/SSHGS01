@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui printsupport
 QMAKE_CXXFLAGS += -std=c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -54,7 +54,8 @@ SOURCES += main.cpp\
     test_case/implementation/servo/transient_performance.cpp \
     test_case/implementation/control_board/power_test.cpp \
     test_case/implementation/control_board/va_characteristic.cpp \
-    test_case/implementation/hydro_cylinder/cylinder_test.cpp
+    test_case/implementation/hydro_cylinder/cylinder_test.cpp \
+    ../mylib/Widgets/GraphBuilder/graph_builder.cpp
 
 HEADERS  += mainwindow.h \
     test_case/test_case.h \
@@ -93,7 +94,8 @@ HEADERS  += mainwindow.h \
     test_case/implementation/servo/transient_performance.h \
     test_case/implementation/control_board/power_test.h \
     test_case/implementation/control_board/va_characteristic.h \
-    test_case/implementation/hydro_cylinder/cylinder_test.h
+    test_case/implementation/hydro_cylinder/cylinder_test.h \
+    ../mylib/Widgets/GraphBuilder/graph_builder.h
 
 FORMS    += mainwindow.ui \
     hydro_title_info.ui \

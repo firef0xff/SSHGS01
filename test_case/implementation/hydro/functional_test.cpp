@@ -1,5 +1,6 @@
 #include "functional_test.h"
 #include <QJsonObject>
+#include "../test_params_hydro.h"
 
 namespace test
 {
@@ -29,6 +30,135 @@ bool FunctionalTest::Deserialize( QJsonObject const& obj )
 {
     bool res = ReelA.Deserialize( obj.value("ReelA").toObject() );
     res *= ReelB.Deserialize( obj.value("ReelB").toObject() );
+    return res;
+}
+
+bool FunctionalTest::Draw( QPainter& painter, QRect &free_rect ) const
+{
+    test::hydro::Parameters *params = static_cast< test::hydro::Parameters * >( CURRENT_PARAMS );
+    if ( !params )
+        return true;
+
+    QFont header_font = painter.font();
+    QFont text_font = painter.font();
+    header_font.setPointSize( 14 );
+    text_font.setPointSize( 12 );
+
+    QFontMetrics head_metrix( header_font );
+
+    uint32_t num = 0;
+    bool res = DrawLine( num, free_rect, header_font,
+    [ this, &painter, &head_metrix, &header_font ]( QRect const& rect )
+    {
+        QPoint start_point( rect.center().x() - head_metrix.width( mName ) / 2, rect.bottom() );
+        painter.setFont( header_font );
+        painter.drawText( start_point, mName );
+    });
+
+    painter.setFont( text_font );
+    res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter ]( QRect const& rect )
+    {
+        painter.drawText( rect, "Катушка А:" );
+    });
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter ]( QRect const& rect )
+    {
+        QString s = "Функционирование при минимальном давлении: ";
+        s += ReelA.work_on_min_pressure ? "Да" : "Нет";
+        painter.drawText( rect, s );
+    });
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter ]( QRect const& rect )
+    {
+        QString s = "Функционирование при максимальном давлении: ";
+        s += ReelA.work_on_max_pressure ? "Да" : "Нет";
+        painter.drawText( rect, s );
+    });
+
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter ]( QRect const& rect )
+    {
+        QString s = "Ток I, А: ";
+        s += QString::number( ReelA.I );
+        painter.drawText( rect, s );
+    });
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter ]( QRect const& rect )
+    {
+        QString s = "Напряжение U, В: ";
+        s += QString::number( ReelA.U );
+        painter.drawText( rect, s );
+    });
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter ]( QRect const& rect )
+    {
+        QString s = "Сопротивление R, Ом: ";
+        s += QString::number( ReelA.R );
+        painter.drawText( rect, s );
+    });
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter ]( QRect const& rect )
+    {
+        QString s = "Мощьность P, Ват: ";
+        s += QString::number( ReelA.P );
+        painter.drawText( rect, s );
+    });
+
+    if ( params->ReelCount() == 2 )
+    {
+        res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
+        res = DrawLine( num, free_rect, text_font,
+        [ this, &painter ]( QRect const& rect )
+        {
+            painter.drawText( rect, "Катушка Б:" );
+        });
+        res = DrawLine( num, free_rect, text_font,
+        [ this, &painter ]( QRect const& rect )
+        {
+            QString s = "Функционирование при минимальном давлении: ";
+            s += ReelB.work_on_min_pressure ? "Да" : "Нет";
+            painter.drawText( rect, s );
+        });
+        res = DrawLine( num, free_rect, text_font,
+        [ this, &painter ]( QRect const& rect )
+        {
+            QString s = "Функционирование при максимальном давлении: ";
+            s += ReelB.work_on_max_pressure ? "Да" : "Нет";
+            painter.drawText( rect, s );
+        });
+
+        res = DrawLine( num, free_rect, text_font,
+        [ this, &painter ]( QRect const& rect )
+        {
+            QString s = "Ток I, А: ";
+            s += QString::number( ReelB.I );
+            painter.drawText( rect, s );
+        });
+        res = DrawLine( num, free_rect, text_font,
+        [ this, &painter ]( QRect const& rect )
+        {
+            QString s = "Напряжение U, В: ";
+            s += QString::number( ReelB.U );
+            painter.drawText( rect, s );
+        });
+        res = DrawLine( num, free_rect, text_font,
+        [ this, &painter ]( QRect const& rect )
+        {
+            QString s = "Сопротивление R, Ом: ";
+            s += QString::number( ReelB.R );
+            painter.drawText( rect, s );
+        });
+        res = DrawLine( num, free_rect, text_font,
+        [ this, &painter ]( QRect const& rect )
+        {
+            QString s = "Мощьность P, Ват: ";
+            s += QString::number( ReelB.P );
+            painter.drawText( rect, s );
+        });
+    }
+
     return res;
 }
 
