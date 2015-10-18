@@ -14,6 +14,8 @@
 #include "test_case/implementation/test_params_servo.h"
 #include "test_case/implementation/test_params_control_panel.h"
 #include "test_case/implementation/test_params_hydro_cilinder.h"
+#include "test_case/test.h"
+#include "viewer.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -152,7 +154,7 @@ void MainWindow::ShowChildWindow( std::unique_ptr< QWidget > child )
 {
     enable_modes(false);
     if ( mChildWindow.get() )
-        QObject::disconnect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
+        QObject::disconnect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(enable_modes()) );
     mChildWindow.reset( child.release() );
     QObject::connect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(enable_modes()) );
     mChildWindow->show();
@@ -302,4 +304,26 @@ void MainWindow::on_control_panels_list_triggered()
 {
     DeviceLists( test::control_board::Parameters::Instance().TestCollection().Devices() );
 }
+void MainWindow::on_LastTest_triggered()
+{
+    ShowChildWindow( ChildPtr( new Viewer() ) );
+}
 
+void MainWindow::on_Open_results_triggered()
+{
+    QString file_name;
+    QFileDialog dlg;
+    dlg.setFileMode( QFileDialog::ExistingFile );
+    dlg.setDirectory( app::Settings::Instance().TestPath() );
+    dlg.setNameFilter( "Результаты испытаний (*.res )" );
+    dlg.setViewMode( QFileDialog::Detail );
+    if ( dlg.exec() )
+    {
+        file_name = dlg.selectedFiles().front();
+        test::DataFromFile( file_name );
+        on_LastTest_triggered();
+    }
+
+
+
+}

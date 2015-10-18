@@ -31,6 +31,7 @@ private:
     Ui::TestRunner *ui;
     QList< ControlPtr > mChilds;
     std::unique_ptr< Worker > mWorker;
+    std::unique_ptr< QWidget > mChildWindow;
 
     void closeEvent(QCloseEvent *e);
     void StopWorker();
@@ -45,7 +46,7 @@ private slots:
     void on_test_start();
     void on_test_stop();
     void on_SaveTest_clicked();
-    void on_Save_clicked();
+    void on_Results_clicked();
 };
 
 class Worker : public QThread

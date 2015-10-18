@@ -55,7 +55,9 @@ SOURCES += main.cpp\
     test_case/implementation/control_board/power_test.cpp \
     test_case/implementation/control_board/va_characteristic.cpp \
     test_case/implementation/hydro_cylinder/cylinder_test.cpp \
-    ../mylib/Widgets/GraphBuilder/graph_builder.cpp
+    ../mylib/Widgets/GraphBuilder/graph_builder.cpp \
+    viewer.cpp \
+    cpu/cpu_memory.cpp
 
 HEADERS  += mainwindow.h \
     test_case/test_case.h \
@@ -95,7 +97,10 @@ HEADERS  += mainwindow.h \
     test_case/implementation/control_board/power_test.h \
     test_case/implementation/control_board/va_characteristic.h \
     test_case/implementation/hydro_cylinder/cylinder_test.h \
-    ../mylib/Widgets/GraphBuilder/graph_builder.h
+    ../mylib/Widgets/GraphBuilder/graph_builder.h \
+    viewer.h \
+    cpu/cpu_memory.h \
+    cpu/data_block_base.h
 
 FORMS    += mainwindow.ui \
     hydro_title_info.ui \
@@ -106,10 +111,8 @@ FORMS    += mainwindow.ui \
     settings/settings_wnd.ui \
     devices/device_collection_wnd.ui \
     control_panels_title_info.ui \
-    hydro_cilinder_title_info.ui
+    hydro_cilinder_title_info.ui \
+    viewer.ui
 
 OTHER_FILES += devices/*.json\
     тз/*\
-
-
-DISTFILES +=

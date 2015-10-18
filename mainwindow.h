@@ -82,4 +82,6 @@ private slots:
     void on_TestCase4_clicked();
     void on_act_test_case3_triggered();
     void on_act_test_case4_triggered();
+    void on_LastTest_triggered();
+    void on_Open_results_triggered();
 };

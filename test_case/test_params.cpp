@@ -566,6 +566,8 @@ bool DataFromFile( QString fname )
         f.close();
     }
 
+    if ( ret )
+        test::CURRENT_PARAMS = ret;
     return ret != nullptr;
 }
 

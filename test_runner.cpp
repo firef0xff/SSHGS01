@@ -6,7 +6,7 @@
 #include <QThread>
 #include <QFileDialog>
 #include "settings/settings.h"
-#include <QtPrintSupport/QPrinter>
+#include "viewer.h"
 
 TestRunner::TestRunner(QWidget *parent) :
     QWidget(parent),
@@ -151,66 +151,11 @@ void Worker::LogIt( QString const& str )
     emit to_log( str );
 }
 
-
-void TestRunner::on_Save_clicked()
+void TestRunner::on_Results_clicked()
 {
-    QString file_name;
-    QFileDialog dlg;
-    dlg.setFileMode( QFileDialog::AnyFile );
-    dlg.setDirectory( app::Settings::Instance().TestPath() );
-    dlg.setNameFilter( "Результаты испытаний (*.res )" );
-    dlg.setAcceptMode( QFileDialog::AcceptSave );
-    dlg.setViewMode( QFileDialog::Detail );
-    if ( dlg.exec() )
-        file_name = dlg.selectedFiles().front();
-    if ( !file_name.isEmpty() )
-    {
-        if ( !file_name.endsWith(".res", Qt::CaseInsensitive) )
-            file_name += ".res";
-        test::DataToFile( file_name, *test::CURRENT_PARAMS );
-    }
-
-
-    QPixmap pixmap( 1024, 1024);
-    QPainter p(&pixmap);
-    QRect r(0,0,1024,1024);
-    p.fillRect( r, Qt::white );
-    foreach (test::Test* test, test::CURRENT_PARAMS->TestCase())
-    {
-        test->ResetDrawLine();
-        test->Draw( p, r );
-    }
-    pixmap.save("img1.png","PNG");
-
-
-    QPrinter printer;
-    printer.setOutputFormat(QPrinter::PdfFormat);
-    printer.setOrientation( QPrinter::Portrait );
-    printer.setPaperSize( QPrinter::A4 );
-    printer.setPageMargins( 20, 5, 10, 5, QPrinter::Millimeter );
-    printer.setOutputFileName("file.pdf");
-
-    QPainter painter(&printer);
-    QRect rc( 0, 0, printer.pageRect().width(), printer.pageRect().height() );
-
-    foreach (test::Test* test, test::CURRENT_PARAMS->TestCase())
-    {
-        test->ResetDrawLine();
-
-        bool draw = false;
-        while( !draw )
-        {
-            draw = test->Draw( painter, rc );
-            if ( !draw )
-            {
-                printer.newPage();
-                rc = QRect( 0, 0, printer.pageRect().width(), printer.pageRect().height() );
-            }
-            QFontMetrics m (painter.font());
-            rc.setTop( rc.top() + m.height() );
-        }
-    }
-    painter.end();
-
-
+    if ( mChildWindow.get() )
+        QObject::disconnect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(show()) );
+    mChildWindow.reset( new Viewer() );
+    QObject::connect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(show()) );
+    mChildWindow->show();
 }

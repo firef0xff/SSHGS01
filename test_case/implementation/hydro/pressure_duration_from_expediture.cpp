@@ -115,7 +115,7 @@ bool PressureDurationFromExpenditure::Draw( QPainter& painter, QRect &free_rect 
               "<style type='text/css'>"
                    "td { text-align: center;}"
                    "th { font-weight: normal;}"
-                   "table {border-collapse: collapse;}"
+                   "table {border-collapse: collapse; border-style: solid;}"
              "</style>"
             "</head>"
             "<body>"
@@ -166,7 +166,6 @@ bool PressureDurationFromExpenditure::Draw( QPainter& painter, QRect &free_rect 
     };
 
     QTextDocument doc;
-    doc.setDefaultFont( text_font );
     doc.setUndoRedoEnabled( false );
     doc.setTextWidth( rect.width() );
     doc.setUseDesignMetrics( true );
