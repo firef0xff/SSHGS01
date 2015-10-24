@@ -2,6 +2,8 @@
 #include <QJsonObject>
 #include <QMessageBox>
 #include <QPushButton>
+#include <mutex>
+#include <functional>
 namespace test
 {
 namespace hydro
@@ -14,7 +16,12 @@ OutsideHermTest::OutsideHermTest():
 
 bool OutsideHermTest::Run()
 {
-    Question();
+    std::mutex mutex;
+    std::unique_lock< std::mutex > lock( mutex );
+    Launcher( std::bind( &OutsideHermTest::Question, this ) );
+
+    mCondVar.wait( lock );
+
     return !LeakFounded;
 }
 
@@ -64,8 +71,7 @@ bool OutsideHermTest::Draw( QPainter& painter, QRect &free_rect ) const
 
 void OutsideHermTest::Question()
 {
-#warning найти как обойти падение
-    /*QMessageBox msg;
+    QMessageBox msg;
     msg.setWindowTitle( "Визуальный контроль" );
     msg.setText( "Заметна ли течь по резьбам и стыкам,\nпотение наружных поверхностей гидрораспределителя" );
     QPushButton *no = msg.addButton("Течь не обнаружена", QMessageBox::NoRole );
@@ -74,7 +80,8 @@ void OutsideHermTest::Question()
     no->setDefault( false );
     yes->setDefault( false );
     msg.exec();
-    LeakFounded = msg.clickedButton() == yes;*/
+    LeakFounded = msg.clickedButton() == yes;
+    mCondVar.notify_one();
 }
 
 

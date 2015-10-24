@@ -18,6 +18,7 @@ class Test;
 class QLabel;
 class Worker;
 
+typedef std::function< void() > Functor;
 class TestRunner : public QWidget
 {
     Q_OBJECT
@@ -47,6 +48,8 @@ private slots:
     void on_test_stop();
     void on_SaveTest_clicked();
     void on_Results_clicked();
+
+    void exec( Functor );
 };
 
 class Worker : public QThread
@@ -59,10 +62,13 @@ public:
 private:
     mutable bool mStopSignal;
     void LogIt( QString const& str );
+    void LaunchIt( Functor  func );
 signals:
     void to_log( QString const& );
+    void to_exec( Functor );
     void progress();
 
 };
 
+Q_DECLARE_METATYPE(Functor)
 #endif // TEST_RUNNER_H

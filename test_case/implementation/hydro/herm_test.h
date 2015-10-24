@@ -1,6 +1,6 @@
 #pragma once
 #include "../test_base.h"
-
+#include <condition_variable>
 namespace test
 {
 
@@ -20,6 +20,7 @@ public:
 private:
     void Question();
     bool LeakFounded; //Течь при испытании наружной герметичности не обнаружена / Испытание внешней герметичности не пройдено
+    std::condition_variable mCondVar;
 };
 
 class InsideHermTest :public test::hydro::Test
@@ -35,7 +36,7 @@ public:
 private:
     // Средний расчет расход утечки за %s сек, %s л/мин
     int Seconds;
-    double Leak;
+    double Leak;    
 };
 
 }//namespace hydro

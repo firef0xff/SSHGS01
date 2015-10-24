@@ -14,9 +14,11 @@ class Test
 {
 public:
     typedef std::function< void( QString const& ) > LogFunction;
+    typedef std::function< void() > Handler;
+    typedef std::function< void( Handler ) > LaunchFunction;
     Test( TestCase* test_case, QString const& name, uint8_t number, uint8_t id );
     virtual ~Test();
-    bool Run( LogFunction, bool& );
+    bool Run( LaunchFunction, LogFunction, bool& );
     virtual bool Run() = 0;
 
     QString const& Name() const;
@@ -34,6 +36,7 @@ public:
 protected:
     bool IsStopped();
     LogFunction Log;
+    LaunchFunction Launcher;
     QString mName;
 
     bool AllocatePlace(QRect& place, int height, QRect& source ) const;

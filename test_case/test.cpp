@@ -35,14 +35,16 @@ uint8_t const& Test::ID() const
 {
     return mId;
 }
-bool Test::Run( LogFunction to_log, bool& stop )
+bool Test::Run(LaunchFunction to_launch, LogFunction to_log, bool& stop )
 {
     Log = to_log;
+    Launcher = to_launch;
     mStopMarker = &stop;
 
     bool res = Run();
 
     Log = LogFunction();
+    Launcher = LaunchFunction();
     mStopMarker = nullptr;
 
     return res;

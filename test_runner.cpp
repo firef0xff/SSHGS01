@@ -12,6 +12,7 @@ TestRunner::TestRunner(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::TestRunner)
 {
+    qRegisterMetaType< Functor >();
     ui->setupUi(this);
 
     uint32_t num = 0;
@@ -60,6 +61,7 @@ void TestRunner::on_Start_clicked()
     QObject::connect( mWorker.get(), &Worker::progress, this, &TestRunner::on_progress );
     QObject::connect( mWorker.get(), &Worker::started, this, &TestRunner::on_test_start );
     QObject::connect( mWorker.get(), &Worker::finished, this, &TestRunner::on_test_stop );
+    QObject::connect( mWorker.get(), &Worker::to_exec, this, &TestRunner::exec );
     mWorker->start();
 }
 
@@ -72,6 +74,7 @@ void TestRunner::StopWorker()
         QObject::disconnect( mWorker.get(), &Worker::progress, this, &TestRunner::on_progress );
         QObject::disconnect( mWorker.get(), &Worker::started, this, &TestRunner::on_test_start );
         QObject::disconnect( mWorker.get(), &Worker::finished, this, &TestRunner::on_test_stop );
+        QObject::disconnect( mWorker.get(), &Worker::to_exec, this, &TestRunner::exec );
         mWorker.reset();
     }
     ui->Start->setEnabled( true );
@@ -120,6 +123,12 @@ void TestRunner::on_SaveTest_clicked()
     }
 }
 
+void TestRunner::exec( Functor func )
+{
+    if ( func )
+        func();
+}
+
 Worker::Worker():
     mStopSignal(false)
 {}
@@ -131,7 +140,9 @@ void Worker::run()
         if (mStopSignal)
             break;
         LogIt( "Запущен тест: " + to_run->Name() );
-        bool result = to_run->Run( std::bind( &Worker::LogIt, this, std::placeholders::_1 ), mStopSignal );
+        bool result = to_run->Run( std::bind( &Worker::LaunchIt, this, std::placeholders::_1 ),
+                                   std::bind( &Worker::LogIt, this, std::placeholders::_1 ),
+                                   mStopSignal );
         emit progress();
         if (result)
             LogIt( "Тест пройден" );
@@ -149,6 +160,11 @@ void Worker::stop()
 void Worker::LogIt( QString const& str )
 {
     emit to_log( str );
+}
+
+void Worker::LaunchIt( Functor func )
+{
+    emit to_exec( func );
 }
 
 void TestRunner::on_Results_clicked()
