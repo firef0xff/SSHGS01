@@ -13,6 +13,9 @@ DB31::DB31():
 {
 }
 
+void DB31::Write()
+{}
+
 }//namespace data
 }//namespace cpu
 
