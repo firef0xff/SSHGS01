@@ -1,6 +1,5 @@
 #pragma once
 #include "data_block_base.h"
-#include <stdint.h>
 
 namespace cpu
 {

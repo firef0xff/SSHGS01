@@ -59,7 +59,8 @@ SOURCES += main.cpp\
     viewer.cpp \
     cpu/cpu_memory.cpp \
     cpu/db30.cpp \
-    cpu/db32.cpp
+    cpu/db32.cpp \
+    cpu/db31.cpp
 
 HEADERS  += mainwindow.h \
     test_case/test_case.h \
@@ -104,7 +105,8 @@ HEADERS  += mainwindow.h \
     cpu/cpu_memory.h \
     cpu/data_block_base.h \
     cpu/db30.h \
-    cpu/db32.h
+    cpu/db32.h \
+    cpu/db31.h
 
 FORMS    += mainwindow.ui \
     hydro_title_info.ui \
