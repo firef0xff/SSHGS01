@@ -59,7 +59,6 @@ void Test::ResetDrawLine()
 }
 bool Test::AllocatePlace( QRect& place, int height, QRect& source ) const
 {
-//    height = 1.25 * height;
     if ( source.height() < height)
         return false;
 

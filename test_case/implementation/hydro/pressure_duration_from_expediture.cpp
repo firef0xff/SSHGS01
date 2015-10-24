@@ -78,7 +78,6 @@ bool PressureDurationFromExpenditure::Draw( QPainter& painter, QRect &free_rect 
 
     QFont header_font = painter.font();
     QFont text_font = painter.font();
-    text_font.setFamily("  ");
     header_font.setPointSize( 14 );
     text_font.setPointSize( 12 );
 
@@ -195,6 +194,13 @@ bool PressureDurationFromExpenditure::Draw( QPainter& painter, QRect &free_rect 
     doc.drawContents( &painter, rect);
     painter.restore();
     return res;
+//    QPixmap pix( r.width(), r.height() );
+//    QRect pix_r( 0,0, r.width(), r.height() );
+//    QPainter pix_painter( &pix );
+//    pix_painter.fillRect( pix_r, Qt::white );
+//    pix_painter.setFont( text_font );
+//    doc.drawContents( &pix_painter, pix_r);
+//    painter.drawPixmap( r, pix );
 }
 
 
