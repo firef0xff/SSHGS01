@@ -19,6 +19,8 @@ public:
     virtual QJsonObject Serialise() const;
     virtual bool Deserialize( QJsonObject const& obj );
 
+    virtual void WriteToController() const {}
+
     bool ReelControl ( QString const& val );
     RELL_CONTROL const& ReelControl () const;
 

@@ -87,25 +87,6 @@ bool ParseValue ( DYNAMIC& param, QString const& val )
     }
     return false;
 }
-bool ParseValue ( DYNAMIC_CONTROL& param, QString const& val )
-{
-    if ( !val.compare( "ДД1", Qt::CaseInsensitive ) )
-    {
-        param = DC_DD1;
-        return true;
-    }
-    else if ( !val.compare( "ДД2", Qt::CaseInsensitive ) )
-    {
-        param = DC_DD2;
-        return true;
-    }
-    else if ( !val.compare( "ДД3", Qt::CaseInsensitive ) )
-    {
-        param = DC_DD3;
-        return true;
-    }
-    return false;
-}
 bool ParseValue ( RELL_CONTROL& param, QString const& val )
 {
     if ( !val.compare( "Напрямую катушками управления", Qt::CaseInsensitive ) )
@@ -242,22 +223,6 @@ QString ToString( DYNAMIC const& v )
         return "Неизвестное значение";
     }
 }
-QString ToString( DYNAMIC_CONTROL const& v )
-{
-    switch (v)
-    {
-        case DC_UNKNOWN:
-            return "Не задано";
-        case DC_DD1:
-            return "ДД1";
-        case DC_DD2:
-            return "ДД2";
-        case DC_DD3:
-            return "ДД3";
-    default:
-        return "Неизвестное значение";
-    }
-}
 QString ToString( RELL_CONTROL const& v )
 {
     switch (v)
@@ -364,20 +329,20 @@ bool Parameters::Deserialize(const QJsonObject &obj )
 CommonParameters::CommonParameters():
     mSerNo(""),
     mReelCount( 0 ),
-    mMaxExpenditure ( 0 ),
+    mMaxExpenditure ( 0.0 ),
     mControlType ( CT_UNKNOWN ),
-    mMinControlPressure ( 0 ),
-    mMaxControlPressure ( 0 )
+    mMinControlPressure ( 0.0 ),
+    mMaxControlPressure ( 0.0 )
 {}
 
 void CommonParameters::Reset()
 {
     mSerNo = "";
     mReelCount =  0;
-    mMaxExpenditure  =  0;
+    mMaxExpenditure  =  0.0;
     mControlType  =  CT_UNKNOWN;
-    mMinControlPressure  =  0;
-    mMaxControlPressure  =  0;
+    mMinControlPressure  =  0.0;
+    mMaxControlPressure  =  0.0;
 }
 
 bool CommonParameters::SerNo ( QString const& val )
@@ -403,7 +368,7 @@ bool CommonParameters::MaxExpenditure ( QString const& val )
 {
     return ParseValue( mMaxExpenditure, val );
 }
-qint32 const& CommonParameters::MaxExpenditure () const
+double const& CommonParameters::MaxExpenditure () const
 {
     return mMaxExpenditure;
 }
@@ -421,7 +386,7 @@ bool CommonParameters::MinControlPressure ( QString const& val )
 {
     return ParseValue( mMinControlPressure, val );
 }
-qint32 const& CommonParameters::MinControlPressure () const
+double const& CommonParameters::MinControlPressure () const
 {
     return mMinControlPressure;
 }
@@ -430,7 +395,7 @@ bool CommonParameters::MaxControlPressure ( QString const& val )
 {
     return ParseValue( mMaxControlPressure, val );
 }
-qint32 const& CommonParameters::MaxControlPressure () const
+double const& CommonParameters::MaxControlPressure () const
 {
     return mMaxControlPressure;
 }
@@ -453,10 +418,10 @@ bool CommonParameters::Deserialize(const QJsonObject &obj )
     bool res = Parameters::Deserialize( obj );
     mSerNo = obj.value("SerNo").toString();
     mReelCount = obj.value("ReelCount").toInt();
-    mMaxExpenditure = obj.value("MaxExpenditure").toInt();
+    mMaxExpenditure = obj.value("MaxExpenditure").toDouble();
     mControlType = static_cast<CONTROL_TYPE>( obj.value("ControlType").toInt() );
-    mMinControlPressure = obj.value("MinControlPressure").toInt();
-    mMaxControlPressure = obj.value("MaxControlPressure").toInt();
+    mMinControlPressure = obj.value("MinControlPressure").toDouble();
+    mMaxControlPressure = obj.value("MaxControlPressure").toDouble();
 
     return res;
 }

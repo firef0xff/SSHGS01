@@ -2,24 +2,27 @@
 
 namespace cpu
 {
-
-class InputBlock
+namespace data
 {
-public:
-    InputBlock();
-    virtual ~InputBlock();
+
+class In
+{
+public:    
+    virtual ~In(){}
     virtual void Read() = 0;
 };
 
-class OutputBlock
+class Out
 {
-public:
-    OutputBlock();
-    virtual ~OutputBlock();
+public:   
+    virtual ~Out(){}
     virtual void Write() = 0;
 };
 
-class InOutBlock : public InputBlock, OutputBlock
-{};
+class InOut : public In, Out
+{
+    virtual ~InOut(){}
+};
 
+}//namespace data
 }//namespace cpu

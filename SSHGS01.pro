@@ -57,7 +57,9 @@ SOURCES += main.cpp\
     test_case/implementation/hydro_cylinder/cylinder_test.cpp \
     ../mylib/Widgets/GraphBuilder/graph_builder.cpp \
     viewer.cpp \
-    cpu/cpu_memory.cpp
+    cpu/cpu_memory.cpp \
+    cpu/db30.cpp \
+    cpu/db32.cpp
 
 HEADERS  += mainwindow.h \
     test_case/test_case.h \
@@ -100,7 +102,9 @@ HEADERS  += mainwindow.h \
     ../mylib/Widgets/GraphBuilder/graph_builder.h \
     viewer.h \
     cpu/cpu_memory.h \
-    cpu/data_block_base.h
+    cpu/data_block_base.h \
+    cpu/db30.h \
+    cpu/db32.h
 
 FORMS    += mainwindow.ui \
     hydro_title_info.ui \

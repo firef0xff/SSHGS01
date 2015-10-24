@@ -2,6 +2,7 @@
 #include <memory>
 #include <mutex>
 #include "../tests.h"
+#include "../../cpu/cpu_memory.h"
 
 namespace test
 {
@@ -29,22 +30,31 @@ Parameters& Parameters::Instance()
 
 Parameters::Parameters():
     mGsType(""),
-    mVoltage( 0 ),
-    mVoltageRange( 0 ),
+    mVoltage( 0.0 ),
+    mVoltageRange( 0.0 ),
     mLost( 0),
     mVoltageType( VT_UNKNOWN ),
-    mMaxWorkPressure ( 0 ),
-    mMinTestPressure ( 0 ),
-    mHermPressure( 0 ),
+    mMaxWorkPressure ( 0.0 ),
+    mMinTestPressure ( 0.0 ),
+    mHermPressure( 0.0 ),
+    mTestControlPressure( 0.0 ),
     mHermSignal ( CS_UNKNOWN ),
     mPABTSignal ( CS_UNKNOWN ),
     mPBATSignal ( CS_UNKNOWN ),
-    mActuationOnTime ( 0 ),
-    mActuationOffTime ( 0 ),
-    mOnControl_1 ( DC_UNKNOWN ),
-    mOffControl_1 ( DC_UNKNOWN ),
-    mOnControl_2 ( DC_UNKNOWN ),
-    mOffControl_2 ( DC_UNKNOWN ),
+    mActuationOnTime ( 0.0 ),
+    mActuationOffTime ( 0.0 ),
+    mOnDD1A( false ),
+    mOnDD2A( false ),
+    mOnDD3A( false ),
+    mOffDD1A( false ),
+    mOffDD2A( false ),
+    mOffDD3A( false ),
+    mOnDD1B( false ),
+    mOnDD2B( false ),
+    mOnDD3B( false ),
+    mOffDD1B( false ),
+    mOffDD2B( false ),
+    mOffDD3B( false ),
     mOnDynamic_1 ( DN_UNKNOWN ),
     mOffDynamic_1 ( DN_UNKNOWN ),
     mOnDynamic_2 ( DN_UNKNOWN ),
@@ -57,22 +67,33 @@ void Parameters::Reset()
 {
     test::Parameters::Reset();
     mGsType = "";
-    mVoltage =  0;
-    mVoltageRange =  0;
+    mVoltage =  0.0;
+    mVoltageRange =  0.0;
     mLost = 0;
     mVoltageType = VT_UNKNOWN;
-    mMaxWorkPressure  =  0;
-    mMinTestPressure  =  0;
-    mHermPressure =  0;
+    mMaxWorkPressure  =  0.0;
+    mMinTestPressure  =  0.0;
+    mHermPressure =  0.0;
+    mTestControlPressure = 0.0;
     mHermSignal  =  CS_UNKNOWN;
     mPABTSignal  =  CS_UNKNOWN;
     mPBATSignal  =  CS_UNKNOWN;
-    mActuationOnTime  =  0;
-    mActuationOffTime  =  0;
-    mOnControl_1 = DC_UNKNOWN;
-    mOffControl_1 = DC_UNKNOWN;
-    mOnControl_2 = DC_UNKNOWN;
-    mOffControl_2 = DC_UNKNOWN;
+    mActuationOnTime  =  0.0;
+    mActuationOffTime  =  0.0;
+
+    mOnDD1A = false;
+    mOnDD2A = false;
+    mOnDD3A = false;
+    mOffDD1A = false;
+    mOffDD2A = false;
+    mOffDD3A = false;
+    mOnDD1B = false;
+    mOnDD2B = false;
+    mOnDD3B = false;
+    mOffDD1B = false;
+    mOffDD2B = false;
+    mOffDD3B = false;
+
     mOnDynamic_1 = DN_UNKNOWN;
     mOffDynamic_1 = DN_UNKNOWN;
     mOnDynamic_2 = DN_UNKNOWN;
@@ -103,18 +124,31 @@ QString Parameters::ToString()
     res+= "Параметры испытаний:\n";
     res+= "  Давление для испытания функционирования минимальным давлением, Бар: " + test::ToString( mMinTestPressure ) + "\n";
     res+= "  Давление для испытания функционирования минимальным давлением, Бар: " + test::ToString( mHermPressure ) + "\n";
+    res+= "  Давление управления для испытания времени прерключения, Бар: " + test::ToString( mTestControlPressure ) + "\n";
     res+= "  Сигнал проверки внутренней герметичности: " + test::ToString( mHermSignal ) + "\n";
     res+= "  Сигнал PABT: " + test::ToString( mPABTSignal ) + "\n";
     res+= "  Сигнал PBAT: " + test::ToString( mPBATSignal ) + "\n";
     res+= "  Диагностика включения катушки:\n";
     res+= "    Катушка А:\n";
-    res+= "      Датчик по которому определяется включение: " + test::ToString( mOnControl_1 ) + "\n";
-    res+= "      Датчик по которому определяется выключение: " + test::ToString( mOffControl_1 ) + "\n";
+    res+= "      Датчики по которым определяется включение: \n";
+    res+= "        ДД1:" + test::ToString( mOnDD1A ) + "\n";
+    res+= "        ДД2:" + test::ToString( mOnDD2A ) + "\n";
+    res+= "        ДД3:" + test::ToString( mOnDD3A ) + "\n";
+    res+= "      Датчики по которым определяется выключение: \n";
+    res+= "        ДД1:" + test::ToString( mOffDD1A ) + "\n";
+    res+= "        ДД2:" + test::ToString( mOffDD2A ) + "\n";
+    res+= "        ДД3:" + test::ToString( mOffDD3A ) + "\n";
     res+= "      Ожидаемая динамика после включения: " + test::ToString( mOnDynamic_1 ) + "\n";
     res+= "      Ожидаемая динамика после выключения: " + test::ToString( mOffDynamic_1 ) + "\n";
     res+= "    Катушка Б:\n";
-    res+= "      Датчик по которому определяется включение: " + test::ToString( mOnControl_2 ) + "\n";
-    res+= "      Датчик по которому определяется выключение: " + test::ToString( mOffControl_2 ) + "\n";
+    res+= "      Датчики по которым определяется включение: \n";
+    res+= "        ДД1:" + test::ToString( mOnDD1B ) + "\n";
+    res+= "        ДД2:" + test::ToString( mOnDD2B ) + "\n";
+    res+= "        ДД3:" + test::ToString( mOnDD3B ) + "\n";
+    res+= "      Датчики по которым определяется выключение: \n";
+    res+= "        ДД1:" + test::ToString( mOffDD1B ) + "\n";
+    res+= "        ДД2:" + test::ToString( mOffDD2B ) + "\n";
+    res+= "        ДД3:" + test::ToString( mOffDD3B ) + "\n";
     res+= "      Ожидаемая динамика после включения: " + test::ToString( mOnDynamic_2 ) + "\n";
     res+= "      Ожидаемая динамика после выключения: " + test::ToString( mOffDynamic_2 ) + "\n";
 
@@ -137,15 +171,26 @@ QJsonObject Parameters::Serialise() const
     obj.insert("MaxWorkPressure", mMaxWorkPressure);
     obj.insert("MinTestPressure", mMinTestPressure);
     obj.insert("HermPressure", mHermPressure);
+    obj.insert("TestControlPressure", mTestControlPressure);
     obj.insert("HermSignal", mHermSignal);
     obj.insert("PABTSignal", mPABTSignal);
     obj.insert("PBATSignal", mPBATSignal);
     obj.insert("ActuationOnTime", mActuationOnTime);
     obj.insert("ActuationOffTime", mActuationOffTime);
-    obj.insert("OnControl_1", mOnControl_1);
-    obj.insert("OffControl_1", mOffControl_1);
-    obj.insert("OnControl_2", mOnControl_2);
-    obj.insert("OffControl_2", mOffControl_2);
+
+    obj.insert("OnDD1A", mOnDD1A);
+    obj.insert("OnDD2A", mOnDD2A);
+    obj.insert("OnDD3A", mOnDD3A);
+    obj.insert("OffDD1A", mOffDD1A);
+    obj.insert("OffDD2A", mOffDD2A);
+    obj.insert("OffDD3A", mOffDD3A);
+    obj.insert("OnDD1B", mOnDD1B);
+    obj.insert("OnDD2B", mOnDD2B);
+    obj.insert("OnDD3B", mOnDD3B);
+    obj.insert("OffDD1B", mOffDD1B);
+    obj.insert("OffDD2B", mOffDD2B);
+    obj.insert("OffDD3B", mOffDD3B);
+
     obj.insert("OnDynamic_1", mOnDynamic_1);
     obj.insert("OffDynamic_1", mOffDynamic_1);
     obj.insert("OnDynamic_2", mOnDynamic_2);
@@ -166,21 +211,32 @@ bool Parameters::Deserialize(const QJsonObject &obj )
         QJsonObject obj = val.toObject();
         mGsType = obj.value("GsType").toString();
         mVoltage =  obj.value("Voltage").toInt();
-        mVoltageRange =  obj.value("VoltageRange").toInt();
+        mVoltageRange =  obj.value("VoltageRange").toDouble();
         mLost = obj.value("Lost").toDouble();
         mVoltageType = static_cast<VOLTAGE_TYPE>( obj.value("VoltageType").toInt() );
-        mMaxWorkPressure  =  obj.value("MaxWorkPressure").toInt();
-        mMinTestPressure  =  obj.value("MinTestPressure").toInt();
-        mHermPressure =  obj.value("HermPressure").toInt();
-        mHermSignal  =  static_cast<CONTROL_SIGNAL>( obj.value("HermSignal").toInt() );
+        mMaxWorkPressure  =  obj.value("MaxWorkPressure").toDouble();
+        mMinTestPressure  =  obj.value("MinTestPressure").toDouble();
+        mHermPressure =  obj.value("HermPressure").toDouble();
+        mTestControlPressure =  obj.value("TestControlPressure").toDouble();
+        mHermSignal  =  static_cast<CONTROL_SIGNAL>( obj.value("HermSignal").toDouble() );
         mPABTSignal  =  static_cast<CONTROL_SIGNAL>( obj.value("PABTSignal").toInt() );
         mPBATSignal  =  static_cast<CONTROL_SIGNAL>( obj.value("PBATSignal").toInt() );
-        mActuationOnTime  =  obj.value("ActuationOnTime").toInt();
-        mActuationOffTime  =  obj.value("ActuationOffTime").toInt();
-        mOnControl_1 = static_cast<DYNAMIC_CONTROL>( obj.value("OnControl_1").toInt() );
-        mOffControl_1 = static_cast<DYNAMIC_CONTROL>( obj.value("OffControl_1").toInt() );
-        mOnControl_2 = static_cast<DYNAMIC_CONTROL>( obj.value("OnControl_2").toInt() );
-        mOffControl_2 = static_cast<DYNAMIC_CONTROL>( obj.value("OffControl_2").toInt() );
+        mActuationOnTime  =  obj.value("ActuationOnTime").toDouble();
+        mActuationOffTime  =  obj.value("ActuationOffTime").toDouble();
+
+        mOnDD1A     = obj.value("OnDD1A").toBool();
+        mOnDD2A     = obj.value("OnDD2A").toBool();;
+        mOnDD3A     = obj.value("OnDD3A").toBool();;
+        mOffDD1A    = obj.value("OffDD1A").toBool();;
+        mOffDD2A    = obj.value("OffDD2A").toBool();;
+        mOffDD3A    = obj.value("OffDD3A").toBool();;
+        mOnDD1B     = obj.value("OnDD1B").toBool();;
+        mOnDD2B     = obj.value("OnDD2B").toBool();;
+        mOnDD3B     = obj.value("OnDD3B").toBool();;
+        mOffDD1B    = obj.value("OffDD1B").toBool();;
+        mOffDD2B    = obj.value("OffDD2B").toBool();;
+        mOffDD3B    = obj.value("OffDD3B").toBool();;
+
         mOnDynamic_1 = static_cast<DYNAMIC>( obj.value("OnDynamic_1").toInt() );
         mOffDynamic_1 = static_cast<DYNAMIC>( obj.value("OffDynamic_1").toInt() );
         mOnDynamic_2 = static_cast<DYNAMIC>( obj.value("OnDynamic_2").toInt() );
@@ -191,6 +247,57 @@ bool Parameters::Deserialize(const QJsonObject &obj )
         ret = false;
 
     return ret;
+}
+
+void Parameters::WriteToController() const
+{
+    auto& mem = cpu::CpuMemory::Instance().HydpoParams;
+
+    mem.Current = mVoltageType == VT_DC ? 0: 1;
+    mem.Coil = mReelCount == 1 ? 0 : 1;
+    mem.TypeControl = mControlType == CT_ELECTRIC ? 0: 1;
+
+    mem.Voltage = mVoltage;
+    mem.Delta_U = mVoltageRange;
+
+    mem.Q_max = mMaxExpenditure;
+    mem.Q_min = mLost;
+    mem.P_max_rab = mMaxWorkPressure;
+    mem.P_min = mMinTestPressure;
+    mem.P_narug_germ = mHermPressure;
+
+    mem.Signal_vnutr_germ = static_cast< int >(mHermSignal) >= 0 ? static_cast< int >(mHermSignal) : 0;
+    mem.Signal_PA_BT = static_cast< int >(mPABTSignal) >= 0 ? static_cast< int >(mPABTSignal) : 0;
+    mem.Signal_PB_AT = static_cast< int >(mPBATSignal) >= 0 ? static_cast< int >(mPBATSignal) : 0;
+
+    mem.Time_ON = mActuationOnTime;
+    mem.Time_OFF = mActuationOffTime;
+
+    mem.Min_P = mMinControlPressure;
+    mem.Max_P = mMaxControlPressure;
+
+    mem.Time_P = mTestControlPressure;
+    mem.DD1_open_a = mOnDD1A;
+    mem.DD2_open_a = mOnDD2A;
+    mem.DD3_open_a = mOnDD3A;
+    mem.TypeD_open_a = static_cast< int >(mOnDynamic_1) >= 0 ? static_cast< int >(mOnDynamic_1) : 0;
+
+    mem.DD1_open_b = mOnDD1B;
+    mem.DD2_open_b = mOnDD2B;
+    mem.DD3_open_b = mOnDD3B;
+    mem.TypeD_open_b = static_cast< int >(mOnDynamic_2) >= 0 ? static_cast< int >(mOnDynamic_2) : 0;
+
+    mem.DD1_close_a = mOffDD1A;
+    mem.DD2_close_a = mOffDD2A;
+    mem.DD3_close_a = mOffDD3A;
+    mem.TypeD_close_a = static_cast< int >(mOffDynamic_1) >= 0 ? static_cast< int >(mOffDynamic_1) : 0;
+
+    mem.DD1_close_b = mOffDD1B;
+    mem.DD2_close_b = mOffDD2B;
+    mem.DD3_close_b = mOffDD3B;
+    mem.TypeD_close_b = static_cast< int >(mOffDynamic_2) >= 0 ? static_cast< int >(mOffDynamic_2) : 0;
+
+    mem.Write();
 }
 
 bool Parameters::GsType ( QString const& val )
@@ -207,7 +314,7 @@ bool Parameters::Voltage ( QString const& val )
 {
     return ParseValue( mVoltage, val );
 }
-qint32 const& Parameters::Voltage () const
+double const& Parameters::Voltage () const
 {
     return mVoltage;
 }
@@ -216,7 +323,7 @@ bool Parameters::VoltageRange ( QString const& val )
 {
     return ParseValue( mVoltageRange, val );
 }
-qint32 const& Parameters::VoltageRange () const
+double const& Parameters::VoltageRange () const
 {
     return mVoltageRange;
 }
@@ -244,7 +351,7 @@ bool Parameters::MaxWorkPressure ( QString const& val )
 {
     return ParseValue( mMaxWorkPressure, val );
 }
-qint32 const& Parameters::MaxWorkPressure () const
+double const& Parameters::MaxWorkPressure () const
 {
     return mMaxWorkPressure;
 }
@@ -253,7 +360,7 @@ bool Parameters::MinTestPressure ( QString const& val )
 {
     return ParseValue( mMinTestPressure, val );
 }
-qint32 const& Parameters::MinTestPressure () const
+double const& Parameters::MinTestPressure () const
 {
     return mMinTestPressure;
 }
@@ -262,9 +369,18 @@ bool Parameters::HermPressure ( QString const& val )
 {
     return ParseValue( mHermPressure, val );
 }
-qint32 const& Parameters::HermPressure () const
+double const& Parameters::HermPressure () const
 {
     return mHermPressure;
+}
+
+bool Parameters::TestControlPressure ( QString const& val )
+{
+    return ParseValue( mTestControlPressure, val );
+}
+const double &Parameters::TestControlPressure() const
+{
+    return mTestControlPressure;
 }
 
 bool Parameters::HermSignal ( QString const& val )
@@ -298,7 +414,7 @@ bool Parameters::ActuationOnTime ( QString const& val )
 {
     return ParseValue( mActuationOnTime, val );
 }
-qint32 const& Parameters::ActuationOnTime () const
+double const& Parameters::ActuationOnTime () const
 {
     return mActuationOnTime;
 }
@@ -307,45 +423,121 @@ bool Parameters::ActuationOffTime ( QString const& val )
 {
     return ParseValue( mActuationOffTime, val );
 }
-qint32 const& Parameters::ActuationOffTime () const
+const double &Parameters::ActuationOffTime() const
 {
     return mActuationOffTime;
 }
 
-bool Parameters::OnControl_1 ( QString const& val )
+bool Parameters::OnDD1A ( Qt::CheckState const& val )
 {
-    return ParseValue( mOnControl_1, val );
+    mOnDD1A = val != Qt::Unchecked;
+    return true;
 }
-DYNAMIC_CONTROL const& Parameters::OnControl_1 () const
+bool const& Parameters::OnDD1A () const
 {
-    return mOnControl_1;
+    return mOnDD1A;
+}
+bool Parameters::OnDD2A ( Qt::CheckState const& val )
+{
+    mOnDD2A = val != Qt::Unchecked;
+    return true;
+}
+bool const& Parameters::OnDD2A () const
+{
+    return mOnDD2A;
+}
+bool Parameters::OnDD3A ( Qt::CheckState const& val )
+{
+    mOnDD3A = val != Qt::Unchecked;
+    return true;
+}
+bool const& Parameters::OnDD3A () const
+{
+    return mOnDD3A;
 }
 
-bool Parameters::OffControl_1 ( QString const& val )
+bool Parameters::OffDD1A ( Qt::CheckState const& val )
 {
-    return ParseValue( mOffControl_1, val );
+    mOffDD1A = val != Qt::Unchecked;
+    return true;
 }
-DYNAMIC_CONTROL const& Parameters::OffControl_1 () const
+bool const& Parameters::OffDD1A () const
 {
-    return mOffControl_1;
+    return mOffDD1A;
+}
+bool Parameters::OffDD2A ( Qt::CheckState const& val )
+{
+    mOffDD2A = val != Qt::Unchecked;
+    return true;
+}
+bool const& Parameters::OffDD2A () const
+{
+    return mOffDD2A;
+}
+bool Parameters::OffDD3A ( Qt::CheckState const& val )
+{
+    mOffDD3A = val != Qt::Unchecked;
+    return true;
+}
+bool const& Parameters::OffDD3A () const
+{
+    return mOffDD3A;
 }
 
-bool Parameters::OnControl_2 ( QString const& val )
+bool Parameters::OnDD1B ( Qt::CheckState const& val )
 {
-    return ParseValue( mOnControl_2, val );
+    mOnDD1B = val != Qt::Unchecked;
+    return true;
 }
-DYNAMIC_CONTROL const& Parameters::OnControl_2 () const
+bool const& Parameters::OnDD1B () const
 {
-    return mOnControl_2;
+    return mOnDD1B;
+}
+bool Parameters::OnDD2B ( Qt::CheckState const& val )
+{
+    mOnDD2B = val != Qt::Unchecked;
+    return true;
+}
+bool const& Parameters::OnDD2B () const
+{
+    return mOnDD2B;
+}
+bool Parameters::OnDD3B ( Qt::CheckState const& val )
+{
+    mOnDD3B = val != Qt::Unchecked;
+    return true;
+}
+bool const& Parameters::OnDD3B () const
+{
+    return mOnDD3B;
 }
 
-bool Parameters::OffControl_2 ( QString const& val )
+bool Parameters::OffDD1B ( Qt::CheckState const& val )
 {
-    return ParseValue( mOffControl_2, val );
+    mOffDD1B = val != Qt::Unchecked;
+    return true;
 }
-DYNAMIC_CONTROL const& Parameters::OffControl_2 () const
+bool const& Parameters::OffDD1B () const
 {
-    return mOffControl_2;
+    return mOffDD1B;
+}
+bool Parameters::OffDD2B ( Qt::CheckState const& val )
+{
+    mOffDD2B = val != Qt::Unchecked;
+    return true;
+}
+bool const& Parameters::OffDD2B () const
+{
+    return mOffDD2B;
+}
+bool Parameters::OffDD3B ( Qt::CheckState const& val )
+{
+    mOffDD3B = val != Qt::Unchecked;
+    return true;
+}
+bool const& Parameters::OffDD3B () const
+{
+    return mOffDD3B;
 }
 
 bool Parameters::OnDynamic_1 ( QString const& val )

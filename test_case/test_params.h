@@ -31,15 +31,8 @@ enum VOLTAGE_TYPE
 enum DYNAMIC
 {
     DN_UNKNOWN = -1,
-    DN_UP,
-    DN_DOWN
-};
-enum DYNAMIC_CONTROL
-{
-    DC_UNKNOWN = -1,
-    DC_DD1,
-    DC_DD2,
-    DC_DD3
+    DN_UP = 0,
+    DN_DOWN = 1
 };
 enum RELL_CONTROL
 {
@@ -66,7 +59,6 @@ bool ParseValue ( CONTROL_TYPE& sig, QString const& val );
 bool ParseValue ( VOLTAGE_TYPE& sig, QString const& val );
 bool ParseValue ( qint32& param, QString const& val );
 bool ParseValue ( DYNAMIC& param, QString const& val );
-bool ParseValue ( DYNAMIC_CONTROL& param, QString const& val );
 bool ParseValue ( RELL_CONTROL& param, QString const& val );
 bool ParseValue ( double &param, QString const& val );
 bool ParseValue ( SIGNAL_TYPE &param, QString const& val );
@@ -76,7 +68,6 @@ QString ToString( VOLTAGE_TYPE const& v );
 QString ToString( CONTROL_TYPE const& v );
 QString ToString( CONTROL_SIGNAL const& v );
 QString ToString( DYNAMIC const& v );
-QString ToString( DYNAMIC_CONTROL const& v );
 QString ToString( RELL_CONTROL const& v );
 QString ToString( double const& v );
 QString ToString( SIGNAL_TYPE const& v );
@@ -93,6 +84,8 @@ public:
 
     virtual QJsonObject Serialise() const;
     virtual bool Deserialize( QJsonObject const& obj );
+
+    virtual void WriteToController() const = 0;
 
     void Reset();
 
@@ -124,26 +117,26 @@ public:
     qint32 const& ReelCount () const;
 
     bool MaxExpenditure ( QString const& val );
-    qint32 const& MaxExpenditure () const;
+    const double &MaxExpenditure() const;
 
     bool ControlType ( QString const& val );
     CONTROL_TYPE const& ControlType () const;
 
     bool MinControlPressure ( QString const& val );
-    qint32 const& MinControlPressure () const;
+    const double &MinControlPressure() const;
 
     bool MaxControlPressure ( QString const& val );
-    qint32 const& MaxControlPressure () const;
+    const double &MaxControlPressure() const;
 
 protected:
     QString mSerNo;             //Серийный номер
-    qint32 mReelCount;          //Количество катушек питания
+    qint32 mReelCount;          //+Количество катушек питания
 
-    qint32 mMaxExpenditure;     //максимальный расход
+    double mMaxExpenditure;     //+максимальный расход
 
-    CONTROL_TYPE mControlType;  //Тип управления гидрораспределителем
-    qint32 mMinControlPressure; //минимальное давление управления
-    qint32 mMaxControlPressure; //максимальное давление управления
+    CONTROL_TYPE mControlType;  //+Тип управления гидрораспределителем
+    double mMinControlPressure; //+минимальное давление управления
+    double mMaxControlPressure; //+максимальное давление управления
 };
 
 extern Parameters* CURRENT_PARAMS;

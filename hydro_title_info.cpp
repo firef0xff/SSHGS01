@@ -80,6 +80,7 @@ bool HydroTitleInfo::SaveInputParams()
     {
         res *= ParamChecker( ui->l_min_control_pressure, params.MinControlPressure( QString::number( ui->MinControlPressure->value() ) ) );
         res *= ParamChecker( ui->l_max_control_pressure, params.MaxControlPressure( QString::number( ui->MaxControlPressure->value() ) ) );
+        res *= ParamChecker( ui->l_test_control_Pressure, params.TestControlPressure( QString::number( ui->TestControlPressure->value() ) ) );
     }
     res *= ParamChecker( ui->l_voltage_range,      params.VoltageRange( QString::number( ui->VoltageRange->value() ) ) );
     res *= ParamChecker( ui->l_lost,  ValidateRange( ui->Lost, params.Lost( ui->Lost->text() ) ) );
@@ -110,6 +111,7 @@ void HydroTitleInfo::FromParams()
     on_ControlType_activated( ui->ControlType->currentIndex() );
     ui->MinControlPressure->setValue( params.MinControlPressure() );
     ui->MaxControlPressure->setValue( params.MaxControlPressure() );
+    ui->TestControlPressure->setValue( params.TestControlPressure() );
 
     ui->VoltageRange->setValue( params.VoltageRange() );
     ui->Lost->setText( test::ToString( params.Lost() ) );
@@ -223,13 +225,16 @@ void HydroTitleInfo::on_GsType_activated(int index)
     //задать диапазоны минимального и максимального давления управления
     ui->MinControlPressure->setRange( min_pressure_control.first, min_pressure_control.second );
     ui->MaxControlPressure->setRange( max_pressure_control.first, max_pressure_control.second );
+    ui->TestControlPressure->setRange( min_pressure_control.first, max_pressure_control.second );
 
     //задать установить значения на минимум
     ui->MinControlPressure->setValue( min_pressure_control.first );
     ui->MaxControlPressure->setValue( max_pressure_control.first );
+    ui->TestControlPressure->setValue( max_pressure_control.first );
 
     ui->MinControlPressure->setToolTip( QString::number( min_pressure_control.first ) + "..." + QString::number( min_pressure_control.second ) + " Бар." );
     ui->MaxControlPressure->setToolTip( QString::number( max_pressure_control.first ) + "..." + QString::number( max_pressure_control.second ) + " Бар." );
+    ui->TestControlPressure->setToolTip( QString::number( min_pressure_control.first ) + "..." + QString::number( max_pressure_control.second ) + " Бар." );
 
     it = prop.find( "ТипУправления" );
     if ( it != prop.end() )

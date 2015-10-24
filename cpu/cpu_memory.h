@@ -1,4 +1,5 @@
 #pragma once
+#include "db30.h"
 
 namespace cpu
 {
@@ -10,8 +11,7 @@ public:
     static CpuMemory& Instance();
 
     void Syncronise();
-
-
+    data::DB30 HydpoParams;
 
 private:
     CpuMemory();

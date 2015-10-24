@@ -18,6 +18,8 @@ public:
     QJsonObject Serialise() const;
     bool Deserialize(const QJsonObject &obj );
 
+    virtual void WriteToController() const {}
+
     bool GsType ( QString const& val );
     QString const& GsType () const;
 

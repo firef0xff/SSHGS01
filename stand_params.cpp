@@ -16,11 +16,15 @@ StandParams::StandParams(bool new_mode, QWidget *parent) :
     if ( test::hydro::Parameters::Instance().ReelCount() < 2 )
     {
         ui->l_tr->setVisible( false );
-        ui->OnControl_2->setVisible( false );
+        ui->DD1B_ON->setVisible( false );
+        ui->DD2B_ON->setVisible( false );
+        ui->DD3B_ON->setVisible( false );
         ui->OnDynamic_2->setVisible( false );
 
         ui->l_br->setVisible( false );
-        ui->OffControl_2->setVisible( false );
+        ui->DD1B_OFF->setVisible( false );
+        ui->DD2B_OFF->setVisible( false );
+        ui->DD3B_OFF->setVisible( false );
         ui->OffDynamic_2->setVisible( false );
     }
 
@@ -63,16 +67,26 @@ bool StandParams::SaveInputParams()
     };
 
 
-    res *= ParamChecker( ui->l_h1t,             params.OnControl_1 ( ui->OnControl_1->currentText() ) );
+    res *= ParamChecker( ui->l_h1t,             params.OnDD1A ( ui->DD1A_ON->checkState() ) );
+    res *= ParamChecker( ui->l_h1t,             params.OnDD2A ( ui->DD2A_ON->checkState() ) );
+    res *= ParamChecker( ui->l_h1t,             params.OnDD3A ( ui->DD3A_ON->checkState() ) );
     res *= ParamChecker( ui->l_h2t,             params.OnDynamic_1 ( ui->OnDynamic_1->currentText() ) );
-    res *= ParamChecker( ui->l_h1b,             params.OffControl_1( ui->OffControl_1->currentText() ) );
+
+    res *= ParamChecker( ui->l_h1b,             params.OffDD1A ( ui->DD1A_OFF->checkState() ) );
+    res *= ParamChecker( ui->l_h1b,             params.OffDD2A ( ui->DD2A_OFF->checkState() ) );
+    res *= ParamChecker( ui->l_h1b,             params.OffDD3A ( ui->DD3A_OFF->checkState() ) );
     res *= ParamChecker( ui->l_h2b,             params.OffDynamic_1( ui->OffDynamic_1->currentText() ) );
 
     if ( params.ReelCount() == 2 )
-    {
-        res *= ParamChecker( ui->l_h1t,         params.OnControl_2 ( ui->OnControl_2->currentText() ) );
+    {        
+        res *= ParamChecker( ui->l_h1t,         params.OnDD1B ( ui->DD1B_ON->checkState() ) );
+        res *= ParamChecker( ui->l_h1t,         params.OnDD2B ( ui->DD2B_ON->checkState() ) );
+        res *= ParamChecker( ui->l_h1t,         params.OnDD3B ( ui->DD3B_ON->checkState() ) );
         res *= ParamChecker( ui->l_h2t,         params.OnDynamic_2 ( ui->OnDynamic_2->currentText() ) );
-        res *= ParamChecker( ui->l_h1b,         params.OffControl_2( ui->OffControl_2->currentText() ) );
+
+        res *= ParamChecker( ui->l_h1b,         params.OffDD1B ( ui->DD1B_OFF->checkState() ) );
+        res *= ParamChecker( ui->l_h1b,         params.OffDD2B ( ui->DD2B_OFF->checkState() ) );
+        res *= ParamChecker( ui->l_h1b,         params.OffDD3B ( ui->DD3B_OFF->checkState() ) );
         res *= ParamChecker( ui->l_h2b,         params.OffDynamic_2( ui->OffDynamic_2->currentText() ) );
     }
 
@@ -84,14 +98,24 @@ void StandParams::FromParams()
 {
     test::hydro::Parameters& params = test::hydro::Parameters::Instance();
 
-    ui->OnControl_1->setCurrentIndex( ui->OnControl_1->findText( test::ToString( params.OnControl_1() ) ) );
+    ui->DD1A_ON->setChecked( params.OnDD1A() );
+    ui->DD2A_ON->setChecked( params.OnDD2A() );
+    ui->DD3A_ON->setChecked( params.OnDD3A() );
     ui->OnDynamic_1->setCurrentIndex( ui->OnDynamic_1->findText( test::ToString( params.OnDynamic_1() ) ) );
-    ui->OffControl_1->setCurrentIndex( ui->OffControl_1->findText( test::ToString( params.OffControl_1() ) ) );
+
+    ui->DD1A_OFF->setChecked( params.OffDD1A() );
+    ui->DD2A_OFF->setChecked( params.OffDD2A() );
+    ui->DD3A_OFF->setChecked( params.OffDD3A() );
     ui->OffDynamic_1->setCurrentIndex( ui->OffDynamic_1->findText( test::ToString( params.OffDynamic_1() ) ) );
 
-    ui->OnControl_2->setCurrentIndex( ui->OnControl_2->findText( test::ToString( params.OnControl_2() ) ) );
+    ui->DD1B_ON->setChecked( params.OnDD1B() );
+    ui->DD2B_ON->setChecked( params.OnDD2B() );
+    ui->DD3B_ON->setChecked( params.OnDD3B() );
     ui->OnDynamic_2->setCurrentIndex( ui->OnDynamic_2->findText( test::ToString( params.OnDynamic_2() ) ) );
-    ui->OffControl_2->setCurrentIndex( ui->OffControl_2->findText( test::ToString( params.OffControl_2() ) ) );
+
+    ui->DD1B_OFF->setChecked( params.OffDD1B() );
+    ui->DD2B_OFF->setChecked( params.OffDD2B() );
+    ui->DD3B_OFF->setChecked( params.OffDD3B() );
     ui->OffDynamic_2->setCurrentIndex( ui->OffDynamic_2->findText( test::ToString( params.OffDynamic_2() ) ) );
 }
 

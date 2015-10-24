@@ -19,14 +19,16 @@ public:
     QJsonObject Serialise() const;
     bool Deserialize(const QJsonObject &obj );
 
+    void WriteToController() const;
+
     bool GsType ( QString const& val );
     QString const& GsType () const;
 
     bool Voltage ( QString const& val );
-    qint32 const& Voltage () const;
+    const double &Voltage() const;
 
     bool VoltageRange ( QString const& val );
-    qint32 const& VoltageRange () const;
+    const double &VoltageRange() const;
 
     bool Lost ( QString const& val );
     const double &Lost() const;
@@ -35,13 +37,16 @@ public:
     const VOLTAGE_TYPE &VoltageType() const;
 
     bool MaxWorkPressure ( QString const& val );
-    qint32 const& MaxWorkPressure () const;
+    const double &MaxWorkPressure() const;
 
     bool MinTestPressure ( QString const& val );
-    qint32 const& MinTestPressure () const;
+    const double &MinTestPressure() const;
 
     bool HermPressure ( QString const& val );
-    qint32 const& HermPressure () const;
+    const double &HermPressure() const;
+
+    bool TestControlPressure ( QString const& val );
+    const double &TestControlPressure() const;
 
     bool HermSignal ( QString const& val );
     CONTROL_SIGNAL const& HermSignal () const;
@@ -53,19 +58,39 @@ public:
     CONTROL_SIGNAL const& PBATSignal () const;
 
     bool ActuationOnTime ( QString const& val );
-    qint32 const& ActuationOnTime () const;
+    const double &ActuationOnTime() const;
 
     bool ActuationOffTime ( QString const& val );
-    qint32 const& ActuationOffTime () const;
+    double const& ActuationOffTime () const;
 
-    bool OnControl_1 ( QString const& val );
-    DYNAMIC_CONTROL const& OnControl_1 () const;
-    bool OffControl_1 ( QString const& val );
-    DYNAMIC_CONTROL const& OffControl_1 () const;
-    bool OnControl_2 ( QString const& val );
-    DYNAMIC_CONTROL const& OnControl_2 () const;
-    bool OffControl_2 ( QString const& val );
-    DYNAMIC_CONTROL const& OffControl_2 () const;
+    bool OnDD1A ( Qt::CheckState const& val );
+    bool const& OnDD1A () const;
+    bool OnDD2A ( Qt::CheckState const& val );
+    bool const& OnDD2A () const;
+    bool OnDD3A ( Qt::CheckState const& val );
+    bool const& OnDD3A () const;
+
+    bool OffDD1A ( Qt::CheckState const& val );
+    bool const& OffDD1A () const;
+    bool OffDD2A ( Qt::CheckState const& val );
+    bool const& OffDD2A () const;
+    bool OffDD3A ( Qt::CheckState const& val );
+    bool const& OffDD3A () const;
+
+    bool OnDD1B ( Qt::CheckState const& val );
+    bool const& OnDD1B () const;
+    bool OnDD2B ( Qt::CheckState const& val );
+    bool const& OnDD2B () const;
+    bool OnDD3B ( Qt::CheckState const& val );
+    bool const& OnDD3B () const;
+
+    bool OffDD1B ( Qt::CheckState const& val );
+    bool const& OffDD1B () const;
+    bool OffDD2B ( Qt::CheckState const& val );
+    bool const& OffDD2B () const;
+    bool OffDD3B ( Qt::CheckState const& val );
+    bool const& OffDD3B () const;
+
 
     bool OnDynamic_1 ( QString const& val );
     DYNAMIC const& OnDynamic_1 () const;
@@ -82,31 +107,43 @@ private:
     void operator = ( Parameters& ) = delete;
 
     QString mGsType;            //тип гидрораспределителя
-    qint32 mVoltage;            //Напряжение питания
-    qint32 mVoltageRange;       //Допустимое отклонение напрядения питания
-    double mLost;             //Допустимое значение утечки
-    VOLTAGE_TYPE mVoltageType;  //тип напряжения
-    qint32 mMaxWorkPressure;    //максимальное рабочее давление
+    double mVoltage;            //+Напряжение питания
+    double mVoltageRange;       //+Допустимое отклонение напрядения питания
+    double mLost;               //+Допустимое значение утечки
+    VOLTAGE_TYPE mVoltageType;  //+тип напряжения
+    double mMaxWorkPressure;    //+максимальное рабочее давление
 
-    qint32 mMinTestPressure;    //давление для испытания функционирования минимальным давлением
-    qint32 mHermPressure;       //давление для испытания функционирования минимальным давлением
+    double mMinTestPressure;    //+давление для испытания функционирования минимальным давлением
+    double mHermPressure;       //+давление для испытания герметичности
+    double mTestControlPressure;//+давление для испытания времени переключения
 
-    CONTROL_SIGNAL mHermSignal; //сигнал проверки внутренней герметичности
-    CONTROL_SIGNAL mPABTSignal; //сигнал PABT
-    CONTROL_SIGNAL mPBATSignal; //сигнал PBAT
+    CONTROL_SIGNAL mHermSignal; //+сигнал проверки внутренней герметичности
+    CONTROL_SIGNAL mPABTSignal; //+сигнал PABT
+    CONTROL_SIGNAL mPBATSignal; //+сигнал PBAT
 
-    qint32 mActuationOnTime;    //время срабатывания включения распределителя
-    qint32 mActuationOffTime;   //время срабатывания выключения распределителя
+    double mActuationOnTime;    //+время срабатывания включения распределителя
+    double mActuationOffTime;   //+время срабатывания выключения распределителя
 
-    DYNAMIC_CONTROL mOnControl_1; //датчик контроля включения 1
-    DYNAMIC_CONTROL mOffControl_1;//датчик контроля выключения 1
-    DYNAMIC_CONTROL mOnControl_2; //датчик контроля включения 2
-    DYNAMIC_CONTROL mOffControl_2;//датчик контроля выключения 2
+    bool mOnDD1A;   //+Используемый датчик для определения динамики включения
+    bool mOnDD2A;   //+Используемый датчик для определения динамики включения
+    bool mOnDD3A;   //+Используемый датчик для определения динамики включения
 
-    DYNAMIC mOnDynamic_1;    //ожидаемая динамика на датчике включения 1
-    DYNAMIC mOffDynamic_1;   //ожидаемая динамика на датчике выключения 1
-    DYNAMIC mOnDynamic_2;    //ожидаемая динамика на датчике включения 2
-    DYNAMIC mOffDynamic_2;   //ожидаемая динамика на датчике выключения 2
+    bool mOffDD1A;  //+Используемый датчик для определения динамики выключения
+    bool mOffDD2A;  //+Используемый датчик для определения динамики выключения
+    bool mOffDD3A;  //+Используемый датчик для определения динамики выключения
+
+    bool mOnDD1B;   //+Используемый датчик для определения динамики включения
+    bool mOnDD2B;   //+Используемый датчик для определения динамики включения
+    bool mOnDD3B;   //+Используемый датчик для определения динамики включения
+
+    bool mOffDD1B;  //+Используемый датчик для определения динамики выключения
+    bool mOffDD2B;  //+Используемый датчик для определения динамики выключения
+    bool mOffDD3B;  //+Используемый датчик для определения динамики выключения
+
+    DYNAMIC mOnDynamic_1;    //+ожидаемая динамика на датчике включения 1
+    DYNAMIC mOffDynamic_1;   //+ожидаемая динамика на датчике выключения 1
+    DYNAMIC mOnDynamic_2;    //+ожидаемая динамика на датчике включения 2
+    DYNAMIC mOffDynamic_2;   //+ожидаемая динамика на датчике выключения 2
 };
 
 }//namespace hydro

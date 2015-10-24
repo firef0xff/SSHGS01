@@ -89,25 +89,24 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
-          <widget class="QComboBox" name="OnControl_1">
-           <property name="currentIndex">
-            <number>-1</number>
+          <widget class="QCheckBox" name="DD1A_ON">
+           <property name="text">
+            <string>ДД1</string>
            </property>
-           <item>
-            <property name="text">
-             <string>ДД1</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>ДД2</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>ДД3</string>
-            </property>
-           </item>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="DD2A_ON">
+           <property name="text">
+            <string>ДД2</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="DD3A_ON">
+           <property name="text">
+            <string>ДД3</string>
+           </property>
           </widget>
          </item>
          <item>
@@ -124,25 +123,24 @@
           </spacer>
          </item>
          <item>
-          <widget class="QComboBox" name="OnControl_2">
-           <property name="currentIndex">
-            <number>-1</number>
+          <widget class="QCheckBox" name="DD1B_ON">
+           <property name="text">
+            <string>ДД1</string>
            </property>
-           <item>
-            <property name="text">
-             <string>ДД1</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>ДД2</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>ДД3</string>
-            </property>
-           </item>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="DD2B_ON">
+           <property name="text">
+            <string>ДД2</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="DD3B_ON">
+           <property name="text">
+            <string>ДД3</string>
+           </property>
           </widget>
          </item>
         </layout>
@@ -292,25 +290,24 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
-          <widget class="QComboBox" name="OffControl_1">
-           <property name="currentIndex">
-            <number>-1</number>
+          <widget class="QCheckBox" name="DD1A_OFF">
+           <property name="text">
+            <string>ДД1</string>
            </property>
-           <item>
-            <property name="text">
-             <string>ДД1</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>ДД2</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>ДД3</string>
-            </property>
-           </item>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="DD2A_OFF">
+           <property name="text">
+            <string>ДД2</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="DD3A_OFF">
+           <property name="text">
+            <string>ДД3</string>
+           </property>
           </widget>
          </item>
          <item>
@@ -327,25 +324,24 @@
           </spacer>
          </item>
          <item>
-          <widget class="QComboBox" name="OffControl_2">
-           <property name="currentIndex">
-            <number>-1</number>
+          <widget class="QCheckBox" name="DD1B_OFF">
+           <property name="text">
+            <string>ДД1</string>
            </property>
-           <item>
-            <property name="text">
-             <string>ДД1</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>ДД2</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>ДД3</string>
-            </property>
-           </item>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="DD2B_OFF">
+           <property name="text">
+            <string>ДД2</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="DD3B_OFF">
+           <property name="text">
+            <string>ДД3</string>
+           </property>
           </widget>
          </item>
         </layout>
