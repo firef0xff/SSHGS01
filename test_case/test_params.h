@@ -64,6 +64,7 @@ bool ParseValue ( double &param, QString const& val );
 bool ParseValue ( SIGNAL_TYPE &param, QString const& val );
 
 QString ToString( qint32 const& v );
+QString ToString( bool const& v );
 QString ToString( VOLTAGE_TYPE const& v );
 QString ToString( CONTROL_TYPE const& v );
 QString ToString( CONTROL_SIGNAL const& v );

@@ -165,6 +165,12 @@ QString ToString( qint32 const& v )
 {   
     return QString::number( v );
 }
+QString ToString( bool const& v )
+{
+    if ( v )
+        return QString( "Да" );
+    return QString( "Нет" );
+}
 QString ToString( VOLTAGE_TYPE const& v )
 {
     switch (v)
