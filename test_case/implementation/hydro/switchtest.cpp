@@ -122,39 +122,63 @@ bool SwitchTest::Draw( QPainter& painter, QRect &free_rect ) const
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter ]( QRect const& rect )
     {
-        QString s = "Позиция А: ";
+        QString s = "Распределитель в позиции А: ";
         painter.drawText( rect, s );
     });
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter ]( QRect const& rect )
     {
-        QString s = "Распределитель ";
-        s += ResultMinMinA ? "" : "не ";
-        s += "переключается при допустимом пониженном напряжении и пониженном давлении управления";
+        QString s = "";
+        s += ResultMinMinA ? "" : "Не ";
+        s += "переключается при допустимом пониженном напряжении и пониженном давлении";
         painter.drawText( rect, s );
     });
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter ]( QRect const& rect )
     {
-        QString s = "Распределитель ";
-        s += ResultMinMaxA ? "" : "не ";
-        s += "переключается при допустимом пониженном напряжении и повышенном давлении управления";
+        QString s = "управления";
         painter.drawText( rect, s );
     });
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter ]( QRect const& rect )
     {
-        QString s = "Распределитель ";
-        s += ResultMaxMinA ? "" : "не ";
-        s += "переключается при допустимом повышенном напряжении и пониженном давлении управления";
+        QString s = "";
+        s += ResultMinMaxA ? "" : "Не ";
+        s += "переключается при допустимом пониженном напряжении и повышенном давлении";
         painter.drawText( rect, s );
     });
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter ]( QRect const& rect )
     {
-        QString s = "Распределитель ";
-        s += ResultMaxMaxA ? "" : "не ";
-        s += "переключается при допустимом повышенном напряжении и повышенном давлении управления";
+        QString s = "управления";
+        painter.drawText( rect, s );
+    });
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter ]( QRect const& rect )
+    {
+        QString s = "";
+        s += ResultMaxMinA ? "" : "Не ";
+        s += "переключается при допустимом повышенном напряжении и пониженном давлении";
+        painter.drawText( rect, s );
+    });
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter ]( QRect const& rect )
+    {
+        QString s = "управления";
+        painter.drawText( rect, s );
+    });
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter ]( QRect const& rect )
+    {
+        QString s = "";
+        s += ResultMaxMaxA ? "" : "Не ";
+        s += "переключается при допустимом повышенном напряжении и повышенном давлении";
+        painter.drawText( rect, s );
+    });
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter ]( QRect const& rect )
+    {
+        QString s = "управления";
         painter.drawText( rect, s );
     });
 
@@ -163,39 +187,63 @@ bool SwitchTest::Draw( QPainter& painter, QRect &free_rect ) const
         res = DrawLine( num, free_rect, text_font,
         [ this, &painter ]( QRect const& rect )
         {
-            QString s = "Позиция Б: ";
+            QString s = "Распределитель в позиции Б: ";
             painter.drawText( rect, s );
         });
         res = DrawLine( num, free_rect, text_font,
         [ this, &painter ]( QRect const& rect )
         {
-            QString s = "Распределитель ";
-            s += ResultMinMinB ? "" : "не ";
-            s += "переключается при допустимом пониженном напряжении и пониженном давлении управления";
+            QString s = "";
+            s += ResultMinMinB ? "" : "Не ";
+            s += "переключается при допустимом пониженном напряжении и пониженном давлении";
             painter.drawText( rect, s );
         });
         res = DrawLine( num, free_rect, text_font,
         [ this, &painter ]( QRect const& rect )
         {
-            QString s = "Распределитель ";
-            s += ResultMinMaxB ? "" : "не ";
-            s += "переключается при допустимом пониженном напряжении и повышенном давлении управления";
+            QString s = "управления";
             painter.drawText( rect, s );
         });
         res = DrawLine( num, free_rect, text_font,
         [ this, &painter ]( QRect const& rect )
         {
-            QString s = "Распределитель ";
-            s += ResultMaxMinB ? "" : "не ";
-            s += "переключается при допустимом повышенном напряжении и пониженном давлении управления";
+            QString s = "";
+            s += ResultMinMaxB ? "" : "Не ";
+            s += "переключается при допустимом пониженном напряжении и повышенном давлении";
             painter.drawText( rect, s );
         });
         res = DrawLine( num, free_rect, text_font,
         [ this, &painter ]( QRect const& rect )
         {
-            QString s = "Распределитель ";
-            s += ResultMaxMaxB ? "" : "не ";
-            s += "переключается при допустимом повышенном напряжении и повышенном давлении управления";
+            QString s = "управления";
+            painter.drawText( rect, s );
+        });
+        res = DrawLine( num, free_rect, text_font,
+        [ this, &painter ]( QRect const& rect )
+        {
+            QString s = "";
+            s += ResultMaxMinB ? "" : "Не ";
+            s += "переключается при допустимом повышенном напряжении и пониженном давлении";
+            painter.drawText( rect, s );
+        });
+        res = DrawLine( num, free_rect, text_font,
+        [ this, &painter ]( QRect const& rect )
+        {
+            QString s = "управления";
+            painter.drawText( rect, s );
+        });
+        res = DrawLine( num, free_rect, text_font,
+        [ this, &painter ]( QRect const& rect )
+        {
+            QString s = "";
+            s += ResultMaxMaxB ? "" : "Не ";
+            s += "переключается при допустимом повышенном напряжении и повышенном давлении";
+            painter.drawText( rect, s );
+        });
+        res = DrawLine( num, free_rect, text_font,
+        [ this, &painter ]( QRect const& rect )
+        {
+            QString s = "управления";
             painter.drawText( rect, s );
         });
     }

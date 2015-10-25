@@ -150,7 +150,16 @@ DB32::DB32():
 }
 
 void DB32::Read()
-{}
+{
+    OP1_End = true;
+    OP2_End = true;
+    OP3_End = true;
+    OP4_End = true;
+    OP5_End = true;
+    OP6_End = true;
+    OP7_End = true;
+    OP8_End = true;
+}
 
 }//namespace data
 }//namespace cpu
