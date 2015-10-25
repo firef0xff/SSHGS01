@@ -110,7 +110,7 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &text_font ]( QRect const& rect )
     {
-        ff0x::GraphBuilder::GraphDataType data;
+        ff0x::GraphBuilder::LinePoints data;
 
         double max_signal = 0;
         double max_Leak = 0;
@@ -130,7 +130,9 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
         }
 
         ff0x::GraphBuilder builder ( 1024, 768, text_font );
-        painter.drawPixmap( rect, builder.Draw( data, max_signal * 1.25, max_Leak * 1.25, 0.05, 0.5, "x", "y", true ) );
+        ff0x::GraphBuilder::GraphDataLine lines;
+        lines.push_back( ff0x::GraphBuilder::Line(data, Qt::blue) );
+        painter.drawPixmap( rect, builder.Draw( lines, max_signal * 1.25, max_Leak * 1.25, 0.05, 0.5, "x", "y", true ) );
     }, free_rect.width()/4*3  );
 
     free_rect.setHeight( 0 );
