@@ -15,6 +15,23 @@ Test::Test( QString const& name, uint8_t id ):
     ++mTestsCount;
 }
 
+void Test::Start()
+{
+    mCommand.N_Operation = mId;
+    mCommand.Start_Oper = true;
+    mCommand.Stop_Oper = false;
+    mCommand.Nasos_M2 = false;
+    mCommand.Write();
+}
+void Test::Wait( bool& work, bool& done)
+{
+    work = false;
+    done = false;
+    while( !done )
+    {
+        mResults.Read();
+    }
+}
 
 }//namespace hydro
 

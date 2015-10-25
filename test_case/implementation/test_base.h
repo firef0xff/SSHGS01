@@ -1,6 +1,9 @@
 #pragma once
 #include "../test.h"
 
+#include "../../cpu/db31.h"
+#include "../../cpu/db32.h"
+
 namespace test
 {
 
@@ -11,6 +14,11 @@ class Test :public test::Test
 {
 public:
     Test( QString const& name, uint8_t id );
+protected:
+    void Start();
+    void Wait( bool& work, bool& done);
+    cpu::data::DB31 mCommand;
+    cpu::data::DB32 mResults;
 private:
     static uint8_t mTestsCount;
 };

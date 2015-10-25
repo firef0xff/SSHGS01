@@ -300,8 +300,6 @@ private:
 
         L"S7:[S7 connection_4]DB32,REAL162",  //Temperatura_masla
     };
-
-
 };
 
 }//namespace data

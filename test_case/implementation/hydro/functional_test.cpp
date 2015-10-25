@@ -14,6 +14,23 @@ FunctionalTest::FunctionalTest():
 
 bool FunctionalTest::Run()
 {
+    Start();
+    Wait( mResults.OP1_Work, mResults.OP1_End );
+
+    ReelA.work_on_max_pressure = mResults.OP1_Max_D_YESa && !mResults.OP1_Max_D_NOa;
+    ReelA.work_on_min_pressure = mResults.OP1_Min_D_YESa && !mResults.OP1_Min_D_NOa;
+    ReelA.I = mResults.OP1_Current_a;
+    ReelA.P = mResults.OP1_Power_a;
+    ReelA.R = mResults.OP1_Resist_a;
+    ReelA.U = mResults.OP1_Voltage_a;
+
+
+    ReelB.work_on_max_pressure = mResults.OP1_Max_D_YESb && !mResults.OP1_Max_D_NOb;
+    ReelB.work_on_min_pressure = mResults.OP1_Min_D_YESb && !mResults.OP1_Min_D_NOb;
+    ReelB.I = mResults.OP1_Current_b;
+    ReelB.P = mResults.OP1_Power_b;
+    ReelB.R = mResults.OP1_Resist_b;
+    ReelB.U = mResults.OP1_Voltage_b;
 
     return false;
 }
