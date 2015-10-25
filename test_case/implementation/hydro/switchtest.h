@@ -18,8 +18,16 @@ public:
 
     bool Draw(QPainter &painter, QRect &free_rect ) const;
 private:
-    bool Result;     //Респределитель (не)переключается при допустимом пониженном напряжении управления
+    //Респределитель (не)переключается при допустимом пониженном напряжении управления
+    bool ResultMinMinA;
+    bool ResultMinMaxA;
+    bool ResultMinMinB;
+    bool ResultMinMaxB;
 
+    bool ResultMaxMinA;
+    bool ResultMaxMaxA;
+    bool ResultMaxMinB;
+    bool ResultMaxMaxB;
 };
 
 
