@@ -9,29 +9,50 @@ namespace hydro
 {
 
 ActivationTime::ActivationTime():
-    test::hydro::Test( "Время срабатывания", 8 ),
-  ResultA(false),
-  ResultB(false)
+    test::hydro::Test( "Время срабатывания", 8 )
 {}
 
 bool ActivationTime::Run()
 {
-    return ResultA && ResultB;
+    test::hydro::Parameters *params = static_cast< test::hydro::Parameters * >( CURRENT_PARAMS );
+    if ( !params )
+        return false;
+#warning перед началом окно выбора динамики ?Oo
+    params->WriteToController();
+
+    Start();
+    Wait( mResults.OP8_Work, mResults.OP8_End );
+
+    ReelA.TimeOn = mResults.OP8_Time_on_a;
+    ReelA.TimeOff = mResults.OP8_Time_off_a;
+    ReelA.InTimeOn = mResults.OP8_open_YES_a && !mResults.OP8_open_NO_a;
+    ReelA.InTimeOff = mResults.OP8_close_YES_a && !mResults.OP8_close_NO_a;
+    ReelA.IsOn = !mResults.OP8_NO_Impuls_open_a;
+    ReelA.IsOff = !mResults.OP8_NO_Impuls_close_a;
+
+    ReelB.TimeOn = mResults.OP8_Time_on_b;
+    ReelB.TimeOff = mResults.OP8_Time_off_b;
+    ReelB.InTimeOn = mResults.OP8_open_YES_b && !mResults.OP8_open_NO_b;
+    ReelB.InTimeOff = mResults.OP8_close_YES_b && !mResults.OP8_close_NO_b;
+    ReelB.IsOn = !mResults.OP8_NO_Impuls_open_b;
+    ReelB.IsOff = !mResults.OP8_NO_Impuls_close_b;
+
+    return ReelA.InTimeOn && ReelA.InTimeOff && ReelA.IsOn && ReelA.IsOff &&
+            ( params->ReelCount() == 2 ? ReelB.InTimeOn && ReelB.InTimeOff && ReelB.IsOn && ReelB.IsOff : true );
 }
 
 QJsonObject ActivationTime::Serialise() const
 {
     QJsonObject obj;
-    obj.insert("ResultA", ResultA );
-    obj.insert("ResultB", ResultB );
+    obj.insert("ReelA", ReelA.Serialise() );
+    obj.insert("ReelB", ReelB.Serialise() );
 
     return obj;
 }
 bool ActivationTime::Deserialize( QJsonObject const& obj )
 {
-    ResultA = obj.value("ResultA").toBool();
-    ResultB = obj.value("ResultB").toBool();
-
+    ReelA.Deserialize(obj.value("ReelA").toObject());
+    ReelB.Deserialize(obj.value("ReelB").toObject());
     return true;
 }
 
@@ -63,7 +84,7 @@ bool ActivationTime::Draw( QPainter& painter, QRect &free_rect ) const
     [ this, &painter ]( QRect const& rect )
     {
         QString s = "Катушка А: время срабатывания ";
-        s += ResultA ? "" : "не";
+        s += ReelA.InTimeOn && ReelA.InTimeOff && ReelA.IsOn && ReelA.IsOff ? "" : "не ";
         s += "удовлетворяет";
         painter.drawText( rect, s );
     });
@@ -74,13 +95,35 @@ bool ActivationTime::Draw( QPainter& painter, QRect &free_rect ) const
         [ this, &painter ]( QRect const& rect )
         {
             QString s = "Катушка Б: время срабатывания ";
-            s += ResultB ? "" : "не";
+            s += ReelB.InTimeOn && ReelB.InTimeOff && ReelB.IsOn && ReelB.IsOff ? "" : "не ";
             s += "удовлетворяет";
             painter.drawText( rect, s );
         });
     }
 
     return res;
+}
+
+QJsonObject ActivationTime::Data::Serialise() const
+{
+    QJsonObject obj;
+    obj.insert("TimeOn", TimeOn );
+    obj.insert("TimeOff", TimeOff );
+    obj.insert("InTimeOn", InTimeOn );
+    obj.insert("InTimeOff", InTimeOff );
+    obj.insert("IsOn", IsOn );
+    obj.insert("IsOff", IsOff );
+    return obj;
+}
+bool ActivationTime::Data::Deserialize( QJsonObject const& obj )
+{
+    TimeOn = obj.value("TimeOn").toDouble();
+    TimeOff = obj.value("TimeOff").toDouble();
+    InTimeOn = obj.value("InTimeOn").toBool();
+    InTimeOff = obj.value("InTimeOff").toBool();
+    IsOn = obj.value("IsOn").toBool();
+    IsOff = obj.value("IsOff").toBool();
+    return true;
 }
 
 }//namespace hydro

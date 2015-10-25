@@ -135,6 +135,7 @@ Worker::Worker():
 void Worker::run()
 {
     mStopSignal = false;
+    test::CURRENT_PARAMS->WriteToController();
     foreach (test::Test* to_run, test::CURRENT_PARAMS->TestCase())
     {
         if (mStopSignal)
