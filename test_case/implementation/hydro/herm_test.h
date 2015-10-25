@@ -36,7 +36,8 @@ public:
 private:
     // Средний расчет расход утечки за %s сек, %s л/мин
     int Seconds;
-    double Leak;    
+    double Leak;
+    bool Result;
 };
 
 }//namespace hydro

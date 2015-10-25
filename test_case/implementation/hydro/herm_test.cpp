@@ -16,6 +16,9 @@ OutsideHermTest::OutsideHermTest():
 
 bool OutsideHermTest::Run()
 {
+    Start();
+    Wait( mResults.OP2_Work, mResults.OP2_End );
+
     std::mutex mutex;
     std::unique_lock< std::mutex > lock( mutex );
     Launcher( std::bind( &OutsideHermTest::Question, this ) );
@@ -92,13 +95,21 @@ InsideHermTest::InsideHermTest():
 
 bool InsideHermTest::Run()
 {
-    return true;
+    Start();
+    Wait( mResults.OP3_Work, mResults.OP3_End );
+
+    Result = mResults.OP3_Rashod_Norma && !mResults.OP3_Rashod_VNorma;
+    Leak = mResults.OP3_Sred_Rashod;
+    Seconds = 30;
+
+    return Result;
 }
 QJsonObject InsideHermTest::Serialise() const
 {
     QJsonObject obj;
     obj.insert("Seconds", Seconds );
     obj.insert("Leak", Leak );
+    obj.insert("Result", Result );
 
     return obj;
 }
@@ -106,6 +117,7 @@ bool InsideHermTest::Deserialize( QJsonObject const& obj )
 {
     Seconds = obj.value("Seconds").toInt();
     Leak = obj.value("Leak").toDouble();
+    Result = obj.value("Result").toBool();
     return true;
 }
 
@@ -129,6 +141,15 @@ bool InsideHermTest::Draw( QPainter& painter, QRect &free_rect ) const
 
     painter.setFont( text_font );
     res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter ]( QRect const& rect )
+    {
+        QString s = "Проверка внутренней герметичности ";
+        s += Result ? "" : "не ";
+        s += "пройдена."
+        painter.drawText( rect, s );
+    });
+
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter ]( QRect const& rect )
     {
