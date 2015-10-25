@@ -10,7 +10,8 @@ namespace hydro
 uint8_t Test::mTestsCount = 1;
 
 Test::Test( QString const& name, uint8_t id ):
-    test::Test( &HydroTests, name, mTestsCount, id )
+    test::Test( &HydroTests, name, mTestsCount, id ),
+    OilTemp(0)
 {
     ++mTestsCount;
 }

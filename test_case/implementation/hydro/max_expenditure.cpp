@@ -26,6 +26,8 @@ bool MaxExpenditureTest::Run()
     ResultA = mResults.OP5_A_OK && !mResults.OP5_A_NO;
     ResultB = mResults.OP5_B_OK && !mResults.OP5_B_NO;
 
+    OilTemp = mResults.Temperatura_masla;
+
     return ResultA && (params->ReelCount() == 2 ? ResultB : true);
 }
 
@@ -34,6 +36,7 @@ QJsonObject MaxExpenditureTest::Serialise() const
     QJsonObject obj;
     obj.insert("ResultA", ResultA );
     obj.insert("ResultB", ResultB );
+    obj.insert("OilTemp", OilTemp );
 
     return obj;
 }
@@ -41,6 +44,7 @@ bool MaxExpenditureTest::Deserialize( QJsonObject const& obj )
 {
     ResultA = obj.value("ResultA").toBool();
     ResultB = obj.value("ResultB").toBool();
+    OilTemp = obj.value("OilTemp").toDouble();
     return true;
 }
 
@@ -68,6 +72,11 @@ bool MaxExpenditureTest::Draw( QPainter& painter, QRect &free_rect ) const
 
     painter.setFont( text_font );
     res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
+    res = DrawLine( num, free_rect, text_font, [ this, &painter ]( QRect const& rect )
+    {
+        QString s = "Средняя температура масла во время испытания: " + QString::number( OilTemp );
+        painter.drawText( rect, s );
+    });
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter ]( QRect const& rect )
     {

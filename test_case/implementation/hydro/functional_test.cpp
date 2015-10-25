@@ -32,6 +32,8 @@ bool FunctionalTest::Run()
     ReelB.R = mResults.OP1_Resist_b;
     ReelB.U = mResults.OP1_Voltage_b;
 
+    OilTemp = mResults.Temperatura_masla;
+
     return false;
 }
 
@@ -40,6 +42,7 @@ QJsonObject FunctionalTest::Serialise() const
     QJsonObject obj;
     obj.insert("ReelA", ReelA.Serialise() );
     obj.insert("ReelB", ReelB.Serialise() );
+    obj.insert("OilTemp", OilTemp );
 
     return obj;
 }
@@ -47,6 +50,7 @@ bool FunctionalTest::Deserialize( QJsonObject const& obj )
 {
     bool res = ReelA.Deserialize( obj.value("ReelA").toObject() );
     res *= ReelB.Deserialize( obj.value("ReelB").toObject() );
+    OilTemp = obj.value("OilTemp").toDouble();
     return res;
 }
 
@@ -74,6 +78,11 @@ bool FunctionalTest::Draw( QPainter& painter, QRect &free_rect ) const
 
     painter.setFont( text_font );
     res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
+    res = DrawLine( num, free_rect, text_font, [ this, &painter ]( QRect const& rect )
+    {
+        QString s = "Средняя температура масла во время испытания: " + QString::number( OilTemp );
+        painter.drawText( rect, s );
+    });
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter ]( QRect const& rect )
     {

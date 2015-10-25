@@ -30,6 +30,8 @@ bool PressureRange::Run()
     ResultMinB = mResults.OP7_Min_D_YESb &&! mResults.OP7_Min_D_NOb;
     ResultMaxB = mResults.OP7_Max_D_YESb &&! mResults.OP7_Max_D_NOb;
 
+    OilTemp = mResults.Temperatura_masla;
+
     return ResultMinA && ResultMaxA && ( params->ReelCount() == 2 ? ResultMinB && ResultMaxB : true );
 }
 
@@ -40,6 +42,7 @@ QJsonObject PressureRange::Serialise() const
     obj.insert("ResultMaxA", ResultMaxA );
     obj.insert("ResultMinB", ResultMinB );
     obj.insert("ResultMaxB", ResultMaxB );
+    obj.insert("OilTemp", OilTemp );
 
     return obj;
 }
@@ -49,7 +52,7 @@ bool PressureRange::Deserialize( QJsonObject const& obj )
     ResultMaxA = obj.value("ResultMaxA").toBool();
     ResultMinB = obj.value("ResultMinB").toBool();
     ResultMaxB = obj.value("ResultMaxB").toBool();
-
+    OilTemp = obj.value("OilTemp").toDouble();
     return true;
 }
 
@@ -79,6 +82,11 @@ bool PressureRange::Draw( QPainter& painter, QRect &free_rect ) const
 
     painter.setFont( text_font );
     res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
+    res = DrawLine( num, free_rect, text_font, [ this, &painter ]( QRect const& rect )
+    {
+        QString s = "Средняя температура масла во время испытания: " + QString::number( OilTemp );
+        painter.drawText( rect, s );
+    });
 
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, params ]( QRect const& rect )

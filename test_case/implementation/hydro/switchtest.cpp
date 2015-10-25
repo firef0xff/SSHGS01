@@ -41,6 +41,8 @@ bool SwitchTest::Run()
     ResultMaxMinB = mResults.OP6_MaxD_MinUprD_YESb && !mResults.OP6_MaxD_MinUprD_NOb;
     ResultMaxMaxB = mResults.OP6_MaxD_MaxUprD_YESb && !mResults.OP6_MaxD_MaxUprD_NOb;
 
+    OilTemp = mResults.Temperatura_masla;
+
     return ResultMinMinA && ResultMinMaxA && ResultMaxMinA && ResultMaxMaxA &&
             ( params->ReelCount() == 2 ? ResultMinMinB && ResultMinMaxB && ResultMaxMinB && ResultMaxMaxB : true );
 }
@@ -58,6 +60,7 @@ QJsonObject SwitchTest::Serialise() const
     obj.insert("ResultMaxMinB", ResultMaxMinB );
     obj.insert("ResultMaxMaxB", ResultMaxMaxB );
 
+    obj.insert("OilTemp", OilTemp );
     return obj;
 }
 bool SwitchTest::Deserialize( QJsonObject const& obj )
@@ -71,6 +74,8 @@ bool SwitchTest::Deserialize( QJsonObject const& obj )
     ResultMaxMaxA = obj.value("ResultMaxMaxA").toBool();
     ResultMaxMinB = obj.value("ResultMaxMinB").toBool();
     ResultMaxMaxB = obj.value("ResultMaxMaxB").toBool();
+
+    OilTemp = obj.value("OilTemp").toDouble();
     return true;
 }
 
@@ -108,6 +113,11 @@ bool SwitchTest::Draw( QPainter& painter, QRect &free_rect ) const
 
     painter.setFont( text_font );
     res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
+    res = DrawLine( num, free_rect, text_font, [ this, &painter ]( QRect const& rect )
+    {
+        QString s = "Средняя температура масла во время испытания: " + QString::number( OilTemp );
+        painter.drawText( rect, s );
+    });
 
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter ]( QRect const& rect )

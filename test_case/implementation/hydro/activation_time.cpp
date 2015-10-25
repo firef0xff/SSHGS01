@@ -37,6 +37,8 @@ bool ActivationTime::Run()
     ReelB.IsOn = !mResults.OP8_NO_Impuls_open_b;
     ReelB.IsOff = !mResults.OP8_NO_Impuls_close_b;
 
+    OilTemp = mResults.Temperatura_masla;
+
     return ReelA.InTimeOn && ReelA.InTimeOff && ReelA.IsOn && ReelA.IsOff &&
             ( params->ReelCount() == 2 ? ReelB.InTimeOn && ReelB.InTimeOff && ReelB.IsOn && ReelB.IsOff : true );
 }
@@ -46,6 +48,7 @@ QJsonObject ActivationTime::Serialise() const
     QJsonObject obj;
     obj.insert("ReelA", ReelA.Serialise() );
     obj.insert("ReelB", ReelB.Serialise() );
+    obj.insert("OilTemp", OilTemp );
 
     return obj;
 }
@@ -53,6 +56,7 @@ bool ActivationTime::Deserialize( QJsonObject const& obj )
 {
     ReelA.Deserialize(obj.value("ReelA").toObject());
     ReelB.Deserialize(obj.value("ReelB").toObject());
+    OilTemp = obj.value("OilTemp").toDouble();
     return true;
 }
 
@@ -80,6 +84,11 @@ bool ActivationTime::Draw( QPainter& painter, QRect &free_rect ) const
 
     painter.setFont( text_font );
     res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
+    res = DrawLine( num, free_rect, text_font, [ this, &painter ]( QRect const& rect )
+    {
+        QString s = "Средняя температура масла во время испытания: " + QString::number( OilTemp );
+        painter.drawText( rect, s );
+    });
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter ]( QRect const& rect )
     {

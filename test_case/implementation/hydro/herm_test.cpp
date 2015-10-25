@@ -19,6 +19,8 @@ bool OutsideHermTest::Run()
     Start();
     Wait( mResults.OP2_Work, mResults.OP2_End );
 
+    OilTemp = mResults.Temperatura_masla;
+
     std::mutex mutex;
     std::unique_lock< std::mutex > lock( mutex );
     Launcher( std::bind( &OutsideHermTest::Question, this ) );
@@ -32,12 +34,13 @@ QJsonObject OutsideHermTest::Serialise() const
 {
     QJsonObject obj;
     obj.insert("LeakFounded", LeakFounded );
-
+    obj.insert("OilTemp", OilTemp );
     return obj;
 }
 bool OutsideHermTest::Deserialize( QJsonObject const& obj )
 {
     LeakFounded = obj.value("LeakFounded").toBool();
+    OilTemp = obj.value("OilTemp").toDouble();
     return true;
 }
 
@@ -61,6 +64,11 @@ bool OutsideHermTest::Draw( QPainter& painter, QRect &free_rect ) const
 
     painter.setFont( text_font );
     res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
+    res = DrawLine( num, free_rect, text_font, [ this, &painter ]( QRect const& rect )
+    {
+        QString s = "Средняя температура масла во время испытания: " + QString::number( OilTemp );
+        painter.drawText( rect, s );
+    });
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter ]( QRect const& rect )
     {
@@ -103,6 +111,7 @@ bool InsideHermTest::Run()
 
     Result = mResults.OP3_Rashod_Norma && !mResults.OP3_Rashod_VNorma;
     Leak = mResults.OP3_Sred_Rashod;
+    OilTemp = mResults.Temperatura_masla;
     return Result;
 }
 QJsonObject InsideHermTest::Serialise() const
@@ -111,7 +120,7 @@ QJsonObject InsideHermTest::Serialise() const
     obj.insert("Seconds", Seconds );
     obj.insert("Leak", Leak );
     obj.insert("Result", Result );
-
+    obj.insert("OilTemp", OilTemp );
     return obj;
 }
 bool InsideHermTest::Deserialize( QJsonObject const& obj )
@@ -119,6 +128,7 @@ bool InsideHermTest::Deserialize( QJsonObject const& obj )
     Seconds = obj.value("Seconds").toInt();
     Leak = obj.value("Leak").toDouble();
     Result = obj.value("Result").toBool();
+    OilTemp = obj.value("OilTemp").toDouble();
     return true;
 }
 
@@ -142,6 +152,11 @@ bool InsideHermTest::Draw( QPainter& painter, QRect &free_rect ) const
 
     painter.setFont( text_font );
     res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
+    res = DrawLine( num, free_rect, text_font, [ this, &painter ]( QRect const& rect )
+    {
+        QString s = "Средняя температура масла во время испытания: " + QString::number( OilTemp );
+        painter.drawText( rect, s );
+    });
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter ]( QRect const& rect )
     {

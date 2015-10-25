@@ -61,6 +61,9 @@ bool PressureDurationFromExpenditure::Run()
     mData.push_back( Channels( a1, b1 ) );
     mData.push_back( Channels( a2, b2 ) );
     mData.push_back( Channels( a3, b3 ) );
+
+    OilTemp = mResults.Temperatura_masla;
+
     return true;
 }
 
@@ -79,11 +82,13 @@ QJsonObject PressureDurationFromExpenditure::Serialise() const
         a.insert( a.end(), o );
     }
     obj.insert("Data", a );
+    obj.insert("OilTemp", OilTemp );
 
     return obj;
 }
 bool PressureDurationFromExpenditure::Deserialize( QJsonObject const& obj )
 {
+    OilTemp = obj.value("OilTemp").toDouble();
     QJsonArray a = obj.value("Data").toArray();
     foreach ( QJsonValue const& v, a )
     {
@@ -136,6 +141,11 @@ bool PressureDurationFromExpenditure::Draw( QPainter& painter, QRect &free_rect 
 
     painter.setFont( text_font );
     res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
+    res = DrawLine( num, free_rect, text_font, [ this, &painter ]( QRect const& rect )
+    {
+        QString s = "Средняя температура масла во время испытания: " + QString::number( OilTemp );
+        painter.drawText( rect, s );
+    });
 
     painter.save();
     QRectF rect( 0, 0, free_rect.width(), free_rect.height() );

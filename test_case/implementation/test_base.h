@@ -19,6 +19,8 @@ protected:
     void Wait( bool& work, bool& done);
     cpu::data::DB31 mCommand;
     cpu::data::DB32 mResults;
+
+    double OilTemp;
 private:
     static uint8_t mTestsCount;
 };
