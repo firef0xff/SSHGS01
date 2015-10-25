@@ -17,17 +17,50 @@ PressureDurationFromExpenditure::PressureDurationFromExpenditure():
 
 bool PressureDurationFromExpenditure::Run()
 {
-    mData.clear();
-    Data d1;
-    d1.BP3 = 0;
-    Data d2;    
-    d2.BP3 = 0;
+    Start();
+    Wait( mResults.OP4_Work, mResults.OP4_End );
 
-    for ( size_t i = 0; i < 4; ++i )
-    {
-        mData.push_back( Channels( d1, d2 ) );
-        ++d1.BP3; ++d2.BP3;
-    }
+    mData.clear();
+    Data a1;
+    a1.BP5 = mResults.OP4_D_P_03Qmax_A;
+    a1.BP3 = mResults.OP4_D_A_03Qmax_A;
+    a1.BP5_3 = mResults.OP4_BP5_BP3_03Qmax_A;
+    a1.Expenditure = mResults.OP4_Q_Fakt_03Qmax_A;
+
+    Data a2;
+    a2.BP5 = mResults.OP4_D_P_06Qmax_A;
+    a2.BP3 = mResults.OP4_D_A_06Qmax_A;
+    a2.BP5_3 = mResults.OP4_BP5_BP3_06Qmax_A;
+    a2.Expenditure = mResults.OP4_Q_Fakt_06Qmax_A;
+
+    Data a3;
+    a3.BP5 = mResults.OP4_D_P_Qmax_A;
+    a3.BP3 = mResults.OP4_D_A_Qmax_A;
+    a3.BP5_3 = mResults.OP4_BP5_BP3_Qmax_A;
+    a3.Expenditure = mResults.OP4_Q_Fakt_Qmax_A;
+
+
+    Data b1;
+    b1.BP5 = mResults.OP4_D_P_03Qmax_B;
+    b1.BP3 = mResults.OP4_D_A_03Qmax_B;
+    b1.BP5_3 = mResults.OP4_BP5_BP3_03Qmax_B;
+    b1.Expenditure = mResults.OP4_Q_Fakt_03Qmax_B;
+
+    Data b2;
+    b2.BP5 = mResults.OP4_D_P_06Qmax_B;
+    b2.BP3 = mResults.OP4_D_A_06Qmax_B;
+    b2.BP5_3 = mResults.OP4_BP5_BP3_06Qmax_B;
+    b2.Expenditure = mResults.OP4_Q_Fakt_06Qmax_B;
+
+    Data b3;
+    b3.BP5 = mResults.OP4_D_P_Qmax_B;
+    b3.BP3 = mResults.OP4_D_A_Qmax_B;
+    b3.BP5_3 = mResults.OP4_BP5_BP3_Qmax_B;
+    b3.Expenditure = mResults.OP4_Q_Fakt_Qmax_B;
+
+    mData.push_back( Channels( a1, b1 ) );
+    mData.push_back( Channels( a2, b2 ) );
+    mData.push_back( Channels( a3, b3 ) );
     return true;
 }
 
