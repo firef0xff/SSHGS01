@@ -1,7 +1,8 @@
 #include "activation_time.h"
 #include <QJsonObject>
 #include "../test_params_hydro.h"
-
+#include "../../../stand_params.h"
+#include <mutex>
 namespace test
 {
 
@@ -17,7 +18,10 @@ bool ActivationTime::Run()
     test::hydro::Parameters *params = static_cast< test::hydro::Parameters * >( CURRENT_PARAMS );
     if ( !params )
         return false;
-#warning перед началом окно выбора динамики ?Oo
+    std::mutex mutex;
+    std::unique_lock<std::mutex> lock( mutex );
+    Launcher( std::bind( &ActivationTime::SetParams, this ) );
+    mWaiter.wait( lock );
     params->WriteToController();
 
     Start();
@@ -111,6 +115,18 @@ bool ActivationTime::Draw( QPainter& painter, QRect &free_rect ) const
     }
 
     return res;
+}
+
+void ActivationTime::SetParams()
+{
+    StandParams* ptr = new StandParams( false );
+    mChildWindow.reset( ptr );
+    ptr->SetCallback(
+    [this]()
+    {
+        mWaiter.notify_one();
+    });
+    ptr->show();
 }
 
 QJsonObject ActivationTime::Data::Serialise() const

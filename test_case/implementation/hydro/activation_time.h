@@ -1,6 +1,8 @@
 #pragma once
 #include "../test_base.h"
-
+#include <memory>
+#include <QWidget>
+#include <condition_variable>
 namespace test
 {
 
@@ -42,6 +44,10 @@ private:
 
     Data ReelA;
     Data ReelB;
+
+    std::unique_ptr< QWidget > mChildWindow;
+    std::condition_variable mWaiter;
+    void SetParams();
 };
 
 

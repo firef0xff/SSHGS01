@@ -41,6 +41,8 @@ void StandParams::closeEvent(QCloseEvent *e)
 {
     QWidget::closeEvent( e );
     emit closed();
+    if (mCustomAction)
+        mCustomAction();
 }
 
 bool StandParams::SaveInputParams()
@@ -122,13 +124,18 @@ void StandParams::FromParams()
 void StandParams::on_buttonBox_accepted()
 {
     if ( SaveInputParams() )
-    {
+    {        
         hide();
-        if ( mChildWindow.get() )
-            QObject::disconnect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
-        mChildWindow.reset( new TestForm( mNewMode ) );
-        QObject::connect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
-        mChildWindow->show();
+        if ( mCustomAction )
+            mCustomAction();
+        else
+        {
+            if ( mChildWindow.get() )
+                QObject::disconnect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
+            mChildWindow.reset( new TestForm( mNewMode ) );
+            QObject::connect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
+            mChildWindow->show();
+        }
     }
     else
     {
@@ -144,4 +151,9 @@ void StandParams::on_buttonBox_accepted()
 void StandParams::on_buttonBox_rejected()
 {
     close();
+}
+
+void StandParams::SetCallback( std::function< void() > func  )
+{
+    mCustomAction = func;
 }
