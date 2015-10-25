@@ -44,6 +44,8 @@ protected:
     typedef std::function< void ( QRect const& ) > DrawLineHandler;
     bool DrawLine ( uint32_t &num, QRect& source, QFont font, DrawLineHandler do_draw, int custom_height = 0 ) const;
 
+protected:
+    uint8_t mId;
 private:
     friend class TestCase;
     Test( Test const& );
@@ -52,7 +54,6 @@ private:
     void Free();
 
     uint8_t mNumber;
-    uint8_t mId;
     TestCase *mCase;
 
     bool* mStopMarker;

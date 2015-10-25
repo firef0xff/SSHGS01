@@ -18,7 +18,8 @@ public:
 
     bool Draw(QPainter &painter, QRect &free_rect ) const;
 private:
-    bool Result; //Максимальный расход (не)удовлетворяет установленным критериям
+    bool ResultA; //Максимальный расход (не)удовлетворяет установленным критериям
+    bool ResultB;
 };
 
 

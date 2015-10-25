@@ -5,7 +5,7 @@ namespace test
 {
 
 Test::Test(TestCase *test_case, QString const& name, uint8_t number , uint8_t id)
-    : mName(name), mNumber(number), mId(id), mCase(test_case),mStopMarker(nullptr),
+    : mName(name), mId(id), mNumber(number), mCase(test_case),mStopMarker(nullptr),
       mDrawLine( 0 )
 {
     if (mCase)

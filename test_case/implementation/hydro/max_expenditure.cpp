@@ -1,5 +1,6 @@
 #include "max_expenditure.h"
 #include <QJsonObject>
+#include "../test_params_hydro.h"
 
 namespace test
 {
@@ -9,29 +10,46 @@ namespace hydro
 
 MaxExpenditureTest::MaxExpenditureTest():
     test::hydro::Test( "Проверка максимального расхода", 5 ),
-  Result(false)
+    ResultA(false),
+    ResultB(false)
 {}
 
 bool MaxExpenditureTest::Run()
 {
-    return Result;
+    test::hydro::Parameters *params = static_cast< test::hydro::Parameters * >( CURRENT_PARAMS );
+    if ( !params )
+        return false;
+
+    Start();
+    Wait( mResults.OP5_Work, mResults.OP5_End );
+
+    ResultA = mResults.OP5_A_OK && !mResults.OP5_A_NO;
+    ResultB = mResults.OP5_B_OK && !mResults.OP5_B_NO;
+
+    return ResultA && (params->ReelCount() == 2 ? ResultB : true);
 }
 
 QJsonObject MaxExpenditureTest::Serialise() const
 {
     QJsonObject obj;
-    obj.insert("Result", Result );
+    obj.insert("ResultA", ResultA );
+    obj.insert("ResultB", ResultB );
 
     return obj;
 }
 bool MaxExpenditureTest::Deserialize( QJsonObject const& obj )
 {
-    Result = obj.value("Result").toBool();
+    ResultA = obj.value("ResultA").toBool();
+    ResultB = obj.value("ResultB").toBool();
     return true;
 }
 
 bool MaxExpenditureTest::Draw( QPainter& painter, QRect &free_rect ) const
 {
+    test::hydro::Parameters *params = static_cast< test::hydro::Parameters * >( CURRENT_PARAMS );
+    if ( !params )
+        return true;
+
     QFont header_font = painter.font();
     QFont text_font = painter.font();
     header_font.setPointSize( 14 );
@@ -53,11 +71,23 @@ bool MaxExpenditureTest::Draw( QPainter& painter, QRect &free_rect ) const
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter ]( QRect const& rect )
     {
-        QString s = "Максимальный расход ";
-        s += Result ? "" : "не";
+        QString s = "Максимальный расход на канале А ";
+        s += ResultA ? "" : "не ";
         s += "удовлетворяет установленным критериям";
         painter.drawText( rect, s );
     });
+
+    if ( params->ReelCount() == 2 )
+    {
+        res = DrawLine( num, free_rect, text_font,
+        [ this, &painter ]( QRect const& rect )
+        {
+            QString s = "Максимальный расход на канале Б ";
+            s += ResultB ? "" : "не ";
+            s += "удовлетворяет установленным критериям";
+            painter.drawText( rect, s );
+        });
+    }
 
     return res;
 }

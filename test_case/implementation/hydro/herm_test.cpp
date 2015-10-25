@@ -90,7 +90,10 @@ void OutsideHermTest::Question()
 
 //----------------------------------------------
 InsideHermTest::InsideHermTest():
-    test::hydro::Test( "Проверка внутренней герметичности", 3 )
+    test::hydro::Test( "Проверка внутренней герметичности", 3 ),
+    Seconds( 30 ),
+    Leak(0),
+    Result(false)
 {}
 
 bool InsideHermTest::Run()
@@ -100,8 +103,6 @@ bool InsideHermTest::Run()
 
     Result = mResults.OP3_Rashod_Norma && !mResults.OP3_Rashod_VNorma;
     Leak = mResults.OP3_Sred_Rashod;
-    Seconds = 30;
-
     return Result;
 }
 QJsonObject InsideHermTest::Serialise() const
@@ -146,7 +147,7 @@ bool InsideHermTest::Draw( QPainter& painter, QRect &free_rect ) const
     {
         QString s = "Проверка внутренней герметичности ";
         s += Result ? "" : "не ";
-        s += "пройдена."
+        s += "пройдена.";
         painter.drawText( rect, s );
     });
 
