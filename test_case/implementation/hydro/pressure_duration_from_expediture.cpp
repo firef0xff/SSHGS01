@@ -4,6 +4,7 @@
 #include "../test_params_hydro.h"
 #include <QTextDocument>
 #include <QAbstractTextDocumentLayout>
+#include "../../../../mylib/Widgets/GraphBuilder/graph_builder.h"
 
 namespace test
 {
@@ -106,6 +107,7 @@ void PressureDurationFromExpenditure::ResetDrawLine()
 {
     Test::ResetDrawLine();
     mRowsPrinted = 0;
+    mTablePrinted = false;
 }
 
 bool PressureDurationFromExpenditure::Draw( QPainter& painter, QRect &free_rect ) const
@@ -231,11 +233,58 @@ bool PressureDurationFromExpenditure::Draw( QPainter& painter, QRect &free_rect 
             break;
         }
     }
-    doc.setHtml( table + footer );
-    QRect r;
-    AllocatePlace( r, doc.documentLayout()->documentSize().height(), free_rect );
-    doc.drawContents( &painter, rect);
+    if (!mTablePrinted)
+    {
+        doc.setHtml( table + footer );
+        QRect r;
+        AllocatePlace( r, doc.documentLayout()->documentSize().height(), free_rect );
+        doc.drawContents( &painter, rect);
+        if ( mRowsPrinted == mData.size() )
+            mTablePrinted = true;
+    }
     painter.restore();
+
+
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter, &text_font, &params ]( QRect const& rect )
+    {
+        ff0x::GraphBuilder::LinePoints B5A;
+        ff0x::GraphBuilder::LinePoints B3A;
+        ff0x::GraphBuilder::LinePoints B35A;
+
+        ff0x::GraphBuilder::LinePoints B5B;
+        ff0x::GraphBuilder::LinePoints B3B;
+        ff0x::GraphBuilder::LinePoints B35B;
+
+        foreach ( Channels const& item, mData )
+        {
+            B5A.push_back( QPointF( item.first.Expenditure, item.first.BP5 ) );
+            B3A.push_back( QPointF( item.first.Expenditure, item.first.BP3 ) );
+            B35A.push_back( QPointF( item.first.Expenditure, item.first.BP5_3 ) );
+
+            B5B.push_back( QPointF( item.second.Expenditure, item.second.BP5 ) );
+            B3B.push_back( QPointF( item.second.Expenditure, item.second.BP3 ) );
+            B35B.push_back( QPointF( item.second.Expenditure, item.second.BP5_3 ) );
+        }
+
+        QFont f = text_font;
+        f.setPointSize( 6 );
+        ff0x::GraphBuilder builder ( rect.width(), rect.height(), f );
+        ff0x::GraphBuilder::GraphDataLine lines;
+        lines.push_back( ff0x::GraphBuilder::Line(B5A, Qt::blue) );
+        lines.push_back( ff0x::GraphBuilder::Line(B3A, Qt::darkBlue) );
+        lines.push_back( ff0x::GraphBuilder::Line(B35A, Qt::gray) );
+        if (params->ReelCount() == 2 )
+        {
+            lines.push_back( ff0x::GraphBuilder::Line(B5B, Qt::red) );
+            lines.push_back( ff0x::GraphBuilder::Line(B3B, Qt::darkRed) );
+            lines.push_back( ff0x::GraphBuilder::Line(B35B, Qt::magenta) );
+        }
+        painter.drawPixmap( rect, builder.Draw( lines, 690, 360, 50, 50, "x", "y", true ) );
+    }, free_rect.width()/4*3  );
+
+
+
     return res;
 //    QPixmap pix( r.width(), r.height() );
 //    QRect pix_r( 0,0, r.width(), r.height() );

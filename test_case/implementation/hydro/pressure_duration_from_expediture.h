@@ -41,6 +41,7 @@ private:
     QVector< Channels > mData;
 
     mutable int mRowsPrinted;
+    mutable bool mTablePrinted;
 
     //Зависимость перепада давления от расхода
     /// |--------------------------------------------|--------------------------------------------|

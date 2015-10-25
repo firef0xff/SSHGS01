@@ -159,6 +159,37 @@ void DB32::Read()
     OP6_End = true;
     OP7_End = true;
     OP8_End = true;
+
+    OP4_Q_Fakt_03Qmax_A = 100;
+    OP4_D_P_03Qmax_A = 300;
+    OP4_D_A_03Qmax_A = 150;
+    OP4_BP5_BP3_03Qmax_A = 150;
+
+    OP4_Q_Fakt_06Qmax_A = 300;
+    OP4_D_P_06Qmax_A = 270;
+    OP4_D_A_06Qmax_A = 170;
+    OP4_BP5_BP3_06Qmax_A = 100;
+
+    OP4_Q_Fakt_Qmax_A = 600;
+    OP4_D_P_Qmax_A = 200;
+    OP4_D_A_Qmax_A = 120;
+    OP4_BP5_BP3_Qmax_A = 80;
+
+
+    OP4_Q_Fakt_03Qmax_B = 150;
+    OP4_D_P_03Qmax_B = 280;
+    OP4_D_A_03Qmax_B = 140;
+    OP4_BP5_BP3_03Qmax_B = 140;
+
+    OP4_Q_Fakt_06Qmax_B = 250;
+    OP4_D_P_06Qmax_B = 250;
+    OP4_D_A_06Qmax_B = 170;
+    OP4_BP5_BP3_06Qmax_B = 80;
+
+    OP4_Q_Fakt_Qmax_B = 550;
+    OP4_D_P_Qmax_B = 170;
+    OP4_D_A_Qmax_B = 70;
+    OP4_BP5_BP3_Qmax_B = 100;
 }
 
 }//namespace data
