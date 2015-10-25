@@ -18,7 +18,11 @@ public:
 
     bool Draw(QPainter &painter, QRect &free_rect ) const;
 private:
-    bool Result; //Распределитель корректно переключается при всех допустимых значениях давления управления( от XX до XXX Бар )
+    //Распределитель корректно переключается при всех допустимых значениях давления управления( от XX до XXX Бар )
+    bool ResultMinA;
+    bool ResultMaxA;
+    bool ResultMinB;
+    bool ResultMaxB;
 };
 
 
