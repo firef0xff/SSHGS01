@@ -12,7 +12,7 @@ public:
     static Parameters& Instance();
 
     void Reset();
-    QString ToString();
+    QString ToString() const;
 
     virtual test::TestCase& TestCollection() const;
 

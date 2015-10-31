@@ -100,7 +100,7 @@ void Parameters::Reset()
     mOffDynamic_2 = DN_UNKNOWN;
 }
 
-QString Parameters::ToString()
+QString Parameters::ToString() const
 {
     QString res;
     res+= "Параметры гидрораспределителя:\n";

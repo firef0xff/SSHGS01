@@ -46,7 +46,7 @@ void Parameters::Reset()
     mReelResist = 0;
 }
 
-QString Parameters::ToString()
+QString Parameters::ToString() const
 {
     QString res;
     res+= "Параметры платы:\n";

@@ -11,6 +11,7 @@
 #include "test_case/implementation/test_params_servo.h"
 #include "test_case/implementation/test_params_control_panel.h"
 #include "test_case/implementation/test_params_hydro_cilinder.h"
+#include <QTextDocument>
 
 namespace test
 {
@@ -329,6 +330,23 @@ bool Parameters::Deserialize(const QJsonObject &obj )
     }
 
     return res;
+}
+
+bool Parameters::Draw(QPainter &painter, QRect &free_rect ) const
+{
+    QFont text_font = painter.font();
+    text_font.setPointSize( 12 );
+    painter.setFont( text_font );
+
+    QTextDocument doc;
+    doc.setUndoRedoEnabled( false );
+    doc.setTextWidth( free_rect.width() );
+    doc.setUseDesignMetrics( true );
+    doc.setDefaultTextOption ( QTextOption (Qt::AlignLeft )  );
+    doc.setPlainText( ToString() );
+
+    doc.drawContents( &painter, free_rect );
+    return true;
 }
 
 

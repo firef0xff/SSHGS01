@@ -2,6 +2,7 @@
 #include <QString>
 #include "devices/device.h"
 #include "test_case.h"
+#include <QPainter>
 
 namespace test
 {
@@ -79,7 +80,7 @@ public:
     typedef QList< test::Test* > TestsList;
     Parameters();
     virtual ~Parameters(){}
-    virtual QString ToString() = 0;
+    virtual QString ToString() const = 0;
 
     virtual test::TestCase& TestCollection() const = 0;
 
@@ -88,6 +89,7 @@ public:
 
     virtual void WriteToController() const = 0;
 
+    bool Draw(QPainter &painter, QRect &free_rect ) const;
     void Reset();
 
     void TestCase ( TestsList const& test_case);
@@ -102,7 +104,7 @@ class CommonParameters :public Parameters
 public:
     CommonParameters();
     virtual ~CommonParameters(){}
-    virtual QString ToString() = 0;
+    virtual QString ToString() const = 0;
 
     virtual test::TestCase& TestCollection() const = 0;
 
@@ -138,6 +140,9 @@ protected:
     CONTROL_TYPE mControlType;  //+Тип управления гидрораспределителем
     double mMinControlPressure; //+минимальное давление управления
     double mMaxControlPressure; //+максимальное давление управления
+
+private:
+    size_t mPrintedPage;
 };
 
 extern Parameters* CURRENT_PARAMS;

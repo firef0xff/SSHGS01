@@ -61,7 +61,7 @@ void Parameters::Reset()
     mEndSgnal = 0;
     mControlReelResist = 0;
 }
-QString Parameters::ToString()
+QString Parameters::ToString() const
 {
     QString res;
     res+= "Параметры аппаратуры управления направлением расхода:\n";

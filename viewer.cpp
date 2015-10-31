@@ -20,6 +20,14 @@ Viewer::Viewer(QWidget *parent) :
 
     if ( test::CURRENT_PARAMS )
     {
+        test::CURRENT_PARAMS->Draw( painter, rc );
+        painter.end();
+        mPages.push_back( pixmap );
+        pixmap = QPixmap( 680, 1085 );
+        rc = QRect( 0, 0, 680, 1085 );
+        painter.begin( &pixmap );
+        painter.fillRect( rc, Qt::white );
+
         foreach (test::Test* test, test::CURRENT_PARAMS->TestCase())
         {
             test->ResetDrawLine();
