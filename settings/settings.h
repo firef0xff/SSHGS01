@@ -20,6 +20,9 @@ public:
     QString LogLevel() const;     //текущий уровень логирования
     void LogLevel( QString const& val);
 
+    void MainPupm( QString const& val);
+    QString MainPupm() const;     //используемый основной насос
+
     void Save();
     void Load();
 

@@ -121,6 +121,17 @@ void Settings::LogLevel( QString const& val)
     mDocument.setObject( obj );
 }
 
+void Settings::MainPupm( QString const& val)
+{
+    auto obj = mDocument.object();
+    obj.insert( "MainPupm", val );
+    mDocument.setObject( obj );
+}
+QString Settings::MainPupm() const
+{
+    return mDocument.object().value("MainPupm").toString();
+}
+
 
 void Settings::Save()
 {
@@ -133,6 +144,7 @@ void Settings::Save()
         ResultPath( "results" );
         TestPath( "test_cases" );
         LogLevel( "Ошибки" );
+        MainPupm( "M1" );
     }
     f.open(QIODevice::WriteOnly);
     f.write( mDocument.toJson() );

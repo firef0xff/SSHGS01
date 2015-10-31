@@ -1,5 +1,6 @@
 #include "test_base.h"
 #include "../tests.h"
+#include "../../settings/settings.h"
 
 namespace test
 {
@@ -21,7 +22,7 @@ void Test::Start()
     mCommand.N_Operation = mId;
     mCommand.Start_Oper = true;
     mCommand.Stop_Oper = false;
-    mCommand.Nasos_M2 = false;
+    mCommand.Nasos_M2 = app::Settings::Instance().MainPupm() == "M2";
     mCommand.Write();
 }
 void Test::Wait( bool& work, bool& done)

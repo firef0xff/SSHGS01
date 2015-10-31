@@ -17,6 +17,8 @@ settings_wnd::settings_wnd(QWidget *parent) :
 
     ui->TestingParams->setText( app::Settings::Instance().TestPath() );
     ui->TestingResults->setText( app::Settings::Instance().ResultPath() );
+    ui->MainPump->setCurrentIndex( ui->MainPump->findText( app::Settings::Instance().MainPupm() ) );
+
 }
 
 settings_wnd::~settings_wnd()
@@ -67,6 +69,7 @@ void settings_wnd::on_buttonBox_accepted()
     app::Settings::Instance().LogLevel( ui->LogLevel->currentText() );
     app::Settings::Instance().TestPath( ui->TestingParams->text() );
     app::Settings::Instance().ResultPath( ui->TestingResults->text() );
+    app::Settings::Instance().MainPupm( ui->MainPump->currentText() );
     app::Settings::Instance().Save();
     close();
 }
