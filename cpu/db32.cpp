@@ -1,4 +1,5 @@
 #include "db32.h"
+#include "../myOPC/miniOPC.h"
 
 namespace cpu
 {
@@ -147,10 +148,27 @@ DB32::DB32():
     OP7_End( mBoolData[69] ),  //167.6 Конец операции 7
     OP8_End( mBoolData[70] )  //167.7 Конец операции 8
 {
+    mGroupID = OPC->AddGroup( L"DB32", mAdresses, BOOL_COUNT + FLOAT_COUNT );
 }
 
 void DB32::Read()
 {
+    OPCITEMSTATE* rez = OPC->Read( mGroupID );
+    if (!rez)
+    {
+        //ошибка подключения..
+        return;
+    }
+    for (size_t i = 0; i < BOOL_COUNT + FLOAT_COUNT; i++)
+    {
+        if ( i < BOOL_COUNT )
+            mBoolData[ i ] = rez[i].vDataValue.boolVal;
+        else
+            mFloatData[ i - BOOL_COUNT ] = rez[i].vDataValue.fltVal;
+    }
+    OPC->OpcMassFree( mGroupID, rez );
+
+
     OP1_End = true;
     OP2_End = true;
     OP3_End = true;

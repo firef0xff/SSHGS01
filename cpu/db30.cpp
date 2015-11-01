@@ -1,4 +1,5 @@
 #include "db30.h"
+#include "../myOPC/miniOPC.h"
 
 namespace cpu
 {
@@ -49,11 +50,15 @@ DB30::DB30():
     DD2_close_b( mBoolData[16] ),      //ДД2 выключение б
     DD3_close_b( mBoolData[17] ),      //ДД3 выключение б
     TypeD_close_b( mBoolData[18] )     //TуpeD 0 - падение 1 - увеличение
-
-{}
+{
+    mGroupID = OPC->AddGroup( L"DB30", mAdresses, BOOL_COUNT + FLOAT_COUNT );
+}
 
 void DB30::Write()
-{}
+{
+    OPC->WriteMass( mGroupID, 0, BOOL_COUNT, static_cast<void*>( mBoolData ), tBOOL );
+    OPC->WriteMass( mGroupID, BOOL_COUNT, FLOAT_COUNT, static_cast<void*>( mFloatData ), tFLOAT );
+}
 
 }//namespace data
 
