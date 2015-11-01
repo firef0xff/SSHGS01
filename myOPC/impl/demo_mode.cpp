@@ -5,7 +5,7 @@ namespace opc
 {
 static memory::Memory MEM;
 
-DemoMode::DemoMode()
+DemoMode::DemoMode( wchar_t const* )
 {}
 DemoMode::~DemoMode()
 {}
@@ -88,9 +88,8 @@ HRESULT         DemoMode::WriteMass   ( GROUP_ID id, size_t pos, size_t mass_len
             {
                 return E_FAIL;
             }
-
-            MEM.Page<VARIANT>().Write( ptr->Addresses.at( pos + i), value );
         }
+        MEM.Page<VARIANT>().Write( ptr->Addresses.at( pos + i), value );
     }
 
     return S_OK;
@@ -98,6 +97,10 @@ HRESULT         DemoMode::WriteMass   ( GROUP_ID id, size_t pos, size_t mass_len
 void            DemoMode::OpcMassFree ( GROUP_ID /*id*/, OPCITEMSTATE* mass )
 {
     delete[] mass;
+}
+bool            DemoMode::Connected   ()
+{
+    return true;
 }
 
 }//namespace opc

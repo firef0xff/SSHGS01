@@ -13,7 +13,7 @@ namespace opc
 class WorkMode
 {
 public:
-    WorkMode( wchar_t *ServerName = L"OPC.SimaticNET" );//конструктор
+    WorkMode( wchar_t *ServerName );//конструктор
     ~WorkMode();//деструктор
 
     GROUP_ID        AddGroup    ( wchar_t const* pGroupName, wchar_t const* Addresses[], size_t ItemsCount );

@@ -33,7 +33,7 @@ namespace opc
 class DemoMode
 {
 public:
-    DemoMode();//конструктор
+    DemoMode( wchar_t const* );//конструктор
     ~DemoMode();//деструктор
 
     GROUP_ID        AddGroup    ( wchar_t const* pGroupName, wchar_t const* Addresses[], size_t ItemsCount );
@@ -42,6 +42,7 @@ public:
     HRESULT         WriteMass   ( GROUP_ID id, size_t pos, size_t mass_len, void *item, types type );
     void            OpcMassFree ( GROUP_ID id, OPCITEMSTATE* mass );
 
+    bool            Connected   ();
 private:
     //типы
     struct Group                 //структура с данными по шруппе ОПС сервера
