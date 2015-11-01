@@ -149,6 +149,155 @@ DB32::DB32():
     OP8_End( mBoolData[70] )  //167.7 Конец операции 8
 {
     mGroupID = opc::miniOPC::Instance().AddGroup( L"DB32", mAdresses, BOOL_COUNT + FLOAT_COUNT );
+
+    {
+#ifndef WINDOWS
+        //хз что
+        D_E1_OK = true;               //2.4 давление в системе достигнуто ( электро )
+        D_E1G_OK = true;              //2.5 давление в системе достигнуто ( электрогидравл )
+
+        //test1
+        OP1_Min_D_YESa = true;        //2.0 минимальное давление пройдено ( кат. а )
+        OP1_Min_D_NOa = false;         //2.1 минимальное давление НЕ пройдено ( кат. а )
+        OP1_Min_D_YESb = true;        //2.2 минимальное давление пройдено ( кат. б )
+        OP1_Min_D_NOb = false;         //2.3 минимальное давление НЕ пройдено ( кат. б )
+        Voltage_Alarm_a = false;       //2.6  напряжение катушки а вне допуска
+        Voltage_Alarm_b = false;       //36.0 напряжение катушки б вне допуска
+        OP1_Max_D_YESa = true;        //2.7 максимальное давление пройдено ( кат. а )
+        OP1_Max_D_NOa = false;         //3.0 максимальное давление НЕ пройдено ( кат. а )
+        OP1_Max_D_YESb = true;        //3.1 максимальное давление пройдено ( кат. б )
+        OP1_Max_D_NOb = false;         //3.2 максимальное давление НЕ пройдено ( кат. б )
+
+        OP1_Voltage_a = 253;        //4.0 замерянное наряжение катушки а
+        OP1_Current_a = 20;        //8.0 замерянный ток катушки а
+        OP1_Power_a = 30;          //12.0 расчетная мощьность катушки а
+        OP1_Resist_a = 53;         //16.0 расчетное сопротивение катушки а
+        OP1_Voltage_b = 10;        //20.0 замерянное наряжение катушки б
+        OP1_Current_b = 63;        //24.0 замерянный ток катушки б
+        OP1_Power_b = 10;          //28.0 расчетная мощьность катушки а
+        OP1_Resist_b = 1;         //32.0 расчетное сопротивение катушки а
+
+        //test2 ???
+        OP2_Tech_Yes_No = false;       //36.1 течь обнаружена, не обнаружена //не используется
+
+        //test3
+        OP3_Sred_Rashod = 321;      //38.0 средний расход
+        OP3_Rashod_Norma = true;      //42.0 расход в норме
+        OP3_Rashod_VNorma = false;     //42.1 расход выше нормы
+
+        //test4
+        OP4_Q_Fakt_03Qmax_A = 100;
+        OP4_D_P_03Qmax_A = 300;
+        OP4_D_A_03Qmax_A = 150;
+        OP4_BP5_BP3_03Qmax_A = 150;
+
+        OP4_Q_Fakt_06Qmax_A = 300;
+        OP4_D_P_06Qmax_A = 270;
+        OP4_D_A_06Qmax_A = 170;
+        OP4_BP5_BP3_06Qmax_A = 100;
+
+        OP4_Q_Fakt_Qmax_A = 600;
+        OP4_D_P_Qmax_A = 200;
+        OP4_D_A_Qmax_A = 120;
+        OP4_BP5_BP3_Qmax_A = 80;
+
+
+        OP4_Q_Fakt_03Qmax_B = 150;
+        OP4_D_P_03Qmax_B = 280;
+        OP4_D_A_03Qmax_B = 140;
+        OP4_BP5_BP3_03Qmax_B = 140;
+
+        OP4_Q_Fakt_06Qmax_B = 250;
+        OP4_D_P_06Qmax_B = 250;
+        OP4_D_A_06Qmax_B = 170;
+        OP4_BP5_BP3_06Qmax_B = 80;
+
+        OP4_Q_Fakt_Qmax_B = 550;
+        OP4_D_P_Qmax_B = 170;
+        OP4_D_A_Qmax_B = 70;
+        OP4_BP5_BP3_Qmax_B = 100;
+
+        //test5
+        OP5_A_OK = true;    //140.0 пропускная способность соотвествует А
+        OP5_A_NO = false;    //140.1 пропускная способность не соотвествует А
+        OP5_B_OK = true;    //140.2 пропускная способность соотвествует В
+        OP5_B_NO = false;    //140.3 пропускная способность не соотвествует В
+
+        //test6
+        OP6_MinD_MinUprD_YESa = true;    //140.4 "а" перекл. при мин. давл. (мин упр.)
+        OP6_MinD_MinUprD_NOa = false;     //140.5 "а" не перекл. при мин. давл. (мин упр.)
+        OP6_MinD_MaxUprD_YESa = true;    //140.6 "а" перекл. при мин. давл. (макс упр.)
+        OP6_MinD_MaxUprD_NOa = false;     //140.7 "а" перекл. при мин. давл. (макс упр.)
+        OP6_MaxD_MinUprD_YESa = true;    //141.0 "а" перекл. при макс. давл. (мин упр.)
+        OP6_MaxD_MinUprD_NOa = false;     //141.1 "а" перекл. при макс. давл. (мин упр.)
+        OP6_MaxD_MaxUprD_YESa = true;    //141.2 "а" перекл. при макс. давл. (макс упр.)
+        OP6_MaxD_MaxUprD_NOa = false;     //141.3 "а" перекл. при макс. давл. (макс упр.)
+
+        OP6_MinD_MinUprD_YESb = true;    //141.4 "б" перекл. при мин. давл. (мин упр.)
+        OP6_MinD_MinUprD_NOb = false;     //141.5 "б" не перекл. при мин. давл. (мин упр.)
+        OP6_MinD_MaxUprD_YESb = true;    //141.6 "б" перекл. при мин. давл. (макс упр.)
+        OP6_MinD_MaxUprD_NOb = false;     //141.7 "б" перекл. при мин. давл. (макс упр.)
+        OP6_MaxD_MinUprD_YESb = true;    //142.0 "б" перекл. при макс. давл. (мин упр.)
+        OP6_MaxD_MinUprD_NOb = false;     //142.1 "б" перекл. при макс. давл. (мин упр.)
+        OP6_MaxD_MaxUprD_YESb = true;    //142.2 "б" перекл. при макс. давл. (макс упр.)
+        OP6_MaxD_MaxUprD_NOb = false;     //142.3 "б" перекл. при макс. давл. (макс упр.)
+
+
+        //test7
+        OP7_Min_D_YESa = true;  //142.4 "а" перекл. при мин. давлении (Vmin)
+        OP7_Min_D_NOa = false;   //142.5 "а" не перекл. при мин. давлении (Vmin)
+        OP7_Min_D_YESb = true;  //142.6 "б" перекл. при мин. давлении (Vmin)
+        OP7_Min_D_NOb = false;   //142.7 "б" не перекл. при мин. давлении (Vmin)
+        OP7_Max_D_YESa = true;  //143.0 "а" перекл. при макс. давлении (Vmin)
+        OP7_Max_D_NOa = false;   //143.1 "а" не перекл. при макс. давлении (Vmin)
+        OP7_Max_D_YESb = true;  //143.2 "б" перекл. при макс. давлении (Vmin)
+        OP7_Max_D_NOb = false;   //143.3 "б" не перекл. при макс. давлении (Vmin)
+
+        //test8
+        OP8_Time_on_a = 50;       //144.0 время включения катуки "а"
+        OP8_Time_off_a = 65;      //148.0 время отключения катуки "а"
+        OP8_Time_on_b = 23;       //152.0 время включения катуки "б"
+        OP8_Time_off_b = 25;      //156.0 время отключения катуки "б"
+
+        OP8_open_YES_a = true;       //160.0 "а" время включения соответствует
+        OP8_open_NO_a = false;        //160.1 "а" время включения не соответствует
+        OP8_close_YES_a = true;      //160.2 "а" время отключения соответствует
+        OP8_close_NO_a = false;       //160.3 "а" время отключения не соответствует
+        OP8_open_YES_b = true;       //160.4 "б" время включения соответствует
+        OP8_open_NO_b = false;        //160.5 "б" время включения не соответствует
+        OP8_close_YES_b = true;      //160.6 "б" время отключения соответствует
+        OP8_close_NO_b = false;       //160.7 "б" время отключения не соответствует
+
+        OP8_NO_Impuls_open_a = false;     //161.0 катушка "а" не включилась
+        OP8_NO_Impuls_close_a = false;    //161.1 катушка "а" не отключилась
+        OP8_NO_Impuls_open_b = false;     //161.2 катушка "б" не включилась
+        OP8_NO_Impuls_close_b = false;    //161.3 катушка "б" не отключилась
+
+        //служебные
+        Temperatura_masla = 66.3;   //162.0 температура масла
+
+        OP1_Work = true; //166.0 Выполнение операции 1
+        OP2_Work = true; //166.1 Выполнение операции 2
+        OP3_Work = true; //166.2 Выполнение операции 3
+        OP4_Work = true; //166.3 Выполнение операции 4
+        OP5_Work = true; //166.4 Выполнение операции 5
+        OP6_Work = true; //166.5 Выполнение операции 6
+        OP7_Work = true; //166.6 Выполнение операции 7
+        OP8_Work = true; //166.7 Выполнение операции 8
+
+        OP1_End = true;  //167.0 Конец операции 1
+        OP2_End = true;  //167.1 Конец операции 2
+        OP3_End = true;  //167.2 Конец операции 3
+        OP4_End = true;  //167.3 Конец операции 4
+        OP5_End = true;  //167.4 Конец операции 5
+        OP6_End = true;  //167.5 Конец операции 6
+        OP7_End = true;  //167.6 Конец операции 7
+        OP8_End = true;  //167.7 Конец операции 8
+
+        opc::miniOPC::Instance().WriteMass( mGroupID, BOOL_COUNT, FLOAT_COUNT, static_cast<void*>( mFloatData ), opc::tFLOAT );
+        opc::miniOPC::Instance().WriteMass( mGroupID, 0, BOOL_COUNT, static_cast<void*>( mBoolData ), opc::tBOOL );
+#endif
+    }
 }
 
 void DB32::Read()
@@ -167,47 +316,6 @@ void DB32::Read()
             mFloatData[ i - BOOL_COUNT ] = rez[i].vDataValue.fltVal;
     }
     opc::miniOPC::Instance().OpcMassFree( mGroupID, rez );
-
-
-    OP1_End = true;
-    OP2_End = true;
-    OP3_End = true;
-    OP4_End = true;
-    OP5_End = true;
-    OP6_End = true;
-    OP7_End = true;
-    OP8_End = true;
-
-    OP4_Q_Fakt_03Qmax_A = 100;
-    OP4_D_P_03Qmax_A = 300;
-    OP4_D_A_03Qmax_A = 150;
-    OP4_BP5_BP3_03Qmax_A = 150;
-
-    OP4_Q_Fakt_06Qmax_A = 300;
-    OP4_D_P_06Qmax_A = 270;
-    OP4_D_A_06Qmax_A = 170;
-    OP4_BP5_BP3_06Qmax_A = 100;
-
-    OP4_Q_Fakt_Qmax_A = 600;
-    OP4_D_P_Qmax_A = 200;
-    OP4_D_A_Qmax_A = 120;
-    OP4_BP5_BP3_Qmax_A = 80;
-
-
-    OP4_Q_Fakt_03Qmax_B = 150;
-    OP4_D_P_03Qmax_B = 280;
-    OP4_D_A_03Qmax_B = 140;
-    OP4_BP5_BP3_03Qmax_B = 140;
-
-    OP4_Q_Fakt_06Qmax_B = 250;
-    OP4_D_P_06Qmax_B = 250;
-    OP4_D_A_06Qmax_B = 170;
-    OP4_BP5_BP3_06Qmax_B = 80;
-
-    OP4_Q_Fakt_Qmax_B = 550;
-    OP4_D_P_Qmax_B = 170;
-    OP4_D_A_Qmax_B = 70;
-    OP4_BP5_BP3_Qmax_B = 100;
 }
 
 }//namespace data

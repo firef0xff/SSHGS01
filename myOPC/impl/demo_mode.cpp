@@ -3,7 +3,11 @@
 
 namespace opc
 {
-static memory::Memory MEM;
+static memory::Memory& MEM()
+{
+    static memory::Memory m;
+    return m;
+}
 
 DemoMode::DemoMode( wchar_t const* )
 {}
@@ -45,7 +49,7 @@ OPCITEMSTATE*   DemoMode::Read        ( GROUP_ID id )
 
     for ( size_t i = 0; i < ptr->Addresses.size(); ++i )
     {
-        res[i].vDataValue = MEM.Page< VARIANT >().Read( ptr->Addresses[i] );
+        res[i].vDataValue = MEM().Page< VARIANT >().Read( ptr->Addresses[i] );
     }
     return res;
 }
@@ -89,7 +93,7 @@ HRESULT         DemoMode::WriteMass   ( GROUP_ID id, size_t pos, size_t mass_len
                 return E_FAIL;
             }
         }
-        MEM.Page<VARIANT>().Write( ptr->Addresses.at( pos + i), value );
+        MEM().Page<VARIANT>().Write( ptr->Addresses.at( pos + i), value );
     }
 
     return S_OK;
