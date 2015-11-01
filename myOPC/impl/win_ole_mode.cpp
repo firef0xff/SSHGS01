@@ -1,4 +1,4 @@
-#include "work_mode.h"
+#include "win_ole_mode.h"
 #include "../miniOPC.h"
 
 #ifdef WINDOWS
@@ -8,10 +8,15 @@ namespace opc
 #define LOCALE_ID    0x409	// Code 0x409 = ENGLISH
 #define REQUESTED_UPDATE_RATE 500
 
-WorkMode::WorkMode( wchar_t *ServerName ):
+WinOleMode::WinOleMode( wchar_t const* ServerName ):
+    pIOPCServer( nullptr ),
+    GrpSrvHandle( 0 ),
+    result( E_FAIL ),
+    clsid(),
     TimeBias( 0 ),
     PercentDeadband( 0.0 ),
-    Connected( false )
+    RevisedUpdateRate( 0 ),
+    mConnected( false )
 {
     //подключение к серверу
     result = CoInitialize( NULL ); //подготовка СОМ библиотек к работе
@@ -22,30 +27,31 @@ WorkMode::WorkMode( wchar_t *ServerName ):
         return;
     }
     // получение адреса сервера
-    result = CoCreateInstance( clsid, NULL, CLSCTX_LOCAL_SERVER, IID_IOPCServer, (void**)& pIOPCServer );
+    result = CoCreateInstance( clsid, NULL, CLSCTX_LOCAL_SERVER, IID_IOPCServer, (void**) &pIOPCServer );
     if ( result != S_OK )
     {
         return;
     }
-    Connected = true;
+    mConnected = true;
     Groups.clear();
 }
 
-WorkMode::~WorkMode()
+WinOleMode::~WinOleMode()
 {
     Groups.clear();
+    if ( pIOPCServer )
     result = pIOPCServer->Release();
 }
 
-GROUP_ID  WorkMode::AddGroup( wchar_t const* pGroupName, wchar_t const* Addresses[]/*массив второго уровня*/,
+GROUP_ID  WinOleMode::AddGroup( wchar_t const* pGroupName, wchar_t const* Addresses[]/*массив второго уровня*/,
                             size_t ItemsCount/*массив считается элементом*/)
 {
-    if (!Connected)
+    if (!mConnected)
     {
         return 0;
     }
 
-    boost::shared_ptr<GroupPTRs> tmp( new GroupPTRs() );
+    GroupPtr tmp( new Group() );
     tmp->ItemsCount = ItemsCount;
     result = pIOPCServer->AddGroup( pGroupName,
                                     true,
@@ -64,10 +70,10 @@ GROUP_ID  WorkMode::AddGroup( wchar_t const* pGroupName, wchar_t const* Addresse
     }
 
     tmp->pItems.resize( tmp->ItemsCount );
-    for( int i = 0; i < tmp->ItemsCount; i++ )
+    for( size_t i = 0; i < tmp->ItemsCount; i++ )
     {
-        tmp->pItems[i].szAccessPath        	=  L"";
-        tmp->pItems[i].szItemID		     	=  Addresses[i];
+        tmp->pItems[i].szAccessPath        	=  const_cast< wchar_t* >( L"" );           //очень очень дикий костыль
+        tmp->pItems[i].szItemID		     	=  const_cast< wchar_t* >( Addresses[i] );  //очень очень дикий костыль
         tmp->pItems[i].bActive             	=  TRUE;
         tmp->pItems[i].hClient             	=  1;
         tmp->pItems[i].dwBlobSize          	=  0;
@@ -75,6 +81,7 @@ GROUP_ID  WorkMode::AddGroup( wchar_t const* pGroupName, wchar_t const* Addresse
         tmp->pItems[i].vtRequestedDataType 	=  0;
     }
 
+    HRESULT* pErrors = nullptr;
     result = tmp->pItemMgt->AddItems( tmp->ItemsCount,
                                       &(*tmp->pItems.begin()),
                                       &tmp->pItemResult,
@@ -83,6 +90,7 @@ GROUP_ID  WorkMode::AddGroup( wchar_t const* pGroupName, wchar_t const* Addresse
     {
         return 0;
     }
+    CoTaskMemFree( pErrors );
 
     result = tmp->pItemMgt->QueryInterface( IID_IOPCSyncIO, (void**)&tmp->pSyncIO );
     if( result < 0 )
@@ -90,65 +98,63 @@ GROUP_ID  WorkMode::AddGroup( wchar_t const* pGroupName, wchar_t const* Addresse
         return 0;
     }
 
-    Groups.push_back( tmp );
+    Groups.push_back( std::move( tmp ) );
     return Groups.size();
 }
 
-WorkMode::Item    WorkMode::GetGroup( GROUP_ID _id )
+WinOleMode::Item    WinOleMode::GetGroup( GROUP_ID id )
 {
-    int k = 0, pos = _id - 1;//счетчик и реальная позиция в списке
-    for ( Item i = Groups.begin(); i != Groups.end(); i++,k++)
+    if ( id > 0)
     {
-        if ( k == pos )
+        --id;
+        if ( id < Groups.size() )
         {
-            return i;
+            return Groups.begin() + id;
         }
     }
     return Groups.end();
 }
 
-void 	WorkMode::OpcMassFree( GROUP_ID _id, OPCITEMSTATE* mass )
+void 	WinOleMode::OpcMassFree( GROUP_ID id, OPCITEMSTATE* mass )
 {
-    if ( !Connected )
+    Item it = GetGroup( id );
+    if ( it == Groups.end() )
     {
         return;
     }
-    Item _item = GetGroup( _id );
-    if ( _item == Groups.end() )
-    {
-        return;
-    }
-    boost::shared_ptr<GroupPTRs> __item = *_item;
-    for( int i=0; i<__item->ItemsCount; i++ )
+    Group* ptr = it->get();
+    for( size_t i=0; i<ptr->ItemsCount; i++ )
     {
         VariantClear( &mass[i].vDataValue );
     }
     CoTaskMemFree( mass );
 }
 
-OPCITEMSTATE*	WorkMode::Read ( GROUP_ID _id )
+OPCITEMSTATE*	WinOleMode::Read ( GROUP_ID id )
 {
-    if ( !Connected )
+    if ( !mConnected )
     {
         return nullptr;
     }
-    Item _item = GetGroup( _id );
-    if ( _item == Groups.end() )
+    Item it = GetGroup( id );
+    if ( it == Groups.end() )
     {
         return nullptr;
     }
 
-    boost::shared_ptr<GroupPTRs> __item = *_item;
+    Group* ptr = it->get();
     std::vector<OPCHANDLE> phServer;
-    phServer.resize( __item->ItemsCount );//массив указателией на OPC
+    phServer.resize( ptr->ItemsCount );//массив указателией на OPC
     OPCITEMSTATE *pItemsValues = nullptr; //указатель на состояния итемов в опс
 
-    for( int i=0; i < __item->ItemsCount; i++ )
+    for( size_t i=0; i < ptr->ItemsCount; i++ )
     {
-        phServer[i] = __item->pItemResult[i].hServer;
+        phServer[i] = ptr->pItemResult[i].hServer;
     }
 
-    result = __item->pSyncIO->Read( OPC_DS_CACHE, __item->ItemsCount, &(*phServer.begin()), &pItemsValues, &pRErrors );
+    HRESULT* pRErrors = nullptr;
+    result = ptr->pSyncIO->Read( OPC_DS_CACHE, ptr->ItemsCount, &(*phServer.begin()), &pItemsValues, &pRErrors );
+    CoTaskMemFree( pRErrors );
     if( result == S_OK )
     {
         return pItemsValues;
@@ -159,25 +165,25 @@ OPCITEMSTATE*	WorkMode::Read ( GROUP_ID _id )
     }
 }
 
-HRESULT	WorkMode::WriteValue   ( GROUP_ID _id, size_t pos, void *item, types type )
+HRESULT	WinOleMode::WriteValue   ( GROUP_ID id, size_t pos, void *item, types type )
 {
-    return  WriteMass( _id, pos, 1, item, type );
+    return  WriteMass( id, pos, 1, item, type );
 }
-HRESULT	WorkMode::WriteMass ( GROUP_ID _id, size_t pos, size_t mass_len, void *item, types type )
+HRESULT	WinOleMode::WriteMass ( GROUP_ID id, size_t pos, size_t mass_len, void *item, types type )
 {
-    if ( !Connected )
+    if ( !mConnected )
     {
         return E_FAIL;
     }
 
-    Item _item = GetGroup( _id );
-    if ( _item==Groups.end() )
+    Item it = GetGroup( id );
+    if ( it == Groups.end() )
     {
         return E_FAIL;
     }
 
-    boost::shared_ptr<GroupPTRs> __item = *_item;
-    if ( __item->ItemsCount <= pos )
+    Group* ptr = it->get();
+    if ( ptr->ItemsCount <= pos )
     {
         return E_FAIL;
     }
@@ -190,7 +196,7 @@ HRESULT	WorkMode::WriteMass ( GROUP_ID _id, size_t pos, size_t mass_len, void *i
 
     for ( size_t i = 0; i < mass_len; i++ )
     {
-        phServer[i]	= __item->pItemResult[pos+i].hServer;
+        phServer[i]	= ptr->pItemResult[pos + i].hServer;
         switch ( type )
         {
             case tBOOL:
@@ -218,7 +224,7 @@ HRESULT	WorkMode::WriteMass ( GROUP_ID _id, size_t pos, size_t mass_len, void *i
         }
     }
 
-    result = __item->pSyncIO->Write( mass_len, &(*phServer.begin()), &(*values.begin()), &pWErrors );
+    result = ptr->pSyncIO->Write( mass_len, &(*phServer.begin()), &(*values.begin()), &pWErrors );
     HRESULT res = *pWErrors;
 
     if( result == S_OK || result == S_FALSE )
@@ -231,7 +237,10 @@ HRESULT	WorkMode::WriteMass ( GROUP_ID _id, size_t pos, size_t mass_len, void *i
         return res;
     }
 }
-
+bool    WinOleMode::Connected   ()
+{
+    return mConnected;
+}
 }//namespace opc
 
 #endif

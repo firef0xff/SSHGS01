@@ -3,37 +3,36 @@
 
 #ifdef WINDOWS
 #include "../opc.h"
-#include <list>
-#include <Classes.hpp>
-#include <boost/thread.hpp>
+#include <vector>
+#include <memory>
 
 namespace opc
 {
 
-class WorkMode
+class WinOleMode
 {
 public:
-    WorkMode( wchar_t *ServerName );//конструктор
-    ~WorkMode();//деструктор
+    WinOleMode( wchar_t const* ServerName );//конструктор
+    ~WinOleMode();//деструктор
 
     GROUP_ID        AddGroup    ( wchar_t const* pGroupName, wchar_t const* Addresses[], size_t ItemsCount );
-    OPCITEMSTATE*   Read        ( GROUP_ID _id ); //вернуть минимально возможный набор который нужно будет распределить в массив
-    HRESULT         WriteValue  ( GROUP_ID _id, size_t pos, void *item, types type );
-    HRESULT         WriteMass   ( GROUP_ID _id, size_t pos, size_t mass_len, void *item, types type );
-    void            OpcMassFree ( GROUP_ID _id, OPCITEMSTATE* mass);
+    OPCITEMSTATE*   Read        ( GROUP_ID id ); //вернуть минимально возможный набор который нужно будет распределить в массив
+    HRESULT         WriteValue  ( GROUP_ID id, size_t pos, void *item, types type );
+    HRESULT         WriteMass   ( GROUP_ID id, size_t pos, size_t mass_len, void *item, types type );
+    void            OpcMassFree ( GROUP_ID id, OPCITEMSTATE* mass);
+    bool            Connected   ();
 
 private:
     //типы
-    class GroupPTRs                 //структура с данными по шруппе ОПС сервера
+    class Group                 //структура с данными по шруппе ОПС сервера
     {
     public:
-        GroupPTRs():
+        Group():
             pItemMgt( nullptr ),
             pSyncIO ( nullptr ),
-            pItems ( nullptr ),
             pItemResult( nullptr )
         {}
-        ~GroupPTRs()
+        ~Group()
         {
             if ( pItemResult )
             {
@@ -46,18 +45,19 @@ private:
         std::vector<OPCITEMDEF> pItems;	//массив с элементами группы
         OPCITEMRESULT   *pItemResult;	//указатель на элемент
         size_t			ItemsCount;		//количество элементов в группе
-    };
-    typedef std::list< boost::shared_ptr< GroupPTRs > > GroupsList;
+    };    
+    typedef std::unique_ptr< Group > GroupPtr;
+    typedef std::vector< GroupPtr > GroupsList;
     typedef GroupsList::const_iterator Item;
 
     //функции
-    Item GetGroup ( GROUP_ID _id );
+    Item GetGroup ( GROUP_ID id );
     //данные
     IOPCServer  *pIOPCServer;	//указатель на OPC сервер
 
     GroupsList  Groups;//Данные по группам сервера
     OPCHANDLE   GrpSrvHandle;
-    HRESULT     *pErrors, *pRErrors, result;
+    HRESULT     result;
 
     _GUID       clsid;		//идентификатор класса сервера
     long        TimeBias; 	//смещение времени
@@ -65,7 +65,7 @@ private:
     DWORD       RevisedUpdateRate;
 
     //состояние сервера
-    bool Connected;
+    bool mConnected;
 };
 
 }//namespace opc

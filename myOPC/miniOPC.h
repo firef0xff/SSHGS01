@@ -2,16 +2,16 @@
 #include "impl/types.h"
 #include <memory>
 #include <mutex>
+#include <thread>
 
 #ifdef WINDOWS
-#include "impl/work_mode.h"
+#include "impl/win_ole_mode.h"
 #else
 #include "impl/demo_mode.h"
 #endif
 
 namespace opc
 {
-
 template < class Impl, class NameRegistrator >
 class Server : public Impl
 {
@@ -23,9 +23,10 @@ public:
         {
             static std::mutex m;
             std::lock_guard< std::mutex > lock( m );
-            if ( !ptr || !ptr->Connected() )
+            while ( !ptr || !ptr->Connected() )
             {
                 ptr.reset( new Server() );
+                std::this_thread::sleep_for( std::chrono::milliseconds(100) );
             }
         }
 
@@ -47,7 +48,7 @@ struct SimaticNET
 };
 
 #ifdef WINDOWS
-typedef Server< WorkMode, SimaticNET > miniOPC;
+typedef Server< WinOleMode, SimaticNET > miniOPC;
 #else
 typedef Server< DemoMode, SimaticNET > miniOPC;
 #endif
