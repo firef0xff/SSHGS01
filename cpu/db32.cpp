@@ -148,12 +148,12 @@ DB32::DB32():
     OP7_End( mBoolData[69] ),  //167.6 Конец операции 7
     OP8_End( mBoolData[70] )  //167.7 Конец операции 8
 {
-    mGroupID = OPC->AddGroup( L"DB32", mAdresses, BOOL_COUNT + FLOAT_COUNT );
+    mGroupID = opc::miniOPC::Instance().AddGroup( L"DB32", mAdresses, BOOL_COUNT + FLOAT_COUNT );
 }
 
 void DB32::Read()
 {
-    OPCITEMSTATE* rez = OPC->Read( mGroupID );
+    OPCITEMSTATE* rez = opc::miniOPC::Instance().Read( mGroupID );
     if (!rez)
     {
         //ошибка подключения..
@@ -166,7 +166,7 @@ void DB32::Read()
         else
             mFloatData[ i - BOOL_COUNT ] = rez[i].vDataValue.fltVal;
     }
-    OPC->OpcMassFree( mGroupID, rez );
+    opc::miniOPC::Instance().OpcMassFree( mGroupID, rez );
 
 
     OP1_End = true;

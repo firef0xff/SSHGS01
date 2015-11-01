@@ -60,7 +60,11 @@ SOURCES += main.cpp\
     cpu/cpu_memory.cpp \
     cpu/db30.cpp \
     cpu/db32.cpp \
-    cpu/db31.cpp
+    cpu/db31.cpp \
+    myOPC/opc_i.c \
+    myOPC/impl/demo_mode.cpp \
+    myOPC/impl/work_mode.cpp \
+    myOPC/impl/cache/memory.cpp
 
 HEADERS  += mainwindow.h \
     test_case/test_case.h \
@@ -106,7 +110,15 @@ HEADERS  += mainwindow.h \
     cpu/data_block_base.h \
     cpu/db30.h \
     cpu/db32.h \
-    cpu/db31.h
+    cpu/db31.h \
+    myOPC/miniOPC.h \
+    myOPC/opc.h \
+    myOPC/impl/demo_mode.h \
+    myOPC/impl/types.h \
+    myOPC/impl/work_mode.h \
+    myOPC/impl/cache/cache.h \
+    myOPC/impl/cache/def.h \
+    myOPC/impl/cache/memory.h
 
 FORMS    += mainwindow.ui \
     hydro_title_info.ui \
