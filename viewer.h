@@ -17,11 +17,8 @@ public:
 
 private slots:
     void on_pushButton_clicked();
-
     void on_pushButton_2_clicked();
-
     void on_Save_clicked();
-
     void on_SavePDF_clicked();
 
 signals:
@@ -34,6 +31,11 @@ private:
     int mPageNo;
 
     QVector< QPixmap > mPages;
+    QPixmap header_logo;
+    QPixmap footer_logo;
+
 
     void DrawPage();
+
+    QRect PreparePage( QPainter& painter, QRect const& page_rect );
 };

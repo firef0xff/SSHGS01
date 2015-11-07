@@ -12,8 +12,7 @@ namespace hydro
 {
 
 PressureDurationFromExpenditure::PressureDurationFromExpenditure():
-    test::hydro::Test( "Проверка перепада давления и зависимость перепада давления от расхода", 4 ),
-    mRowsPrinted( 0 )
+    test::hydro::Test( "Проверка перепада давления и зависимость\nперепада давления от расхода", 4 )
 {}
 
 bool PressureDurationFromExpenditure::Run()
@@ -65,7 +64,7 @@ bool PressureDurationFromExpenditure::Run()
 
     OilTemp = mResults.Temperatura_masla;
 
-    return true;
+    return Success();
 }
 
 QJsonObject PressureDurationFromExpenditure::Serialise() const
@@ -103,13 +102,6 @@ bool PressureDurationFromExpenditure::Deserialize( QJsonObject const& obj )
     return true;
 }
 
-void PressureDurationFromExpenditure::ResetDrawLine()
-{
-    Test::ResetDrawLine();
-    mRowsPrinted = 0;
-    mTablePrinted = false;
-}
-
 bool PressureDurationFromExpenditure::Draw( QPainter& painter, QRect &free_rect ) const
 {
     test::hydro::Parameters *params = static_cast< test::hydro::Parameters * >( CURRENT_PARAMS );
@@ -117,41 +109,100 @@ bool PressureDurationFromExpenditure::Draw( QPainter& painter, QRect &free_rect 
         return true;
 
     QFont header_font = painter.font();
-    QFont text_font = painter.font();
+    header_font.setFamily("Arial");
+    QFont result_font = header_font;
+    result_font.setUnderline(true);
+    QFont text_font = header_font;
     header_font.setPointSize( 14 );
     text_font.setPointSize( 12 );
 
-    QFontMetrics head_metrix( header_font );
+
+    auto DrawRowCenter = [ &painter, &free_rect ](QRect const& place, QFont const& font, QColor const& color, QString const& text )
+    {
+        painter.save();
+        QFontMetrics metrix( font );
+        QPoint start_point( place.center().x() - metrix.width( text ) / 2, place.center().y()+metrix.height()/2);
+        painter.setFont( font );
+        painter.setPen( color );
+        painter.drawText( start_point, text );
+        painter.restore();
+    };
+    auto DrawRowLeft = [ &painter, &free_rect ](    QRect const& place,
+                                                    QFont const& font,
+                                                    QColor const& color1,
+                                                    QString const& label,
+                                                    QColor const& color2 = Qt::black,
+                                                    QString const& value = "")
+    {
+        painter.save();
+        QFontMetrics metrix( font );
+        QPoint start_point( place.left() , place.center().y()+metrix.height()/2 );
+        QPoint start_point2( place.left() + metrix.width(label), place.center().y() +metrix.height()/2);
+        painter.setFont( font );
+        painter.setPen( color1 );
+        painter.drawText( start_point, label );
+        painter.setPen( color2 );
+        painter.drawText( start_point2, value );
+        painter.restore();
+    };
+
+    QFontMetrics m(text_font);
+    int width = m.width("123456789012345678901234567890123456789012345");
+    char symbol = '.';
+    auto FillToSize = [ width, &m, symbol ]( QString text )
+    {
+        while( m.width( text + symbol ) < width )
+            text += symbol;
+        return text + " ";
+    };
+
 
     uint32_t num = 0;
     bool res = DrawLine( num, free_rect, header_font,
-    [ this, &painter, &head_metrix, &header_font ]( QRect const& rect )
+    [ this, &painter, &DrawRowCenter, &header_font ]( QRect const& rect )
     {
-        QString n = "Проверка перепада давления и зависимость";
-        QPoint start_point( rect.center().x() - head_metrix.width( n ) / 2, rect.bottom() );
-        painter.setFont( header_font );
-        painter.drawText( start_point, n );
-    });
+        DrawRowCenter( rect, header_font, Qt::black, "5.Проверка перепада давления и зависимость" );
+    }, 2 );
     res = DrawLine( num, free_rect, header_font,
-    [ this, &painter, &head_metrix, &header_font ]( QRect const& rect )
+    [ this, &painter, &DrawRowCenter, &header_font ]( QRect const& rect )
     {
-        QString n = "перепада давления от расхода";
-        QPoint start_point( rect.center().x() - head_metrix.width( n ) / 2, rect.bottom() );
-        painter.setFont( header_font );
-        painter.drawText( start_point, n );
-    });
+        DrawRowCenter( rect, header_font, Qt::black, "перепада давления от расхода" );
+    }, 2 );
 
-    painter.setFont( text_font );
     res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
-    res = DrawLine( num, free_rect, text_font, [ this, &painter ]( QRect const& rect )
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter, &DrawRowLeft, &text_font ]( QRect const& rect )
     {
-        QString s = "Средняя температура масла во время испытания: " + QString::number( OilTemp );
-        painter.drawText( rect, s );
-    });
+        QRect r(rect.left() + 76, rect.top(), rect.width() - 76, rect.height() );
+        DrawRowLeft( r, text_font, Qt::black, "Данное испытание предназначено для построения зависимости перепада" );
+    }, 1.5 );
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter, &DrawRowLeft, &text_font ]( QRect const& rect )
+    {
+        DrawRowLeft( rect, text_font, Qt::black, "давления от расхода. Для построения такого графика необходимо произвести" );
+    }, 1.5 );
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter, &DrawRowLeft, &text_font ]( QRect const& rect )
+    {
+        DrawRowLeft( rect, text_font, Qt::black, "измерение давления на входе и выходе гидроаппарата, как минимум при трех" );
+    }, 1.5 );
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter, &DrawRowLeft, &text_font ]( QRect const& rect )
+    {
+        DrawRowLeft( rect, text_font, Qt::black, "разных значениях расхода. " );
+    }, 1.5 );
 
-    painter.save();
-    QRectF rect( 0, 0, free_rect.width(), free_rect.height() );
-    painter.translate( free_rect.topLeft() );
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
+    {
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Температура масла во время испытаний, ˚С"), Qt::red, test::ToString(OilTemp) );
+    }, 2 );
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
+    {
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, сек"), Qt::red, "не реализовано" );
+    }, 2 );
+
 
     QString header = "<html>"
             "<head>"
@@ -163,20 +214,19 @@ bool PressureDurationFromExpenditure::Draw( QPainter& painter, QRect &free_rect 
              "</style>"
             "</head>"
             "<body>"
-            "<table width='100%' border='1' cellspacing='0' cellpadding='0'>"
+            "<table width='100%' border='1.5' cellspacing='-0.5' cellpadding='-0.5'>"
                "<tr>"
-                   "<th colspan='4'>Канал А</th>"
-                   "<th colspan='4'>Канал Б</th>"
+                   "<th rowspan='2'>Расход<br>л/мин</th>"
+                   "<th colspan='3'>Перепад P-->А</th>"
+                   "<th colspan='3'>Перепад P-->B</th>"
                "</tr>"
                "<tr>"
-                   "<th>Давление<br>БР5, бар<br></th>"
-                   "<th>Давление<br>БР3, бар<br></th>"
-                   "<th>Перепад<br>БР5 - бр3, бар<br></th>"
-                   "<th>Расход,<br>л/мин<br></th>"
-                   "<th>Давление<br>БР5, бар</th>"
-                   "<th>Давление<br>БР3, бар</th>"
-                   "<th>Перепад<br>БР5 - бр3, бар <br></th>"
-                   "<th>Расход,<br>л/мин</th>"
+                   "<th>Давление<br>в канале<br>P, бар</th>"
+                   "<th>Давление<br>в канале<br>A, бар</th>"
+                   "<th>Перепад,<br>бар</th>"
+                   "<th>Давление<br>в канале<br>P, бар</th>"
+                   "<th>Давление<br>в канале<br>B, бар</th>"
+                   "<th>Перепад,<br>бар</th>"
                "</tr>";
 
     QString footer = "</table>"
@@ -187,21 +237,19 @@ bool PressureDurationFromExpenditure::Draw( QPainter& painter, QRect &free_rect 
     auto MakeRow = [ &table, this, &params ]( int i ) -> QString
     {
         QString row =   "<tr>"
+                            "<td>" + QString::number( mData[i].first.Expenditure ) + "</td>"
                             "<td>" + QString::number( mData[i].first.BP5 ) + "</td>"
                             "<td>" + QString::number( mData[i].first.BP3 ) + "</td>"
-                            "<td>" + QString::number( mData[i].first.BP5_3 ) + "</td>"
-                            "<td>" + QString::number( mData[i].first.Expenditure ) + "</td>";
+                            "<td>" + QString::number( mData[i].first.BP5_3 ) + "</td>";
         if ( params->ReelCount() == 2 )
         {
                 row +=      "<td>" + QString::number( mData[i].second.BP5 ) + "</td>"
                             "<td>" + QString::number( mData[i].second.BP3 ) + "</td>"
-                            "<td>" + QString::number( mData[i].second.BP5_3 ) + "</td>"
-                            "<td>" + QString::number( mData[i].second.Expenditure ) + "</td>";
+                            "<td>" + QString::number( mData[i].second.BP5_3 ) + "</td>";
         }
         else
         {
             row +=          "<td></td>"
-                            "<td></td>"
                             "<td></td>"
                             "<td></td>";
         }
@@ -209,92 +257,91 @@ bool PressureDurationFromExpenditure::Draw( QPainter& painter, QRect &free_rect 
         return row;
     };
 
+    for ( auto i = 0; i < mData.size(); ++i )
+    {
+        table += MakeRow( i );
+    }
+    table += footer;
+
     QTextDocument doc;
     doc.setUndoRedoEnabled( false );
-    doc.setTextWidth( rect.width() );
+    doc.setTextWidth( free_rect.width() );
     doc.setUseDesignMetrics( true );
     doc.setDefaultTextOption ( QTextOption (Qt::AlignHCenter )  );
-
-    for ( auto i = mRowsPrinted; i < mData.size(); ++i )
-    {
-        QString tmp = table + MakeRow( i );
-        doc.setHtml( tmp + footer );
-
-        auto h = doc.documentLayout()->documentSize().height();
-
-        if ( h < rect.height() )
-        {
-            ++mRowsPrinted;
-            table = tmp;
-        }
-        else
-        {
-            res = false;
-            break;
-        }
-    }
-    if (!mTablePrinted)
-    {
-        doc.setHtml( table + footer );
-        QRect r;
-        AllocatePlace( r, doc.documentLayout()->documentSize().height(), free_rect );
-        doc.drawContents( &painter, rect);
-        if ( mRowsPrinted == mData.size() )
-            mTablePrinted = true;
-    }
-    painter.restore();
-
+    doc.setHtml( table );
+    auto h = doc.documentLayout()->documentSize().height();
 
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &text_font, &params ]( QRect const& rect )
+    [ this, &painter, &doc, &text_font ]( QRect const& rect )
     {
-        ff0x::GraphBuilder::LinePoints B5A;
-        ff0x::GraphBuilder::LinePoints B3A;
-        ff0x::GraphBuilder::LinePoints B35A;
+        painter.save();
+        QRectF r( 0, 0, rect.width(), rect.height() );
+        painter.translate( rect.topLeft() );
+        doc.drawContents( &painter, r);
+        painter.restore();
+    }, 1, h );
 
-        ff0x::GraphBuilder::LinePoints B5B;
-        ff0x::GraphBuilder::LinePoints B3B;
+    res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
+    QFontMetrics metrix( text_font );
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter, &text_font, &params, &DrawRowCenter, &metrix ]( QRect const& rect )
+    {
+        painter.save();
+        ff0x::GraphBuilder::LinePoints B35A;
         ff0x::GraphBuilder::LinePoints B35B;
 
         foreach ( Channels const& item, mData )
         {
-            B5A.push_back( QPointF( item.first.Expenditure, item.first.BP5 ) );
-            B3A.push_back( QPointF( item.first.Expenditure, item.first.BP3 ) );
             B35A.push_back( QPointF( item.first.Expenditure, item.first.BP5_3 ) );
-
-            B5B.push_back( QPointF( item.second.Expenditure, item.second.BP5 ) );
-            B3B.push_back( QPointF( item.second.Expenditure, item.second.BP3 ) );
             B35B.push_back( QPointF( item.second.Expenditure, item.second.BP5_3 ) );
         }
 
         QFont f = text_font;
         f.setPointSize( 6 );
-        ff0x::GraphBuilder builder ( rect.width(), rect.height(), f );
-        ff0x::GraphBuilder::GraphDataLine lines;
-        lines.push_back( ff0x::GraphBuilder::Line(B5A, Qt::blue) );
-        lines.push_back( ff0x::GraphBuilder::Line(B3A, Qt::darkBlue) );
-        lines.push_back( ff0x::GraphBuilder::Line(B35A, Qt::gray) );
+        int w = (rect.height() - metrix.height())*0.98;
+        int h = (rect.height() - metrix.height())*0.98;
+        QRect p1(rect.left(), rect.top(), w, h );
+        QRect p2(rect.right() - w, rect.top(), w, h );
+        QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
+        QRect p2t(p2.left(), p2.bottom(), p2.width(), metrix.height());;
+        ff0x::GraphBuilder builder ( w, h, f );
+        ff0x::GraphBuilder::GraphDataLine lines1;
+        ff0x::GraphBuilder::GraphDataLine lines2;
+        lines1.push_back( ff0x::GraphBuilder::Line(B35A, Qt::blue) );
         if (params->ReelCount() == 2 )
         {
-            lines.push_back( ff0x::GraphBuilder::Line(B5B, Qt::red) );
-            lines.push_back( ff0x::GraphBuilder::Line(B3B, Qt::darkRed) );
-            lines.push_back( ff0x::GraphBuilder::Line(B35B, Qt::magenta) );
+            lines2.push_back( ff0x::GraphBuilder::Line(B35B, Qt::blue) );
         }
-        painter.drawPixmap( rect, builder.Draw( lines, 690, 360, 50, 50, "x", "y", true ) );
-    }, free_rect.width()/4*3  );
+        painter.drawPixmap( p1, builder.Draw( lines1, 690, 360, 50, 50, "x", "y", true ) );
+        painter.drawPixmap( p2, builder.Draw( lines2, 690, 360, 50, 50, "x", "y", true ) );
 
 
+        DrawRowCenter( p1t, text_font, Qt::black, "График: «перепад Р-->A»" );
+        DrawRowCenter( p2t, text_font, Qt::black, "График: «перепад Р-->B»" );
 
+        painter.restore();
+    }, 1, free_rect.width()/2 + metrix.height()  );
+
+
+    res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter, &DrawRowLeft, &result_font ]( QRect const& rect )
+    {
+        DrawRowLeft( rect, result_font, Qt::black, "РЕЗУЛЬТАТ:" );
+    }, 3 );
+
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter, &DrawRowLeft, &text_font ]( QRect const& rect )
+    {
+        DrawRowLeft( rect, text_font, Qt::black, "Испытание ", Qt::red, QString("нет критерия успеха теста!!!") + (Success()? "пройдено" : "не пройдено") );
+    }, 2 );
     return res;
-//    QPixmap pix( r.width(), r.height() );
-//    QRect pix_r( 0,0, r.width(), r.height() );
-//    QPainter pix_painter( &pix );
-//    pix_painter.fillRect( pix_r, Qt::white );
-//    pix_painter.setFont( text_font );
-//    doc.drawContents( &pix_painter, pix_r);
-//    painter.drawPixmap( r, pix );
 }
 
+bool PressureDurationFromExpenditure::Success() const
+{
+    return true;
+}
 
 QJsonObject PressureDurationFromExpenditure::Data::Serialise() const
 {

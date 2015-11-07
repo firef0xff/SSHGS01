@@ -3,6 +3,8 @@
 #include <mutex>
 #include "../tests.h"
 #include "../../cpu/cpu_memory.h"
+#include <QTextDocument>
+#include <QAbstractTextDocumentLayout>
 
 namespace test
 {
@@ -298,6 +300,248 @@ void Parameters::WriteToController() const
     mem.TypeD_close_b = static_cast< int >(mOffDynamic_2) >= 0 ? static_cast< int >(mOffDynamic_2) : 0;
 
     mem.Write();
+}
+
+bool Parameters::Draw(QPainter &painter, QRect &free_rect ) const
+{
+    QFont title_font = painter.font();
+    title_font.setFamily("Arial");
+    title_font.setPointSize(18);
+
+    QFont level_font = title_font;
+    level_font.setPointSize( 14 );
+
+    QFont text_font = title_font;
+    text_font.setPointSize( 12 );
+
+    auto DrawRowCenter = [ &painter, &free_rect ]( QFont font, QColor color, QString text, double spase = 1 )
+    {
+        painter.save();
+        QFontMetrics metrix( font );
+        QRect place;
+        AllocatePlace( place, metrix.height()*spase ,free_rect );
+        QPoint start_point( place.center().x() - metrix.width( text ) / 2, place.center().y() +metrix.height()/2);
+        painter.setFont( font );
+        painter.setPen( color );
+        painter.drawText( start_point, text );
+        painter.restore();
+    };
+
+    auto DrawRowLeft = [ &painter, &free_rect ]( QFont font, QColor color1, QColor color2,  QString label, QString value, double spase = 1 )
+    {
+        painter.save();
+        QFontMetrics metrix( font );
+        QRect place;
+        AllocatePlace( place, metrix.height()*spase, free_rect );
+        QPoint start_point( place.left() , place.center().y()+metrix.height()/2 );
+        QPoint start_point2( place.left() + metrix.width(label), place.center().y() +metrix.height()/2);
+        painter.setFont( font );
+        painter.setPen( color1 );
+        painter.drawText( start_point, label );
+        painter.setPen( color2 );
+        painter.drawText( start_point2, value );
+        painter.restore();
+    };
+
+    auto DrawLastRow = [ &painter, &free_rect ]( QFont font, QColor color, QString text, double spase = 1 )
+    {
+        painter.save();
+        QFontMetrics metrix( font );
+        QRect place;
+        QRect draw_place;
+        while ( AllocatePlace( place, metrix.height()*spase ,free_rect ) )
+        {
+            draw_place = place;
+        }
+        QPoint start_point( place.left() , place.center().y()+metrix.height()/2 );
+        painter.setFont( font );
+        painter.setPen( color );
+        painter.drawText( start_point, text );
+        painter.restore();
+    };
+
+    QFontMetrics m(text_font);
+    int width = m.width("12345678901234567890123456789012345678901234567890");
+    char symbol = '.';
+    auto FillToSize = [ width, &m, symbol ]( QString text )
+    {
+        while( m.width( text + symbol ) < width )
+            text += symbol;
+        return text + " ";
+    };
+
+
+    double row_skale = 2;
+
+    DrawRowCenter( title_font, Qt::black, "ОТЧЕТ", row_skale );
+    DrawRowCenter( level_font, Qt::black, "Испытания дискретного аппарата", row_skale );
+    DrawRowCenter( level_font, Qt::red, mGsType, row_skale );
+
+    DrawRowLeft( text_font, Qt::black, Qt::red, "Идентификационный номер: ", mSerNo, row_skale);
+    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Максимальное давление, бар"), test::ToString( mMaxWorkPressure ), row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Максимальный расход, л/мин"), test::ToString( mMaxExpenditure ), row_skale );
+    if ( mControlType == CT_ELECTRIC )
+    {
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Максимальное давление управления*, бар"), "-", row_skale );
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Минимальное давление управления*, бар"), "-", row_skale );
+    }
+    else
+    {
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Максимальное давление управления*, бар"), test::ToString(mMaxControlPressure), row_skale );
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Минимальное давление управления*, бар"), test::ToString(mMinControlPressure), row_skale );
+    }
+    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Напряжение пинания, В"), "="+test::ToString( mVoltage )+" (~220)", row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Тонкость фильтрации рабочей жидкости, мкм"), test::ToString(3), row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Тип масла"), "Лукой Гейзер HLP32", row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Вязкость масла (при 40˚С), сСт"), test::ToString(32), row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Эталонный аппарат"), "не реализовано", row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Класс чистоты жидкости (по ISO 4406)"), "17/15/12", row_skale );
+
+    DrawRowCenter( text_font, Qt::black, "", row_skale );
+
+    DrawRowLeft( text_font, Qt::black, Qt::red, "Испытания проводил: ", "не реализовано", row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::red, "Дата проведения испытаний: ", "не реализовано", row_skale );
+
+    DrawLastRow( text_font, Qt::black, "*Для распределителей с электрогидравлическим управлением");
+    return true;
+}
+
+bool Parameters::DrawResults(QPainter &painter, QRect &free_rect ) const
+{
+    QFont title_font = painter.font();
+    title_font.setFamily("Arial");
+    title_font.setPointSize(14);
+
+    QFont text_font = title_font;
+    text_font.setPointSize( 12 );
+
+    auto DrawRowCenter = [ &painter, &free_rect ]( QFont font, QColor color, QString text, double spase = 1 )
+    {
+        painter.save();
+        QFontMetrics metrix( font );
+        QRect place;
+        AllocatePlace( place, metrix.height()*spase ,free_rect );
+        QPoint start_point( place.center().x() - metrix.width( text ) / 2, place.center().y() +metrix.height()/2);
+        painter.setFont( font );
+        painter.setPen( color );
+        painter.drawText( start_point, text );
+        painter.restore();
+    };
+    auto DrawRowCenter2 = [ &painter, &free_rect ]( QFont font, QColor color, QString text, QColor color2, QString text2, double spase = 1 )
+    {
+        painter.save();
+        QFontMetrics metrix( font );
+        QRect place;
+        AllocatePlace( place, metrix.height()*spase ,free_rect );
+        QPoint start_point( place.center().x() - metrix.width( text ) / 2, place.center().y() +metrix.height()/2);
+        QPoint start_point2( start_point.x() + metrix.width(text), start_point.y() );
+        painter.setFont( font );
+        painter.setPen( color );
+        painter.drawText( start_point, text );
+        painter.setPen( color2 );
+        painter.drawText( start_point2, text2 );
+        painter.restore();
+    };
+
+    auto DrawRowLeft = [ &painter, &free_rect ]( QFont font, QColor color1, QString label, double spase = 1 )
+    {
+        painter.save();
+        QFontMetrics metrix( font );
+        QRect place;
+        AllocatePlace( place, metrix.height()*spase, free_rect );
+        QPoint start_point( place.left() , place.center().y()+metrix.height()/2 );
+        painter.setFont( font );
+        painter.setPen( color1 );
+        painter.drawText( start_point, label );
+        painter.restore();
+    };
+
+    auto DrawRowLeft3 = [ &painter, &free_rect ](    QFont const& font,
+                                                    QColor const& color1,
+                                                    QString const& label,
+                                                    QColor const& color2 = Qt::black,
+                                                    QString const& value = "",
+                                                    QColor const& color3 = Qt::black,
+                                                    QString const& value2 = "",
+                                                    double spase = 1)
+    {
+        painter.save();
+        QFontMetrics metrix( font );
+        QRect place;
+        AllocatePlace( place, metrix.height()*spase, free_rect );
+        QPoint start_point( place.left() , place.center().y()+metrix.height()/2 );
+        QPoint start_point2( start_point.x() + metrix.width(label), place.center().y() +metrix.height()/2);
+        QPoint start_point3( start_point2.x() + metrix.width(value), place.center().y() +metrix.height()/2);
+        painter.setFont( font );
+        painter.setPen( color1 );
+        painter.drawText( start_point, label );
+        painter.setPen( color2 );
+        painter.drawText( start_point2, value );
+        painter.setPen( color3 );
+        painter.drawText( start_point3, value2 );
+        painter.restore();
+    };
+
+    DrawRowCenter( title_font, Qt::black, "", 7 );
+    DrawRowCenter( title_font, Qt::black, "Результаты испытаний", 1 );
+    DrawRowCenter2( title_font, Qt::black, "дискретного аппарата ", Qt::red, mGsType, 2 );
+
+    QString header = "<html>"
+            "<head>"
+              "<meta charset='utf-8'>"
+              "<style type='text/css'>"
+                   "td { text-align: center;}"
+                   "th { font-weight: normal; padding: 2px;}"
+                   "table {border-collapse: collapse; border-style: solid; vertical-align:middle;}"
+             "</style>"
+            "</head>"
+            "<body>"
+            "<table width='100%' border='1.5' cellspacing='-0.5' cellpadding='-0.5'>"
+               "<tr>"
+                   "<th> Номер </th>"
+                   "<th></th>"
+                   "<th> Работоспособность </th>"
+               "</tr>";
+
+    QString footer = "</table>"
+            "</body>"
+            "</html>";
+
+    bool sucsess = true;
+
+    QString row;
+    for ( auto it =  mTestCase.begin(), end = mTestCase.end(); it != end; ++it )
+    {
+        Test* ptr = *it;
+        row +=  "<tr>"
+                   "<td>"+test::ToString( ptr->Number() )+"</td>"
+                   "<td>"+ QString(ptr->Name()).replace("\n","<br>") +"</td>"
+                   "<td style='font-size:28pt; color: \"red\"; font-weight:bold;'>"+ (ptr->Success() ? QString("+"):QString("-")) +"</td>"
+                "</tr>";
+        sucsess &= ptr->Success();
+    }
+
+    QTextDocument doc;
+    doc.setUndoRedoEnabled( false );
+    doc.setTextWidth( free_rect.width() );
+    doc.setUseDesignMetrics( true );
+    doc.setDefaultTextOption ( QTextOption (Qt::AlignHCenter )  );
+    doc.setHtml( header + row + footer );
+    auto h = doc.documentLayout()->documentSize().height();
+
+    QRect place;
+    AllocatePlace( place, h ,free_rect );
+    QRectF r( 0, 0, place.width(), place.height() );
+    painter.save();
+    painter.translate( place.topLeft() );
+    doc.drawContents( &painter, r);
+    painter.restore();
+
+    DrawRowLeft( text_font, Qt::black, "ИТОГ:", 3 );
+    DrawRowLeft3( text_font, Qt::black, "Гидроаппарат ",
+                            Qt::red, mGsType + (sucsess? " годен": " не годен"),
+                            Qt::black, " к эксплуатации", 1 );
+    return true;
 }
 
 bool Parameters::GsType ( QString const& val )

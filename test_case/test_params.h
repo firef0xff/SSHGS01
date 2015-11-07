@@ -89,7 +89,9 @@ public:
 
     virtual void WriteToController() const = 0;
 
-    bool Draw(QPainter &painter, QRect &free_rect ) const;
+    virtual bool Draw(QPainter &painter, QRect &free_rect ) const;
+    virtual bool DrawResults(QPainter &/*painter*/, QRect &/*free_rect*/ ) const
+    { return true; }
     void Reset();
 
     void TestCase ( TestsList const& test_case);

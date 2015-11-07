@@ -21,6 +21,9 @@ public:
 
     void WriteToController() const;
 
+    bool Draw(QPainter &painter, QRect &free_rect ) const;
+    bool DrawResults(QPainter &painter, QRect &free_rect ) const;
+
     bool GsType ( QString const& val );
     QString const& GsType () const;
 

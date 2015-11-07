@@ -17,6 +17,8 @@ public:
     bool Deserialize( QJsonObject const& obj );
 
     bool Draw(QPainter &painter, QRect &free_rect ) const;
+
+    bool Success() const;
 private:
     struct ReelResult
     {

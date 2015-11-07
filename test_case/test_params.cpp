@@ -338,6 +338,9 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect ) const
     text_font.setPointSize( 12 );
     painter.setFont( text_font );
 
+    QRect r( 0, 0, free_rect.width(), free_rect.height() );
+    painter.save();
+    painter.translate( free_rect.topLeft() );
     QTextDocument doc;
     doc.setUndoRedoEnabled( false );
     doc.setTextWidth( free_rect.width() );
@@ -345,7 +348,9 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect ) const
     doc.setDefaultTextOption ( QTextOption (Qt::AlignLeft )  );
     doc.setPlainText( ToString() );
 
-    doc.drawContents( &painter, free_rect );
+    doc.drawContents( &painter, r );
+
+    painter.restore();
     return true;
 }
 

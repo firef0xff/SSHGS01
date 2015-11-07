@@ -1,6 +1,8 @@
 #include "functional_test.h"
 #include <QJsonObject>
 #include "../test_params_hydro.h"
+#include <QTextDocument>
+#include <QAbstractTextDocumentLayout>
 
 namespace test
 {
@@ -34,7 +36,7 @@ bool FunctionalTest::Run()
 
     OilTemp = mResults.Temperatura_masla;
 
-    return false;
+    return Success();
 }
 
 QJsonObject FunctionalTest::Serialise() const
@@ -61,130 +63,189 @@ bool FunctionalTest::Draw( QPainter& painter, QRect &free_rect ) const
         return true;
 
     QFont header_font = painter.font();
-    QFont text_font = painter.font();
+    header_font.setFamily("Arial");
+    QFont result_font = header_font;
+    result_font.setUnderline(true);
+    QFont text_font = header_font;
     header_font.setPointSize( 14 );
     text_font.setPointSize( 12 );
 
-    QFontMetrics head_metrix( header_font );
+
+    auto DrawRowCenter = [ &painter, &free_rect ](QRect const& place, QFont const& font, QColor const& color, QString const& text )
+    {
+        painter.save();
+        QFontMetrics metrix( font );
+        QPoint start_point( place.center().x() - metrix.width( text ) / 2, place.center().y() +metrix.height()/2);
+        painter.setFont( font );
+        painter.setPen( color );
+        painter.drawText( start_point, text );
+        painter.restore();
+    };
+    auto DrawRowLeft = [ &painter, &free_rect ](    QRect const& place,
+                                                    QFont const& font,
+                                                    QColor const& color1,
+                                                    QString const& label,
+                                                    QColor const& color2 = Qt::black,
+                                                    QString const& value = "")
+    {
+        painter.save();
+        QFontMetrics metrix( font );
+        QPoint start_point( place.left() , place.center().y()+metrix.height()/2 );
+        QPoint start_point2( place.left() + metrix.width(label), place.center().y() +metrix.height()/2);
+        painter.setFont( font );
+        painter.setPen( color1 );
+        painter.drawText( start_point, label );
+        painter.setPen( color2 );
+        painter.drawText( start_point2, value );
+        painter.restore();
+    };
+
+    QFontMetrics m(text_font);
+    int width = m.width("123456789012345678901234567890123456789012345");
+    char symbol = '.';
+    auto FillToSize = [ width, &m, symbol ]( QString text )
+    {
+        while( m.width( text + symbol ) < width )
+            text += symbol;
+        return text + " ";
+    };
+
 
     uint32_t num = 0;
     bool res = DrawLine( num, free_rect, header_font,
-    [ this, &painter, &head_metrix, &header_font ]( QRect const& rect )
-    {
-        QPoint start_point( rect.center().x() - head_metrix.width( mName ) / 2, rect.bottom() );
-        painter.setFont( header_font );
-        painter.drawText( start_point, mName );
-    });
+    [ this, &painter, &DrawRowCenter, &header_font ]( QRect const& rect )
+    {        
+        DrawRowCenter( rect, header_font, Qt::black, "1."+mName );
+    }, 1.5 );
 
-    painter.setFont( text_font );
     res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
-    res = DrawLine( num, free_rect, text_font, [ this, &painter ]( QRect const& rect )
-    {
-        QString s = "Средняя температура масла во время испытания: " + QString::number( OilTemp );
-        painter.drawText( rect, s );
-    });
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter ]( QRect const& rect )
+    [ this, &painter, &DrawRowLeft, &text_font ]( QRect const& rect )
     {
-        painter.drawText( rect, "Катушка А:" );
-    });
+        QRect r(rect.left() + 76, rect.top(), rect.width() - 76, rect.height() );
+        DrawRowLeft( r, text_font, Qt::black, "В данном испытании происходит проверка прохода рабочей жидкости в" );
+    }, 1.5 );
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter ]( QRect const& rect )
+    [ this, &painter, &DrawRowLeft, &text_font ]( QRect const& rect )
     {
-        QString s = "Функционирование при минимальном давлении: ";
-        s += ReelA.work_on_min_pressure ? "Да" : "Нет";
-        painter.drawText( rect, s );
-    });
+        DrawRowLeft( rect, text_font, Qt::black, "линиях, предусмотренных схемой гидроаппаратуры и характеристики катушек" );
+    }, 1.5 );
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter ]( QRect const& rect )
+    [ this, &painter, &DrawRowLeft, &text_font ]( QRect const& rect )
     {
-        QString s = "Функционирование при максимальном давлении: ";
-        s += ReelA.work_on_max_pressure ? "Да" : "Нет";
-        painter.drawText( rect, s );
-    });
+        DrawRowLeft( rect, text_font, Qt::black, "управления." );
+    }, 1.5 );
+
 
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter ]( QRect const& rect )
+    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
     {
-        QString s = "Ток I, А: ";
-        s += QString::number( ReelA.I );
-        painter.drawText( rect, s );
-    });
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении испытаний, бар"), Qt::red, "что писать?" );
+    }, 2 );
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter ]( QRect const& rect )
+    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
     {
-        QString s = "Напряжение U, В: ";
-        s += QString::number( ReelA.U );
-        painter.drawText( rect, s );
-    });
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Расход при проведении испытаний, л/мин" ), Qt::black, "что писать?" );
+    }, 2 );
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter ]( QRect const& rect )
+    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
     {
-        QString s = "Сопротивление R, Ом: ";
-        s += QString::number( ReelA.R );
-        painter.drawText( rect, s );
-    });
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Температура масла во время испытаний, ˚С"), Qt::red, test::ToString(OilTemp) );
+    }, 2 );
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter ]( QRect const& rect )
+    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
     {
-        QString s = "Мощьность P, Ват: ";
-        s += QString::number( ReelA.P );
-        painter.drawText( rect, s );
-    });
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, сек"), Qt::red, "не реализовано" );
+    }, 2 );
 
-    if ( params->ReelCount() == 2 )
+    res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter, &DrawRowLeft, &result_font ]( QRect const& rect )
     {
-        res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
-        res = DrawLine( num, free_rect, text_font,
-        [ this, &painter ]( QRect const& rect )
-        {
-            painter.drawText( rect, "Катушка Б:" );
-        });
-        res = DrawLine( num, free_rect, text_font,
-        [ this, &painter ]( QRect const& rect )
-        {
-            QString s = "Функционирование при минимальном давлении: ";
-            s += ReelB.work_on_min_pressure ? "Да" : "Нет";
-            painter.drawText( rect, s );
-        });
-        res = DrawLine( num, free_rect, text_font,
-        [ this, &painter ]( QRect const& rect )
-        {
-            QString s = "Функционирование при максимальном давлении: ";
-            s += ReelB.work_on_max_pressure ? "Да" : "Нет";
-            painter.drawText( rect, s );
-        });
+        DrawRowLeft( rect, result_font, Qt::black, "РЕЗУЛЬТАТ:" );
+    }, 1.5 );
 
-        res = DrawLine( num, free_rect, text_font,
-        [ this, &painter ]( QRect const& rect )
-        {
-            QString s = "Ток I, А: ";
-            s += QString::number( ReelB.I );
-            painter.drawText( rect, s );
-        });
-        res = DrawLine( num, free_rect, text_font,
-        [ this, &painter ]( QRect const& rect )
-        {
-            QString s = "Напряжение U, В: ";
-            s += QString::number( ReelB.U );
-            painter.drawText( rect, s );
-        });
-        res = DrawLine( num, free_rect, text_font,
-        [ this, &painter ]( QRect const& rect )
-        {
-            QString s = "Сопротивление R, Ом: ";
-            s += QString::number( ReelB.R );
-            painter.drawText( rect, s );
-        });
-        res = DrawLine( num, free_rect, text_font,
-        [ this, &painter ]( QRect const& rect )
-        {
-            QString s = "Мощьность P, Ват: ";
-            s += QString::number( ReelB.P );
-            painter.drawText( rect, s );
-        });
+
+    QString header = "<html>"
+            "<head>"
+              "<meta charset='utf-8'>"
+              "<style type='text/css'>"
+                   "td { text-align: center;}"
+                   "th { font-weight: normal;}"
+                   "table {border-collapse: collapse; border-style: solid;}"
+             "</style>"
+            "</head>"
+            "<body>"
+            "<table width='100%' border='1.5' cellspacing='-0.5' cellpadding='-0.5'>"
+               "<tr>"
+                   "<th> </th>"
+                   "<th>Сила тока, А</th>"
+                   "<th>Напряжение, В</th>"
+                   "<th>Сопротивление, Ом</th>"
+                   "<th>Мощность, Вт</th>"
+               "</tr>";
+
+    QString footer = "</table>"
+            "</body>"
+            "</html>";
+
+    QString row =   "<tr>"
+                        "<td>Катушка a</td>"
+                        "<td>" + test::ToString(ReelA.I) + "</td>"
+                        "<td>" + test::ToString(ReelA.U) + "</td>"
+                        "<td>" + test::ToString(ReelA.R) + "</td>"
+                        "<td>" + test::ToString(ReelA.P) + "</td>"
+                    "</tr>";
+    if (params->ReelCount() == 2)
+    {
+        row +=  "<tr>"
+                    "<td>Катушка b</td>"
+                    "<td>" + test::ToString(ReelB.I) + "</td>"
+                    "<td>" + test::ToString(ReelB.U) + "</td>"
+                    "<td>" + test::ToString(ReelB.R) + "</td>"
+                    "<td>" + test::ToString(ReelB.P) + "</td>"
+                "</tr>";
     }
 
+    QTextDocument doc;
+    doc.setUndoRedoEnabled( false );
+    doc.setTextWidth( free_rect.width() );
+    doc.setUseDesignMetrics( true );
+    doc.setDefaultTextOption ( QTextOption (Qt::AlignHCenter )  );
+    doc.setHtml( header + row + footer );
+    auto h = doc.documentLayout()->documentSize().height();
+
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter, &doc, &text_font ]( QRect const& rect )
+    {
+        painter.save();
+        QRectF r( 0, 0, rect.width(), rect.height() );
+        painter.translate( rect.topLeft() );
+        doc.drawContents( &painter, r);
+        painter.restore();
+    }, 1, h );
+
+
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter, &DrawRowLeft, &text_font ]( QRect const& rect )
+    {
+        DrawRowLeft( rect, text_font, Qt::black, "Функционирование клапана ", Qt::red, Success()? "верно" : "не верно" );
+    }, 3 );
+
+    return res;
+}
+
+bool FunctionalTest::Success() const
+{
+    test::hydro::Parameters *params = static_cast< test::hydro::Parameters * >( CURRENT_PARAMS );
+    if ( !params )
+        return false;
+
+    bool res = ReelA.work_on_max_pressure && ReelA.work_on_min_pressure;
+    if (params->ReelCount() == 2 )
+    {
+        res &= ReelB.work_on_max_pressure && ReelB.work_on_min_pressure;
+    }
     return res;
 }
 

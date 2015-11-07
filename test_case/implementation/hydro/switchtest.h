@@ -17,17 +17,15 @@ public:
     bool Deserialize( QJsonObject const& obj );
 
     bool Draw(QPainter &painter, QRect &free_rect ) const;
+    bool Success() const;
+
 private:
     //Респределитель (не)переключается при допустимом пониженном напряжении управления
-    bool ResultMinMinA;
-    bool ResultMinMaxA;
-    bool ResultMinMinB;
-    bool ResultMinMaxB;
 
-    bool ResultMaxMinA;
-    bool ResultMaxMaxA;
-    bool ResultMaxMinB;
-    bool ResultMaxMaxB;
+    bool ResultMinA;
+    bool ResultMaxA;
+    bool ResultMinB;
+    bool ResultMaxB;
 };
 
 

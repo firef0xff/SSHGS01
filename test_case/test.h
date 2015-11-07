@@ -9,6 +9,8 @@
 namespace test
 {
 
+bool AllocatePlace(QRect& place, int height, QRect& source );
+
 class TestCase;
 class Test
 {
@@ -31,7 +33,9 @@ public:
     // true если больше нечего выводить ecли false то предоставленного куска мало
     virtual bool Draw( QPainter& painter, QRect &free_rect ) const = 0;
 
-    virtual void ResetDrawLine();
+    virtual void ResetDrawLine();  
+
+    virtual bool Success() const;
 
 protected:
     bool IsStopped();
@@ -39,10 +43,8 @@ protected:
     LaunchFunction Launcher;
     QString mName;
 
-    bool AllocatePlace(QRect& place, int height, QRect& source ) const;
-
     typedef std::function< void ( QRect const& ) > DrawLineHandler;
-    bool DrawLine ( uint32_t &num, QRect& source, QFont font, DrawLineHandler do_draw, int custom_height = 0 ) const;
+    bool DrawLine ( uint32_t &num, QRect& source, QFont font, DrawLineHandler do_draw, double space = 1, int custom_height = 0 ) const;
 
 protected:
     uint8_t mId;

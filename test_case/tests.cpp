@@ -94,8 +94,8 @@ namespace test_case
 static FunctionalTest t1;
 static OutsideHermTest t2;
 static InsideHermTest t3;
-static PressureDurationFromExpenditure t4;
-static MaxExpenditureTest t5;
+static MaxExpenditureTest t4;
+static PressureDurationFromExpenditure t5;
 static SwitchTest t6;
 static PressureRange t7;
 static ActivationTime t8;

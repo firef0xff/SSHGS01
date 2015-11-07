@@ -218,7 +218,7 @@ bool InsideHermTest::Draw( QPainter& painter, QRect &free_rect ) const
         ff0x::GraphBuilder::GraphDataLine lines;
         lines.push_back( ff0x::GraphBuilder::Line( data, Qt::blue ) );
         painter.drawPixmap( rect, builder.Draw( lines, max_signal * 1.25, max_Leak * 1.25, 0.05, 0.5, "л/мин", params->ControlSignal() == ST_10_10_V ? "В" : "мА", true ) );
-    }, free_rect.width()/4*3  );
+    }, 1, free_rect.width()/4*3  );
 
     free_rect.setHeight( 0 );
 

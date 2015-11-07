@@ -17,8 +17,8 @@ public:
     QJsonObject Serialise() const;
     bool Deserialize( QJsonObject const& obj );
 
-    void ResetDrawLine();
     bool Draw(QPainter &painter, QRect &free_rect ) const;
+    bool Success() const;
 private:
     struct Data
     {
@@ -39,9 +39,6 @@ private:
     typedef std::pair<Data, Data> Channels;
 
     QVector< Channels > mData;
-
-    mutable int mRowsPrinted;
-    mutable bool mTablePrinted;
 
     //Зависимость перепада давления от расхода
     /// |--------------------------------------------|--------------------------------------------|

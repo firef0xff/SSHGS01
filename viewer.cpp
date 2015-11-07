@@ -9,24 +9,24 @@
 Viewer::Viewer(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Viewer),
-    mPageNo( 0 )
+    mPageNo( 0 ),
+    header_logo( "./img/logo1.png", "PNG" ),
+    footer_logo( "./img/logo2.png", "PNG" )
 {
     ui->setupUi(this);
 
-    QPixmap pixmap( 680, 1085 );
+    QPixmap pixmap( 793, 1123 );
     QPainter painter(&pixmap);
-    QRect rc(0,0,680,1085);
-    painter.fillRect( rc, Qt::white );
+    QRect rc = PreparePage( painter, QRect(0,0,793,1123) );
 
     if ( test::CURRENT_PARAMS )
     {
         test::CURRENT_PARAMS->Draw( painter, rc );
         painter.end();
         mPages.push_back( pixmap );
-        pixmap = QPixmap( 680, 1085 );
-        rc = QRect( 0, 0, 680, 1085 );
+        pixmap = QPixmap( 793, 1123 );
         painter.begin( &pixmap );
-        painter.fillRect( rc, Qt::white );
+        rc = PreparePage( painter, QRect(0,0,793,1123) );
 
         foreach (test::Test* test, test::CURRENT_PARAMS->TestCase())
         {
@@ -40,10 +40,9 @@ Viewer::Viewer(QWidget *parent) :
                 {
                     painter.end();
                     mPages.push_back( pixmap );
-                    pixmap = QPixmap( 680, 1085 );
-                    rc = QRect( 0, 0, 680, 1085 );
+                    pixmap = QPixmap( 793, 1123 );
                     painter.begin( &pixmap );
-                    painter.fillRect( rc, Qt::white );
+                    rc = PreparePage( painter, QRect(0,0,793,1123) );
                 }
                 painter.end();
                 painter.begin( &pixmap );
@@ -51,6 +50,12 @@ Viewer::Viewer(QWidget *parent) :
                 rc.setTop( rc.top() + m.height() );
             }
         }
+        painter.end();
+        mPages.push_back( pixmap );
+        pixmap = QPixmap( 793, 1123 );
+        painter.begin( &pixmap );
+        rc = PreparePage( painter, QRect(0,0,793,1123) );
+        test::CURRENT_PARAMS->DrawResults( painter, rc );
     }
     painter.end();
     mPages.push_back( pixmap );
@@ -119,20 +124,27 @@ void Viewer::on_SavePDF_clicked()
         printer.setOutputFormat(QPrinter::PdfFormat);
         printer.setOrientation( QPrinter::Portrait );
         printer.setPaperSize( QPrinter::A4 );
-        printer.setPageMargins( 20, 5, 10, 5, QPrinter::Millimeter );
+        printer.setPageMargins( 20, 20, 5, 10, QPrinter::Millimeter );
         printer.setOutputFileName(file_name);
 
         QPainter painter(&printer);
-        QRect rc( 0, 0, printer.pageRect().width(), printer.pageRect().height() );
+        QPoint start (0,0);
+        start -= printer.pageRect().topLeft();
+        painter.translate( start );
+        QRect rc = PreparePage( painter, printer.paperRect() );
 
         /*for ( int i = 0 ; i < mPages.size(); ++i )
         {
             painter.drawPixmap( rc, mPages[i] );
             if ( i != mPages.size() - 1 )
                 printer.newPage();
-        }*/
+        }*/        
         if ( test::CURRENT_PARAMS )
         {
+            test::CURRENT_PARAMS->Draw( painter, rc );
+            printer.newPage();
+            rc = PreparePage( painter, QRect(0,0,793,1123) );
+
             foreach (test::Test* test, test::CURRENT_PARAMS->TestCase())
             {
                 test->ResetDrawLine();
@@ -144,14 +156,17 @@ void Viewer::on_SavePDF_clicked()
                     if ( !draw )
                     {
                         printer.newPage();
-                        rc = QRect( 0, 0, printer.pageRect().width(), printer.pageRect().height() );
+                        rc = PreparePage( painter, printer.paperRect() );
                     }
-                    painter.resetMatrix();
-                    painter.resetTransform();
+//                    painter.resetMatrix();
+//                    painter.resetTransform();
                     QFontMetrics m (painter.font());
                     rc.setTop( rc.top() + m.height() );
                 }
             }
+            printer.newPage();
+            rc = PreparePage( painter, printer.paperRect() );
+            test::CURRENT_PARAMS->DrawResults( painter, rc );
         }
         painter.end();
     }
@@ -159,12 +174,47 @@ void Viewer::on_SavePDF_clicked()
 
 void Viewer::DrawPage()
 {
-    QPixmap pixmap( 793, 1123 );
-    QPainter painter(&pixmap);
-    QRect rc(0,0,793,1123);
-    QRect rc2(76,19,680,1085);
-    painter.fillRect( rc, Qt::white );
-    painter.drawPixmap( rc2, mPages[mPageNo] );
-    painter.end();
-    ui->mPicture->setPixmap( pixmap );
+    ui->mPicture->setPixmap( mPages[mPageNo] );
+}
+
+QRect Viewer::PreparePage( QPainter& painter, QRect const& page_rect )
+{
+    painter.fillRect( page_rect, Qt::white );
+    QRect work_area( 76, 76, 698, 1010 );// 698 x 1010 19 = 5мм
+    QRect print_area( work_area.left() + 38, work_area.top() + 10, work_area.width() - ( 38 + 19 ), work_area.height() - 19 );
+
+    QRect header_rect( 0, 0, 150, 30 );
+    QRect footer_rect( 0, 0, 200, 30 );
+    header_rect.setHeight( header_logo.height() * header_rect.width() / header_logo.width() );
+    footer_rect.setHeight( footer_logo.height() * footer_rect.width() / footer_logo.width() );
+
+    painter.save();
+    QPoint header_point( work_area.right() - header_rect.width(), work_area.top() - header_rect.height() - 2 );
+    painter.translate( header_point );
+    painter.drawPixmap( header_rect, header_logo );
+    painter.restore();
+
+    painter.save();
+    QPoint footer_point( work_area.right() - footer_rect.width(), work_area.bottom() + 4 );
+    painter.translate( footer_point );
+    painter.drawPixmap( footer_rect, footer_logo );
+    painter.restore();
+
+    painter.save();
+    QFont font = painter.font();
+    font.setFamily("Calibri");
+    font.setPointSize( 11 );
+    painter.setFont( font );
+    QFontMetrics m( font );
+    QPoint footer_text( work_area.left(), work_area.bottom() + m.height() + 2 );
+
+    painter.drawText( footer_text, "Испытание производилось на стенде испытательном ООО «ПНЕВМАКС»" );
+    painter.restore();
+
+    painter.drawRect( work_area );
+
+//    painter.drawRect( print_area );
+//    painter.translate( print_area.topLeft() );
+
+    return print_area;
 }
