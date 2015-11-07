@@ -304,16 +304,16 @@ bool PressureDurationFromExpenditure::Draw( QPainter& painter, QRect &free_rect 
         QRect p2(rect.right() - w, rect.top(), w, h );
         QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
         QRect p2t(p2.left(), p2.bottom(), p2.width(), metrix.height());;
-        ff0x::GraphBuilder builder ( w, h, f );
+        ff0x::GraphBuilder builder ( w, h, ff0x::GraphBuilder::PlusPlus ,f );
         ff0x::GraphBuilder::GraphDataLine lines1;
         ff0x::GraphBuilder::GraphDataLine lines2;
-        lines1.push_back( ff0x::GraphBuilder::Line(B35A, Qt::blue) );
+        lines1.push_back( ff0x::GraphBuilder::Line(B35A, ff0x::GraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
         if (params->ReelCount() == 2 )
         {
-            lines2.push_back( ff0x::GraphBuilder::Line(B35B, Qt::blue) );
+            lines2.push_back( ff0x::GraphBuilder::Line(B35B, ff0x::GraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
         }
-        painter.drawPixmap( p1, builder.Draw( lines1, 690, 360, 50, 50, "x", "y", true ) );
-        painter.drawPixmap( p2, builder.Draw( lines2, 690, 360, 50, 50, "x", "y", true ) );
+        painter.drawPixmap( p1, builder.Draw( lines1, 690, 360, 50, 50, "", "", true ) );
+        painter.drawPixmap( p2, builder.Draw( lines2, 690, 360, 50, 50, "", "", true ) );
 
 
         DrawRowCenter( p1t, text_font, Qt::black, "График: «перепад Р-->A»" );

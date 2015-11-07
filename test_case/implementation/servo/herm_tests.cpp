@@ -214,9 +214,9 @@ bool InsideHermTest::Draw( QPainter& painter, QRect &free_rect ) const
             data.push_back( QPointF( item.Signal, item.Leak ) );
         }
 
-        ff0x::GraphBuilder builder ( 1024, 768, text_font );
+        ff0x::GraphBuilder builder ( 1024, 768, ff0x::GraphBuilder::PlusPlus, text_font );
         ff0x::GraphBuilder::GraphDataLine lines;
-        lines.push_back( ff0x::GraphBuilder::Line( data, Qt::blue ) );
+        lines.push_back( ff0x::GraphBuilder::Line( data, ff0x::GraphBuilder::LabelInfo( "", Qt::blue ) ) );
         painter.drawPixmap( rect, builder.Draw( lines, max_signal * 1.25, max_Leak * 1.25, 0.05, 0.5, "л/мин", params->ControlSignal() == ST_10_10_V ? "В" : "мА", true ) );
     }, 1, free_rect.width()/4*3  );
 

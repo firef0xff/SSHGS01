@@ -104,10 +104,10 @@ bool ExpeditureFromPressureDuration::Draw( QPainter& painter, QRect &free_rect )
             data.push_back( QPointF( item.Expenditure, item.Duration ) );
         }
 
-        ff0x::GraphBuilder builder ( 1024, 768, text_font );
+        ff0x::GraphBuilder builder ( 1024, 768, ff0x::GraphBuilder::PlusPlus, text_font );
         ff0x::GraphBuilder::GraphDataLine lines;
-        lines.push_back( ff0x::GraphBuilder::Line(data, Qt::blue) );
-        painter.drawPixmap( rect, builder.Draw( lines, max_signal * 1.25, max_Leak * 1.25, 0.05, 0.5, "x", "y", true ) );
+        lines.push_back( ff0x::GraphBuilder::Line(data, ff0x::GraphBuilder::LabelInfo( "", Qt::blue ) ) );
+        painter.drawPixmap( rect, builder.Draw( lines, max_signal * 1.25, max_Leak * 1.25, 0.05, 0.5, "", "", true ) );
     }, 1, free_rect.width()/4*3  );
 
     res = DrawLine( num, free_rect, text_font,
@@ -138,10 +138,10 @@ bool ExpeditureFromPressureDuration::Draw( QPainter& painter, QRect &free_rect )
             data.push_back( QPointF( item.Expenditure, item.Duration ) );
         }
 
-        ff0x::GraphBuilder builder ( 1024, 768, text_font );
+        ff0x::GraphBuilder builder ( 1024, 768, ff0x::GraphBuilder::PlusPlus, text_font );
         ff0x::GraphBuilder::GraphDataLine lines;
-        lines.push_back( ff0x::GraphBuilder::Line(data, Qt::blue) );
-        painter.drawPixmap( rect, builder.Draw( lines, max_signal * 1.25, max_Leak * 1.25, 0.05, 0.5, "x", "y", true ) );
+        lines.push_back( ff0x::GraphBuilder::Line(data, ff0x::GraphBuilder::LabelInfo( "", Qt::blue ) ) );
+        painter.drawPixmap( rect, builder.Draw( lines, max_signal * 1.25, max_Leak * 1.25, 0.05, 0.5, "", "", true ) );
     }, 1, free_rect.width()/4*3  );
 
     free_rect.setHeight( 0 );
