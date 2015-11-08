@@ -8,6 +8,7 @@
 #include "settings/settings.h"
 #include "viewer.h"
 #include "QDateTime"
+#include "test_case/test_params.h"
 
 TestRunner::TestRunner(QWidget *parent) :
     QWidget(parent),
@@ -59,7 +60,7 @@ void TestRunner::on_Start_clicked()
     test::CURRENT_PARAMS->Date( QDateTime::currentDateTime() );
     test::CURRENT_PARAMS->User( app::Settings::Instance().User() );
 
-    mWorker.reset( new Worker());
+    mWorker.reset( new Worker(ui->Etalone->checkState() == Qt::Checked ) );
     QObject::connect( mWorker.get(), &Worker::to_log, ui->LogBox, &QTextBrowser::append );
     QObject::connect( mWorker.get(), &Worker::progress, this, &TestRunner::on_progress );
     QObject::connect( mWorker.get(), &Worker::started, this, &TestRunner::on_test_start );
@@ -132,8 +133,9 @@ void TestRunner::exec( Functor func )
         func();
 }
 
-Worker::Worker():
-    mStopSignal(false)
+Worker::Worker( bool etalone ):
+    mStopSignal(false),
+    mEtalone(etalone)
 {}
 void Worker::run()
 {
@@ -153,6 +155,11 @@ void Worker::run()
         else
             LogIt( "Тест не пройден" );
         LogIt( QString() );
+    }
+
+    if (mEtalone)
+    {
+        test::SaveToEtalone( *test::CURRENT_PARAMS );
     }
 }
 void Worker::stop()

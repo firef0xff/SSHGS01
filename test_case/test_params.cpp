@@ -379,6 +379,10 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect ) const
     return true;
 }
 
+QString Parameters::ModelId() const
+{
+    return "";
+}
 
 CommonParameters::CommonParameters():
     mSerNo(""),
@@ -480,6 +484,10 @@ bool CommonParameters::Deserialize(const QJsonObject &obj )
     return res;
 }
 
+QString CommonParameters::ModelId() const
+{
+    return mSerNo;
+}
 
 void ParamsToFile( QString fname, Parameters const& params )
 {
@@ -521,21 +529,7 @@ void DataToFile( QString fname, Parameters const& params )
     QFile f( fname );
     f.open(QIODevice::WriteOnly);
     QJsonDocument doc;
-
-    QJsonObject data;
-    data.insert( "Params", params.Serialise() );
-
-    QJsonArray tests_data;
-    foreach ( Test *d, params.TestCase() )
-    {
-        QJsonObject obj;
-        obj.insert("id", d->ID() );
-        obj.insert("data", d->Serialise() );
-
-        tests_data.push_back( obj );
-    }
-    data.insert( "Results", tests_data );
-    doc.setObject( data );
+    doc.setObject( GetTestData( params ) );
     f.write( doc.toJson() );
 
     f.close();
@@ -588,6 +582,52 @@ bool DataFromFile( QString fname )
     if ( ret )
         test::CURRENT_PARAMS = ret;
     return ret != nullptr;
+}
+
+QJsonObject GetTestData( Parameters const& params )
+{
+    QJsonObject data;
+    data.insert( "Params", params.Serialise() );
+
+    QJsonArray tests_data;
+    foreach ( Test *d, params.TestCase() )
+    {
+        QJsonObject obj;
+        obj.insert("id", d->ID() );
+        obj.insert("data", d->Serialise() );
+
+        tests_data.push_back( obj );
+    }
+    data.insert( "Results", tests_data );
+    return data;
+}
+
+void SaveToEtalone( const Parameters &params )
+{
+    auto obj = ReadFromEtalone();
+    obj.insert( params.ModelId(), GetTestData(params) );
+    QFile f( "models.json" );
+    f.open(QIODevice::WriteOnly);
+    QJsonDocument doc;
+    doc.setObject( obj );
+    f.write( doc.toJson() );
+
+    f.close();
+}
+
+QJsonObject ReadFromEtalone()
+{
+    QFile f( "models.json" );
+    if ( f.exists() )
+    {
+        f.open(QIODevice::ReadOnly);
+        auto doc = QJsonDocument::fromJson( f.readAll() );
+        f.close();
+
+        return doc.object();
+    }
+
+    return QJsonObject();
 }
 
 }//namespace test

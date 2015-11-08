@@ -93,6 +93,8 @@ public:
     virtual bool Draw(QPainter &painter, QRect &free_rect ) const;
     virtual bool DrawResults(QPainter &/*painter*/, QRect &/*free_rect*/ ) const
     { return true; }
+
+    virtual QString ModelId() const;
     void Reset();
 
     void TestCase ( TestsList const& test_case);
@@ -121,6 +123,8 @@ public:
 
     virtual QJsonObject Serialise() const;
     virtual bool Deserialize( QJsonObject const& obj );
+
+    QString ModelId() const;
 
     void Reset();
 
@@ -163,5 +167,10 @@ Parameters* ParamsFromFile( QString fname );
 
 void DataToFile( QString fname, Parameters const& params );
 bool DataFromFile( QString fname );
+
+QJsonObject GetTestData(const Parameters &params);
+
+void SaveToEtalone( const Parameters &params );
+QJsonObject ReadFromEtalone();
 
 }//namespace test

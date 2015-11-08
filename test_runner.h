@@ -56,11 +56,12 @@ class Worker : public QThread
 {
     Q_OBJECT
 public:
-    Worker();
+    Worker( bool etalone );
     void run();
     void stop();
 private:
     mutable bool mStopSignal;
+    bool mEtalone;
     void LogIt( QString const& str );
     void LaunchIt( Functor  func );
 signals:

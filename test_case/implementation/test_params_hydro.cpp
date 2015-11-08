@@ -433,7 +433,7 @@ bool Parameters::DrawResults(QPainter &painter, QRect &free_rect ) const
         QFontMetrics metrix( font );
         QRect place;
         AllocatePlace( place, metrix.height()*spase ,free_rect );
-        QPoint start_point( place.center().x() - metrix.width( text ) / 2, place.center().y() +metrix.height()/2);
+        QPoint start_point( place.center().x() - ( metrix.width( text ) + metrix.width( text2 ) ) / 2, place.center().y() +metrix.height()/2);
         QPoint start_point2( start_point.x() + metrix.width(text), start_point.y() );
         painter.setFont( font );
         painter.setPen( color );
@@ -542,6 +542,11 @@ bool Parameters::DrawResults(QPainter &painter, QRect &free_rect ) const
                             Qt::red, mGsType + (sucsess? " годен": " не годен"),
                             Qt::black, " к эксплуатации", 1 );
     return true;
+}
+
+QString Parameters::ModelId() const
+{
+    return mGsType;
 }
 
 bool Parameters::GsType ( QString const& val )
