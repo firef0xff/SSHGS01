@@ -290,6 +290,32 @@ bool PressureDurationFromExpenditure::Draw( QPainter& painter, QRect &free_rect 
         ff0x::GraphBuilder::LinePoints B35A;
         ff0x::GraphBuilder::LinePoints B35B;
 
+        ff0x::GraphBuilder::LinePoints B35Ae;
+        ff0x::GraphBuilder::LinePoints B35Be;
+
+
+        //поиск данных теста
+        foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
+        {
+            auto obj = val.toObject();
+            if ( obj.value("id").toInt() == mId )
+            {
+                QJsonArray a = obj.value("data").toObject().value("Data").toArray();
+                foreach ( QJsonValue const& v, a )
+                {
+                    QJsonObject o = v.toObject();
+                    Data d1;
+                    Data d2;
+                    if ( d1.Deserialize( o.value( "ChannelA" ).toObject() ) &&
+                         d2.Deserialize( o.value( "ChannelB" ).toObject() ) )
+                    {
+                        B35Ae.push_back( QPointF( d1.Expenditure, d1.BP5_3 ) );
+                        B35Be.push_back( QPointF( d2.Expenditure, d2.BP5_3 ) );
+                    }
+                }
+            }
+        }
+
         foreach ( Channels const& item, mData )
         {
             B35A.push_back( QPointF( item.first.Expenditure, item.first.BP5_3 ) );
@@ -308,9 +334,13 @@ bool PressureDurationFromExpenditure::Draw( QPainter& painter, QRect &free_rect 
         ff0x::GraphBuilder::GraphDataLine lines1;
         ff0x::GraphBuilder::GraphDataLine lines2;
         lines1.push_back( ff0x::GraphBuilder::Line(B35A, ff0x::GraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
+        if ( !B35Ae.empty() )
+            lines1.push_back( ff0x::GraphBuilder::Line(B35Ae, ff0x::GraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
         if (params->ReelCount() == 2 )
         {
             lines2.push_back( ff0x::GraphBuilder::Line(B35B, ff0x::GraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
+            if ( !B35Be.empty() )
+                lines2.push_back( ff0x::GraphBuilder::Line(B35Be, ff0x::GraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
         }
         painter.drawPixmap( p1, builder.Draw( lines1, 690, 360, 50, 50, "", "", true ) );
         painter.drawPixmap( p2, builder.Draw( lines2, 690, 360, 50, 50, "", "", true ) );

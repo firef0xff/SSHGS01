@@ -375,7 +375,7 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect ) const
 
     DrawRowCenter( title_font, Qt::black, "ОТЧЕТ", row_skale );
     DrawRowCenter( level_font, Qt::black, "Испытания дискретного аппарата", row_skale );
-    DrawRowCenter( level_font, Qt::red, mGsType, row_skale );
+    DrawRowCenter( level_font, Qt::red, mSerNo, row_skale );
 
     DrawRowLeft( text_font, Qt::black, Qt::red, "Идентификационный номер: ", mSerNo, row_skale);
     DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Максимальное давление, бар"), test::ToString( mMaxWorkPressure ), row_skale );
@@ -394,7 +394,10 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect ) const
     DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Тонкость фильтрации рабочей жидкости, мкм"), test::ToString(3), row_skale );
     DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Тип масла"), "Лукой Гейзер HLP32", row_skale );
     DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Вязкость масла (при 40˚С), сСт"), test::ToString(32), row_skale );
-    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Эталонный аппарат"), "не реализовано", row_skale );
+
+    QString model_ser_no = test::ReadFromEtalone().value(ModelId()).toObject().value("Params").toObject().value("SerNo").toString();
+
+    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Эталонный аппарат"), model_ser_no, row_skale );
     DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Класс чистоты жидкости (по ISO 4406)"), "17/15/12", row_skale );
 
     DrawRowCenter( text_font, Qt::black, "", row_skale );
