@@ -399,8 +399,8 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect ) const
 
     DrawRowCenter( text_font, Qt::black, "", row_skale );
 
-    DrawRowLeft( text_font, Qt::black, Qt::red, "Испытания проводил: ", "не реализовано", row_skale );
-    DrawRowLeft( text_font, Qt::black, Qt::red, "Дата проведения испытаний: ", "не реализовано", row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::red, "Испытания проводил: ", mUser, row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::red, "Дата проведения испытаний: ", mDate.toString("dd MMMM yyyy г. hh:mm"), row_skale );
 
     DrawLastRow( text_font, Qt::black, "*Для распределителей с электрогидравлическим управлением");
     return true;

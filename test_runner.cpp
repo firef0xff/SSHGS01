@@ -7,6 +7,7 @@
 #include <QFileDialog>
 #include "settings/settings.h"
 #include "viewer.h"
+#include "QDateTime"
 
 TestRunner::TestRunner(QWidget *parent) :
     QWidget(parent),
@@ -55,6 +56,8 @@ void TestRunner::on_Start_clicked()
         ui->LogBox->append( test::CURRENT_PARAMS->ToString() );
 
     test::ParamsToFile( "last_test_settings.isx", *test::CURRENT_PARAMS );
+    test::CURRENT_PARAMS->Date( QDateTime::currentDateTime() );
+    test::CURRENT_PARAMS->User( app::Settings::Instance().User() );
 
     mWorker.reset( new Worker());
     QObject::connect( mWorker.get(), &Worker::to_log, ui->LogBox, &QTextBrowser::append );

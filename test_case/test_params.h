@@ -3,6 +3,7 @@
 #include "devices/device.h"
 #include "test_case.h"
 #include <QPainter>
+#include <QDateTime>
 
 namespace test
 {
@@ -97,8 +98,16 @@ public:
     void TestCase ( TestsList const& test_case);
     TestsList const& TestCase () const;
 
+    void Date( QDateTime const& date );
+    QDateTime const& Date();
+
+    void User( QString const& user );
+    QString const& User();
+
 protected:
     TestsList mTestCase;        //набор тестов для выполнения
+    QDateTime mDate;            //дата проведения испытаний
+    QString   mUser;            //испытатель.
 };
 
 class CommonParameters :public Parameters

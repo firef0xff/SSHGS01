@@ -26,6 +26,8 @@ public:
     void Save();
     void Load();
 
+    void User( QString u );
+    QString User() const;
 private:
     Settings();
     Settings( Settings const& ) = delete;

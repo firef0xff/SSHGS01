@@ -1,9 +1,9 @@
 #include "mainwindow.h"
-#include "hydro_title_info.h"
 #include <QApplication>
 #include <QFileInfo>
 #include <QDir>
 #include "settings/settings.h"
+#include "login.h"
 
 
 int main(int argc, char *argv[])
@@ -15,7 +15,8 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     MainWindow w;
-    w.showMaximized();
+    Login l ( &w );
+    l.show();
 
     return a.exec();
 }

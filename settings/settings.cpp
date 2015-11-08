@@ -132,6 +132,16 @@ QString Settings::MainPupm() const
     return mDocument.object().value("MainPupm").toString();
 }
 
+void Settings::User( QString u )
+{
+    auto obj = mDocument.object();
+    obj.insert( "User", u );
+    mDocument.setObject( obj );
+}
+QString Settings::User() const
+{
+    return mDocument.object().value("User").toString();
+}
 
 void Settings::Save()
 {

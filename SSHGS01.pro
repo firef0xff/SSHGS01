@@ -64,7 +64,8 @@ SOURCES += main.cpp\
     myOPC/opc_i.c \
     myOPC/impl/demo_mode.cpp \
     myOPC/impl/cache/memory.cpp \
-    myOPC/impl/win_ole_mode.cpp
+    myOPC/impl/win_ole_mode.cpp \
+    login.cpp
 
 HEADERS  += mainwindow.h \
     test_case/test_case.h \
@@ -118,7 +119,8 @@ HEADERS  += mainwindow.h \
     myOPC/impl/cache/cache.h \
     myOPC/impl/cache/def.h \
     myOPC/impl/cache/memory.h \
-    myOPC/impl/win_ole_mode.h
+    myOPC/impl/win_ole_mode.h \
+    login.h
 
 FORMS    += mainwindow.ui \
     hydro_title_info.ui \
@@ -130,7 +132,8 @@ FORMS    += mainwindow.ui \
     devices/device_collection_wnd.ui \
     control_panels_title_info.ui \
     hydro_cilinder_title_info.ui \
-    viewer.ui
+    viewer.ui \
+    login.ui
 
 OTHER_FILES += devices/*.json\
     тз/*\

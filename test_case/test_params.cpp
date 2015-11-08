@@ -284,6 +284,8 @@ Parameters::Parameters():
 void Parameters::Reset()
 {
     mTestCase.clear();
+    mUser.clear();
+    mDate = QDateTime();
 }
 
 void Parameters::TestCase ( TestsList const& test_case)
@@ -295,6 +297,24 @@ Parameters::TestsList const& Parameters::TestCase () const
     return mTestCase;
 }
 
+void Parameters::Date( QDateTime const& data )
+{
+    mDate = data;
+}
+QDateTime const& Parameters::Date()
+{
+    return mDate;
+}
+
+void Parameters::User( QString const& user )
+{
+    mUser = user;
+}
+QString const& Parameters::User()
+{
+    return mUser;
+}
+
 QJsonObject Parameters::Serialise() const
 {
     QJsonObject obj;
@@ -304,6 +324,8 @@ QJsonObject Parameters::Serialise() const
         tests.push_back( ptr->ID() );
     }
     obj.insert("TestCase", tests);
+    obj.insert("Date", mDate.toString(Qt::ISODate));
+    obj.insert("User", mUser);
     return obj;
 }
 bool Parameters::Deserialize(const QJsonObject &obj )
@@ -328,6 +350,9 @@ bool Parameters::Deserialize(const QJsonObject &obj )
         }
         res *= find;
     }
+
+    mDate = QDateTime::fromString( obj.value("Date").toString(), Qt::ISODate );
+    mUser = obj.value("User").toString();
 
     return res;
 }
