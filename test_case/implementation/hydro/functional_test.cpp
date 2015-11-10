@@ -41,10 +41,9 @@ bool FunctionalTest::Run()
 
 QJsonObject FunctionalTest::Serialise() const
 {
-    QJsonObject obj;
+    QJsonObject obj = Test::Serialise();
     obj.insert("ReelA", ReelA.Serialise() );
     obj.insert("ReelB", ReelB.Serialise() );
-    obj.insert("OilTemp", OilTemp );
 
     return obj;
 }
@@ -52,7 +51,7 @@ bool FunctionalTest::Deserialize( QJsonObject const& obj )
 {
     bool res = ReelA.Deserialize( obj.value("ReelA").toObject() );
     res *= ReelB.Deserialize( obj.value("ReelB").toObject() );
-    OilTemp = obj.value("OilTemp").toDouble();
+    Test::Deserialize( obj );
     return res;
 }
 
@@ -138,9 +137,9 @@ bool FunctionalTest::Draw( QPainter& painter, QRect &free_rect ) const
 
 
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
+    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font, params ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении испытаний, бар"), Qt::red, "что писать?" );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении испытаний, бар"), Qt::red, test::ToString(params->MinTestPressure()) );
     }, 2 );
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
@@ -155,7 +154,7 @@ bool FunctionalTest::Draw( QPainter& painter, QRect &free_rect ) const
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, сек"), Qt::red, "не реализовано" );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, сек"), Qt::red, test::ToString( TestingTime ) );
     }, 2 );
 
     res = DrawLine( num, free_rect, text_font, []( QRect const& ){});

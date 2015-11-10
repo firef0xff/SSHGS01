@@ -33,15 +33,14 @@ bool OutsideHermTest::Run()
 
 QJsonObject OutsideHermTest::Serialise() const
 {
-    QJsonObject obj;
+    QJsonObject obj = Test::Serialise();
     obj.insert("LeakFounded", LeakFounded );
-    obj.insert("OilTemp", OilTemp );
     return obj;
 }
 bool OutsideHermTest::Deserialize( QJsonObject const& obj )
 {
     LeakFounded = obj.value("LeakFounded").toBool();
-    OilTemp = obj.value("OilTemp").toDouble();
+    Test::Deserialize( obj );
     return true;
 }
 
@@ -122,9 +121,9 @@ bool OutsideHermTest::Draw( QPainter& painter, QRect &free_rect ) const
 
 
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
+    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font, params ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении испытаний, бар"), Qt::red, "что писать?" );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении испытаний, бар"), Qt::red, test::ToString(params->HermPressure()) );
     }, 2 );
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
@@ -134,7 +133,7 @@ bool OutsideHermTest::Draw( QPainter& painter, QRect &free_rect ) const
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, сек"), Qt::red, "не реализовано" );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, сек"), Qt::red, test::ToString( TestingTime ) );
     }, 2 );
 
 
@@ -193,11 +192,10 @@ bool InsideHermTest::Run()
 }
 QJsonObject InsideHermTest::Serialise() const
 {
-    QJsonObject obj;
+    QJsonObject obj = Test::Serialise();
     obj.insert("Seconds", Seconds );
     obj.insert("Leak", Leak );
     obj.insert("Result", Result );
-    obj.insert("OilTemp", OilTemp );
     return obj;
 }
 bool InsideHermTest::Deserialize( QJsonObject const& obj )
@@ -205,7 +203,7 @@ bool InsideHermTest::Deserialize( QJsonObject const& obj )
     Seconds = obj.value("Seconds").toInt();
     Leak = obj.value("Leak").toDouble();
     Result = obj.value("Result").toBool();
-    OilTemp = obj.value("OilTemp").toDouble();
+    Test::Deserialize( obj );
     return true;
 }
 
@@ -286,9 +284,9 @@ bool InsideHermTest::Draw( QPainter& painter, QRect &free_rect ) const
 
 
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
+    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font, params ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении испытаний, бар"), Qt::red, "что писать?" );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении испытаний, бар"), Qt::red, test::ToString(params->MaxWorkPressure()) );
     }, 2 );
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
@@ -298,7 +296,7 @@ bool InsideHermTest::Draw( QPainter& painter, QRect &free_rect ) const
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, сек"), Qt::red, "не реализовано" );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, сек"), Qt::red, test::ToString( TestingTime ) );
     }, 2 );
 
 

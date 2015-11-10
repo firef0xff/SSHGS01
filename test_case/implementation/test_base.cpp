@@ -1,7 +1,7 @@
 #include "test_base.h"
 #include "../tests.h"
 #include "../../settings/settings.h"
-
+#include <thread>
 namespace test
 {
 
@@ -24,6 +24,7 @@ void Test::Start()
     mCommand.Stop_Oper = false;
     mCommand.Nasos_M2 = app::Settings::Instance().MainPupm() == "M2";
     mCommand.Write();
+    StartTime.start();
 }
 void Test::Wait( bool& work, bool& done)
 {
@@ -31,10 +32,26 @@ void Test::Wait( bool& work, bool& done)
     done = false;
     while( !done )
     {
+        std::this_thread::sleep_for( std::chrono::seconds(1) );
         mResults.Read();
     }
+    TestingTime = StartTime.elapsed()/1000;
 }
 
+QJsonObject Test::Serialise() const
+{
+    QJsonObject obj;
+    obj.insert("OilTemp", OilTemp );
+    obj.insert("TestingTime", TestingTime );
+
+    return obj;
+}
+bool Test::Deserialize( QJsonObject const& obj )
+{
+    OilTemp = obj.value("OilTemp").toDouble();
+    TestingTime = obj.value("TestingTime").toInt();
+    return true;
+}
 }//namespace hydro
 
 namespace servo

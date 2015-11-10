@@ -37,12 +37,11 @@ bool SwitchTest::Run()
 
 QJsonObject SwitchTest::Serialise() const
 {
-    QJsonObject obj;
+    QJsonObject obj = Test::Serialise();
     obj.insert("ResultMinA", ResultMinA );
     obj.insert("ResultMaxA", ResultMaxA );
     obj.insert("ResultMinB", ResultMinB );
     obj.insert("ResultMaxB", ResultMaxB );
-    obj.insert("OilTemp", OilTemp );
 
     return obj;
 
@@ -53,7 +52,7 @@ bool SwitchTest::Deserialize( QJsonObject const& obj )
     ResultMaxA = obj.value("ResultMaxA").toBool();
     ResultMinB = obj.value("ResultMinB").toBool();
     ResultMaxB = obj.value("ResultMaxB").toBool();
-    OilTemp = obj.value("OilTemp").toDouble();
+    Test::Deserialize( obj );
     return true;
 }
 
@@ -167,7 +166,7 @@ bool SwitchTest::Draw( QPainter& painter, QRect &free_rect ) const
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, сек"), Qt::red, "не реализовано" );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, сек"), Qt::red, test::ToString( TestingTime ) );
     }, 2 );
 
     res = DrawLine( num, free_rect, text_font, []( QRect const& ){});

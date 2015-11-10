@@ -33,10 +33,9 @@ bool MaxExpenditureTest::Run()
 
 QJsonObject MaxExpenditureTest::Serialise() const
 {
-    QJsonObject obj;
+    QJsonObject obj = Test::Serialise();
     obj.insert("ResultA", ResultA );
     obj.insert("ResultB", ResultB );
-    obj.insert("OilTemp", OilTemp );
 
     return obj;
 }
@@ -44,7 +43,7 @@ bool MaxExpenditureTest::Deserialize( QJsonObject const& obj )
 {
     ResultA = obj.value("ResultA").toBool();
     ResultB = obj.value("ResultB").toBool();
-    OilTemp = obj.value("OilTemp").toDouble();
+    Test::Deserialize( obj );
     return true;
 }
 
@@ -142,7 +141,7 @@ bool MaxExpenditureTest::Draw( QPainter& painter, QRect &free_rect ) const
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, сек"), Qt::red, "не реализовано" );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, сек"), Qt::red, test::ToString( TestingTime ) );
     }, 2 );
 
 

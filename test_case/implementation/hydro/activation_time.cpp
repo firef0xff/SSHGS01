@@ -48,10 +48,9 @@ bool ActivationTime::Run()
 
 QJsonObject ActivationTime::Serialise() const
 {
-    QJsonObject obj;
+    QJsonObject obj = Test::Serialise();
     obj.insert("ReelA", ReelA.Serialise() );
-    obj.insert("ReelB", ReelB.Serialise() );
-    obj.insert("OilTemp", OilTemp );
+    obj.insert("ReelB", ReelB.Serialise() );    
 
     return obj;
 }
@@ -59,7 +58,7 @@ bool ActivationTime::Deserialize( QJsonObject const& obj )
 {
     ReelA.Deserialize(obj.value("ReelA").toObject());
     ReelB.Deserialize(obj.value("ReelB").toObject());
-    OilTemp = obj.value("OilTemp").toDouble();
+    Test::Deserialize( obj );
     return true;
 }
 
@@ -173,7 +172,7 @@ bool ActivationTime::Draw( QPainter& painter, QRect &free_rect ) const
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, сек"), Qt::red, "не реализовано" );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, сек"), Qt::red, test::ToString( TestingTime ) );
     }, 2 );
 
     res = DrawLine( num, free_rect, text_font, []( QRect const& ){});

@@ -1,5 +1,6 @@
 #pragma once
 #include "../test.h"
+#include <QTime>
 
 #include "../../cpu/db31.h"
 #include "../../cpu/db32.h"
@@ -21,7 +22,14 @@ protected:
     cpu::data::DB32 mResults;
 
     double OilTemp;
+    int TestingTime;
+
+    QJsonObject Serialise() const;
+    bool Deserialize( QJsonObject const& obj );
+
+
 private:
+    QTime StartTime;
     static uint8_t mTestsCount;
 };
 

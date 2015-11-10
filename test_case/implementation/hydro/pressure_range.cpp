@@ -49,7 +49,7 @@ bool PressureRange::Run()
 
 QJsonObject PressureRange::Serialise() const
 {
-    QJsonObject obj;
+    QJsonObject obj = Test::Serialise();
     obj.insert("ResultMinMinA", ResultMinMinA );
     obj.insert("ResultMinMaxA", ResultMinMaxA );
     obj.insert("ResultMinMinB", ResultMinMinB );
@@ -60,7 +60,6 @@ QJsonObject PressureRange::Serialise() const
     obj.insert("ResultMaxMinB", ResultMaxMinB );
     obj.insert("ResultMaxMaxB", ResultMaxMaxB );
 
-    obj.insert("OilTemp", OilTemp );
     return obj;
 }
 bool PressureRange::Deserialize( QJsonObject const& obj )
@@ -75,7 +74,7 @@ bool PressureRange::Deserialize( QJsonObject const& obj )
     ResultMaxMinB = obj.value("ResultMaxMinB").toBool();
     ResultMaxMaxB = obj.value("ResultMaxMaxB").toBool();
 
-    OilTemp = obj.value("OilTemp").toDouble();
+    Test::Deserialize( obj );
     return true;
 }
 
@@ -174,7 +173,7 @@ bool PressureRange::Draw( QPainter& painter, QRect &free_rect ) const
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, сек"), Qt::red, "не реализовано" );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, сек"), Qt::red, test::ToString( TestingTime ) );
     }, 2 );
 
     res = DrawLine( num, free_rect, text_font, []( QRect const& ){});

@@ -69,7 +69,7 @@ bool PressureDurationFromExpenditure::Run()
 
 QJsonObject PressureDurationFromExpenditure::Serialise() const
 {
-    QJsonObject obj;
+    QJsonObject obj = Test::Serialise();
 
     QJsonArray a;
 
@@ -82,13 +82,12 @@ QJsonObject PressureDurationFromExpenditure::Serialise() const
         a.insert( a.end(), o );
     }
     obj.insert("Data", a );
-    obj.insert("OilTemp", OilTemp );
 
     return obj;
 }
 bool PressureDurationFromExpenditure::Deserialize( QJsonObject const& obj )
 {
-    OilTemp = obj.value("OilTemp").toDouble();
+    Test::Deserialize( obj );
     QJsonArray a = obj.value("Data").toArray();
     foreach ( QJsonValue const& v, a )
     {
@@ -200,7 +199,7 @@ bool PressureDurationFromExpenditure::Draw( QPainter& painter, QRect &free_rect 
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, сек"), Qt::red, "не реализовано" );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, сек"), Qt::red, test::ToString( TestingTime ) );
     }, 2 );
 
 
