@@ -17,6 +17,12 @@ public:
 
     QJsonObject Serialise() const;
     bool Deserialize(const QJsonObject &obj );
+    bool HasResults()
+    {
+        return false;
+    }
+
+    bool Draw(QPainter &painter, QRect &free_rect ) const;
 
     virtual void WriteToController() const {}
 

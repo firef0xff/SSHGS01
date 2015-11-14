@@ -8,10 +8,24 @@
 namespace test
 {
 
+class TestCommonData : public test::Test
+{
+public:
+    TestCommonData( TestCase* test_case, QString const& name, uint8_t number, uint8_t id );
+
+protected:
+    double OilTemp;
+    int TestingTime;
+    QTime StartTime;
+
+    QJsonObject Serialise() const;
+    bool Deserialize( QJsonObject const& obj );
+};
+
 namespace hydro
 {
 
-class Test :public test::Test
+class Test :public test::TestCommonData
 {
 public:
     Test( QString const& name, uint8_t id );
@@ -21,15 +35,7 @@ protected:
     cpu::data::DB31 mCommand;
     cpu::data::DB32 mResults;
 
-    double OilTemp;
-    int TestingTime;
-
-    QJsonObject Serialise() const;
-    bool Deserialize( QJsonObject const& obj );
-
-
 private:
-    QTime StartTime;
     static uint8_t mTestsCount;
 };
 
@@ -38,7 +44,7 @@ private:
 namespace servo
 {
 
-class Test :public test::Test
+class Test :public test::TestCommonData
 {
 public:
     Test( QString const& name, uint8_t id );
@@ -50,7 +56,7 @@ private:
 
 namespace control_board
 {
-class Test :public test::Test
+class Test :public test::TestCommonData
 {
 public:
     Test( QString const& name, uint8_t id );
@@ -61,7 +67,7 @@ private:
 
 namespace hydro_cylinder
 {
-class Test :public test::Test
+class Test :public test::TestCommonData
 {
 public:
     Test( QString const& name, uint8_t id );

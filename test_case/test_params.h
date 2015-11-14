@@ -93,6 +93,10 @@ public:
     virtual bool Draw(QPainter &painter, QRect &free_rect ) const;
     virtual bool DrawResults(QPainter &/*painter*/, QRect &/*free_rect*/ ) const
     { return true; }
+    virtual bool HasResults()
+    {
+        return true;
+    }
 
     virtual QString ModelId() const;
     void Reset();

@@ -66,10 +66,10 @@ bool ActivationTime::Draw( QPainter& painter, QRect &free_rect ) const
 {
     QFont header_font = painter.font();
     header_font.setFamily("Arial");
+    header_font.setPointSize( 14 );
     QFont result_font = header_font;
     result_font.setUnderline(true);
     QFont text_font = header_font;
-    header_font.setPointSize( 14 );
     text_font.setPointSize( 12 );
 
 

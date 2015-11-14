@@ -137,3 +137,6 @@ FORMS    += mainwindow.ui \
 
 OTHER_FILES += devices/*.json\
     тз/*\
+
+DISTFILES += \
+    тз/ячейки

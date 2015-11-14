@@ -5,14 +5,32 @@
 namespace test
 {
 
+TestCommonData::TestCommonData( TestCase* test_case, QString const& name, uint8_t number, uint8_t id ):
+    test::Test( test_case, name, number, id ),
+    OilTemp(0)
+{}
+
+QJsonObject TestCommonData::Serialise() const
+{
+    QJsonObject obj;
+    obj.insert("OilTemp", OilTemp );
+    obj.insert("TestingTime", TestingTime );
+
+    return obj;
+}
+bool TestCommonData::Deserialize( QJsonObject const& obj )
+{
+    OilTemp = obj.value("OilTemp").toDouble();
+    TestingTime = obj.value("TestingTime").toInt();
+    return true;
+}
 namespace hydro
 {
 
 uint8_t Test::mTestsCount = 1;
 
 Test::Test( QString const& name, uint8_t id ):
-    test::Test( &HydroTests, name, mTestsCount, id ),
-    OilTemp(0)
+    test::TestCommonData( &HydroTests, name, mTestsCount, id )
 {
     ++mTestsCount;
 }
@@ -38,20 +56,6 @@ void Test::Wait( bool& work, bool& done)
     TestingTime = StartTime.elapsed()/1000;
 }
 
-QJsonObject Test::Serialise() const
-{
-    QJsonObject obj;
-    obj.insert("OilTemp", OilTemp );
-    obj.insert("TestingTime", TestingTime );
-
-    return obj;
-}
-bool Test::Deserialize( QJsonObject const& obj )
-{
-    OilTemp = obj.value("OilTemp").toDouble();
-    TestingTime = obj.value("TestingTime").toInt();
-    return true;
-}
 }//namespace hydro
 
 namespace servo
@@ -60,7 +64,7 @@ namespace servo
 uint8_t Test::mTestsCount = 1;
 
 Test::Test( QString const& name, uint8_t id ):
-    test::Test( &ServoTests, name, mTestsCount, id )
+    test::TestCommonData( &ServoTests, name, mTestsCount, id )
 {
     ++mTestsCount;
 }
@@ -71,7 +75,7 @@ namespace control_board
 uint8_t Test::mTestsCount = 1;
 
 Test::Test( QString const& name, uint8_t id ):
-    test::Test( &ControlBoardTests, name, mTestsCount, id )
+    test::TestCommonData( &ControlBoardTests, name, mTestsCount, id )
 {
     ++mTestsCount;
 }
@@ -82,7 +86,7 @@ namespace hydro_cylinder
 uint8_t Test::mTestsCount = 1;
 
 Test::Test( QString const& name, uint8_t id ):
-    test::Test( &HydroCylinder, name, mTestsCount, id )
+    test::TestCommonData( &HydroCylinder, name, mTestsCount, id )
 {
     ++mTestsCount;
 }

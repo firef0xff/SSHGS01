@@ -103,6 +103,81 @@ bool Parameters::Deserialize(const QJsonObject &obj )
     return ret;
 }
 
+bool Parameters::Draw(QPainter &painter, QRect &free_rect ) const
+{
+    QFont title_font = painter.font();
+    title_font.setFamily("Arial");
+    title_font.setPointSize(18);
+
+    QFont level_font = title_font;
+    level_font.setPointSize( 14 );
+
+    QFont text_font = title_font;
+    text_font.setPointSize( 12 );
+
+    auto DrawRowCenter = [ &painter, &free_rect ]( QFont font, QColor color, QString text, double spase = 1 )
+    {
+        painter.save();
+        QFontMetrics metrix( font );
+        QRect place;
+        AllocatePlace( place, metrix.height()*spase ,free_rect );
+        QPoint start_point( place.center().x() - metrix.width( text ) / 2, place.center().y() +metrix.height()/2);
+        painter.setFont( font );
+        painter.setPen( color );
+        painter.drawText( start_point, text );
+        painter.restore();
+    };
+
+    auto DrawRowLeft = [ &painter, &free_rect ]( QFont font, QColor color1, QColor color2,  QString label, QString value, double spase = 1 )
+    {
+        painter.save();
+        QFontMetrics metrix( font );
+        QRect place;
+        AllocatePlace( place, metrix.height()*spase, free_rect );
+        QPoint start_point( place.left() , place.center().y()+metrix.height()/2 );
+        QPoint start_point2( place.left() + metrix.width(label), place.center().y() +metrix.height()/2);
+        painter.setFont( font );
+        painter.setPen( color1 );
+        painter.drawText( start_point, label );
+        painter.setPen( color2 );
+        painter.drawText( start_point2, value );
+        painter.restore();
+    };
+
+    QFontMetrics m(text_font);
+    int width = m.width("12345678901234567890123456789012345678901234567890");
+    char symbol = '.';
+    auto FillToSize = [ width, &m, symbol ]( QString text )
+    {
+        while( m.width( text + symbol ) < width )
+            text += symbol;
+        return text + " ";
+    };
+
+
+    double row_skale = 2;
+
+    DrawRowCenter( title_font, Qt::black, "ОТЧЕТ", row_skale );
+    DrawRowCenter( level_font, Qt::black, "Испытания плат управления", row_skale );
+    DrawRowCenter( level_font, Qt::red, mGsType, row_skale );
+
+    DrawRowLeft( text_font, Qt::black, Qt::red, "Идентификационный номер: ", mGsType, row_skale);
+
+    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Тип входного сигнала"), test::ToString(mSignalType), row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Напряжение питания платы, VDC"), test::ToString(mVoltage), row_skale );
+
+    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Максимальный выходной ток платы, А"), test::ToString(mMaxAmperage), row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Сопротивление катушки распределителя, Ом"), test::ToString(mReelResist), row_skale );
+
+    QString model_ser_no = test::ReadFromEtalone().value(ModelId()).toObject().value("Params").toObject().value("GsType").toString();
+    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Эталонный аппарат"), model_ser_no, row_skale );
+
+    DrawRowLeft( text_font, Qt::black, Qt::red, "Испытания проводил: ", mUser, row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::red, "Дата проведения испытаний: ", mDate.toString("dd MMMM yyyy г. hh:mm"), row_skale );
+
+    return true;
+}
+
 bool Parameters::GsType ( QString const& val )
 {
     mGsType = val;

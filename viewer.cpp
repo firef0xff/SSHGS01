@@ -22,12 +22,6 @@ Viewer::Viewer(QWidget *parent) :
     if ( test::CURRENT_PARAMS )
     {
         test::CURRENT_PARAMS->Draw( painter, rc );
-        painter.end();
-        mPages.push_back( pixmap );
-        pixmap = QPixmap( 793, 1123 );
-        painter.begin( &pixmap );
-        rc = PreparePage( painter, QRect(0,0,793,1123) );
-
         foreach (test::Test* test, test::CURRENT_PARAMS->TestCase())
         {
             test->ResetDrawLine();
@@ -50,13 +44,18 @@ Viewer::Viewer(QWidget *parent) :
                 rc.setTop( rc.top() + m.height() );
             }
         }
-        painter.end();
-        mPages.push_back( pixmap );
-        pixmap = QPixmap( 793, 1123 );
-        painter.begin( &pixmap );
-        rc = PreparePage( painter, QRect(0,0,793,1123) );
-        test::CURRENT_PARAMS->DrawResults( painter, rc );
+
+        if ( test::CURRENT_PARAMS->HasResults() )
+        {
+            painter.end();
+            mPages.push_back( pixmap );
+            pixmap = QPixmap( 793, 1123 );
+            painter.begin( &pixmap );
+            rc = PreparePage( painter, QRect(0,0,793,1123) );
+            test::CURRENT_PARAMS->DrawResults( painter, rc );
+        }
     }
+
     painter.end();
     mPages.push_back( pixmap );
 
@@ -139,12 +138,10 @@ void Viewer::on_SavePDF_clicked()
             if ( i != mPages.size() - 1 )
                 printer.newPage();
         }*/        
+
         if ( test::CURRENT_PARAMS )
         {
             test::CURRENT_PARAMS->Draw( painter, rc );
-            printer.newPage();
-            rc = PreparePage( painter, QRect(0,0,793,1123) );
-
             foreach (test::Test* test, test::CURRENT_PARAMS->TestCase())
             {
                 test->ResetDrawLine();
@@ -164,9 +161,12 @@ void Viewer::on_SavePDF_clicked()
                     rc.setTop( rc.top() + m.height() );
                 }
             }
-            printer.newPage();
-            rc = PreparePage( painter, printer.paperRect() );
-            test::CURRENT_PARAMS->DrawResults( painter, rc );
+            if ( test::CURRENT_PARAMS->HasResults() )
+            {
+                printer.newPage();
+                rc = PreparePage( painter, printer.paperRect() );
+                test::CURRENT_PARAMS->DrawResults( painter, rc );
+            }
         }
         painter.end();
     }
