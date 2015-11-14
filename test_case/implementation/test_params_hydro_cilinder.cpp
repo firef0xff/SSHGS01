@@ -163,7 +163,7 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect ) const
 
     DrawRowCenter( title_font, Qt::black, "ОТЧЕТ", row_skale );
     DrawRowCenter( level_font, Qt::black, "Испытания гидроцилиндра", row_skale );
-    DrawRowCenter( level_font, Qt::red, mSerNo, row_skale );
+    DrawRowCenter( level_font, Qt::red, "тип цилидра? откуда брать?", row_skale );
 
     DrawRowLeft( text_font, Qt::black, Qt::red, "Идентификационный номер: ", mSerNo, row_skale);
     DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Максимальное давление, бар"), test::ToString( mMaxPressure ), row_skale );

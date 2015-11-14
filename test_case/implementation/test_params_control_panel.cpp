@@ -161,7 +161,7 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect ) const
     DrawRowCenter( level_font, Qt::black, "Испытания плат управления", row_skale );
     DrawRowCenter( level_font, Qt::red, mGsType, row_skale );
 
-    DrawRowLeft( text_font, Qt::black, Qt::red, "Идентификационный номер: ", mGsType, row_skale);
+    DrawRowLeft( text_font, Qt::black, Qt::red, "Идентификационный номер: ", "серийный номер? откуда брать?", row_skale);
 
     DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Тип входного сигнала"), test::ToString(mSignalType), row_skale );
     DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Напряжение питания платы, VDC"), test::ToString(mVoltage), row_skale );
@@ -169,13 +169,18 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect ) const
     DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Максимальный выходной ток платы, А"), test::ToString(mMaxAmperage), row_skale );
     DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Сопротивление катушки распределителя, Ом"), test::ToString(mReelResist), row_skale );
 
-    QString model_ser_no = test::ReadFromEtalone().value(ModelId()).toObject().value("Params").toObject().value("GsType").toString();
-    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Эталонный аппарат"), model_ser_no, row_skale );
+    QString model_ser_no = test::ReadFromEtalone().value(ModelId()).toObject().value("Params").toObject().value("control_board").toObject().value("SerNo").toString();
+    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Эталонный аппарат"), "серийный номер? откуда брать?", row_skale );
+
 
     DrawRowLeft( text_font, Qt::black, Qt::red, "Испытания проводил: ", mUser, row_skale );
     DrawRowLeft( text_font, Qt::black, Qt::red, "Дата проведения испытаний: ", mDate.toString("dd MMMM yyyy г. hh:mm"), row_skale );
 
     return true;
+}
+QString Parameters::ModelId() const
+{
+    return mGsType;
 }
 
 bool Parameters::GsType ( QString const& val )

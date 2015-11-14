@@ -23,6 +23,7 @@ public:
     }
 
     bool Draw(QPainter &painter, QRect &free_rect ) const;
+    QString ModelId() const;
 
     virtual void WriteToController() const {}
 
