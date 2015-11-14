@@ -115,7 +115,7 @@ bool VACharacteristic::Draw( QPainter& painter, QRect &free_rect ) const
             auto obj = val.toObject();
             if ( obj.value("id").toInt() == mId )
             {
-                QJsonArray a = obj.value("Graph").toArray();
+                QJsonArray a = obj.value("data").toObject().value("Graph").toArray();
                 foreach ( QJsonValue const& v, a )
                 {
                     QJsonObject o = v.toObject();
