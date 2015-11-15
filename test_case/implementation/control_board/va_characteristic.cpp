@@ -62,24 +62,6 @@ bool VACharacteristic::Draw( QPainter& painter, QRect &free_rect ) const
         painter.drawText( start_point, text );
         painter.restore();
     };
-    auto DrawRowLeft = [ &painter, &free_rect ](    QRect const& place,
-                                                    QFont const& font,
-                                                    QColor const& color1,
-                                                    QString const& label,
-                                                    QColor const& color2 = Qt::black,
-                                                    QString const& value = "")
-    {
-        painter.save();
-        QFontMetrics metrix( font );
-        QPoint start_point( place.left() , place.center().y()+metrix.height()/2 );
-        QPoint start_point2( place.left() + metrix.width(label), place.center().y() +metrix.height()/2);
-        painter.setFont( font );
-        painter.setPen( color1 );
-        painter.drawText( start_point, label );
-        painter.setPen( color2 );
-        painter.drawText( start_point2, value );
-        painter.restore();
-    };
 
     uint32_t num = 0;
     bool res = DrawLine( num, free_rect, header_font,
@@ -119,7 +101,7 @@ bool VACharacteristic::Draw( QPainter& painter, QRect &free_rect ) const
                 foreach ( QJsonValue const& v, a )
                 {
                     QJsonObject o = v.toObject();
-                    data.push_back( QPointF( o.value("x").toDouble(), o.value("y").toDouble() ) );
+                    data_e.push_back( QPointF( o.value("x").toDouble(), o.value("y").toDouble() ) );
                 }
             }
         }

@@ -134,6 +134,16 @@
        </item>
       </widget>
      </item>
+     <item row="0" column="2">
+      <widget class="QLabel" name="l_ser_no">
+       <property name="text">
+        <string>Серийный номер</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="QLineEdit" name="SerNo"/>
+     </item>
     </layout>
    </item>
    <item>

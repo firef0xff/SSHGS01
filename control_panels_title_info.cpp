@@ -69,6 +69,7 @@ bool ControlPanelsTitleInfo::SaveInputParams()
     };
 
     res *= ParamChecker( ui->l_gs_type, params.GsType( ui->GsType->currentText() ) );
+    res *= ParamChecker( ui->l_ser_no, params.SerNo( ui->SerNo->text() ) );
 
     res *= ParamChecker( ui->l_signal_type,  params.SignalType( ui->SignalType->currentText() ) );
     res *= ParamChecker( ui->l_voltage,      ValidateRange( ui->Voltage, params.Voltage( ui->Voltage->text() ) ) );
@@ -82,6 +83,7 @@ void ControlPanelsTitleInfo::FromParams()
     test::control_board::Parameters& params = test::control_board::Parameters::Instance();
 
     ui->GsType->setCurrentIndex( ui->GsType->findText( params.GsType() ) );
+    ui->SerNo->setText( params.SerNo() );
     ui->SignalType->setCurrentIndex( ui->SignalType->findText( test::ToString( params.SignalType() ) ) );
     ui->Voltage->setText( test::ToString( params.Voltage() ) );
     ui->MaxAmperage->setText( test::ToString( params.MaxAmperage() ) );

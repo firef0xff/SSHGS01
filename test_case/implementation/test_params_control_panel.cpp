@@ -27,6 +27,7 @@ Parameters& Parameters::Instance()
 
 Parameters::Parameters():
     mGsType(""),
+    mSerNo(""),
     mSignalType( ST_UNKNOWN ),
     mVoltage( 0 ),
     mMaxAmperage( 0 ),
@@ -40,6 +41,7 @@ void Parameters::Reset()
     test::Parameters::Reset();
 
     mGsType = "";
+    mSerNo = "";
     mSignalType = ST_UNKNOWN;
     mVoltage = 0;
     mMaxAmperage = 0;
@@ -51,6 +53,7 @@ QString Parameters::ToString() const
     QString res;
     res+= "Параметры платы:\n";
     res+= "  Тип: " + mGsType +"\n";
+    res+= "  Серийный номер: " + mSerNo +"\n";
     res+= "  Тип входного сигнала: " + test::ToString( mVoltage ) +"\n";
     res+= "  Напряжение питания, В: " + test::ToString( mSignalType ) +"\n";
     res+= "  Максимальный выходной ток, А: " + test::ToString( mMaxAmperage ) +"\n";
@@ -70,6 +73,7 @@ QJsonObject Parameters::Serialise() const
     QJsonObject obj;
 
     obj.insert("GsType", mGsType);
+    obj.insert("SerNo", mSerNo);
     obj.insert("Voltage", mVoltage);
     obj.insert("SignalType", mSignalType);
     obj.insert("MaxAmperage", mMaxAmperage);
@@ -90,6 +94,7 @@ bool Parameters::Deserialize(const QJsonObject &obj )
         QJsonObject obj = val.toObject();
 
         mGsType  =  obj.value("GsType").toString();
+        mSerNo  =  obj.value("SerNo").toString();
         mVoltage  =  obj.value("Voltage").toDouble();
         mSignalType  =  static_cast<SIGNAL_TYPE>( obj.value("SignalType").toInt() );
         mMaxAmperage  =  obj.value("MaxAmperage").toDouble();
@@ -161,7 +166,7 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect ) const
     DrawRowCenter( level_font, Qt::black, "Испытания плат управления", row_skale );
     DrawRowCenter( level_font, Qt::red, mGsType, row_skale );
 
-    DrawRowLeft( text_font, Qt::black, Qt::red, "Идентификационный номер: ", "серийный номер? откуда брать?", row_skale);
+    DrawRowLeft( text_font, Qt::black, Qt::red, "Идентификационный номер: ", mSerNo, row_skale);
 
     DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Тип входного сигнала"), test::ToString(mSignalType), row_skale );
     DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Напряжение питания платы, VDC"), test::ToString(mVoltage), row_skale );
@@ -170,7 +175,7 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect ) const
     DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Сопротивление катушки распределителя, Ом"), test::ToString(mReelResist), row_skale );
 
     QString model_ser_no = test::ReadFromEtalone().value(ModelId()).toObject().value("Params").toObject().value("control_board").toObject().value("SerNo").toString();
-    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Эталонный аппарат"), "серийный номер? откуда брать?", row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Эталонный аппарат"), model_ser_no, row_skale );
 
 
     DrawRowLeft( text_font, Qt::black, Qt::red, "Испытания проводил: ", mUser, row_skale );
@@ -192,6 +197,17 @@ QString const& Parameters::GsType () const
 {
     return mGsType;
 }
+
+bool Parameters::SerNo ( QString const& val )
+{
+    mSerNo = val;
+    return true;
+}
+QString const& Parameters::SerNo () const
+{
+    return mSerNo;
+}
+
 
 bool Parameters::SignalType ( QString const& val )
 {

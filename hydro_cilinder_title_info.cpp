@@ -65,6 +65,7 @@ bool HydroCilinderTitleInfo::SaveInputParams()
 
 
     res *= ParamChecker( ui->l_ser_no,          params.SerNo( ui->SerNo->text() ) );
+    res *= ParamChecker( ui->l_gs_type,         params.GsType( ui->GsType->text() ) );
     res *= ParamChecker( ui->l_max_pressure,    ValidateRange( ui->MaxPressure, params.MaxPressure( ui->MaxPressure->text() ) ) );
     res *= ParamChecker( ui->l_move_time,       ValidateRange( ui->MoveTime, params.MoveTime( ui->MoveTime->text() ) ) );
     res *= ParamChecker( ui->l_test_pressure,   params.TestPressure( QString::number( ui->TestPressure->value() ) ) );
@@ -78,6 +79,7 @@ void HydroCilinderTitleInfo::FromParams()
     test::hydro_cylinder::Parameters& params = test::hydro_cylinder::Parameters::Instance();
 
     ui->SerNo->setText( params.SerNo() );
+    ui->GsType->setText( params.GsType() );
     ui->MaxPressure->setText( test::ToString( params.MaxPressure() ) );
     ui->MoveTime->setText( test::ToString( params.MoveTime() ) );
     ui->TestPressure->setValue( params.TestPressure() );

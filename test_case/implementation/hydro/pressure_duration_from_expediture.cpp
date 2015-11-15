@@ -328,7 +328,7 @@ bool PressureDurationFromExpenditure::Draw( QPainter& painter, QRect &free_rect 
         QRect p1(rect.left(), rect.top(), w, h );
         QRect p2(rect.right() - w, rect.top(), w, h );
         QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
-        QRect p2t(p2.left(), p2.bottom(), p2.width(), metrix.height());;
+        QRect p2t(p2.left(), p2.bottom(), p2.width(), metrix.height());
         ff0x::GraphBuilder builder ( w, h, ff0x::GraphBuilder::PlusPlus ,f );
         ff0x::GraphBuilder::GraphDataLine lines1;
         ff0x::GraphBuilder::GraphDataLine lines2;

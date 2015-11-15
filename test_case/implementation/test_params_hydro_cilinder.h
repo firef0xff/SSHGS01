@@ -17,10 +17,6 @@ public:
 
     QJsonObject Serialise() const;
     bool Deserialize(const QJsonObject &obj );
-    bool HasResults()
-    {
-        return false;
-    }
 
     virtual void WriteToController() const {}
 
@@ -28,6 +24,9 @@ public:
 
     bool SerNo ( QString const& val );
     QString const& SerNo () const;
+
+    bool GsType ( QString const& val );
+    QString const& GsType () const;
 
     bool MaxPressure ( QString const& val );
     double const& MaxPressure () const;
@@ -50,6 +49,7 @@ private:
     void operator = ( Parameters& ) = delete;
 
     QString mSerNo;
+    QString mGsType;
     double  mMaxPressure;
     double  mMoveTime;
     double  mTestPressure;

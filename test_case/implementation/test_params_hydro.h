@@ -25,6 +25,10 @@ public:
     bool DrawResults(QPainter &painter, QRect &free_rect ) const;
 
     QString ModelId() const;
+    virtual bool HasResults()
+    {
+        return true;
+    }
 
     bool GsType ( QString const& val );
     QString const& GsType () const;

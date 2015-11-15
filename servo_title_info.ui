@@ -495,12 +495,12 @@ X_max_A, л/мин</string>
        </property>
        <item>
         <property name="text">
-         <string>Через блок управления</string>
+         <string>Блок управления</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Напрямую катушками управления</string>
+         <string>Катушками управления</string>
         </property>
        </item>
       </widget>

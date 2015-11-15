@@ -95,7 +95,7 @@ public:
     { return true; }
     virtual bool HasResults()
     {
-        return true;
+        return false;
     }
 
     virtual QString ModelId() const;

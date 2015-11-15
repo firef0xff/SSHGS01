@@ -21,6 +21,13 @@ public:
 
     virtual void WriteToController() const {}
 
+    bool Draw(QPainter &painter, QRect &free_rect ) const;
+
+    QString ModelId() const;
+
+    bool GsType ( QString const& val );
+    QString const& GsType () const;
+
     bool ReelControl ( QString const& val );
     RELL_CONTROL const& ReelControl () const;
 
@@ -61,6 +68,7 @@ private:
     Parameters( Parameters const& )  = delete;
     void operator = ( Parameters& ) = delete;
 
+    QString mGsType;            //тип гидрораспределителя
     RELL_CONTROL mReelControl;
     qint32 mPressureNominal;
     qint32 mPressureTesting;

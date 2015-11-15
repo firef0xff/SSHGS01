@@ -38,9 +38,6 @@ private:
     QVector<Data> Graph;
     double Gain;            /// коэффициент усиления по расходу
     double Hysteresis;      /// гистерезис
-    double Simmetry;        /// симмметрия
-    double Polar;           /// полярность
-    double Overlap;         /// характер перекрытия
 
 };
 

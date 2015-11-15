@@ -90,12 +90,12 @@ bool ParseValue ( DYNAMIC& param, QString const& val )
 }
 bool ParseValue ( RELL_CONTROL& param, QString const& val )
 {
-    if ( !val.compare( "Напрямую катушками управления", Qt::CaseInsensitive ) )
+    if ( !val.compare( "Катушками управления", Qt::CaseInsensitive ) )
     {
         param = RC_REEL;
         return true;
     }
-    else if ( !val.compare( "Через блок управления", Qt::CaseInsensitive ) )
+    else if ( !val.compare( "Блок управления", Qt::CaseInsensitive ) )
     {
         param = RC_CONTROL_BOX;
         return true;
@@ -237,9 +237,9 @@ QString ToString( RELL_CONTROL const& v )
         case RC_UNKNOWN:
             return "Не задано";
         case RC_REEL:
-            return "Напрямую катушками управления";
+            return "Катушками управления";
         case RC_CONTROL_BOX:
-            return "Через блок управления";
+            return "Блок управления";
     default:
         return "Неизвестное значение";
     }

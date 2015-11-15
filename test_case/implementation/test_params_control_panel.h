@@ -30,6 +30,9 @@ public:
     bool GsType ( QString const& val );
     QString const& GsType () const;
 
+    bool SerNo ( QString const& val );
+    QString const& SerNo () const;
+
     bool SignalType ( QString const& val );
     SIGNAL_TYPE const& SignalType () const;
 
@@ -47,6 +50,7 @@ private:
     void operator = ( Parameters& ) = delete;
 
     QString mGsType; //тип устройства
+    QString mSerNo; //серийный номер
     SIGNAL_TYPE mSignalType; //тип сигнала
     double mVoltage;         //напряжение
     double mMaxAmperage;      //максимальный ток

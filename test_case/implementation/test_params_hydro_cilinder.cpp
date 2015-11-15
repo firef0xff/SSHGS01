@@ -26,6 +26,7 @@ Parameters& Parameters::Instance()
 }
 Parameters::Parameters():
     mSerNo(""),
+    mGsType(""),
     mMaxPressure(0),
     mMoveTime(0),
     mTestPressure(0),
@@ -39,6 +40,7 @@ void Parameters::Reset()
 {
     test::Parameters::Reset();
     mSerNo = "";
+    mGsType = "";
     mMaxPressure = 0;
     mMoveTime = 0;
     mTestPressure = 0;
@@ -50,6 +52,7 @@ QString Parameters::ToString() const
 {
     QString res;
     res+= "Параметры гидроцилиндра:\n";
+    res+= "  Тип гидроцилиндра: " + mGsType +"\n";
     res+= "  Серийниый номер: " + mSerNo +"\n";
     res+= "  Максимальное давление нагрузки, Бар: " + test::ToString( mMaxPressure ) +"\n";
     res+= "  Номинальный расход, л/мин: " + test::ToString( mExpenditure ) +"\n";
@@ -73,6 +76,7 @@ QJsonObject Parameters::Serialise() const
 
     QJsonObject ret = test::Parameters::Serialise();
     obj.insert("SerNo", mSerNo);
+    obj.insert("GsType", mGsType);
     obj.insert("MaxPressure", mMaxPressure);
     obj.insert("MoveTime", mMoveTime);
     obj.insert("TestPressure",mTestPressure);
@@ -93,6 +97,7 @@ bool Parameters::Deserialize(const QJsonObject &obj )
         QJsonObject obj = val.toObject();
 
         mSerNo = obj.value("SerNo").toString();
+        mGsType = obj.value("GsType").toString();
         mMaxPressure = obj.value("MaxPressure").toInt();
         mMoveTime = obj.value("MoveTime").toDouble();
         mTestPressure = obj.value("TestPressure").toInt();
@@ -163,7 +168,7 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect ) const
 
     DrawRowCenter( title_font, Qt::black, "ОТЧЕТ", row_skale );
     DrawRowCenter( level_font, Qt::black, "Испытания гидроцилиндра", row_skale );
-    DrawRowCenter( level_font, Qt::red, "тип цилидра? откуда брать?", row_skale );
+    DrawRowCenter( level_font, Qt::red, mGsType, row_skale );
 
     DrawRowLeft( text_font, Qt::black, Qt::red, "Идентификационный номер: ", mSerNo, row_skale);
     DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Максимальное давление, бар"), test::ToString( mMaxPressure ), row_skale );
@@ -193,6 +198,16 @@ bool Parameters::SerNo ( QString const& val )
 QString const& Parameters::SerNo () const
 {
     return mSerNo;
+}
+
+bool Parameters::GsType ( QString const& val )
+{
+    mGsType = val;
+    return true;
+}
+QString const& Parameters::GsType () const
+{
+    return mGsType;
 }
 
 bool Parameters::MaxPressure ( QString const& val )
