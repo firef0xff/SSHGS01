@@ -159,4 +159,4 @@ debug {
 release {
     DEFINES -= DEBUG
 }
-
+DEFINES += DEMO
