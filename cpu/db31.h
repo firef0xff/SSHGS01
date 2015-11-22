@@ -32,11 +32,11 @@ private:
 
     wchar_t const* mAdresses[ BOOL_COUNT + FLOAT_COUNT ] = {
         //bool
-        L"S7:[S7 connection_4]DB31,X2.0",   //Start_Oper
-        L"S7:[S7 connection_4]DB31,X2.1",   //Stop_Oper
-        L"S7:[S7 connection_4]DB31,X2.2",   //Nasos_M2
+        L"CPU/DB31.Start_Oper",
+        L"CPU/DB31.Stop_Oper",
+        L"CPU/DB31.Nasos_M2",
 
-        L"S7:[S7 connection_4]DB31,REAL4",  //N_Operation
+        L"CPU/DB31.N_Operation"
     };
 };
 

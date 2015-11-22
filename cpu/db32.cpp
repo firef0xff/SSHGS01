@@ -151,7 +151,7 @@ DB32::DB32():
     mGroupID = opc::miniOPC::Instance().AddGroup( L"DB32", mAdresses, BOOL_COUNT + FLOAT_COUNT );
 
     {
-#ifndef WINDOWS
+#ifdef DEMO
         //хз что
         D_E1_OK = true;               //2.4 давление в системе достигнуто ( электро )
         D_E1G_OK = true;              //2.5 давление в системе достигнуто ( электрогидравл )

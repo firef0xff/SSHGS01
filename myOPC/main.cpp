@@ -19,11 +19,11 @@ int main()
 
     wchar_t const* mAdresses[ BOOL_COUNT + FLOAT_COUNT ] = {
         //bool
-        L"CPU/Start_Oper",   //Start_Oper
-        L"CPU/Stop_Oper",   //Stop_Oper
-        L"CPU/Nasos_M2",   //Nasos_M2
+        L"CPU/DB31.Start_Oper",
+        L"CPU/DB31.Stop_Oper",
+        L"CPU/DB31.Nasos_M2",
 
-        L"CPU/N_Operation",  //N_Operation
+        L"CPU/DB31.N_Operation"
     };
 
     std::cout << "connecting to opc" << std::endl;

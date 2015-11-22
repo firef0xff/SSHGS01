@@ -171,136 +171,136 @@ private:
 
     wchar_t const* mAdresses[ BOOL_COUNT + FLOAT_COUNT ] = {
         //bool
-        L"S7:[S7 connection_4]DB32,X2.4",   //D_E1_OK
-        L"S7:[S7 connection_4]DB32,X2.5",   //D_E1G_OK
+        L"CPU/DB32.D_E1_OK",
+        L"CPU/DB32.D_E1G_OK",
 
-        L"S7:[S7 connection_4]DB32,X2.0",   //OP1_Min_D_YESa
-        L"S7:[S7 connection_4]DB32,X2.1",   //OP1_Min_D_NOa
-        L"S7:[S7 connection_4]DB32,X2.2",   //OP1_Min_D_YESb
-        L"S7:[S7 connection_4]DB32,X2.3",   //OP1_Min_D_NOb
-        L"S7:[S7 connection_4]DB32,X2.6",   //Voltage_Alarm_a
-        L"S7:[S7 connection_4]DB32,X36.0",  //Voltage_Alarm_b
-        L"S7:[S7 connection_4]DB32,X2.7",   //OP1_Max_D_YESa
-        L"S7:[S7 connection_4]DB32,X3.0",   //OP1_Max_D_NOa
-        L"S7:[S7 connection_4]DB32,X3.1",   //OP1_Max_D_YESb
-        L"S7:[S7 connection_4]DB32,X3.2",   //OP1_Max_D_NOb
+        L"CPU/DB32.OP1_Min_D_YESa",
+        L"CPU/DB32.OP1_Min_D_NOa",
+        L"CPU/DB32.OP1_Min_D_YESb",
+        L"CPU/DB32.OP1_Min_D_NOb",
+        L"CPU/DB32.Voltage_Alarm_a",
+        L"CPU/DB32.Voltage_Alarm_b",
+        L"CPU/DB32.OP1_Max_D_YESa",
+        L"CPU/DB32.OP1_Max_D_NOa",
+        L"CPU/DB32.OP1_Max_D_YESb",
+        L"CPU/DB32.OP1_Max_D_NOb",
 
-        L"S7:[S7 connection_4]DB32,X36.1",  //OP2_Tech_Yes_No
+        L"CPU/DB32.OP2_Tech_Yes_No",
 
-        L"S7:[S7 connection_4]DB32,X42.0",  //OP3_Rashod_Norma
-        L"S7:[S7 connection_4]DB32,X42.1",  //OP3_Rashod_VNorma
+        L"CPU/DB32.OP3_Rashod_Norma",
+        L"CPU/DB32.OP3_Rashod_VNorma",
 
-        L"S7:[S7 connection_4]DB32,X140.0",   //OP5_A_OK
-        L"S7:[S7 connection_4]DB32,X140.1",   //OP5_A_NO
-        L"S7:[S7 connection_4]DB32,X140.2",   //OP5_B_OK
-        L"S7:[S7 connection_4]DB32,X140.3",   //OP5_B_NO
+        L"CPU/DB32.OP5_A_OK",
+        L"CPU/DB32.OP5_A_NO",
+        L"CPU/DB32.OP5_B_OK",
+        L"CPU/DB32.OP5_B_NO",
 
-        L"S7:[S7 connection_4]DB32,X140.4",   //OP6_MinD_MinUprD_YESa
-        L"S7:[S7 connection_4]DB32,X140.5",   //OP6_MinD_MinUprD_NOa
-        L"S7:[S7 connection_4]DB32,X140.6",   //OP6_MinD_MaxUprD_YESa
-        L"S7:[S7 connection_4]DB32,X140.7",   //OP6_MinD_MaxUprD_NOa
-        L"S7:[S7 connection_4]DB32,X141.0",   //OP6_MaxD_MinUprD_YESa
-        L"S7:[S7 connection_4]DB32,X141.1",   //OP6_MaxD_MinUprD_NOa
-        L"S7:[S7 connection_4]DB32,X141.2",   //OP6_MaxD_MaxUprD_YESa
-        L"S7:[S7 connection_4]DB32,X141.3",   //OP6_MaxD_MaxUprD_NOa
-        L"S7:[S7 connection_4]DB32,X141.4",   //OP6_MinD_MinUprD_YESb
-        L"S7:[S7 connection_4]DB32,X141.5",   //OP6_MinD_MinUprD_NOb
-        L"S7:[S7 connection_4]DB32,X141.6",   //OP6_MinD_MaxUprD_YESb
-        L"S7:[S7 connection_4]DB32,X141.7",   //OP6_MinD_MaxUprD_NOb
-        L"S7:[S7 connection_4]DB32,X142.0",   //OP6_MaxD_MinUprD_YESb
-        L"S7:[S7 connection_4]DB32,X142.1",   //OP6_MaxD_MinUprD_NOb
-        L"S7:[S7 connection_4]DB32,X142.2",   //OP6_MaxD_MaxUprD_YESb
-        L"S7:[S7 connection_4]DB32,X142.3",   //OP6_MaxD_MaxUprD_NOb
+        L"CPU/DB32.OP6_MinD_MinUprD_YESa",
+        L"CPU/DB32.OP6_MinD_MinUprD_NOa",
+        L"CPU/DB32.OP6_MinD_MaxUprD_YESa",
+        L"CPU/DB32.OP6_MinD_MaxUprD_NOa",
+        L"CPU/DB32.OP6_MaxD_MinUprD_YESa",
+        L"CPU/DB32.OP6_MaxD_MinUprD_NOa",
+        L"CPU/DB32.OP6_MaxD_MaxUprD_YESa",
+        L"CPU/DB32.OP6_MaxD_MaxUprD_NOa",
+        L"CPU/DB32.OP6_MinD_MinUprD_YESb",
+        L"CPU/DB32.OP6_MinD_MinUprD_NOb",
+        L"CPU/DB32.OP6_MinD_MaxUprD_YESb",
+        L"CPU/DB32.OP6_MinD_MaxUprD_NOb",
+        L"CPU/DB32.OP6_MaxD_MinUprD_YESb",
+        L"CPU/DB32.OP6_MaxD_MinUprD_NOb",
+        L"CPU/DB32.OP6_MaxD_MaxUprD_YESb",
+        L"CPU/DB32.OP6_MaxD_MaxUprD_NOb",
 
-        L"S7:[S7 connection_4]DB32,X142.4",   //OP7_Min_D_YESa
-        L"S7:[S7 connection_4]DB32,X142.5",   //OP7_Min_D_NOa
-        L"S7:[S7 connection_4]DB32,X142.6",   //OP7_Min_D_YESb
-        L"S7:[S7 connection_4]DB32,X142.7",   //OP7_Min_D_NOb
-        L"S7:[S7 connection_4]DB32,X143.0",   //OP7_Max_D_YESa
-        L"S7:[S7 connection_4]DB32,X143.1",   //OP7_Max_D_NOa
-        L"S7:[S7 connection_4]DB32,X143.2",   //OP7_Max_D_YESb
-        L"S7:[S7 connection_4]DB32,X143.3",   //OP7_Max_D_NOb
+        L"CPU/DB32.OP7_Min_D_YESa",
+        L"CPU/DB32.OP7_Min_D_NOa",
+        L"CPU/DB32.OP7_Min_D_YESb",
+        L"CPU/DB32.OP7_Min_D_NOb",
+        L"CPU/DB32.OP7_Max_D_YESa",
+        L"CPU/DB32.OP7_Max_D_NOa",
+        L"CPU/DB32.OP7_Max_D_YESb",
+        L"CPU/DB32.OP7_Max_D_NOb",
 
-        L"S7:[S7 connection_4]DB32,X160.0",   //OP8_open_YES_a
-        L"S7:[S7 connection_4]DB32,X160.1",   //OP8_open_NO_a
-        L"S7:[S7 connection_4]DB32,X160.2",   //OP8_close_YES_a
-        L"S7:[S7 connection_4]DB32,X160.3",   //OP8_close_NO_a
-        L"S7:[S7 connection_4]DB32,X160.4",   //OP8_open_YES_b
-        L"S7:[S7 connection_4]DB32,X160.5",   //OP8_open_NO_b
-        L"S7:[S7 connection_4]DB32,X160.6",   //OP8_close_YES_b
-        L"S7:[S7 connection_4]DB32,X160.7",   //OP8_close_NO_b
+        L"CPU/DB32.OP8_open_YES_a",
+        L"CPU/DB32.OP8_open_NO_a",
+        L"CPU/DB32.OP8_close_YES_a",
+        L"CPU/DB32.OP8_close_NO_a",
+        L"CPU/DB32.OP8_open_YES_b",
+        L"CPU/DB32.OP8_open_NO_b",
+        L"CPU/DB32.OP8_close_YES_b",
+        L"CPU/DB32.OP8_close_NO_b",
 
-        L"S7:[S7 connection_4]DB32,X161.0",   //OP8_NO_Impuls_open_a
-        L"S7:[S7 connection_4]DB32,X161.1",   //OP8_NO_Impuls_close_a
-        L"S7:[S7 connection_4]DB32,X161.2",   //OP8_NO_Impuls_open_b
-        L"S7:[S7 connection_4]DB32,X161.3",   //OP8_NO_Impuls_close_b
+        L"CPU/DB32.OP8_NO_Impuls_open_a",
+        L"CPU/DB32.OP8_NO_Impuls_close_a",
+        L"CPU/DB32.OP8_NO_Impuls_open_b",
+        L"CPU/DB32.OP8_NO_Impuls_close_b",
 
-        L"S7:[S7 connection_4]DB32,X166.0",   //OP1_Work
-        L"S7:[S7 connection_4]DB32,X166.1",   //OP2_Work
-        L"S7:[S7 connection_4]DB32,X166.2",   //OP3_Work
-        L"S7:[S7 connection_4]DB32,X166.3",   //OP4_Work
-        L"S7:[S7 connection_4]DB32,X166.4",   //OP5_Work
-        L"S7:[S7 connection_4]DB32,X166.5",   //OP6_Work
-        L"S7:[S7 connection_4]DB32,X166.6",   //OP7_Work
-        L"S7:[S7 connection_4]DB32,X166.7",   //OP8_Work
+        L"CPU/DB32.OP1_Work",
+        L"CPU/DB32.OP2_Work",
+        L"CPU/DB32.OP3_Work",
+        L"CPU/DB32.OP4_Work",
+        L"CPU/DB32.OP5_Work",
+        L"CPU/DB32.OP6_Work",
+        L"CPU/DB32.OP7_Work",
+        L"CPU/DB32.OP8_Work",
 
-        L"S7:[S7 connection_4]DB32,X167.0",   //OP1_End
-        L"S7:[S7 connection_4]DB32,X167.1",   //OP2_End
-        L"S7:[S7 connection_4]DB32,X167.2",   //OP3_End
-        L"S7:[S7 connection_4]DB32,X167.3",   //OP4_End
-        L"S7:[S7 connection_4]DB32,X167.4",   //OP5_End
-        L"S7:[S7 connection_4]DB32,X167.5",   //OP6_End
-        L"S7:[S7 connection_4]DB32,X167.6",   //OP7_End
-        L"S7:[S7 connection_4]DB32,X167.7",   //OP8_End
+        L"CPU/DB32.OP1_End",
+        L"CPU/DB32.OP2_End",
+        L"CPU/DB32.OP3_End",
+        L"CPU/DB32.OP4_End",
+        L"CPU/DB32.OP5_End",
+        L"CPU/DB32.OP6_End",
+        L"CPU/DB32.OP7_End",
+        L"CPU/DB32.OP8_End",
 
-        //real
-        L"S7:[S7 connection_4]DB32,REAL4",   //OP1_Voltage_a
-        L"S7:[S7 connection_4]DB32,REAL8",   //OP1_Current_a
-        L"S7:[S7 connection_4]DB32,REAL12",  //OP1_Power_a
-        L"S7:[S7 connection_4]DB32,REAL16",  //OP1_Resist_a
-        L"S7:[S7 connection_4]DB32,REAL20",  //OP1_Voltage_b
-        L"S7:[S7 connection_4]DB32,REAL24",  //OP1_Current_b
-        L"S7:[S7 connection_4]DB32,REAL28",  //OP1_Power_b
-        L"S7:[S7 connection_4]DB32,REAL32",  //OP1_Resist_b
 
-        L"S7:[S7 connection_4]DB32,REAL38",   //OP3_Sred_Rashod
+        L"CPU/DB32.OP1_Voltage_a",
+        L"CPU/DB32.OP1_Current_a",
+        L"CPU/DB32.OP1_Power_a",
+        L"CPU/DB32.OP1_Resist_a",
+        L"CPU/DB32.OP1_Voltage_b",
+        L"CPU/DB32.OP1_Current_b",
+        L"CPU/DB32.OP1_Power_b",
+        L"CPU/DB32.OP1_Resist_b",
 
-        L"S7:[S7 connection_4]DB32,REAL44",   //OP4_Q_Fakt_03Qmax_A
-        L"S7:[S7 connection_4]DB32,REAL48",   //OP4_D_P_03Qmax_A
-        L"S7:[S7 connection_4]DB32,REAL52",   //OP4_D_A_03Qmax_A
-        L"S7:[S7 connection_4]DB32,REAL116",  //OP4_BP5_BP3_03Qmax_A
+        L"CPU/DB32.OP3_Sred_Rashod",
 
-        L"S7:[S7 connection_4]DB32,REAL56",   //OP4_Q_Fakt_06Qmax_A
-        L"S7:[S7 connection_4]DB32,REAL60",   //OP4_D_P_06Qmax_A
-        L"S7:[S7 connection_4]DB32,REAL64",   //OP4_D_A_06Qmax_A
-        L"S7:[S7 connection_4]DB32,REAL120",  //OP4_BP5_BP3_06Qmax_A
+        L"CPU/DB32.OP4_Q_Fakt_03Qmax_A",
+        L"CPU/DB32.OP4_D_P_03Qmax_A",
+        L"CPU/DB32.OP4_D_A_03Qmax_A",
+        L"CPU/DB32.OP4_BP5_BP3_03Qmax_A",
 
-        L"S7:[S7 connection_4]DB32,REAL68",   //OP4_Q_Fakt_Qmax_A
-        L"S7:[S7 connection_4]DB32,REAL72",   //OP4_D_P_Qmax_A
-        L"S7:[S7 connection_4]DB32,REAL76",   //OP4_D_A_Qmax_A
-        L"S7:[S7 connection_4]DB32,REAL124",  //OP4_BP5_BP3_Qmax_A
+        L"CPU/DB32.OP4_Q_Fakt_06Qmax_A",
+        L"CPU/DB32.OP4_D_P_06Qmax_A",
+        L"CPU/DB32.OP4_D_A_06Qmax_A",
+        L"CPU/DB32.OP4_BP5_BP3_06Qmax_A",
 
-        L"S7:[S7 connection_4]DB32,REAL80",   //OP4_Q_Fakt_03Qmax_B
-        L"S7:[S7 connection_4]DB32,REAL84",   //OP4_D_P_03Qmax_B
-        L"S7:[S7 connection_4]DB32,REAL88",   //OP4_D_A_03Qmax_B
-        L"S7:[S7 connection_4]DB32,REAL128",  //OP4_BP5_BP3_03Qmax_B
+        L"CPU/DB32.OP4_Q_Fakt_Qmax_A",
+        L"CPU/DB32.OP4_D_P_Qmax_A",
+        L"CPU/DB32.OP4_D_A_Qmax_A",
+        L"CPU/DB32.OP4_BP5_BP3_Qmax_A",
 
-        L"S7:[S7 connection_4]DB32,REAL92",   //OP4_Q_Fakt_06Qmax_B
-        L"S7:[S7 connection_4]DB32,REAL96",   //OP4_D_P_06Qmax_B
-        L"S7:[S7 connection_4]DB32,REAL100",  //OP4_D_A_06Qmax_B
-        L"S7:[S7 connection_4]DB32,REAL132",  //OP4_BP5_BP3_06Qmax_B
+        L"CPU/DB32.OP4_Q_Fakt_03Qmax_B",
+        L"CPU/DB32.OP4_D_P_03Qmax_B",
+        L"CPU/DB32.OP4_D_A_03Qmax_B",
+        L"CPU/DB32.OP4_BP5_BP3_03Qmax_B",
 
-        L"S7:[S7 connection_4]DB32,REAL104",  //OP4_Q_Fakt_Qmax_B
-        L"S7:[S7 connection_4]DB32,REAL108",  //OP4_D_P_Qmax_B
-        L"S7:[S7 connection_4]DB32,REAL112",  //OP4_D_A_Qmax_B
-        L"S7:[S7 connection_4]DB32,REAL136",  //OP4_BP5_BP3_Qmax_B
+        L"CPU/DB32.OP4_Q_Fakt_06Qmax_B",
+        L"CPU/DB32.OP4_D_P_06Qmax_B",
+        L"CPU/DB32.OP4_D_A_06Qmax_B",
+        L"CPU/DB32.OP4_BP5_BP3_06Qmax_B",
 
-        L"S7:[S7 connection_4]DB32,REAL144",  //OP8_Time_on_a
-        L"S7:[S7 connection_4]DB32,REAL148",  //OP8_Time_off_a
-        L"S7:[S7 connection_4]DB32,REAL152",  //OP8_Time_on_b
-        L"S7:[S7 connection_4]DB32,REAL156",  //OP8_Time_off_b
+        L"CPU/DB32.OP4_Q_Fakt_Qmax_B",
+        L"CPU/DB32.OP4_D_P_Qmax_B",
+        L"CPU/DB32.OP4_D_A_Qmax_B",
+        L"CPU/DB32.OP4_BP5_BP3_Qmax_B",
 
-        L"S7:[S7 connection_4]DB32,REAL162",  //Temperatura_masla
+        L"CPU/DB32.OP8_Time_on_a",
+        L"CPU/DB32.OP8_Time_off_a",
+        L"CPU/DB32.OP8_Time_on_b",
+        L"CPU/DB32.OP8_Time_off_b",
+
+        L"CPU/DB32.Temperatura_masla"
     };
 };
 

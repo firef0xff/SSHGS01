@@ -23,6 +23,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+#ifdef DEMO
+    setWindowTitle( windowTitle() + " DEMO" );
+#endif
+
     ui->statusBar->showMessage("Текущий пользователь: " + app::Settings::Instance().User() );
 
     ui->TestCase1->setText( test::hydro::Parameters::Instance().TestCollection().Name() );

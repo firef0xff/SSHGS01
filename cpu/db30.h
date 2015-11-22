@@ -64,7 +64,7 @@ private:
     enum
     {
         BOOL_COUNT = 19,
-        FLOAT_COUNT = 14
+        FLOAT_COUNT = 15
     };
 
     bool mBoolData[ BOOL_COUNT ] = {false};
@@ -73,42 +73,42 @@ private:
 
     wchar_t const* mAdresses[ BOOL_COUNT + FLOAT_COUNT ] = {
         //bool
-        L"S7:[S7 connection_4]DB30,X2.0",   //Current
-        L"S7:[S7 connection_4]DB30,X2.1",   //Coil
-        L"S7:[S7 connection_4]DB30,X2.2",   //TypeControl
-        L"S7:[S7 connection_4]DB30,X64.0",   //DD1_open_a
-        L"S7:[S7 connection_4]DB30,X64.1",   //DD2_open_a
-        L"S7:[S7 connection_4]DB30,X64.2",   //DD3_open_a
-        L"S7:[S7 connection_4]DB30,X64.3",   //TypeD_open_a
-        L"S7:[S7 connection_4]DB30,X64.4",   //DD1_open_b
-        L"S7:[S7 connection_4]DB30,X64.5",   //DD2_open_b
-        L"S7:[S7 connection_4]DB30,X64.6",   //DD3_open_b
-        L"S7:[S7 connection_4]DB30,X64.7",   //TypeD_open_b
-        L"S7:[S7 connection_4]DB30,X65.0",   //DD1_close_a
-        L"S7:[S7 connection_4]DB30,X65.1",   //DD2_close_a
-        L"S7:[S7 connection_4]DB30,X65.2",   //DD3_close_a
-        L"S7:[S7 connection_4]DB30,X65.3",   //TypeD_close_a
-        L"S7:[S7 connection_4]DB30,X65.4",   //DD1_close_b
-        L"S7:[S7 connection_4]DB30,X65.5",   //DD2_close_b
-        L"S7:[S7 connection_4]DB30,X65.6",   //DD3_close_b
-        L"S7:[S7 connection_4]DB30,X65.7",   //TypeD_close_b
+        L"CPU/DB30.Current",
+        L"CPU/DB30.Coil",
+        L"CPU/DB30.TypeControl",
+        L"CPU/DB30.DD1_open_a",
+        L"CPU/DB30.DD2_open_a",
+        L"CPU/DB30.DD3_open_a",
+        L"CPU/DB30.TypeD_open_a",
+        L"CPU/DB30.DD1_open_b",
+        L"CPU/DB30.DD2_open_b",
+        L"CPU/DB30.DD3_open_b",
+        L"CPU/DB30.TypeD_open_b",
+        L"CPU/DB30.DD1_close_a",
+        L"CPU/DB30.DD2_close_a",
+        L"CPU/DB30.DD3_close_a",
+        L"CPU/DB30.TypeD_close_a",
+        L"CPU/DB30.DD1_close_b",
+        L"CPU/DB30.DD2_close_b",
+        L"CPU/DB30.DD3_close_b",
+        L"CPU/DB30.TypeD_close_b",
 
         //real
-        L"S7:[S7 connection_4]DB30,REAL4",  //Voltage
-        L"S7:[S7 connection_4]DB30,REAL8",  //Delta_U
-        L"S7:[S7 connection_4]DB30,REAL12", //Q_max
-        L"S7:[S7 connection_4]DB30,REAL16", //Q_min
-        L"S7:[S7 connection_4]DB30,REAL20", //P_max_rab
-        L"S7:[S7 connection_4]DB30,REAL24", //P_min
-        L"S7:[S7 connection_4]DB30,REAL28", //P_narug_germ
-        L"S7:[S7 connection_4]DB30,REAL32", //Signal_vnutr_germ
-        L"S7:[S7 connection_4]DB30,REAL36", //Signal_PA_BT
-        L"S7:[S7 connection_4]DB30,REAL40", //Signal_PB_AT
-        L"S7:[S7 connection_4]DB30,REAL44", //Time_ON
-        L"S7:[S7 connection_4]DB30,REAL48", //Time_OFF
-        L"S7:[S7 connection_4]DB30,REAL52", //Min_P
-        L"S7:[S7 connection_4]DB30,REAL56"  //Max_P
-        L"S7:[S7 connection_4]DB30,REAL60"  //Time_P
+        L"CPU/DB30.Voltage",
+        L"CPU/DB30.Delta_U",
+        L"CPU/DB30.Q_max",
+        L"CPU/DB30.Q_min",
+        L"CPU/DB30.P_max_rab",
+        L"CPU/DB30.P_min",
+        L"CPU/DB30.P_narug_germ",
+        L"CPU/DB30.Signal_vnutr_germ",
+        L"CPU/DB30.Signal_PA_BT",
+        L"CPU/DB30.Signal_PB_AT",
+        L"CPU/DB30.Time_ON",
+        L"CPU/DB30.Time_OFF",
+        L"CPU/DB30.Min_P",
+        L"CPU/DB30.Max_P",
+        L"CPU/DB30.Time_P"
     };
 };
 
