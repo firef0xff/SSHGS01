@@ -20,6 +20,21 @@ HEADERS += \
     impl/cache/memory.h \
     impl/win_ole_mode.h
 
-DEFINES += WINDOWS
 
-LIBS += -lole32 -loleaut32
+win32 {
+    DEFINES += WINDOWS
+    LIBS += -lole32 -loleaut32
+}
+
+unix {
+    DEFINES -= WINDOWS
+    DEFINES += DEMO
+}
+
+debug {
+    DEFINES += DEBUG
+}
+
+release {
+    DEFINES -= DEBUG
+}

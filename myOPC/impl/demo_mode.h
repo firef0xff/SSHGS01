@@ -4,12 +4,20 @@
 #include <vector>
 #include <string>
 
+
+#ifndef WINDOWS
 typedef int HRESULT;
 union VARIANT
 {
     bool boolVal;
     float fltVal;
     long lVal;
+};
+enum RESULTS
+{
+    S_OK,
+    S_FALSE,
+    E_FAIL
 };
 struct OPCITEMSTATE
 {
@@ -19,13 +27,13 @@ struct OPCITEMSTATE
 //    WORD wReserved;
 VARIANT vDataValue;
 };
+#else
+#include <windows.h>
+#include "../opc.h"
+#endif
 
-enum RESULTS
-{
-    S_OK,
-    S_FALSE,
-    E_FAIL
-};
+
+
 
 namespace opc
 {

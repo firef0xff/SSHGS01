@@ -4,8 +4,9 @@
 #ifdef WINDOWS
 namespace opc
 {
-
-#define LOCALE_ID    0x409	// Code 0x409 = ENGLISH
+#define EN_LOCALE_ID    0x0409	// Code 0x0409 = ENGLISH
+#define RU_LOCALE_ID    0x0419	// Code 0x0419 = ENGLISH
+#define LOCALE_ID    RU_LOCALE_ID	// Code 0x409 = ENGLISH
 #define REQUESTED_UPDATE_RATE 500
 
 WinOleMode::WinOleMode( wchar_t const* ServerName ):
@@ -22,12 +23,14 @@ WinOleMode::WinOleMode( wchar_t const* ServerName ):
     result = CoInitialize( NULL ); //подготовка СОМ библиотек к работе
     // получение идентификатора класса по имени сервера
     result = CLSIDFromProgID( ServerName, &clsid );
+
     if ( result != S_OK )
     {
         return;
     }
     // получение адреса сервера
     result = CoCreateInstance( clsid, NULL, CLSCTX_LOCAL_SERVER, IID_IOPCServer, (void**) &pIOPCServer );
+    LogErrStrong( result );
     if ( result != S_OK )
     {
         return;
@@ -40,7 +43,7 @@ WinOleMode::~WinOleMode()
 {
     Groups.clear();
     if ( pIOPCServer )
-    result = pIOPCServer->Release();
+        result = pIOPCServer->Release();
 }
 
 GROUP_ID  WinOleMode::AddGroup( wchar_t const* pGroupName, wchar_t const* Addresses[]/*массив второго уровня*/,
@@ -64,6 +67,8 @@ GROUP_ID  WinOleMode::AddGroup( wchar_t const* pGroupName, wchar_t const* Addres
                                     &RevisedUpdateRate,
                                     IID_IOPCItemMgt,
                                     ( LPUNKNOWN* )& tmp->pItemMgt );
+    LogErrStrong( result );
+
     if( result != S_OK )
     {
         return 0;
@@ -78,7 +83,8 @@ GROUP_ID  WinOleMode::AddGroup( wchar_t const* pGroupName, wchar_t const* Addres
         tmp->pItems[i].hClient             	=  1;
         tmp->pItems[i].dwBlobSize          	=  0;
         tmp->pItems[i].pBlob			    =  NULL;
-        tmp->pItems[i].vtRequestedDataType 	=  0;
+        tmp->pItems[i].vtRequestedDataType 	=  VT_EMPTY;
+        tmp->pItems[i].wReserved            =  0;
     }
 
     HRESULT* pErrors = nullptr;
@@ -86,6 +92,9 @@ GROUP_ID  WinOleMode::AddGroup( wchar_t const* pGroupName, wchar_t const* Addres
                                       &(*tmp->pItems.begin()),
                                       &tmp->pItemResult,
                                       &pErrors);
+    LogErrStrong( result );
+    LogErrStrong( *pErrors );
+
     if( result != S_OK && result != S_FALSE )
     {
         return 0;
@@ -93,6 +102,7 @@ GROUP_ID  WinOleMode::AddGroup( wchar_t const* pGroupName, wchar_t const* Addres
     CoTaskMemFree( pErrors );
 
     result = tmp->pItemMgt->QueryInterface( IID_IOPCSyncIO, (void**)&tmp->pSyncIO );
+    LogErrStrong( result );
     if( result < 0 )
     {
         return 0;
@@ -154,6 +164,7 @@ OPCITEMSTATE*	WinOleMode::Read ( GROUP_ID id )
 
     HRESULT* pRErrors = nullptr;
     result = ptr->pSyncIO->Read( OPC_DS_CACHE, ptr->ItemsCount, &(*phServer.begin()), &pItemsValues, &pRErrors );
+    LogErrStrong( result );
     CoTaskMemFree( pRErrors );
     if( result == S_OK )
     {
@@ -225,22 +236,36 @@ HRESULT	WinOleMode::WriteMass ( GROUP_ID id, size_t pos, size_t mass_len, void *
     }
 
     result = ptr->pSyncIO->Write( mass_len, &(*phServer.begin()), &(*values.begin()), &pWErrors );
-    HRESULT res = *pWErrors;
 
-    if( result == S_OK || result == S_FALSE )
-    {
-        CoTaskMemFree( pWErrors );
-        return res;
-    }
-    else
-    {
-        return res;
-    }
+#ifdef DEBUG
+    LPWSTR  ErrorStr = L"";    //текст ошибки
+    pIOPCServer->GetErrorString( result, LOCALE_ID, &ErrorStr);
+    CoTaskMemFree(ErrorStr);
+
+    pIOPCServer->GetErrorString( *pWErrors, LOCALE_ID, &ErrorStr);
+    CoTaskMemFree(ErrorStr);
+#endif
+
+    HRESULT res = *pWErrors;
+    CoTaskMemFree( pWErrors );
+    return res;
 }
 bool    WinOleMode::Connected   ()
 {
     return mConnected;
 }
+
+void WinOleMode::LogErrStrong( HRESULT err )
+{
+#ifdef DEBUG
+    LPWSTR  ErrorStr = L"";    //текст ошибки
+    pIOPCServer->GetErrorString( err, LOCALE_ID, &ErrorStr);
+    CoTaskMemFree(ErrorStr);
+#else
+    (void) err;
+#endif
+}
+
 }//namespace opc
 
 #endif

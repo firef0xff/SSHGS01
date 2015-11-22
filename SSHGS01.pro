@@ -137,6 +137,26 @@ FORMS    += mainwindow.ui \
 
 OTHER_FILES += devices/*.json\
     тз/*\
+    config/*\
 
 DISTFILES += \
     тз/ячейки
+
+win32 {
+    DEFINES += WINDOWS
+    LIBS += -lole32 -loleaut32
+}
+
+unix {
+    DEFINES -= WINDOWS
+    DEFINES += DEMO
+}
+
+debug {
+    DEFINES += DEBUG
+}
+
+release {
+    DEFINES -= DEBUG
+}
+

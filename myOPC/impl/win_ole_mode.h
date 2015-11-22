@@ -20,8 +20,7 @@ public:
     HRESULT         WriteValue  ( GROUP_ID id, size_t pos, void *item, types type );
     HRESULT         WriteMass   ( GROUP_ID id, size_t pos, size_t mass_len, void *item, types type );
     void            OpcMassFree ( GROUP_ID id, OPCITEMSTATE* mass);
-    bool            Connected   ();
-
+    bool            Connected   ();   
 private:
     //типы
     class Group                 //структура с данными по шруппе ОПС сервера
@@ -52,6 +51,7 @@ private:
 
     //функции
     Item GetGroup ( GROUP_ID id );
+    void LogErrStrong( HRESULT err );
     //данные
     IOPCServer  *pIOPCServer;	//указатель на OPC сервер
 

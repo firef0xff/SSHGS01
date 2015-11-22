@@ -1,0 +1,4 @@
+Start_Oper;DB31,X2.0;RW
+Stop_Oper;DB31,X2.1;RW
+Nasos_M2;DB31,X2.2;RW
+N_Operation;DB31,REAL4;RW

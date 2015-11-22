@@ -4,10 +4,12 @@
 #include <mutex>
 #include <thread>
 
+#ifdef DEMO
+#include "impl/demo_mode.h"
+#else
 #ifdef WINDOWS
 #include "impl/win_ole_mode.h"
-#else
-#include "impl/demo_mode.h"
+#endif
 #endif
 
 namespace opc
@@ -46,11 +48,20 @@ struct SimaticNET
         return L"OPC.SimaticNET";
     }
 };
+struct VipaOpc7
+{
+    static wchar_t const* Name()
+    {
+        return L"VIPA.OPCServer";
+    }
+};
 
-#ifdef WINDOWS
-typedef Server< WinOleMode, SimaticNET > miniOPC;
+#ifdef DEMO
+typedef Server< DemoMode, VipaOpc7 > miniOPC;
 #else
-typedef Server< DemoMode, SimaticNET > miniOPC;
+#ifdef WINDOWS
+typedef Server< WinOleMode, VipaOpc7 > miniOPC;
+#endif
 #endif
 
 }//namespace opc
