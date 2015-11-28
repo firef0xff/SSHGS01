@@ -1,5 +1,7 @@
 #pragma once
 #include "db30.h"
+#include "db31.h"
+#include "db32.h"
 
 namespace cpu
 {
@@ -11,7 +13,12 @@ public:
     static CpuMemory& Instance();
 
     void Syncronise();
-    data::DB30 HydpoParams;
+    void ReadAll();
+    void WriteAll();
+
+    data::DB30 DB30;
+    data::DB31 DB31;
+    data::DB32 DB32;
 
 private:
     CpuMemory();

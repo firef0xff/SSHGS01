@@ -31,7 +31,18 @@ CpuMemory& CpuMemory::Instance()
 
 void CpuMemory::Syncronise()
 {
+    ReadAll();
+    WriteAll();
+}
 
+void CpuMemory::ReadAll()
+{
+    DB32.Read();
+}
+void CpuMemory::WriteAll()
+{
+    DB30.Write();
+    DB31.Write();
 }
 
 }//namespace cpu

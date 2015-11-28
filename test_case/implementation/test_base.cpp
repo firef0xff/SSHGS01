@@ -30,7 +30,9 @@ namespace hydro
 uint8_t Test::mTestsCount = 1;
 
 Test::Test( QString const& name, uint8_t id ):
-    test::TestCommonData( &HydroTests, name, mTestsCount, id )
+    test::TestCommonData( &HydroTests, name, mTestsCount, id ),
+    mCommand( cpu::CpuMemory::Instance().DB31 ),
+    mResults( cpu::CpuMemory::Instance().DB32 )
 {
     ++mTestsCount;
 }

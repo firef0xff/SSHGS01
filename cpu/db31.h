@@ -4,13 +4,15 @@
 
 namespace cpu
 {
+
+class CpuMemory;
+
 namespace data
 {
 
 class DB31 :public Out
 {
 public:
-    DB31();
 
     void Write();
 
@@ -20,6 +22,11 @@ public:
     float& N_Operation;     //4.0 номер операции
 
 private:
+    friend class cpu::CpuMemory;
+    DB31();
+    DB31( const DB31& ) = delete;
+    void operator = ( const DB31& ) = delete;
+
     enum
     {
         BOOL_COUNT = 3,

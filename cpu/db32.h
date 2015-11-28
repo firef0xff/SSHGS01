@@ -4,7 +4,7 @@
 
 namespace cpu
 {
-
+class CpuMemory;
 namespace data
 {
 
@@ -12,7 +12,6 @@ namespace data
 class DB32 : public In
 {
 public:
-    DB32();
 
     void Read();
 
@@ -159,6 +158,12 @@ public:
     bool& OP8_End;  //167.7 Конец операции 8
 
 private:
+
+    friend class cpu::CpuMemory;
+    DB32();
+    DB32( const DB32& ) = delete;
+    void operator = ( const DB32& ) = delete;
+
     enum
     {
         BOOL_COUNT = 71,

@@ -4,6 +4,7 @@
 
 namespace cpu
 {
+class CpuMemory;
 
 namespace data
 {
@@ -12,8 +13,6 @@ namespace data
 class DB30 : public Out
 {
 public:
-    DB30();
-
     void Write();
 
     bool& Current;        //2.0 0 - постоянный ток, 1 - переменный
@@ -61,6 +60,11 @@ public:
 
 
 private:
+    friend class cpu::CpuMemory;
+    DB30();
+    DB30( const DB30& ) = delete;
+    void operator = ( const DB30& ) = delete;
+
     enum
     {
         BOOL_COUNT = 19,

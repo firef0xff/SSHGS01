@@ -253,7 +253,7 @@ bool Parameters::Deserialize(const QJsonObject &obj )
 
 void Parameters::WriteToController() const
 {
-    auto& mem = cpu::CpuMemory::Instance().HydpoParams;
+    auto& mem = cpu::CpuMemory::Instance().DB30;
 
     mem.Current = mVoltageType == VT_DC ? 0: 1;
     mem.Coil = mReelCount == 1 ? 0 : 1;
