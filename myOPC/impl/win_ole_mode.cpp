@@ -1,5 +1,7 @@
 #include "win_ole_mode.h"
 #include "../miniOPC.h"
+#include <iostream>
+
 
 #ifdef WINDOWS
 namespace opc
@@ -165,7 +167,11 @@ OPCITEMSTATE*	WinOleMode::Read ( GROUP_ID id )
     HRESULT* pRErrors = nullptr;
     result = ptr->pSyncIO->Read( OPC_DS_CACHE, ptr->ItemsCount, &(*phServer.begin()), &pItemsValues, &pRErrors );
     LogErrStrong( result );
-    CoTaskMemFree( pRErrors );
+    if ( pRErrors )
+    {
+        LogErrStrong( *pRErrors );
+        CoTaskMemFree( pRErrors );
+    }
     if( result == S_OK )
     {
         return pItemsValues;
@@ -237,17 +243,15 @@ HRESULT	WinOleMode::WriteMass ( GROUP_ID id, size_t pos, size_t mass_len, void *
 
     result = ptr->pSyncIO->Write( mass_len, &(*phServer.begin()), &(*values.begin()), &pWErrors );
 
-#ifdef DEBUG
-    LPWSTR  ErrorStr = L"";    //текст ошибки
-    pIOPCServer->GetErrorString( result, LOCALE_ID, &ErrorStr);
-    CoTaskMemFree(ErrorStr);
+    LogErrStrong(result);
 
-    pIOPCServer->GetErrorString( *pWErrors, LOCALE_ID, &ErrorStr);
-    CoTaskMemFree(ErrorStr);
-#endif
-
-    HRESULT res = *pWErrors;
-    CoTaskMemFree( pWErrors );
+    HRESULT res = result;
+    if (pWErrors)
+    {
+        LogErrStrong(*pWErrors);
+        res = *pWErrors;
+        CoTaskMemFree( pWErrors );
+    }
     return res;
 }
 bool    WinOleMode::Connected   ()
@@ -256,13 +260,13 @@ bool    WinOleMode::Connected   ()
 }
 
 void WinOleMode::LogErrStrong( HRESULT err )
-{
+{    
+    if (err)
+        std::cout << std::hex << err << std::endl;
 #ifdef DEBUG
     LPWSTR  ErrorStr = L"";    //текст ошибки
     pIOPCServer->GetErrorString( err, LOCALE_ID, &ErrorStr);
     CoTaskMemFree(ErrorStr);
-#else
-    (void) err;
 #endif
 }
 
