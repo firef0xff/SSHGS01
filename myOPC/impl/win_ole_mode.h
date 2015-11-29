@@ -5,9 +5,33 @@
 #include "../opc.h"
 #include <vector>
 #include <memory>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <functional>
 
 namespace opc
 {
+
+class SyncThread
+{
+public:
+    typedef std::function<void(void)> Function;
+
+    SyncThread();
+    ~SyncThread();
+
+    void Start();
+    void Exec( Function func );
+private:
+    void Run();
+    bool interrupt;
+    std::thread mThread;
+    Function mFunc;
+    std::mutex Mutex;
+    std::condition_variable mRunWaiter;
+    std::condition_variable mExecWaiter;
+};
 
 class WinOleMode
 {
@@ -50,6 +74,14 @@ private:
     typedef GroupsList::const_iterator Item;
 
     //функции
+
+    void Init           ( wchar_t const* ServerName );
+    void AddGroupImpl   ( GROUP_ID& id, wchar_t const* pGroupName, wchar_t const* Addresses[], size_t ItemsCount );
+    void OpcMassFreeImpl( GROUP_ID id, OPCITEMSTATE* mass);
+    void ReadImpl       ( OPCITEMSTATE **res, GROUP_ID id );
+    void WriteMassImpl  ( HRESULT &res, GROUP_ID id, size_t pos, size_t mass_len, void *item, types type );
+
+
     Item GetGroup ( GROUP_ID id );
     void LogErrStrong( HRESULT err );
     //данные
@@ -66,6 +98,8 @@ private:
 
     //состояние сервера
     bool mConnected;
+
+    SyncThread mThread;
 };
 
 }//namespace opc

@@ -11,6 +11,54 @@ namespace opc
 #define LOCALE_ID    RU_LOCALE_ID	// Code 0x409 = ENGLISH
 #define REQUESTED_UPDATE_RATE 500
 
+
+SyncThread::SyncThread():
+    interrupt(false)
+{}
+SyncThread::~SyncThread()
+{
+    interrupt = true;
+    mRunWaiter.notify_all();
+    mExecWaiter.notify_all();
+    if ( mThread.joinable() )
+        mThread.join();
+}
+void SyncThread::Start()
+{
+    std::unique_lock< std::mutex > lock( Mutex );
+    mThread = std::thread( &SyncThread::Run, this );
+    mRunWaiter.wait(lock);
+}
+void SyncThread::Exec( Function func )
+{
+    std::unique_lock< std::mutex > lock( Mutex );
+    mFunc = func;
+    mRunWaiter.notify_one();
+    mExecWaiter.wait( lock );
+}
+void SyncThread::Run()
+{
+    for(;;)
+    {
+        try
+        {
+            mRunWaiter.notify_all();
+            std::unique_lock< std::mutex > lock( Mutex );
+            mRunWaiter.wait(lock);
+            if ( interrupt )
+                return;
+            if (mFunc)
+                mFunc();
+            mExecWaiter.notify_one();
+        }
+        catch(...)
+        {
+
+        }
+    }
+}
+
+
 WinOleMode::WinOleMode( wchar_t const* ServerName ):
     pIOPCServer( nullptr ),
     GrpSrvHandle( 0 ),
@@ -20,6 +68,13 @@ WinOleMode::WinOleMode( wchar_t const* ServerName ):
     PercentDeadband( 0.0 ),
     RevisedUpdateRate( 0 ),
     mConnected( false )
+{
+    mThread.Start();
+    mThread.Exec( std::bind( &WinOleMode::Init, this, ServerName ) );
+}
+
+
+void WinOleMode::Init( wchar_t const* ServerName )
 {
     //подключение к серверу
     result = CoInitialize( NULL ); //подготовка СОМ библиотек к работе
@@ -41,6 +96,7 @@ WinOleMode::WinOleMode( wchar_t const* ServerName ):
     Groups.clear();
 }
 
+
 WinOleMode::~WinOleMode()
 {
     Groups.clear();
@@ -51,9 +107,17 @@ WinOleMode::~WinOleMode()
 GROUP_ID  WinOleMode::AddGroup( wchar_t const* pGroupName, wchar_t const* Addresses[]/*массив второго уровня*/,
                             size_t ItemsCount/*массив считается элементом*/)
 {
+    GROUP_ID id = 0;
+    mThread.Exec( std::bind( &WinOleMode::AddGroupImpl, this, std::ref(id), pGroupName, Addresses, ItemsCount ) );
+    return id;
+}
+
+void WinOleMode::AddGroupImpl ( GROUP_ID& id, wchar_t const* pGroupName, wchar_t const* Addresses[], size_t ItemsCount )
+{
     if (!mConnected)
     {
-        return 0;
+        id = 0;
+        return;
     }
 
     GroupPtr tmp( new Group() );
@@ -73,7 +137,8 @@ GROUP_ID  WinOleMode::AddGroup( wchar_t const* pGroupName, wchar_t const* Addres
 
     if( result != S_OK )
     {
-        return 0;
+        id = 0;
+        return;
     }
 
     tmp->pItems.resize( tmp->ItemsCount );
@@ -99,7 +164,8 @@ GROUP_ID  WinOleMode::AddGroup( wchar_t const* pGroupName, wchar_t const* Addres
 
     if( result != S_OK && result != S_FALSE )
     {
-        return 0;
+        id = 0;
+        return;
     }
     CoTaskMemFree( pErrors );
 
@@ -107,12 +173,14 @@ GROUP_ID  WinOleMode::AddGroup( wchar_t const* pGroupName, wchar_t const* Addres
     LogErrStrong( result );
     if( result < 0 )
     {
-        return 0;
+        id = 0;
+        return;
     }
 
     Groups.push_back( std::move( tmp ) );
-    return Groups.size();
+    id = Groups.size();
 }
+
 
 WinOleMode::Item    WinOleMode::GetGroup( GROUP_ID id )
 {
@@ -129,6 +197,10 @@ WinOleMode::Item    WinOleMode::GetGroup( GROUP_ID id )
 
 void 	WinOleMode::OpcMassFree( GROUP_ID id, OPCITEMSTATE* mass )
 {
+    mThread.Exec( std::bind( &WinOleMode::OpcMassFreeImpl, this, id, mass ) );
+}
+void    WinOleMode::OpcMassFreeImpl( GROUP_ID id, OPCITEMSTATE* mass)
+{
     Item it = GetGroup( id );
     if ( it == Groups.end() )
     {
@@ -144,14 +216,22 @@ void 	WinOleMode::OpcMassFree( GROUP_ID id, OPCITEMSTATE* mass )
 
 OPCITEMSTATE*	WinOleMode::Read ( GROUP_ID id )
 {
+    OPCITEMSTATE *res = nullptr;
+    mThread.Exec( std::bind( &WinOleMode::ReadImpl, this, &res, id ) );
+    return res;
+}
+void            WinOleMode::ReadImpl ( OPCITEMSTATE **res, GROUP_ID id )
+{
     if ( !mConnected )
     {
-        return nullptr;
+        *res = nullptr;
+        return;
     }
     Item it = GetGroup( id );
     if ( it == Groups.end() )
     {
-        return nullptr;
+        *res = nullptr;
+        return;
     }
 
     Group* ptr = it->get();
@@ -174,35 +254,47 @@ OPCITEMSTATE*	WinOleMode::Read ( GROUP_ID id )
     }
     if( result == S_OK )
     {
-        return pItemsValues;
+        *res = pItemsValues;
+        return;
     }
     else
     {
-        return nullptr;
+        *res = nullptr;
+        return;
     }
 }
 
-HRESULT	WinOleMode::WriteValue   ( GROUP_ID id, size_t pos, void *item, types type )
+
+HRESULT	WinOleMode::WriteValue  ( GROUP_ID id, size_t pos, void *item, types type )
 {
     return  WriteMass( id, pos, 1, item, type );
 }
-HRESULT	WinOleMode::WriteMass ( GROUP_ID id, size_t pos, size_t mass_len, void *item, types type )
+HRESULT	WinOleMode::WriteMass   ( GROUP_ID id, size_t pos, size_t mass_len, void *item, types type )
+{
+    HRESULT res = E_FAIL;
+    mThread.Exec( std::bind( &WinOleMode::WriteMassImpl, this, std::ref(res), id, pos, mass_len, item, type ) );
+    return res;
+}
+void    WinOleMode::WriteMassImpl   ( HRESULT &res, GROUP_ID id, size_t pos, size_t mass_len, void *item, types type )
 {
     if ( !mConnected )
     {
-        return E_FAIL;
+        res = E_FAIL;
+        return;
     }
 
     Item it = GetGroup( id );
     if ( it == Groups.end() )
     {
-        return E_FAIL;
+        res = E_FAIL;
+        return;
     }
 
     Group* ptr = it->get();
     if ( ptr->ItemsCount <= pos )
     {
-        return E_FAIL;
+        res = E_FAIL;
+        return;
     }
 
     std::vector<OPCHANDLE> phServer;
@@ -236,7 +328,8 @@ HRESULT	WinOleMode::WriteMass ( GROUP_ID id, size_t pos, size_t mass_len, void *
             }
             default:
             {
-                return E_FAIL;
+                res = E_FAIL;
+                return;
             }
         }
     }
@@ -245,15 +338,15 @@ HRESULT	WinOleMode::WriteMass ( GROUP_ID id, size_t pos, size_t mass_len, void *
 
     LogErrStrong(result);
 
-    HRESULT res = result;
+    res = result;
     if (pWErrors)
     {
         LogErrStrong(*pWErrors);
         res = *pWErrors;
         CoTaskMemFree( pWErrors );
     }
-    return res;
 }
+
 bool    WinOleMode::Connected   ()
 {
     return mConnected;
@@ -269,6 +362,8 @@ void WinOleMode::LogErrStrong( HRESULT err )
     CoTaskMemFree(ErrorStr);
 #endif
 }
+
+
 
 }//namespace opc
 

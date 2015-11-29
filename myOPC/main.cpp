@@ -64,10 +64,17 @@ public:
         int i = 0;
         while ( i >= 0 )
         {
+            std::chrono::time_point< std::chrono::system_clock > start, end;
+            start = std::chrono::system_clock::now();
             //++i;
             server.WriteMass( mGroupID, 0, BOOL_COUNT, static_cast<void*>( mWriteBoolData ), opc::tBOOL );
             server.WriteMass( mGroupID, BOOL_COUNT, FLOAT_COUNT, static_cast<void*>( mWriteFloatData ), opc::tFLOAT );
 
+            end = std::chrono::system_clock::now();
+            int mcs = std::chrono::duration_cast< std::chrono::microseconds > ( end - start ).count();
+            std::cout << "time 2 write msec: " << mcs << std::endl;
+
+            start = std::chrono::system_clock::now();
             res = server.Read( mGroupID );
             if ( res )
             {
@@ -88,6 +95,11 @@ public:
             {
                 std::cout << BOOL_COUNT + i << " = " << mFloatData[i] << std::endl;
             }
+
+            end = std::chrono::system_clock::now();
+            mcs = std::chrono::duration_cast< std::chrono::microseconds > ( end - start ).count();
+            std::cout << "time msec: " << mcs << std::endl;
+
 
             bool mWriteBoolDataZero[ BOOL_COUNT ] = {false, false, false};
             float mWriteFloatDataZero[ FLOAT_COUNT ] = { 0.0 };
