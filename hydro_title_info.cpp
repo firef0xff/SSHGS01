@@ -168,9 +168,11 @@ void HydroTitleInfo::on_ControlType_activated(int index)
     {
         ui->l_min_control_pressure->setVisible( visible );
         ui->l_max_control_pressure->setVisible( visible );
+        ui->l_test_control_Pressure->setVisible( visible );
 
         ui->MinControlPressure->setVisible( visible );
         ui->MaxControlPressure->setVisible( visible );
+        ui->TestControlPressure->setVisible( visible );
     };
 
     switch (index)

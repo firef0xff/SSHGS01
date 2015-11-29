@@ -22,7 +22,7 @@ private slots:
 private:
     void closeEvent(QCloseEvent *e);
 
+    Ui::Login *ui;
     QMainWindow *mMainWindow;
 
-    Ui::Login *ui;
 };

@@ -1,173 +1,346 @@
-DB30.Current;DB30,X2.0;RW
-DB30.Coil;DB30,X2.1;RW
-DB30.TypeControl;DB30,X2.2;RW
-DB30.DD1_open_a;DB30,X64.0;RW
-DB30.DD2_open_a;DB30,X64.1;RW
-DB30.DD3_open_a;DB30,X64.2;RW
-DB30.TypeD_open_a;DB30,X64.3;RW
-DB30.DD1_open_b;DB30,X64.4;RW
-DB30.DD2_open_b;DB30,X64.5;RW
-DB30.DD3_open_b;DB30,X64.6;RW
-DB30.TypeD_open_b;DB30,X64.7;RW
-DB30.DD1_close_a;DB30,X65.0;RW
-DB30.DD2_close_a;DB30,X65.1;RW
-DB30.DD3_close_a;DB30,X65.2;RW
-DB30.TypeD_close_a;DB30,X65.3;RW
-DB30.DD1_close_b;DB30,X65.4;RW
-DB30.DD2_close_b;DB30,X65.5;RW
-DB30.DD3_close_b;DB30,X65.6;RW
-DB30.TypeD_close_b;DB30,X65.7;RW
+DB2.ref_a;DB2,REAL0,100;RW;TST=;CMT=опорный сигнал катушки а
+DB2.consumption_a;DB2,REAL400,100;RW;TST=;CMT=расход катушки а
+DB2.ref_b;DB2,REAL800,100;RW;TST=;CMT=опорный сигнал катушки b
+DB2.consumption_b;DB2,REAL1200,100;RW;TST=;CMT=расход катушки b
 
-DB30.Voltage;DB30,REAL4;RW
-DB30.Delta_U;DB30,REAL8;RW
-DB30.Q_max;DB30,REAL12;RW
-DB30.Q_min;DB30,REAL16;RW
-DB30.P_max_rab;DB30,REAL20;RW
-DB30.P_min;DB30,REAL24;RW
-DB30.P_narug_germ;DB30,REAL28;RW
-DB30.Signal_vnutr_germ;DB30,REAL32;RW
-DB30.Signal_PA_BT;DB30,REAL36;RW
-DB30.Signal_PB_AT;DB30,REAL40;RW
-DB30.Time_ON;DB30,REAL44;RW
-DB30.Time_OFF;DB30,REAL48;RW
-DB30.Min_P;DB30,REAL52;RW
-DB30.Max_P;DB30,REAL56;RW
-DB30.Time_P;DB30,REAL60;RW
+DB3.open_ref;DB3,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
+DB3.open_consumption;DB3,REAL400,100;RW;TST=;CMT=расход на открытие
+DB3.open_bp3;DB3,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
+DB3.opoen_bp4;DB3,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
+DB3.opoen_bp5;DB3,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
+DB3.close_ref;DB3,REAL2000,100;RW;TST=;CMT=опорный сигнал назакрытие
+DB3.close_consumption;DB3,REAL2400,100;RW;TST=;CMT=расход на закрытие
+DB3.close_bp3;DB3,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
+DB3.close_bp4;DB3,REAL3200,100;RW;TST=;CMT=давление ВР4 на закрытие
+DB3.close_bp5;DB3,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
+
+DB4.open_ref;DB4,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
+DB4.open_consumption;DB4,REAL400,100;RW;TST=;CMT=расход на открытие
+DB4.open_bp3;DB4,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
+DB4.opoen_bp4;DB4,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
+DB4.opoen_bp5;DB4,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
+DB4.close_ref;DB4,REAL2000,100;RW;TST=;CMT=опорный сигнал назакрытие
+DB4.close_consumption;DB4,REAL2400,100;RW;TST=;CMT=расход на закрытие
+DB4.close_bp3;DB4,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
+DB4.close_bp4;DB4,REAL3200,100;RW;TST=;CMT=давление ВР4 на закрытие
+DB4.close_bp5;DB4,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
+
+DB5.open_ref;DB5,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
+DB5.open_consumption;DB5,REAL400,100;RW;TST=;CMT=расход на открытие
+DB5.open_bp3;DB5,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
+DB5.opoen_bp4;DB5,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
+DB5.opoen_bp5;DB5,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
+DB5.close_ref;DB5,REAL2000,100;RW;TST=;CMT=опорный сигнал назакрытие
+DB5.close_consumption;DB5,REAL2400,100;RW;TST=;CMT=расход на закрытие
+DB5.close_bp3;DB5,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
+DB5.close_bp4;DB5,REAL3200,100;RW;TST=;CMT=давление ВР4 на закрытие
+DB5.close_bp5;DB5,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
+
+DB6.open_ref;DB6,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
+DB6.open_consumption;DB6,REAL400,100;RW;TST=;CMT=расход на открытие
+DB6.open_bp3;DB6,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
+DB6.opoen_bp4;DB6,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
+DB6.opoen_bp5;DB6,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
+DB6.close_ref;DB6,REAL2000,100;RW;TST=;CMT=опорный сигнал назакрытие
+DB6.close_consumption;DB6,REAL2400,100;RW;TST=;CMT=расход на закрытие
+DB6.close_bp3;DB6,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
+DB6.close_bp4;DB6,REAL3200,100;RW;TST=;CMT=давление ВР4 на закрытие
+DB6.close_bp5;DB6,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
+
+DB7.open_ref;DB7,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
+DB7.open_consumption;DB7,REAL400,100;RW;TST=;CMT=расход на открытие
+DB7.open_bp3;DB7,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
+DB7.opoen_bp4;DB7,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
+DB7.opoen_bp5;DB7,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
+DB7.close_ref;DB7,REAL2000,100;RW;TST=;CMT=опорный сигнал назакрытие
+DB7.close_consumption;DB7,REAL2400,100;RW;TST=;CMT=расход на закрытие
+DB7.close_bp3;DB7,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
+DB7.close_bp4;DB7,REAL3200,100;RW;TST=;CMT=давление ВР4 на закрытие
+DB7.close_bp5;DB7,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
+
+DB8.open_ref;DB8,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
+DB8.open_consumption;DB8,REAL400,100;RW;TST=;CMT=расход на открытие
+DB8.open_bp3;DB8,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
+DB8.opoen_bp4;DB8,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
+DB8.opoen_bp5;DB8,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
+DB8.close_ref;DB8,REAL2000,100;RW;TST=;CMT=опорный сигнал назакрытие
+DB8.close_consumption;DB8,REAL2400,100;RW;TST=;CMT=расход на закрытие
+DB8.close_bp3;DB8,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
+DB8.close_bp4;DB8,REAL3200,100;RW;TST=;CMT=давление ВР4 на закрытие
+DB8.close_bp5;DB8,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
+
+DB9.consumption_a;DB9,REAL0,50;RW;TST=;CMT=расход канал А
+DB9.bp3_a;DB9,REAL200,50;RW;TST=;CMT=давление ВР3 канал А
+DB9.bp5_a;DB9,REAL400,50;RW;TST=;CMT=давление ВР5 канал В
+DB9.consumption_b;DB9,REAL600,50;RW;TST=;CMT=расход канал В
+DB9.bp4_b;DB9,REAL800,50;RW;TST=;CMT=давление ВР4 канал В
+DB9.bp5_b;DB9,REAL1000,50;RW;TST=;CMT=давление ВР5 канал В
+
+DB10.ref;DB10,REAL0,20;RW;TST=;CMT=опорный сигнал
+DB10.coordinate;DB10,REAL80,20;RW;TST=;CMT=положение цилиндра
+
+DB11.coordinate;DB11,REAL0,10000;RW;TST=;CMT=положение цилиндра
+
+DB12.ref_a;DB12,REAL0,100;RW;TST=;CMT=опорный сигнал А
+DB12.consumption_a;DB12,REAL400,100;RW;TST=;CMT=расход А
+DB12.ref_b;DB12,REAL800,100;RW;TST=;CMT=опорный сигнал В
+DB12.consumption_b;DB12,REAL1200,100;RW;TST=;CMT=расход В
+
+DB13.open_ref;DB13,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
+DB13.open_consumption;DB13,REAL400,100;RW;TST=;CMT=расход на открытие
+DB13.open_bp3;DB13,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
+DB13.opoen_bp4;DB13,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
+DB13.opoen_bp5;DB13,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
+DB13.close_ref;DB13,REAL2000,100;RW;TST=;CMT=опорный сигнал на закрытие
+DB13.close_consumption;DB13,REAL2400,100;RW;TST=;CMT=расход на закрытие
+DB13.close_bp3;DB13,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
+DB13.close_bp4;DB13,REAL3200,100;RW;TST=;CMT=давление ВР4 на закрытие
+DB13.close_bp5;DB13,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
+
+DB14.open_ref;DB14,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
+DB14.open_consumption;DB14,REAL400,100;RW;TST=;CMT=расход на открытие
+DB14.open_bp3;DB14,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
+DB14.opoen_bp4;DB14,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
+DB14.opoen_bp5;DB14,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
+DB14.close_ref;DB14,REAL2000,100;RW;TST=;CMT=опорный сигнал на закрытие
+DB14.close_consumption;DB14,REAL2400,100;RW;TST=;CMT=расход на закрытие
+DB14.close_bp3;DB14,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
+DB14.close_bp4;DB14,REAL3200,100;RW;TST=;CMT=давление ВР4 на закрытие
+DB14.close_bp5;DB14,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
+
+DB15.open_ref;DB15,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
+DB15.open_consumption;DB15,REAL400,100;RW;TST=;CMT=расход на открытие
+DB15.open_bp3;DB15,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
+DB15.opoen_bp4;DB15,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
+DB15.opoen_bp5;DB15,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
+DB15.close_ref;DB15,REAL2000,100;RW;TST=;CMT=опорный сигнал на закрытие
+DB15.close_consumption;DB15,REAL2400,100;RW;TST=;CMT=расход на закрытие
+DB15.close_bp3;DB15,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
+DB15.close_bp4;DB15,REAL3200,100;RW;TST=;CMT=давление ВР4 на закрытие
+DB15.close_bp5;DB15,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
+
+DB16.open_ref;DB16,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
+DB16.open_consumption;DB16,REAL400,100;RW;TST=;CMT=расход на открытие
+DB16.open_bp3;DB16,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
+DB16.opoen_bp4;DB16,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
+DB16.opoen_bp5;DB16,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
+DB16.close_ref;DB16,REAL2000,100;RW;TST=;CMT=опорный сигнал на закрытие
+DB16.close_consumption;DB16,REAL2400,100;RW;TST=;CMT=расход на закрытие
+DB16.close_bp3;DB16,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
+DB16.close_bp4;DB16,REAL3200,100;RW;TST=;CMT=давление ВР4 на закрытие
+DB16.close_bp5;DB16,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
+
+DB17.open_ref;DB17,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
+DB17.open_consumption;DB17,REAL400,100;RW;TST=;CMT=расход на открытие
+DB17.open_bp3;DB17,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
+DB17.opoen_bp4;DB17,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
+DB17.opoen_bp5;DB17,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
+DB17.close_ref;DB17,REAL2000,100;RW;TST=;CMT=опорный сигнал на закрытие
+DB17.close_consumption;DB17,REAL2400,100;RW;TST=;CMT=расход на закрытие
+DB17.close_bp3;DB17,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
+DB17.close_bp4;DB17,REAL3200,100;RW;TST=;CMT=давление ВР4 на закрытие
+DB17.close_bp5;DB17,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
+
+DB18.open_ref;DB18,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
+DB18.open_consumption;DB18,REAL400,100;RW;TST=;CMT=расход на открытие
+DB18.open_bp3;DB18,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
+DB18.opoen_bp4;DB18,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
+DB18.opoen_bp5;DB18,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
+DB18.close_ref;DB18,REAL2000,100;RW;TST=;CMT=опорный сигнал на закрытие
+DB18.close_consumption;DB18,REAL2400,100;RW;TST=;CMT=расход на закрытие
+DB18.close_bp3;DB18,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
+DB18.close_bp4;DB18,REAL3200,100;RW;TST=;CMT=давление ВР4 на закрытие
+DB18.close_bp5;DB18,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
+
+DB19.consumption_a;DB19,REAL0,50;RW;TST=;CMT=расход канал А
+DB19.bp3_a;DB19,REAL200,50;RW;TST=;CMT=давление ВР3 канал А
+DB19.bp5_a;DB19,REAL400,50;RW;TST=;CMT=давление ВР5 канал В
+DB19.consumption_b;DB19,REAL600,50;RW;TST=;CMT=расход канал В
+DB19.bp4_b;DB19,REAL800,50;RW;TST=;CMT=давление ВР4 канал В
+DB19.bp5_b;DB19,REAL1000,50;RW;TST=;CMT=давление ВР5 канал В
+
+DB20.ref;DB20,REAL0,20;RW;TST=;CMT=опорный сигнал
+DB20.coordinate;DB20,REAL80,20;RW;TST=;CMT=положение цилиндра
+
+DB21.coordinate;DB21,REAL0,10000;RW;TST=;CMT=положение цилиндра
+
+DB22.ref;DB22,REAL0,100;RW;TST=;CMT=опорный сигнал
+DB22.output current;DB22,REAL400,100;RW;TST=;CMT=выходной ток
+
+DB23.coordinate;DB23,REAL0,10000;RW;TST=;CMT=положение цилиндра
+
+DB24.coordinate;DB24,REAL0,10000;RW;TST=;CMT=положение цилиндра
+
+DB30.Current;DB30,X2.0;RW;TST=;CMT=
+DB30.Coil;DB30,X2.1;RW;TST=;CMT=
+DB30.TypeControl;DB30,X2.2;RW;TST=;CMT=
+DB30.DD1_open_a;DB30,X64.0;RW;TST=;CMT=
+DB30.DD2_open_a;DB30,X64.1;RW;TST=;CMT=
+DB30.DD3_open_a;DB30,X64.2;RW;TST=;CMT=
+DB30.TypeD_open_a;DB30,X64.3;RW;TST=;CMT=
+DB30.DD1_open_b;DB30,X64.4;RW;TST=;CMT=
+DB30.DD2_open_b;DB30,X64.5;RW;TST=;CMT=
+DB30.DD3_open_b;DB30,X64.6;RW;TST=;CMT=
+DB30.TypeD_open_b;DB30,X64.7;RW;TST=;CMT=
+DB30.DD1_close_a;DB30,X65.0;RW;TST=;CMT=
+DB30.DD2_close_a;DB30,X65.1;RW;TST=;CMT=
+DB30.DD3_close_a;DB30,X65.2;RW;TST=;CMT=
+DB30.TypeD_close_a;DB30,X65.3;RW;TST=;CMT=
+DB30.DD1_close_b;DB30,X65.4;RW;TST=;CMT=
+DB30.DD2_close_b;DB30,X65.5;RW;TST=;CMT=
+DB30.DD3_close_b;DB30,X65.6;RW;TST=;CMT=
+DB30.TypeD_close_b;DB30,X65.7;RW;TST=;CMT=
+
+DB30.Voltage;DB30,REAL4;RW;TST=;CMT=
+DB30.Delta_U;DB30,REAL8;RW;TST=;CMT=
+DB30.Q_max;DB30,REAL12;RW;TST=;CMT=
+DB30.Q_min;DB30,REAL16;RW;TST=;CMT=
+DB30.P_max_rab;DB30,REAL20;RW;TST=;CMT=
+DB30.P_min;DB30,REAL24;RW;TST=;CMT=
+DB30.P_narug_germ;DB30,REAL28;RW;TST=;CMT=
+DB30.Signal_vnutr_germ;DB30,REAL32;RW;TST=;CMT=
+DB30.Signal_PA_BT;DB30,REAL36;RW;TST=;CMT=
+DB30.Signal_PB_AT;DB30,REAL40;RW;TST=;CMT=
+DB30.Time_ON;DB30,REAL44;RW;TST=;CMT=
+DB30.Time_OFF;DB30,REAL48;RW;TST=;CMT=
+DB30.Min_P;DB30,REAL52;RW;TST=;CMT=
+DB30.Max_P;DB30,REAL56;RW;TST=;CMT=
+DB30.Time_P;DB30,REAL60;RW;TST=;CMT=
 
 
-DB31.Start_Oper;DB31,X2.0;RW
-DB31.Stop_Oper;DB31,X2.1;RW
-DB31.Nasos_M2;DB31,X2.2;RW
-DB31.N_Operation;DB31,REAL4;RW
+DB31.Start_Oper;DB31,X2.0;RW;TST=;CMT=
+DB31.Stop_Oper;DB31,X2.1;RW;TST=;CMT=
+DB31.Nasos_M2;DB31,X2.2;RW;TST=;CMT=
+DB31.N_Operation;DB31,REAL4;RW;TST=;CMT=
 
 
-DB32.D_E1_OK;DB32,X2.4;RW
-DB32.D_E1G_OK;DB32,X2.5;RW
+DB32.D_E1_OK;DB32,X2.4;RW;TST=;CMT=
+DB32.D_E1G_OK;DB32,X2.5;RW;TST=;CMT=
 
-DB32.OP1_Min_D_YESa;DB32,X2.0;RW
-DB32.OP1_Min_D_NOa;DB32,X2.1;RW
-DB32.OP1_Min_D_YESb;DB32,X2.2;RW
-DB32.OP1_Min_D_NOb;DB32,X2.3;RW
-DB32.Voltage_Alarm_a;DB32,X2.6;RW
-DB32.Voltage_Alarm_b;DB32,X36.0;RW
-DB32.OP1_Max_D_YESa;DB32,X2.7;RW
-DB32.OP1_Max_D_NOa;DB32,X3.0;RW
-DB32.OP1_Max_D_YESb;DB32,X3.1;RW
-DB32.OP1_Max_D_NOb;DB32,X3.2;RW
+DB32.OP1_Min_D_YESa;DB32,X2.0;RW;TST=;CMT=
+DB32.OP1_Min_D_NOa;DB32,X2.1;RW;TST=;CMT=
+DB32.OP1_Min_D_YESb;DB32,X2.2;RW;TST=;CMT=
+DB32.OP1_Min_D_NOb;DB32,X2.3;RW;TST=;CMT=
+DB32.Voltage_Alarm_a;DB32,X2.6;RW;TST=;CMT=
+DB32.Voltage_Alarm_b;DB32,X36.0;RW;TST=;CMT=
+DB32.OP1_Max_D_YESa;DB32,X2.7;RW;TST=;CMT=
+DB32.OP1_Max_D_NOa;DB32,X3.0;RW;TST=;CMT=
+DB32.OP1_Max_D_YESb;DB32,X3.1;RW;TST=;CMT=
+DB32.OP1_Max_D_NOb;DB32,X3.2;RW;TST=;CMT=
 
-DB32.OP2_Tech_Yes_No;DB32,X36.1;RW
+DB32.OP2_Tech_Yes_No;DB32,X36.1;RW;TST=;CMT=
 
-DB32.OP3_Rashod_Norma;DB32,X42.0;RW
-DB32.OP3_Rashod_VNorma;DB32,X42.1;RW
+DB32.OP3_Rashod_Norma;DB32,X42.0;RW;TST=;CMT=
+DB32.OP3_Rashod_VNorma;DB32,X42.1;RW;TST=;CMT=
 
-DB32.OP5_A_OK;DB32,X140.0;RW
-DB32.OP5_A_NO;DB32,X140.1;RW
-DB32.OP5_B_OK;DB32,X140.2;RW
-DB32.OP5_B_NO;DB32,X140.3;RW
+DB32.OP5_A_OK;DB32,X140.0;RW;TST=;CMT=
+DB32.OP5_A_NO;DB32,X140.1;RW;TST=;CMT=
+DB32.OP5_B_OK;DB32,X140.2;RW;TST=;CMT=
+DB32.OP5_B_NO;DB32,X140.3;RW;TST=;CMT=
 
-DB32.OP6_MinD_MinUprD_YESa;DB32,X140.4;RW
-DB32.OP6_MinD_MinUprD_NOa;DB32,X140.5;RW
-DB32.OP6_MinD_MaxUprD_YESa;DB32,X140.6;RW
-DB32.OP6_MinD_MaxUprD_NOa;DB32,X140.7;RW
-DB32.OP6_MaxD_MinUprD_YESa;DB32,X141.0;RW
-DB32.OP6_MaxD_MinUprD_NOa;DB32,X141.1;RW
-DB32.OP6_MaxD_MaxUprD_YESa;DB32,X141.2;RW
-DB32.OP6_MaxD_MaxUprD_NOa;DB32,X141.3;RW
-DB32.OP6_MinD_MinUprD_YESb;DB32,X141.4;RW
-DB32.OP6_MinD_MinUprD_NOb;DB32,X141.5;RW
-DB32.OP6_MinD_MaxUprD_YESb;DB32,X141.6;RW
-DB32.OP6_MinD_MaxUprD_NOb;DB32,X141.7;RW
-DB32.OP6_MaxD_MinUprD_YESb;DB32,X142.0;RW
-DB32.OP6_MaxD_MinUprD_NOb;DB32,X142.1;RW
-DB32.OP6_MaxD_MaxUprD_YESb;DB32,X142.2;RW
-DB32.OP6_MaxD_MaxUprD_NOb;DB32,X142.3;RW
+DB32.OP6_MinD_MinUprD_YESa;DB32,X140.4;RW;TST=;CMT=
+DB32.OP6_MinD_MinUprD_NOa;DB32,X140.5;RW;TST=;CMT=
+DB32.OP6_MinD_MaxUprD_YESa;DB32,X140.6;RW;TST=;CMT=
+DB32.OP6_MinD_MaxUprD_NOa;DB32,X140.7;RW;TST=;CMT=
+DB32.OP6_MaxD_MinUprD_YESa;DB32,X141.0;RW;TST=;CMT=
+DB32.OP6_MaxD_MinUprD_NOa;DB32,X141.1;RW;TST=;CMT=
+DB32.OP6_MaxD_MaxUprD_YESa;DB32,X141.2;RW;TST=;CMT=
+DB32.OP6_MaxD_MaxUprD_NOa;DB32,X141.3;RW;TST=;CMT=
+DB32.OP6_MinD_MinUprD_YESb;DB32,X141.4;RW;TST=;CMT=
+DB32.OP6_MinD_MinUprD_NOb;DB32,X141.5;RW;TST=;CMT=
+DB32.OP6_MinD_MaxUprD_YESb;DB32,X141.6;RW;TST=;CMT=
+DB32.OP6_MinD_MaxUprD_NOb;DB32,X141.7;RW;TST=;CMT=
+DB32.OP6_MaxD_MinUprD_YESb;DB32,X142.0;RW;TST=;CMT=
+DB32.OP6_MaxD_MinUprD_NOb;DB32,X142.1;RW;TST=;CMT=
+DB32.OP6_MaxD_MaxUprD_YESb;DB32,X142.2;RW;TST=;CMT=
+DB32.OP6_MaxD_MaxUprD_NOb;DB32,X142.3;RW;TST=;CMT=
 
-DB32.OP7_Min_D_YESa;DB32,X142.4;RW
-DB32.OP7_Min_D_NOa;DB32,X142.5;RW
-DB32.OP7_Min_D_YESb;DB32,X142.6;RW
-DB32.OP7_Min_D_NOb;DB32,X142.7;RW
-DB32.OP7_Max_D_YESa;DB32,X143.0;RW
-DB32.OP7_Max_D_NOa;DB32,X143.1;RW
-DB32.OP7_Max_D_YESb;DB32,X143.2;RW
-DB32.OP7_Max_D_NOb;DB32,X143.3;RW
+DB32.OP7_Min_D_YESa;DB32,X142.4;RW;TST=;CMT=
+DB32.OP7_Min_D_NOa;DB32,X142.5;RW;TST=;CMT=
+DB32.OP7_Min_D_YESb;DB32,X142.6;RW;TST=;CMT=
+DB32.OP7_Min_D_NOb;DB32,X142.7;RW;TST=;CMT=
+DB32.OP7_Max_D_YESa;DB32,X143.0;RW;TST=;CMT=
+DB32.OP7_Max_D_NOa;DB32,X143.1;RW;TST=;CMT=
+DB32.OP7_Max_D_YESb;DB32,X143.2;RW;TST=;CMT=
+DB32.OP7_Max_D_NOb;DB32,X143.3;RW;TST=;CMT=
 
-DB32.OP8_open_YES_a;DB32,X160.0;RW
-DB32.OP8_open_NO_a;DB32,X160.1;RW
-DB32.OP8_close_YES_a;DB32,X160.2;RW
-DB32.OP8_close_NO_a;DB32,X160.3;RW
-DB32.OP8_open_YES_b;DB32,X160.4;RW
-DB32.OP8_open_NO_b;DB32,X160.5;RW
-DB32.OP8_close_YES_b;DB32,X160.6;RW
-DB32.OP8_close_NO_b;DB32,X160.7;RW
+DB32.OP8_open_YES_a;DB32,X160.0;RW;TST=;CMT=
+DB32.OP8_open_NO_a;DB32,X160.1;RW;TST=;CMT=
+DB32.OP8_close_YES_a;DB32,X160.2;RW;TST=;CMT=
+DB32.OP8_close_NO_a;DB32,X160.3;RW;TST=;CMT=
+DB32.OP8_open_YES_b;DB32,X160.4;RW;TST=;CMT=
+DB32.OP8_open_NO_b;DB32,X160.5;RW;TST=;CMT=
+DB32.OP8_close_YES_b;DB32,X160.6;RW;TST=;CMT=
+DB32.OP8_close_NO_b;DB32,X160.7;RW;TST=;CMT=
 
-DB32.OP8_NO_Impuls_open_a;DB32,X161.0;RW
-DB32.OP8_NO_Impuls_close_a;DB32,X161.1;RW
-DB32.OP8_NO_Impuls_open_b;DB32,X161.2;RW
-DB32.OP8_NO_Impuls_close_b;DB32,X161.3;RW
+DB32.OP8_NO_Impuls_open_a;DB32,X161.0;RW;TST=;CMT=
+DB32.OP8_NO_Impuls_close_a;DB32,X161.1;RW;TST=;CMT=
+DB32.OP8_NO_Impuls_open_b;DB32,X161.2;RW;TST=;CMT=
+DB32.OP8_NO_Impuls_close_b;DB32,X161.3;RW;TST=;CMT=
 
-DB32.OP1_Work;DB32,X166.0;RW
-DB32.OP2_Work;DB32,X166.1;RW
-DB32.OP3_Work;DB32,X166.2;RW
-DB32.OP4_Work;DB32,X166.3;RW
-DB32.OP5_Work;DB32,X166.4;RW
-DB32.OP6_Work;DB32,X166.5;RW
-DB32.OP7_Work;DB32,X166.6;RW
-DB32.OP8_Work;DB32,X166.7;RW
+DB32.OP1_Work;DB32,X166.0;RW;TST=;CMT=
+DB32.OP2_Work;DB32,X166.1;RW;TST=;CMT=
+DB32.OP3_Work;DB32,X166.2;RW;TST=;CMT=
+DB32.OP4_Work;DB32,X166.3;RW;TST=;CMT=
+DB32.OP5_Work;DB32,X166.4;RW;TST=;CMT=
+DB32.OP6_Work;DB32,X166.5;RW;TST=;CMT=
+DB32.OP7_Work;DB32,X166.6;RW;TST=;CMT=
+DB32.OP8_Work;DB32,X166.7;RW;TST=;CMT=
 
-DB32.OP1_End;DB32,X167.0;RW
-DB32.OP2_End;DB32,X167.1;RW
-DB32.OP3_End;DB32,X167.2;RW
-DB32.OP4_End;DB32,X167.3;RW
-DB32.OP5_End;DB32,X167.4;RW
-DB32.OP6_End;DB32,X167.5;RW
-DB32.OP7_End;DB32,X167.6;RW
-DB32.OP8_End;DB32,X167.7;RW
+DB32.OP1_End;DB32,X167.0;RW;TST=;CMT=
+DB32.OP2_End;DB32,X167.1;RW;TST=;CMT=
+DB32.OP3_End;DB32,X167.2;RW;TST=;CMT=
+DB32.OP4_End;DB32,X167.3;RW;TST=;CMT=
+DB32.OP5_End;DB32,X167.4;RW;TST=;CMT=
+DB32.OP6_End;DB32,X167.5;RW;TST=;CMT=
+DB32.OP7_End;DB32,X167.6;RW;TST=;CMT=
+DB32.OP8_End;DB32,X167.7;RW;TST=;CMT=
 
 
-DB32.OP1_Voltage_a;DB32,REAL4;RW
-DB32.OP1_Current_a;DB32,REAL8;RW
-DB32.OP1_Power_a;DB32,REAL12;RW
-DB32.OP1_Resist_a;DB32,REAL16;RW
-DB32.OP1_Voltage_b;DB32,REAL20;RW
-DB32.OP1_Current_b;DB32,REAL24;RW
-DB32.OP1_Power_b;DB32,REAL28;RW
-DB32.OP1_Resist_b;DB32,REAL32;RW
+DB32.OP1_Voltage_a;DB32,REAL4;RW;TST=;CMT=
+DB32.OP1_Current_a;DB32,REAL8;RW;TST=;CMT=
+DB32.OP1_Power_a;DB32,REAL12;RW;TST=;CMT=
+DB32.OP1_Resist_a;DB32,REAL16;RW;TST=;CMT=
+DB32.OP1_Voltage_b;DB32,REAL20;RW;TST=;CMT=
+DB32.OP1_Current_b;DB32,REAL24;RW;TST=;CMT=
+DB32.OP1_Power_b;DB32,REAL28;RW;TST=;CMT=
+DB32.OP1_Resist_b;DB32,REAL32;RW;TST=;CMT=
 
-DB32.OP3_Sred_Rashod;DB32,REAL38;RW
+DB32.OP3_Sred_Rashod;DB32,REAL38;RW;TST=;CMT=
 
-DB32.OP4_Q_Fakt_03Qmax_A;DB32,REAL44;RW
-DB32.OP4_D_P_03Qmax_A;DB32,REAL48;RW
-DB32.OP4_D_A_03Qmax_A;DB32,REAL52;RW
-DB32.OP4_BP5_BP3_03Qmax_A;DB32,REAL116;RW
+DB32.OP4_Q_Fakt_03Qmax_A;DB32,REAL44;RW;TST=;CMT=
+DB32.OP4_D_P_03Qmax_A;DB32,REAL48;RW;TST=;CMT=
+DB32.OP4_D_A_03Qmax_A;DB32,REAL52;RW;TST=;CMT=
+DB32.OP4_BP5_BP3_03Qmax_A;DB32,REAL116;RW;TST=;CMT=
 
-DB32.OP4_Q_Fakt_06Qmax_A;DB32,REAL56;RW
-DB32.OP4_D_P_06Qmax_A;DB32,REAL60;RW
-DB32.OP4_D_A_06Qmax_A;DB32,REAL64;RW
-DB32.OP4_BP5_BP3_06Qmax_A;DB32,REAL120;RW
+DB32.OP4_Q_Fakt_06Qmax_A;DB32,REAL56;RW;TST=;CMT=
+DB32.OP4_D_P_06Qmax_A;DB32,REAL60;RW;TST=;CMT=
+DB32.OP4_D_A_06Qmax_A;DB32,REAL64;RW;TST=;CMT=
+DB32.OP4_BP5_BP3_06Qmax_A;DB32,REAL120;RW;TST=;CMT=
 
-DB32.OP4_Q_Fakt_Qmax_A;DB32,REAL68;RW
-DB32.OP4_D_P_Qmax_A;DB32,REAL72;RW
-DB32.OP4_D_A_Qmax_A;DB32,REAL76;RW
-DB32.OP4_BP5_BP3_Qmax_A;DB32,REAL124;RW
+DB32.OP4_Q_Fakt_Qmax_A;DB32,REAL68;RW;TST=;CMT=
+DB32.OP4_D_P_Qmax_A;DB32,REAL72;RW;TST=;CMT=
+DB32.OP4_D_A_Qmax_A;DB32,REAL76;RW;TST=;CMT=
+DB32.OP4_BP5_BP3_Qmax_A;DB32,REAL124;RW;TST=;CMT=
 
-DB32.OP4_Q_Fakt_03Qmax_B;DB32,REAL80;RW
-DB32.OP4_D_P_03Qmax_B;DB32,REAL84;RW
-DB32.OP4_D_A_03Qmax_B;DB32,REAL88;RW
-DB32.OP4_BP5_BP3_03Qmax_B;DB32,REAL128;RW
+DB32.OP4_Q_Fakt_03Qmax_B;DB32,REAL80;RW;TST=;CMT=
+DB32.OP4_D_P_03Qmax_B;DB32,REAL84;RW;TST=;CMT=
+DB32.OP4_D_A_03Qmax_B;DB32,REAL88;RW;TST=;CMT=
+DB32.OP4_BP5_BP3_03Qmax_B;DB32,REAL128;RW;TST=;CMT=
 
-DB32.OP4_Q_Fakt_06Qmax_B;DB32,REAL92;RW
-DB32.OP4_D_P_06Qmax_B;DB32,REAL96;RW
-DB32.OP4_D_A_06Qmax_B;DB32,REAL100;RW
-DB32.OP4_BP5_BP3_06Qmax_B;DB32,REAL132;RW
+DB32.OP4_Q_Fakt_06Qmax_B;DB32,REAL92;RW;TST=;CMT=
+DB32.OP4_D_P_06Qmax_B;DB32,REAL96;RW;TST=;CMT=
+DB32.OP4_D_A_06Qmax_B;DB32,REAL100;RW;TST=;CMT=
+DB32.OP4_BP5_BP3_06Qmax_B;DB32,REAL132;RW;TST=;CMT=
 
-DB32.OP4_Q_Fakt_Qmax_B;DB32,REAL104;RW
-DB32.OP4_D_P_Qmax_B;DB32,REAL108;RW
-DB32.OP4_D_A_Qmax_B;DB32,REAL112;RW
-DB32.OP4_BP5_BP3_Qmax_B;DB32,REAL136;RW
+DB32.OP4_Q_Fakt_Qmax_B;DB32,REAL104;RW;TST=;CMT=
+DB32.OP4_D_P_Qmax_B;DB32,REAL108;RW;TST=;CMT=
+DB32.OP4_D_A_Qmax_B;DB32,REAL112;RW;TST=;CMT=
+DB32.OP4_BP5_BP3_Qmax_B;DB32,REAL136;RW;TST=;CMT=
 
-DB32.OP8_Time_on_a;DB32,REAL144;RW
-DB32.OP8_Time_off_a;DB32,REAL148;RW
-DB32.OP8_Time_on_b;DB32,REAL152;RW
-DB32.OP8_Time_off_b;DB32,REAL156;RW
+DB32.OP8_Time_on_a;DB32,REAL144;RW;TST=;CMT=
+DB32.OP8_Time_off_a;DB32,REAL148;RW;TST=;CMT=
+DB32.OP8_Time_on_b;DB32,REAL152;RW;TST=;CMT=
+DB32.OP8_Time_off_b;DB32,REAL156;RW;TST=;CMT=
 
-DB32.Temperatura_masla;DB32,REAL162;RW
+DB32.Temperatura_masla;DB32,REAL162;RW;TST=;CMT=
