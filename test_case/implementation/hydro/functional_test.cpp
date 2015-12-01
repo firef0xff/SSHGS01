@@ -17,24 +17,24 @@ FunctionalTest::FunctionalTest():
 bool FunctionalTest::Run()
 {
     Start();
-    Wait( mResults.OP1_Work, mResults.OP1_End );
+    Wait( mResults.op1_ok, mResults.op1_end );
 
-    ReelA.work_on_max_pressure = mResults.OP1_Max_D_YESa && !mResults.OP1_Max_D_NOa;
-    ReelA.work_on_min_pressure = mResults.OP1_Min_D_YESa && !mResults.OP1_Min_D_NOa;
-    ReelA.I = mResults.OP1_Current_a;
-    ReelA.P = mResults.OP1_Power_a;
-    ReelA.R = mResults.OP1_Resist_a;
-    ReelA.U = mResults.OP1_Voltage_a;
+    ReelA.work_on_max_pressure = mResults.op1_max_ok_a && !mResults.op1_max_o_a;
+    ReelA.work_on_min_pressure = mResults.op1_min_ok_a && !mResults.op1_min_no_a;
+    ReelA.I = mResults.op1_current_a;
+    ReelA.P = mResults.op1_power_a;
+    ReelA.R = mResults.op1_resist_a;
+    ReelA.U = mResults.op1_volt_a;
 
 
-    ReelB.work_on_max_pressure = mResults.OP1_Max_D_YESb && !mResults.OP1_Max_D_NOb;
-    ReelB.work_on_min_pressure = mResults.OP1_Min_D_YESb && !mResults.OP1_Min_D_NOb;
-    ReelB.I = mResults.OP1_Current_b;
-    ReelB.P = mResults.OP1_Power_b;
-    ReelB.R = mResults.OP1_Resist_b;
-    ReelB.U = mResults.OP1_Voltage_b;
+    ReelB.work_on_max_pressure = mResults.op1_max_ok_b && !mResults.op1_max_no_b;
+    ReelB.work_on_min_pressure = mResults.op1_min_ok_b && !mResults.op1_min_no_b;
+    ReelB.I = mResults.op1_current_b;
+    ReelB.P = mResults.op1_power_b;
+    ReelB.R = mResults.op1_resist_b;
+    ReelB.U = mResults.op1_volt_b;
 
-    OilTemp = mResults.Temperatura_masla;
+    OilTemp = mResults.T_oil;
 
     return Success();
 }

@@ -22,15 +22,15 @@ bool SwitchTest::Run()
     if ( !params )
         return false;
     Start();
-    Wait( mResults.OP7_Work, mResults.OP7_End );
+    Wait( mResults.op7_ok, mResults.op7_end );
 
-    ResultMinA = mResults.OP7_Min_D_YESa &&! mResults.OP7_Min_D_NOa;
-    ResultMaxA = mResults.OP7_Max_D_YESa &&! mResults.OP7_Max_D_NOa;
+    ResultMinA = mResults.op7_min_ok_a &&! mResults.op7_min_no_a;
+    ResultMaxA = mResults.op7_max_ok_a &&! mResults.op7_max_no_a;
 
-    ResultMinB = mResults.OP7_Min_D_YESb &&! mResults.OP7_Min_D_NOb;
-    ResultMaxB = mResults.OP7_Max_D_YESb &&! mResults.OP7_Max_D_NOb;
+    ResultMinB = mResults.op7_min_ok_b &&! mResults.op7_min_no_b;
+    ResultMaxB = mResults.op7_max_ok_b &&! mResults.op7_max_no_b;
 
-    OilTemp = mResults.Temperatura_masla;
+    OilTemp = mResults.T_oil;
 
     return Success();
 }

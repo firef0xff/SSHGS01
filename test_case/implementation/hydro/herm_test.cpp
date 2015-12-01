@@ -18,9 +18,9 @@ OutsideHermTest::OutsideHermTest():
 bool OutsideHermTest::Run()
 {
     Start();
-    Wait( mResults.OP2_Work, mResults.OP2_End );
+    Wait( mResults.op2_ok, mResults.op2_end );
 
-    OilTemp = mResults.Temperatura_masla;
+    OilTemp = mResults.T_oil;
 
     std::mutex mutex;
     std::unique_lock< std::mutex > lock( mutex );
@@ -183,11 +183,11 @@ InsideHermTest::InsideHermTest():
 bool InsideHermTest::Run()
 {
     Start();
-    Wait( mResults.OP3_Work, mResults.OP3_End );
+    Wait( mResults.op3_ok, mResults.op3_end );
 
-    Result = mResults.OP3_Rashod_Norma && !mResults.OP3_Rashod_VNorma;
-    Leak = mResults.OP3_Sred_Rashod;
-    OilTemp = mResults.Temperatura_masla;
+    Result = mResults.op3_consumption_2 && !mResults.op3_consumption_3;
+    Leak = mResults.op3_consumption_1;
+    OilTemp = mResults.T_oil;
     return Success();
 }
 QJsonObject InsideHermTest::Serialise() const

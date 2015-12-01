@@ -65,7 +65,8 @@ SOURCES += main.cpp\
     myOPC/impl/demo_mode.cpp \
     myOPC/impl/cache/memory.cpp \
     myOPC/impl/win_ole_mode.cpp \
-    login.cpp
+    login.cpp \
+    cpu/db2.cpp
 
 HEADERS  += mainwindow.h \
     test_case/test_case.h \
@@ -120,7 +121,8 @@ HEADERS  += mainwindow.h \
     myOPC/impl/cache/def.h \
     myOPC/impl/cache/memory.h \
     myOPC/impl/win_ole_mode.h \
-    login.h
+    login.h \
+    cpu/db2.h
 
 FORMS    += mainwindow.ui \
     hydro_title_info.ui \

@@ -21,12 +21,12 @@ bool MaxExpenditureTest::Run()
         return false;
 
     Start();
-    Wait( mResults.OP5_Work, mResults.OP5_End );
+    Wait( mResults.op5_ok, mResults.op5_end );
 
-    ResultA = mResults.OP5_A_OK && !mResults.OP5_A_NO;
-    ResultB = mResults.OP5_B_OK && !mResults.OP5_B_NO;
+    ResultA = mResults.op5_ok_a && !mResults.op5_no_a;
+    ResultB = mResults.op5_ok_b && !mResults.op5_no_b;
 
-    OilTemp = mResults.Temperatura_masla;
+    OilTemp = mResults.T_oil;
 
     return ResultA && (params->ReelCount() == 2 ? ResultB : true);
 }

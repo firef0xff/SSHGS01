@@ -27,21 +27,21 @@ bool PressureRange::Run()
         return false;
 
     Start();
-    Wait( mResults.OP6_Work, mResults.OP6_End );
+    Wait( mResults.op6_ok, mResults.op6_end );
 
-    ResultMinMinA = mResults.OP6_MinD_MinUprD_YESa && !mResults.OP6_MinD_MinUprD_NOa;
-    ResultMinMaxA = mResults.OP6_MinD_MaxUprD_YESa && !mResults.OP6_MinD_MaxUprD_NOa;
+    ResultMinMinA = mResults.op6_min_min_ok_a && !mResults.op6_min_min_no_a;
+    ResultMinMaxA = mResults.op6_min_max_ok_a && !mResults.op6_min_max_no_a;
 
-    ResultMinMinB = mResults.OP6_MinD_MinUprD_YESb && !mResults.OP6_MinD_MinUprD_NOb;
-    ResultMinMaxB = mResults.OP6_MinD_MaxUprD_YESb && !mResults.OP6_MinD_MaxUprD_NOb;
+    ResultMinMinB = mResults.op6_min_min_ok_b && !mResults.op6_min_min_no_b;
+    ResultMinMaxB = mResults.op6_min_max_ok_b && !mResults.op6_min_max_no_b;
 
-    ResultMaxMinA = mResults.OP6_MaxD_MinUprD_YESa && !mResults.OP6_MaxD_MinUprD_NOa;
-    ResultMaxMaxA = mResults.OP6_MaxD_MaxUprD_YESa && !mResults.OP6_MaxD_MaxUprD_NOa;
+    ResultMaxMinA = mResults.op6_max_min_ok_a && !mResults.op6_max_min_no_b;
+    ResultMaxMaxA = mResults.op6_max_max_ok_a && !mResults.op6_max_max_no_a;
 
-    ResultMaxMinB = mResults.OP6_MaxD_MinUprD_YESb && !mResults.OP6_MaxD_MinUprD_NOb;
-    ResultMaxMaxB = mResults.OP6_MaxD_MaxUprD_YESb && !mResults.OP6_MaxD_MaxUprD_NOb;
+    ResultMaxMinB = mResults.op6_max_min_ok_b && !mResults.op6_mex_min_no_b;
+    ResultMaxMaxB = mResults.op6_max_max_ok_b && !mResults.op6_max_max_no_b;
 
-    OilTemp = mResults.Temperatura_masla;
+    OilTemp = mResults.T_oil;
 
     return ResultMinMinA && ResultMinMaxA && ResultMaxMinA && ResultMaxMaxA &&
             ( params->ReelCount() == 2 ? ResultMinMinB && ResultMinMaxB && ResultMaxMinB && ResultMaxMaxB : true );

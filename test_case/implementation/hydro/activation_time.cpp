@@ -25,23 +25,23 @@ bool ActivationTime::Run()
     params->WriteToController();
 
     Start();
-    Wait( mResults.OP8_Work, mResults.OP8_End );
+    Wait( mResults.op8_ok, mResults.op8_end );
 
-    ReelA.TimeOn = mResults.OP8_Time_on_a;
-    ReelA.TimeOff = mResults.OP8_Time_off_a;
-    ReelA.InTimeOn = mResults.OP8_open_YES_a && !mResults.OP8_open_NO_a;
-    ReelA.InTimeOff = mResults.OP8_close_YES_a && !mResults.OP8_close_NO_a;
-    ReelA.IsOn = !mResults.OP8_NO_Impuls_open_a;
-    ReelA.IsOff = !mResults.OP8_NO_Impuls_close_a;
+    ReelA.TimeOn = mResults.op8_time_on_a;
+    ReelA.TimeOff = mResults.op8_time_off_a;
+    ReelA.InTimeOn = mResults.op8_open_ok_a && !mResults.op8_open_no_a;
+    ReelA.InTimeOff = mResults.op8_close_ok_a && !mResults.op8_close_no_a;
+    ReelA.IsOn = !mResults.op8_fault_on_a;
+    ReelA.IsOff = !mResults.op8_fault_off_a;
 
-    ReelB.TimeOn = mResults.OP8_Time_on_b;
-    ReelB.TimeOff = mResults.OP8_Time_off_b;
-    ReelB.InTimeOn = mResults.OP8_open_YES_b && !mResults.OP8_open_NO_b;
-    ReelB.InTimeOff = mResults.OP8_close_YES_b && !mResults.OP8_close_NO_b;
-    ReelB.IsOn = !mResults.OP8_NO_Impuls_open_b;
-    ReelB.IsOff = !mResults.OP8_NO_Impuls_close_b;
+    ReelB.TimeOn = mResults.op8_time_on_b;
+    ReelB.TimeOff = mResults.op8_time_off_b;
+    ReelB.InTimeOn = mResults.op8_open_ok_b && !mResults.op8_open_no_b;
+    ReelB.InTimeOff = mResults.op8_close_ok_b && !mResults.op8_close_no_b;
+    ReelB.IsOn = !mResults.op8_fault_on_b;
+    ReelB.IsOff = !mResults.op8_fault_off_b;
 
-    OilTemp = mResults.Temperatura_masla;
+    OilTemp = mResults.T_oil;
 
     return Success();
 }

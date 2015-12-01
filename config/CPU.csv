@@ -236,136 +236,145 @@ DB31.Stop_Oper;DB31,X2.1;RW;TST=;CMT=
 DB31.Nasos_M2;DB31,X2.2;RW;TST=;CMT=
 DB31.N_Operation;DB31,REAL4;RW;TST=;CMT=
 
+DB32.p_e_ok;DB32,X2.4;RW;TST=;CMT=давление в системе установлено (электро)
+DB32.p_eg_ok;DB32,X2.5;RW;TST=;CMT=давление в системе установлено (электрогидрав)
 
-DB32.D_E1_OK;DB32,X2.4;RW;TST=;CMT=
-DB32.D_E1G_OK;DB32,X2.5;RW;TST=;CMT=
+DB32.op1_min_ok_a;DB32,X2.0;RW;TST=;CMT=переключение при мин давлении А
+DB32.op1_min_no_a;DB32,X2.1;RW;TST=;CMT=нет переключения при мин давлени А
+DB32.op1_min_ok_b;DB32,X2.2;RW;TST=;CMT=переключение при мин давлении В
+DB32.op1_min_no_b;DB32,X2.3;RW;TST=;CMT=нет переключения при мин давлени В
+DB32.volt_alarm_a;DB32,X2.6;RW;TST=;CMT=напряжение А вне допуска
+DB32.volt_alarm_b;DB32,X36.0;RW;TST=;CMT=напряжение В вне допуска
+DB32.op1_max_ok_a;DB32,X2.7;RW;TST=;CMT=переключение при макс давлении А
+DB32.op1_max_o_a;DB32,X3.0;RW;TST=;CMT=нет переключения при макс давлени А
+DB32.op1_max_ok_b;DB32,X3.1;RW;TST=;CMT=переключение при макс давлении В
+DB32.op1_max_no_b;DB32,X3.2;RW;TST=;CMT=нет переключения при макс давлени В
 
-DB32.OP1_Min_D_YESa;DB32,X2.0;RW;TST=;CMT=
-DB32.OP1_Min_D_NOa;DB32,X2.1;RW;TST=;CMT=
-DB32.OP1_Min_D_YESb;DB32,X2.2;RW;TST=;CMT=
-DB32.OP1_Min_D_NOb;DB32,X2.3;RW;TST=;CMT=
-DB32.Voltage_Alarm_a;DB32,X2.6;RW;TST=;CMT=
-DB32.Voltage_Alarm_b;DB32,X36.0;RW;TST=;CMT=
-DB32.OP1_Max_D_YESa;DB32,X2.7;RW;TST=;CMT=
-DB32.OP1_Max_D_NOa;DB32,X3.0;RW;TST=;CMT=
-DB32.OP1_Max_D_YESb;DB32,X3.1;RW;TST=;CMT=
-DB32.OP1_Max_D_NOb;DB32,X3.2;RW;TST=;CMT=
+DB32.op2_ok_no;DB32,X36.1;RW;TST=;CMT=течь есть/нет
 
-DB32.OP2_Tech_Yes_No;DB32,X36.1;RW;TST=;CMT=
+DB32.op3_consumption_2;DB32,X42.0;RW;TST=;CMT=расход в норме
+DB32.op3_consumption_3;DB32,X42.1;RW;TST=;CMT=расход выше нормы
 
-DB32.OP3_Rashod_Norma;DB32,X42.0;RW;TST=;CMT=
-DB32.OP3_Rashod_VNorma;DB32,X42.1;RW;TST=;CMT=
+DB32.op5_ok_a;DB32,X140.0;RW;TST=;CMT=пропускная способность соотвествует А
+DB32.op5_no_a;DB32,X140.1;RW;TST=;CMT=пропускная способность не соотвествует А
+DB32.op5_ok_b;DB32,X140.2;RW;TST=;CMT=пропускная способность соотвествует В
+DB32.op5_no_b;DB32,X140.3;RW;TST=;CMT=пропускная способность не соотвествует В
 
-DB32.OP5_A_OK;DB32,X140.0;RW;TST=;CMT=
-DB32.OP5_A_NO;DB32,X140.1;RW;TST=;CMT=
-DB32.OP5_B_OK;DB32,X140.2;RW;TST=;CMT=
-DB32.OP5_B_NO;DB32,X140.3;RW;TST=;CMT=
+DB32.op6_min_min_ok_a;DB32,X140.4;RW;TST=;CMT="а" перекл. при мин. давл. (мин упр.)
+DB32.op6_min_min_no_a;DB32,X140.5;RW;TST=;CMT="а" не перекл. при мин. давл. (мин упр.)
+DB32.op6_min_max_ok_a;DB32,X140.6;RW;TST=;CMT="а" перекл. при мин. давл. (макс упр.)
+DB32.op6_min_max_no_a;DB32,X140.7;RW;TST=;CMT="а" перекл. при мин. давл. (макс упр.)
+DB32.op6_max_min_ok_a;DB32,X141.0;RW;TST=;CMT="а" перекл. при макс. давл. (мин упр.)
+DB32.op6_mex_min_no_a;DB32,X141.1;RW;TST=;CMT="а" перекл. при макс. давл. (мин упр.)
+DB32.op6_max_max_ok_a;DB32,X141.2;RW;TST=;CMT="а" перекл. при макс. давл. (макс упр.)
+DB32.op6_max_max_no_a;DB32,X141.3;RW;TST=;CMT="а" перекл. при макс. давл. (макс упр.)
 
-DB32.OP6_MinD_MinUprD_YESa;DB32,X140.4;RW;TST=;CMT=
-DB32.OP6_MinD_MinUprD_NOa;DB32,X140.5;RW;TST=;CMT=
-DB32.OP6_MinD_MaxUprD_YESa;DB32,X140.6;RW;TST=;CMT=
-DB32.OP6_MinD_MaxUprD_NOa;DB32,X140.7;RW;TST=;CMT=
-DB32.OP6_MaxD_MinUprD_YESa;DB32,X141.0;RW;TST=;CMT=
-DB32.OP6_MaxD_MinUprD_NOa;DB32,X141.1;RW;TST=;CMT=
-DB32.OP6_MaxD_MaxUprD_YESa;DB32,X141.2;RW;TST=;CMT=
-DB32.OP6_MaxD_MaxUprD_NOa;DB32,X141.3;RW;TST=;CMT=
-DB32.OP6_MinD_MinUprD_YESb;DB32,X141.4;RW;TST=;CMT=
-DB32.OP6_MinD_MinUprD_NOb;DB32,X141.5;RW;TST=;CMT=
-DB32.OP6_MinD_MaxUprD_YESb;DB32,X141.6;RW;TST=;CMT=
-DB32.OP6_MinD_MaxUprD_NOb;DB32,X141.7;RW;TST=;CMT=
-DB32.OP6_MaxD_MinUprD_YESb;DB32,X142.0;RW;TST=;CMT=
-DB32.OP6_MaxD_MinUprD_NOb;DB32,X142.1;RW;TST=;CMT=
-DB32.OP6_MaxD_MaxUprD_YESb;DB32,X142.2;RW;TST=;CMT=
-DB32.OP6_MaxD_MaxUprD_NOb;DB32,X142.3;RW;TST=;CMT=
+DB32.op6_min_min_ok_b;DB32,X141.4;RW;TST=;CMT="б" перекл. при мин. давл. (мин упр.)
+DB32.op6_min_min_no_b;DB32,X141.5;RW;TST=;CMT="б" не перекл. при мин. давл. (мин упр.)
+DB32.op6_min_max_ok_b;DB32,X141.6;RW;TST=;CMT="б" перекл. при мин. давл. (макс упр.)
+DB32.op6_min_max_no_b;DB32,X141.7;RW;TST=;CMT="б" перекл. при мин. давл. (макс упр.)
+DB32.op6_max_min_ok_b;DB32,X142.0;RW;TST=;CMT="б" перекл. при макс. давл. (мин упр.)
+DB32.op6_max_min_no_b;DB32,X142.1;RW;TST=;CMT="б" перекл. при макс. давл. (мин упр.)
+DB32.op6_max_max_ok_b;DB32,X142.2;RW;TST=;CMT="б" перекл. при макс. давл. (макс упр.)
+DB32.op6_max_max_no_b;DB32,X142.3;RW;TST=;CMT="б" перекл. при макс. давл. (макс упр.)
 
-DB32.OP7_Min_D_YESa;DB32,X142.4;RW;TST=;CMT=
-DB32.OP7_Min_D_NOa;DB32,X142.5;RW;TST=;CMT=
-DB32.OP7_Min_D_YESb;DB32,X142.6;RW;TST=;CMT=
-DB32.OP7_Min_D_NOb;DB32,X142.7;RW;TST=;CMT=
-DB32.OP7_Max_D_YESa;DB32,X143.0;RW;TST=;CMT=
-DB32.OP7_Max_D_NOa;DB32,X143.1;RW;TST=;CMT=
-DB32.OP7_Max_D_YESb;DB32,X143.2;RW;TST=;CMT=
-DB32.OP7_Max_D_NOb;DB32,X143.3;RW;TST=;CMT=
+DB32.op7_min_ok_a;DB32,X142.4;RW;TST=;CMT="а" перекл. при мин. давлении (Vmin)
+DB32.op7_min_no_a;DB32,X142.5;RW;TST=;CMT="а" не перекл. при мин. давлении (Vmin)
+DB32.op7_min_ok_b;DB32,X142.6;RW;TST=;CMT="б" перекл. при мин. давлении (Vmin)
+DB32.op7_min_no_b;DB32,X142.7;RW;TST=;CMT="б" не перекл. при мин. давлении (Vmin)
+DB32.op7_max_ok_a;DB32,X143.0;RW;TST=;CMT="а" перекл. при макс. давлении (Vmin)
+DB32.op7_max_no_a;DB32,X143.1;RW;TST=;CMT="а" не перекл. при макс. давлении (Vmin)
+DB32.op7_max_ok_b;DB32,X143.2;RW;TST=;CMT="б" перекл. при макс. давлении (Vmin)
+DB32.op7_max_no_b;DB32,X143.3;RW;TST=;CMT="б" не перекл. при макс. давлении (Vmin)
 
-DB32.OP8_open_YES_a;DB32,X160.0;RW;TST=;CMT=
-DB32.OP8_open_NO_a;DB32,X160.1;RW;TST=;CMT=
-DB32.OP8_close_YES_a;DB32,X160.2;RW;TST=;CMT=
-DB32.OP8_close_NO_a;DB32,X160.3;RW;TST=;CMT=
-DB32.OP8_open_YES_b;DB32,X160.4;RW;TST=;CMT=
-DB32.OP8_open_NO_b;DB32,X160.5;RW;TST=;CMT=
-DB32.OP8_close_YES_b;DB32,X160.6;RW;TST=;CMT=
-DB32.OP8_close_NO_b;DB32,X160.7;RW;TST=;CMT=
+DB32.unk_1;DB32,X143.4;RW;TST=;CMT=???;
+DB32.unk_2;DB32,X143.5;RW;TST=;CMT=???;
+DB32.unk_3;DB32,X143.6;RW;TST=;CMT=???;
+DB32.unk_4;DB32,X143.7;RW;TST=;CMT=???;
 
-DB32.OP8_NO_Impuls_open_a;DB32,X161.0;RW;TST=;CMT=
-DB32.OP8_NO_Impuls_close_a;DB32,X161.1;RW;TST=;CMT=
-DB32.OP8_NO_Impuls_open_b;DB32,X161.2;RW;TST=;CMT=
-DB32.OP8_NO_Impuls_close_b;DB32,X161.3;RW;TST=;CMT=
+DB32.op8_open_ok_a;DB32,X160.0;RW;TST=;CMT="а" время включения соответствует
+DB32.op8_open_no_a;DB32,X160.1;RW;TST=;CMT="а" время включения не соответствует
+DB32.op8_close_ok_a;DB32,X160.2;RW;TST=;CMT="а" время отключения соответствует
+DB32.op8_close_no_a;DB32,X160.3;RW;TST=;CMT="а" время отключения не соответствует
+DB32.op8_open_ok_b;DB32,X160.4;RW;TST=;CMT="б" время включения соответствует
+DB32.op8_open_no_b;DB32,X160.5;RW;TST=;CMT="б" время включения не соответствует
+DB32.op8_close_ok_b;DB32,X160.6;RW;TST=;CMT="б" время отключения соответствует
+DB32.op8_close_no_b;DB32,X160.7;RW;TST=;CMT="б" время отключения не соответствует
 
-DB32.OP1_Work;DB32,X166.0;RW;TST=;CMT=
-DB32.OP2_Work;DB32,X166.1;RW;TST=;CMT=
-DB32.OP3_Work;DB32,X166.2;RW;TST=;CMT=
-DB32.OP4_Work;DB32,X166.3;RW;TST=;CMT=
-DB32.OP5_Work;DB32,X166.4;RW;TST=;CMT=
-DB32.OP6_Work;DB32,X166.5;RW;TST=;CMT=
-DB32.OP7_Work;DB32,X166.6;RW;TST=;CMT=
-DB32.OP8_Work;DB32,X166.7;RW;TST=;CMT=
+DB32.op8_fault_on_a;DB32,X161.0;RW;TST=;CMT=катушка "а" не включилась
+DB32.op8_fault_off_a;DB32,X161.1;RW;TST=;CMT=катушка "а" не отключилась
+DB32.op8_fault_on_b;DB32,X161.2;RW;TST=;CMT=катушка "б" не включилась
+DB32.op8_fault_off_b;DB32,X161.3;RW;TST=;CMT=катушка "б" не отключилась
 
-DB32.OP1_End;DB32,X167.0;RW;TST=;CMT=
-DB32.OP2_End;DB32,X167.1;RW;TST=;CMT=
-DB32.OP3_End;DB32,X167.2;RW;TST=;CMT=
-DB32.OP4_End;DB32,X167.3;RW;TST=;CMT=
-DB32.OP5_End;DB32,X167.4;RW;TST=;CMT=
-DB32.OP6_End;DB32,X167.5;RW;TST=;CMT=
-DB32.OP7_End;DB32,X167.6;RW;TST=;CMT=
-DB32.OP8_End;DB32,X167.7;RW;TST=;CMT=
+DB32.unk_5;DB32,X161.4;RW;TST=;CMT=???;
+DB32.unk_6;DB32,X161.5;RW;TST=;CMT=???;
+DB32.unk_7;DB32,X161.6;RW;TST=;CMT=???;
 
-DB32.OP1_Voltage_a;DB32,REAL4;RW;TST=;CMT=
-DB32.OP1_Current_a;DB32,REAL8;RW;TST=;CMT=
-DB32.OP1_Power_a;DB32,REAL12;RW;TST=;CMT=
-DB32.OP1_Resist_a;DB32,REAL16;RW;TST=;CMT=
-DB32.OP1_Voltage_b;DB32,REAL20;RW;TST=;CMT=
-DB32.OP1_Current_b;DB32,REAL24;RW;TST=;CMT=
-DB32.OP1_Power_b;DB32,REAL28;RW;TST=;CMT=
-DB32.OP1_Resist_b;DB32,REAL32;RW;TST=;CMT=
+DB32.op1_ok;DB32,X166.0;RW;TST=;CMT=Выполнение операции 1
+DB32.op2_ok;DB32,X166.1;RW;TST=;CMT=Выполнение операции 2
+DB32.op3_ok;DB32,X166.2;RW;TST=;CMT=Выполнение операции 3
+DB32.op4_ok;DB32,X166.3;RW;TST=;CMT=Выполнение операции 4
+DB32.op5_ok;DB32,X166.4;RW;TST=;CMT=Выполнение операции 5
+DB32.op6_ok;DB32,X166.5;RW;TST=;CMT=Выполнение операции 6
+DB32.op7_ok;DB32,X166.6;RW;TST=;CMT=Выполнение операции 7
+DB32.op8_ok;DB32,X166.7;RW;TST=;CMT=Выполнение операции 8
 
-DB32.OP3_Sred_Rashod;DB32,REAL38;RW;TST=;CMT=
+DB32.op1_end;DB32,X167.0;RW;TST=;CMT=Конец операции 1
+DB32.op2_end;DB32,X167.1;RW;TST=;CMT=Конец операции 2
+DB32.op3_end;DB32,X167.2;RW;TST=;CMT=Конец операции 3
+DB32.op4_end;DB32,X167.3;RW;TST=;CMT=Конец операции 4
+DB32.op5_end;DB32,X167.4;RW;TST=;CMT=Конец операции 5
+DB32.op6_end;DB32,X167.5;RW;TST=;CMT=Конец операции 6
+DB32.op7_end;DB32,X167.6;RW;TST=;CMT=Конец операции 7
+DB32.op8_end;DB32,X167.7;RW;TST=;CMT=Конец операции 8
 
-DB32.OP4_Q_Fakt_03Qmax_A;DB32,REAL44;RW;TST=;CMT=
-DB32.OP4_D_P_03Qmax_A;DB32,REAL48;RW;TST=;CMT=
-DB32.OP4_D_A_03Qmax_A;DB32,REAL52;RW;TST=;CMT=
-DB32.OP4_BP5_BP3_03Qmax_A;DB32,REAL116;RW;TST=;CMT=
+DB32.op1_volt_a;DB32,REAL4;RW;TST=;CMT=измерянное напряжение А
+DB32.op1_current_a;DB32,REAL8;RW;TST=;CMT=измеренный ток А
+DB32.op1_power_a;DB32,REAL12;RW;TST=;CMT=расчетаня мощность А
+DB32.op1_resist_a;DB32,REAL16;RW;TST=;CMT=расчетное сопротивление А
+DB32.op1_volt_b;DB32,REAL20;RW;TST=;CMT=измерянное напряжение В
+DB32.op1_current_b;DB32,REAL24;RW;TST=;CMT=измеренный ток В
+DB32.op1_power_b;DB32,REAL28;RW;TST=;CMT=расчетаня мощность В
+DB32.op1_resist_b;DB32,REAL32;RW;TST=;CMT=расчетное сопротивление В
 
-DB32.OP4_Q_Fakt_06Qmax_A;DB32,REAL56;RW;TST=;CMT=
-DB32.OP4_D_P_06Qmax_A;DB32,REAL60;RW;TST=;CMT=
-DB32.OP4_D_A_06Qmax_A;DB32,REAL64;RW;TST=;CMT=
-DB32.OP4_BP5_BP3_06Qmax_A;DB32,REAL120;RW;TST=;CMT=
+DB32.op3_consumption_1;DB32,REAL38;RW;TST=;CMT=средний расход
 
-DB32.OP4_Q_Fakt_Qmax_A;DB32,REAL68;RW;TST=;CMT=
-DB32.OP4_D_P_Qmax_A;DB32,REAL72;RW;TST=;CMT=
-DB32.OP4_D_A_Qmax_A;DB32,REAL76;RW;TST=;CMT=
-DB32.OP4_BP5_BP3_Qmax_A;DB32,REAL124;RW;TST=;CMT=
+DB32.op4_q_03_a;DB32,REAL44;RW;TST=;CMT=факт расход 0,3 Qmax A
+DB32.op4_p_p_03_a;DB32,REAL48;RW;TST=;CMT=давление в канале Р 0,3 Qmax A
+DB32.op4_p_a_03_a;DB32,REAL52;RW;TST=;CMT=давление в канале A 0,3 Qmax A
+DB32.op4_bp5_bp3_03_a;DB32,REAL116;RW;TST=;CMT=перепад ВР3/ВР5 0,3 Qmax A
 
-DB32.OP4_Q_Fakt_03Qmax_B;DB32,REAL80;RW;TST=;CMT=
-DB32.OP4_D_P_03Qmax_B;DB32,REAL84;RW;TST=;CMT=
-DB32.OP4_D_A_03Qmax_B;DB32,REAL88;RW;TST=;CMT=
-DB32.OP4_BP5_BP3_03Qmax_B;DB32,REAL128;RW;TST=;CMT=
+DB32.op4_q_06_a;DB32,REAL56;RW;TST=;CMT=факт расход 0,6 Qmax A
+DB32.op4_p_p_06_a;DB32,REAL60;RW;TST=;CMT=давление в канале Р 0,6 Qmax A
+DB32.op4_p_a_06_a;DB32,REAL64;RW;TST=;CMT=давление в канале А 0,6 Qmax A
+DB32.op4_bp5_bp3_06_a;DB32,REAL120;RW;TST=;CMT=перепад ВР3/ВР5 0,6 Qmax A
 
-DB32.OP4_Q_Fakt_06Qmax_B;DB32,REAL92;RW;TST=;CMT=
-DB32.OP4_D_P_06Qmax_B;DB32,REAL96;RW;TST=;CMT=
-DB32.OP4_D_A_06Qmax_B;DB32,REAL100;RW;TST=;CMT=
-DB32.OP4_BP5_BP3_06Qmax_B;DB32,REAL132;RW;TST=;CMT=
+DB32.op4_q_max_a;DB32,REAL68;RW;TST=;CMT=факт расход Qmax А
+DB32.op4_p_p_max_a;DB32,REAL72;RW;TST=;CMT=давление в канале Р Qmax A
+DB32.op4_p_a_max_a;DB32,REAL76;RW;TST=;CMT=давление в канале А Qmax A
+DB32.op4_bp5_bp3_max_a;DB32,REAL124;RW;TST=;CMT=перепад ВР3/ВР5 Qmax A
 
-DB32.OP4_Q_Fakt_Qmax_B;DB32,REAL104;RW;TST=;CMT=
-DB32.OP4_D_P_Qmax_B;DB32,REAL108;RW;TST=;CMT=
-DB32.OP4_D_A_Qmax_B;DB32,REAL112;RW;TST=;CMT=
-DB32.OP4_BP5_BP3_Qmax_B;DB32,REAL136;RW;TST=;CMT=
+DB32.op4_q_03_b;DB32,REAL80;RW;TST=;CMT=факт расход 0,3 Qmax B
+DB32.op4_p_p_03_b;DB32,REAL84;RW;TST=;CMT=давление в канале Р 0,3 Qmax B
+DB32.op4_p_a_03_b;DB32,REAL88;RW;TST=;CMT=давление в канале A 0,3 Qmax B
+DB32.op4_bp5_bp3_03_b;DB32,REAL128;RW;TST=;CMT=перепад ВР3/ВР5 0,3 Qmax В
 
-DB32.OP8_Time_on_a;DB32,REAL144;RW;TST=;CMT=
-DB32.OP8_Time_off_a;DB32,REAL148;RW;TST=;CMT=
-DB32.OP8_Time_on_b;DB32,REAL152;RW;TST=;CMT=
-DB32.OP8_Time_off_b;DB32,REAL156;RW;TST=;CMT=
+DB32.op4_q_06_b;DB32,REAL92;RW;TST=;CMT=факт расход 0,6 Qmax B
+DB32.op4_p_p_06_b;DB32,REAL96;RW;TST=;CMT=давление в канале Р 0,6 Qmax B
+DB32.op4_p_a_06_b;DB32,REAL100;RW;TST=;CMT=давление в канале А 0,6 Qmax B
+DB32.op4_bp5_bp3_06_b;DB32,REAL132;RW;TST=;CMT=перепад ВР3/ВР5 0,6 Qmax В
 
-DB32.Temperatura_masla;DB32,REAL162;RW;TST=;CMT=
+DB32.op4_q_max_b;DB32,REAL104;RW;TST=;CMT=факт расход Qmax B
+DB32.op4_p_p_max_b;DB32,REAL108;RW;TST=;CMT=давление в канале Р Qmax B
+DB32.op4_p_a_max_b;DB32,REAL112;RW;TST=;CMT=давление в канале А Qmax B
+DB32.op4_bp5_bp3_max_b;DB32,REAL136;RW;TST=;CMT=перепад ВР3/ВР5 Qmax В
+
+DB32.op8_time_on_a;DB32,REAL144;RW;TST=;CMT=время включения А
+DB32.op8_time_off_a;DB32,REAL148;RW;TST=;CMT=время выключения А
+DB32.op8_time_on_b;DB32,REAL152;RW;TST=;CMT=время включения В
+DB32.op8_time_off_b;DB32,REAL156;RW;TST=;CMT=время выключения В
+
+DB32.T_oil;DB32,REAL162;RW;TST=;CMT=температура масла
 
 
 DB33.s4-20ma;DB33,X2.0;RW;TST=;CMT=сигнал 4-20 мА

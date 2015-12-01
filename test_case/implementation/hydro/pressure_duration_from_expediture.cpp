@@ -18,51 +18,51 @@ PressureDurationFromExpenditure::PressureDurationFromExpenditure():
 bool PressureDurationFromExpenditure::Run()
 {
     Start();
-    Wait( mResults.OP4_Work, mResults.OP4_End );
+    Wait( mResults.op4_ok, mResults.op4_end );
 
     mData.clear();
     Data a1;
-    a1.BP5 = mResults.OP4_D_P_03Qmax_A;
-    a1.BP3 = mResults.OP4_D_A_03Qmax_A;
-    a1.BP5_3 = mResults.OP4_BP5_BP3_03Qmax_A;
-    a1.Expenditure = mResults.OP4_Q_Fakt_03Qmax_A;
+    a1.BP5 = mResults.op4_p_p_03_a;
+    a1.BP3 = mResults.op4_p_a_03_a;
+    a1.BP5_3 = mResults.op4_bp5_bp3_03_a;
+    a1.Expenditure = mResults.op4_q_03_a;
 
     Data a2;
-    a2.BP5 = mResults.OP4_D_P_06Qmax_A;
-    a2.BP3 = mResults.OP4_D_A_06Qmax_A;
-    a2.BP5_3 = mResults.OP4_BP5_BP3_06Qmax_A;
-    a2.Expenditure = mResults.OP4_Q_Fakt_06Qmax_A;
+    a2.BP5 = mResults.op4_p_p_06_a;
+    a2.BP3 = mResults.op4_p_a_06_a;
+    a2.BP5_3 = mResults.op4_bp5_bp3_06_a;
+    a2.Expenditure = mResults.op4_q_06_a;
 
     Data a3;
-    a3.BP5 = mResults.OP4_D_P_Qmax_A;
-    a3.BP3 = mResults.OP4_D_A_Qmax_A;
-    a3.BP5_3 = mResults.OP4_BP5_BP3_Qmax_A;
-    a3.Expenditure = mResults.OP4_Q_Fakt_Qmax_A;
+    a3.BP5 = mResults.op4_p_p_max_a;
+    a3.BP3 = mResults.op4_p_a_max_a;
+    a3.BP5_3 = mResults.op4_bp5_bp3_max_a;
+    a3.Expenditure = mResults.op4_q_max_a;
 
 
     Data b1;
-    b1.BP5 = mResults.OP4_D_P_03Qmax_B;
-    b1.BP3 = mResults.OP4_D_A_03Qmax_B;
-    b1.BP5_3 = mResults.OP4_BP5_BP3_03Qmax_B;
-    b1.Expenditure = mResults.OP4_Q_Fakt_03Qmax_B;
+    b1.BP5 = mResults.op4_p_p_03_b;
+    b1.BP3 = mResults.op4_p_a_03_b;
+    b1.BP5_3 = mResults.op4_bp5_bp3_03_b;
+    b1.Expenditure = mResults.op4_q_03_b;
 
     Data b2;
-    b2.BP5 = mResults.OP4_D_P_06Qmax_B;
-    b2.BP3 = mResults.OP4_D_A_06Qmax_B;
-    b2.BP5_3 = mResults.OP4_BP5_BP3_06Qmax_B;
-    b2.Expenditure = mResults.OP4_Q_Fakt_06Qmax_B;
+    b2.BP5 = mResults.op4_p_p_06_b;
+    b2.BP3 = mResults.op4_p_a_06_b;
+    b2.BP5_3 = mResults.op4_bp5_bp3_06_b;
+    b2.Expenditure = mResults.op4_q_06_b;
 
     Data b3;
-    b3.BP5 = mResults.OP4_D_P_Qmax_B;
-    b3.BP3 = mResults.OP4_D_A_Qmax_B;
-    b3.BP5_3 = mResults.OP4_BP5_BP3_Qmax_B;
-    b3.Expenditure = mResults.OP4_Q_Fakt_Qmax_B;
+    b3.BP5 = mResults.op4_p_p_max_b;
+    b3.BP3 = mResults.op4_p_a_max_b;
+    b3.BP5_3 = mResults.op4_bp5_bp3_max_b;
+    b3.Expenditure = mResults.op4_q_max_b;
 
     mData.push_back( Channels( a1, b1 ) );
     mData.push_back( Channels( a2, b2 ) );
     mData.push_back( Channels( a3, b3 ) );
 
-    OilTemp = mResults.Temperatura_masla;
+    OilTemp = mResults.T_oil;
 
     return Success();
 }
