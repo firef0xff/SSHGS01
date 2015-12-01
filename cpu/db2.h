@@ -8,7 +8,7 @@ class CpuMemory;
 namespace data
 {
 
-class DB2 :public In, Out
+class DB2 :public In
 {
 public:
     enum
@@ -20,7 +20,6 @@ public:
     };
 
     void Read();
-    void Write();
 
     float ref_a[REF_A_COUNT] = {0.0};                  //DB2,REAL0,100 опорный сигнал катушки а
     float consumption_a[CONSUMPTION_A_COUNT] = {0.0};  //DB2,REAL0,400 расход катушки а

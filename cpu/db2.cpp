@@ -20,27 +20,12 @@ void DB2::Read()
         return;
     }
 
-    auto ReadData = []( OPCITEMSTATE& result, float* array, uint32_t size )
-    {
-        float* values = nullptr;
-        opc::miniOPC::Instance().GetArrayData( result.vDataValue, reinterpret_cast<void**>(&values) );
-        for (size_t i = 0; i < size; i++)
-        {
-            array[ i ] = values[i];
-        }
-        opc::miniOPC::Instance().FreeArrayData( result.vDataValue );
-    };
-
-    ReadData( rez[0], ref_a,            REF_A_COUNT         );
-    ReadData( rez[1], consumption_a,    CONSUMPTION_A_COUNT );
-    ReadData( rez[2], ref_b,            REF_B_COUNT         );
-    ReadData( rez[3], consumption_b,    CONSUMPTION_B_COUNT );
+    opc::ReadToArray( rez[0].vDataValue, ref_a,            REF_A_COUNT         );
+    opc::ReadToArray( rez[1].vDataValue, consumption_a,    CONSUMPTION_A_COUNT );
+    opc::ReadToArray( rez[2].vDataValue, ref_b,            REF_B_COUNT         );
+    opc::ReadToArray( rez[3].vDataValue, consumption_b,    CONSUMPTION_B_COUNT );
 
     opc::miniOPC::Instance().OpcMassFree( mGroupID, rez );
-}
-void DB2::Write()
-{
-
 }
 
 }
