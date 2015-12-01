@@ -161,4 +161,5 @@ debug {
 release {
     DEFINES -= DEBUG
 }
+#DEFINES += WINDOWS
 #DEFINES += DEMO

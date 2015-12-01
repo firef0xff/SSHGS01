@@ -346,7 +346,14 @@ void    WinOleMode::WriteMassImpl   ( HRESULT &res, GROUP_ID id, size_t pos, siz
         CoTaskMemFree( pWErrors );
     }
 }
-
+void    WinOleMode::GetArrayData( VARIANT& variant, void **values )
+{
+    SafeArrayAccessData( variant.parray, values );
+}
+void    WinOleMode::FreeArrayData( VARIANT& variant )
+{
+    SafeArrayUnaccessData( variant );
+}
 bool    WinOleMode::Connected   ()
 {
     return mConnected;

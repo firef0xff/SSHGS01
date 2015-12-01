@@ -47,7 +47,7 @@ public:
     void            OpcMassFree ( GROUP_ID id, OPCITEMSTATE* mass);
     bool            Connected   ();   
     void            GetArrayData( VARIANT& variant, void **values );
-    void            FreeArrayData( VARIANT& variant );
+    void            FreeArrayData(VARIANT&);
 private:
     //типы
     class Group                 //структура с данными по шруппе ОПС сервера

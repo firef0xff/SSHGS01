@@ -105,11 +105,17 @@ void            DemoMode::OpcMassFree ( GROUP_ID /*id*/, OPCITEMSTATE* mass )
 
 void            DemoMode::GetArrayData( VARIANT& variant, void **values )
 {
+#ifndef WINDOWS
     *values = variant.parray.get();
+#else
+    SafeArrayAccessData( variant.parray, values );
+#endif
 }
 void            DemoMode::FreeArrayData( VARIANT& /*variant*/ )
 {
-
+#ifdef WINDOWS
+    SafeArrayUnaccessData( variant );
+#endif
 }
 bool            DemoMode::Connected   ()
 {
