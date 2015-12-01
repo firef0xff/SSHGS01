@@ -102,6 +102,15 @@ void            DemoMode::OpcMassFree ( GROUP_ID /*id*/, OPCITEMSTATE* mass )
 {
     delete[] mass;
 }
+
+void            DemoMode::GetArrayData( VARIANT& variant, void **values )
+{
+    *values = variant.parray.get();
+}
+void            DemoMode::FreeArrayData( VARIANT& /*variant*/ )
+{
+
+}
 bool            DemoMode::Connected   ()
 {
     return true;

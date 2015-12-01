@@ -19,34 +19,22 @@ void DB2::Read()
         //ошибка подключения..
         return;
     }
-    float* values = nullptr;
-    SafeArrayAccessData(res[0].vDataValue.parray, (void **)& values);
-    for (size_t i = 0; i < REF_A_COUNT; i++)
-    {
-        ref_a[ i ] = values[i];
-    }
-    SafeArrayUnaccessData(res[0].vDataValue.parray);
 
-    SafeArrayAccessData(res[1].vDataValue.parray, (void **)& values);
-    for (size_t i = 0; i < CONSUMPTION_A_COUNT; i++)
+    auto ReadData = []( OPCITEMSTATE& result, float* array, uint32_t size )
     {
-        consumption_a[ i ] = values[i];
-    }
-    SafeArrayUnaccessData(res[0].vDataValue.parray);
+        float* values = nullptr;
+        opc::miniOPC::Instance().GetArrayData( result.vDataValue, reinterpret_cast<void**>(&values) );
+        for (size_t i = 0; i < size; i++)
+        {
+            array[ i ] = values[i];
+        }
+        opc::miniOPC::Instance().FreeArrayData( result.vDataValue );
+    };
 
-    SafeArrayAccessData(res[0].vDataValue.parray, (void **)& values);
-    for (size_t i = 0; i < REF_B_COUNT; i++)
-    {
-        ref_b[ i ] = values[i];
-    }
-    SafeArrayUnaccessData(res[0].vDataValue.parray);
-
-    SafeArrayAccessData(res[0].vDataValue.parray, (void **)& values);
-    for (size_t i = 0; i < CONSUMPTION_B_COUNT; i++)
-    {
-        consumption_b[ i ] = values[i];
-    }
-    SafeArrayUnaccessData(res[0].vDataValue.parray);
+    ReadData( rez[0], ref_a,            REF_A_COUNT         );
+    ReadData( rez[1], consumption_a,    CONSUMPTION_A_COUNT );
+    ReadData( rez[2], ref_b,            REF_B_COUNT         );
+    ReadData( rez[3], consumption_b,    CONSUMPTION_B_COUNT );
 
     opc::miniOPC::Instance().OpcMassFree( mGroupID, rez );
 }

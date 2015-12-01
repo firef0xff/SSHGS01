@@ -7,11 +7,12 @@
 
 #ifndef WINDOWS
 typedef int HRESULT;
-union VARIANT
+struct VARIANT
 {
-    bool boolVal;
-    float fltVal;
-    long lVal;
+    bool boolVal = false;
+    float fltVal = 0.0;
+    long lVal    = 0;
+    std::shared_ptr< void > parray;
 };
 enum RESULTS
 {
@@ -49,8 +50,10 @@ public:
     HRESULT         WriteValue  ( GROUP_ID id, size_t pos, void *item, types type );
     HRESULT         WriteMass   ( GROUP_ID id, size_t pos, size_t mass_len, void *item, types type );
     void            OpcMassFree ( GROUP_ID id, OPCITEMSTATE* mass );
-
+    void            GetArrayData( VARIANT& variant, void **values );
+    void            FreeArrayData(VARIANT&);
     bool            Connected   ();
+
 private:
     //типы
     struct Group                 //структура с данными по шруппе ОПС сервера

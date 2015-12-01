@@ -38,7 +38,6 @@ private:
     };
 
     uint64_t mGroupID = 0;
-
     wchar_t const* mAdresses[ ARRAYS_COUNT ] = {
         L"CPU/DB2.ref_a",
         L"CPU/DB2.consumption_a",
