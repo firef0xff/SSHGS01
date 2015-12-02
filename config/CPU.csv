@@ -185,7 +185,7 @@ DB21.coordinate;DB21,REAL0,10000;RW;TST=;CMT=положение цилиндра
 
 
 DB22.ref;DB22,REAL0,100;RW;TST=;CMT=опорный сигнал
-DB22.output current;DB22,REAL400,100;RW;TST=;CMT=выходной ток
+DB22.output_current;DB22,REAL400,100;RW;TST=;CMT=выходной ток
 
 
 DB23.coordinate;DB23,REAL0,10000;RW;TST=;CMT=положение цилиндра
