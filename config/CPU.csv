@@ -7,8 +7,8 @@ DB2.consumption_b;DB2,REAL1200,100;RW;TST=;CMT=расход катушки b
 DB3.open_ref;DB3,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
 DB3.open_consumption;DB3,REAL400,100;RW;TST=;CMT=расход на открытие
 DB3.open_bp3;DB3,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
-DB3.opoen_bp4;DB3,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
-DB3.opoen_bp5;DB3,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
+DB3.open_bp4;DB3,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
+DB3.open_bp5;DB3,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
 DB3.close_ref;DB3,REAL2000,100;RW;TST=;CMT=опорный сигнал назакрытие
 DB3.close_consumption;DB3,REAL2400,100;RW;TST=;CMT=расход на закрытие
 DB3.close_bp3;DB3,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
@@ -19,8 +19,8 @@ DB3.close_bp5;DB3,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
 DB4.open_ref;DB4,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
 DB4.open_consumption;DB4,REAL400,100;RW;TST=;CMT=расход на открытие
 DB4.open_bp3;DB4,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
-DB4.opoen_bp4;DB4,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
-DB4.opoen_bp5;DB4,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
+DB4.open_bp4;DB4,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
+DB4.open_bp5;DB4,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
 DB4.close_ref;DB4,REAL2000,100;RW;TST=;CMT=опорный сигнал назакрытие
 DB4.close_consumption;DB4,REAL2400,100;RW;TST=;CMT=расход на закрытие
 DB4.close_bp3;DB4,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
@@ -31,8 +31,8 @@ DB4.close_bp5;DB4,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
 DB5.open_ref;DB5,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
 DB5.open_consumption;DB5,REAL400,100;RW;TST=;CMT=расход на открытие
 DB5.open_bp3;DB5,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
-DB5.opoen_bp4;DB5,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
-DB5.opoen_bp5;DB5,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
+DB5.open_bp4;DB5,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
+DB5.open_bp5;DB5,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
 DB5.close_ref;DB5,REAL2000,100;RW;TST=;CMT=опорный сигнал назакрытие
 DB5.close_consumption;DB5,REAL2400,100;RW;TST=;CMT=расход на закрытие
 DB5.close_bp3;DB5,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
@@ -43,8 +43,8 @@ DB5.close_bp5;DB5,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
 DB6.open_ref;DB6,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
 DB6.open_consumption;DB6,REAL400,100;RW;TST=;CMT=расход на открытие
 DB6.open_bp3;DB6,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
-DB6.opoen_bp4;DB6,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
-DB6.opoen_bp5;DB6,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
+DB6.open_bp4;DB6,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
+DB6.open_bp5;DB6,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
 DB6.close_ref;DB6,REAL2000,100;RW;TST=;CMT=опорный сигнал назакрытие
 DB6.close_consumption;DB6,REAL2400,100;RW;TST=;CMT=расход на закрытие
 DB6.close_bp3;DB6,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
@@ -55,8 +55,8 @@ DB6.close_bp5;DB6,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
 DB7.open_ref;DB7,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
 DB7.open_consumption;DB7,REAL400,100;RW;TST=;CMT=расход на открытие
 DB7.open_bp3;DB7,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
-DB7.opoen_bp4;DB7,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
-DB7.opoen_bp5;DB7,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
+DB7.open_bp4;DB7,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
+DB7.open_bp5;DB7,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
 DB7.close_ref;DB7,REAL2000,100;RW;TST=;CMT=опорный сигнал назакрытие
 DB7.close_consumption;DB7,REAL2400,100;RW;TST=;CMT=расход на закрытие
 DB7.close_bp3;DB7,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
@@ -67,8 +67,8 @@ DB7.close_bp5;DB7,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
 DB8.open_ref;DB8,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
 DB8.open_consumption;DB8,REAL400,100;RW;TST=;CMT=расход на открытие
 DB8.open_bp3;DB8,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
-DB8.opoen_bp4;DB8,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
-DB8.opoen_bp5;DB8,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
+DB8.open_bp4;DB8,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
+DB8.open_bp5;DB8,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
 DB8.close_ref;DB8,REAL2000,100;RW;TST=;CMT=опорный сигнал назакрытие
 DB8.close_consumption;DB8,REAL2400,100;RW;TST=;CMT=расход на закрытие
 DB8.close_bp3;DB8,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
@@ -100,8 +100,8 @@ DB12.consumption_b;DB12,REAL1200,100;RW;TST=;CMT=расход В
 DB13.open_ref;DB13,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
 DB13.open_consumption;DB13,REAL400,100;RW;TST=;CMT=расход на открытие
 DB13.open_bp3;DB13,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
-DB13.opoen_bp4;DB13,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
-DB13.opoen_bp5;DB13,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
+DB13.open_bp4;DB13,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
+DB13.open_bp5;DB13,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
 DB13.close_ref;DB13,REAL2000,100;RW;TST=;CMT=опорный сигнал на закрытие
 DB13.close_consumption;DB13,REAL2400,100;RW;TST=;CMT=расход на закрытие
 DB13.close_bp3;DB13,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
@@ -112,8 +112,8 @@ DB13.close_bp5;DB13,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
 DB14.open_ref;DB14,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
 DB14.open_consumption;DB14,REAL400,100;RW;TST=;CMT=расход на открытие
 DB14.open_bp3;DB14,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
-DB14.opoen_bp4;DB14,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
-DB14.opoen_bp5;DB14,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
+DB14.open_bp4;DB14,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
+DB14.open_bp5;DB14,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
 DB14.close_ref;DB14,REAL2000,100;RW;TST=;CMT=опорный сигнал на закрытие
 DB14.close_consumption;DB14,REAL2400,100;RW;TST=;CMT=расход на закрытие
 DB14.close_bp3;DB14,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
@@ -124,8 +124,8 @@ DB14.close_bp5;DB14,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
 DB15.open_ref;DB15,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
 DB15.open_consumption;DB15,REAL400,100;RW;TST=;CMT=расход на открытие
 DB15.open_bp3;DB15,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
-DB15.opoen_bp4;DB15,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
-DB15.opoen_bp5;DB15,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
+DB15.open_bp4;DB15,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
+DB15.open_bp5;DB15,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
 DB15.close_ref;DB15,REAL2000,100;RW;TST=;CMT=опорный сигнал на закрытие
 DB15.close_consumption;DB15,REAL2400,100;RW;TST=;CMT=расход на закрытие
 DB15.close_bp3;DB15,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
@@ -136,8 +136,8 @@ DB15.close_bp5;DB15,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
 DB16.open_ref;DB16,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
 DB16.open_consumption;DB16,REAL400,100;RW;TST=;CMT=расход на открытие
 DB16.open_bp3;DB16,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
-DB16.opoen_bp4;DB16,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
-DB16.opoen_bp5;DB16,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
+DB16.open_bp4;DB16,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
+DB16.open_bp5;DB16,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
 DB16.close_ref;DB16,REAL2000,100;RW;TST=;CMT=опорный сигнал на закрытие
 DB16.close_consumption;DB16,REAL2400,100;RW;TST=;CMT=расход на закрытие
 DB16.close_bp3;DB16,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
@@ -148,8 +148,8 @@ DB16.close_bp5;DB16,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
 DB17.open_ref;DB17,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
 DB17.open_consumption;DB17,REAL400,100;RW;TST=;CMT=расход на открытие
 DB17.open_bp3;DB17,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
-DB17.opoen_bp4;DB17,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
-DB17.opoen_bp5;DB17,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
+DB17.open_bp4;DB17,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
+DB17.open_bp5;DB17,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
 DB17.close_ref;DB17,REAL2000,100;RW;TST=;CMT=опорный сигнал на закрытие
 DB17.close_consumption;DB17,REAL2400,100;RW;TST=;CMT=расход на закрытие
 DB17.close_bp3;DB17,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
@@ -160,8 +160,8 @@ DB17.close_bp5;DB17,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
 DB18.open_ref;DB18,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
 DB18.open_consumption;DB18,REAL400,100;RW;TST=;CMT=расход на открытие
 DB18.open_bp3;DB18,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
-DB18.opoen_bp4;DB18,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
-DB18.opoen_bp5;DB18,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
+DB18.open_bp4;DB18,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
+DB18.open_bp5;DB18,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
 DB18.close_ref;DB18,REAL2000,100;RW;TST=;CMT=опорный сигнал на закрытие
 DB18.close_consumption;DB18,REAL2400,100;RW;TST=;CMT=расход на закрытие
 DB18.close_bp3;DB18,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
