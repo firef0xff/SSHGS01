@@ -377,8 +377,8 @@ DB32.op8_time_off_b;DB32,REAL156;RW;TST=;CMT=время выключения В
 DB32.T_oil;DB32,REAL162;RW;TST=;CMT=температура масла
 
 
-DB33.s4-20ma;DB33,X2.0;RW;TST=;CMT=сигнал 4-20 мА
-DB33.s0-20ma;DB33,X2.1;RW;TST=;CMT=сигнал 0-20 мА
+DB33.s4_20ma;DB33,X2.0;RW;TST=;CMT=сигнал 4-20 мА
+DB33.s0_20ma;DB33,X2.1;RW;TST=;CMT=сигнал 0-20 мА
 DB33.s10v;DB33,X2.2;RW;TST=;CMT=сигнал +/- 10В
 DB33.s10ma;DB33,X2.3;RW;TST=;CMT=сигнал +/- 10 мА
 DB33.s15ma;DB33,X2.4;RW;TST=;CMT=сигнал +/- 15мА
@@ -451,8 +451,8 @@ DB36.op24_end;DB36,X3.2;RW;TST=;CMT=частотные характеристики конец
 DB36.op25_end;DB36,X3.3;RW;TST=;CMT=переходные харарактеристики конец
 
 
-DB37.s4-20ma;DB37,X2.0;RW;TST=;CMT=сигнал 4-20 мА
-DB37.s0-20ma;DB37,X2.1;RW;TST=;CMT=сигнал 0-20 мА
+DB37.s4_20ma;DB37,X2.0;RW;TST=;CMT=сигнал 4-20 мА
+DB37.s0_20ma;DB37,X2.1;RW;TST=;CMT=сигнал 0-20 мА
 DB37.s10v;DB37,X2.2;RW;TST=;CMT=синал +/-10 В
 DB37.s10ma;DB37,X2.3;RW;TST=;CMT=сигнал +/-10 мА
 DB37.s15ma;DB37,X2.4;RW;TST=;CMT=сигнал +/-15 мА
