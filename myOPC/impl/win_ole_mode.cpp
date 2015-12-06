@@ -352,7 +352,7 @@ void    WinOleMode::GetArrayData( VARIANT& variant, void **values )
 }
 void    WinOleMode::FreeArrayData( VARIANT& variant )
 {
-    SafeArrayUnaccessData( variant );
+    SafeArrayUnaccessData( variant.parray );
 }
 bool    WinOleMode::Connected   ()
 {

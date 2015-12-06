@@ -111,10 +111,10 @@ void            DemoMode::GetArrayData( VARIANT& variant, void **values )
     SafeArrayAccessData( variant.parray, values );
 #endif
 }
-void            DemoMode::FreeArrayData( VARIANT& /*variant*/ )
+void            DemoMode::FreeArrayData( VARIANT& variant )
 {
 #ifdef WINDOWS
-    SafeArrayUnaccessData( variant );
+    SafeArrayUnaccessData( variant.parray );
 #endif
 }
 bool            DemoMode::Connected   ()

@@ -51,7 +51,7 @@ public:
     HRESULT         WriteMass   ( GROUP_ID id, size_t pos, size_t mass_len, void *item, types type );
     void            OpcMassFree ( GROUP_ID id, OPCITEMSTATE* mass );
     void            GetArrayData( VARIANT& variant, void **values );
-    void            FreeArrayData(VARIANT&);
+    void            FreeArrayData(VARIANT& variant);
     bool            Connected   ();
 
 private:
