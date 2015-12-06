@@ -2,6 +2,7 @@
 #include <mutex>
 #include <memory>
 #include "../tests.h"
+#include "../../cpu/cpu_memory.h"
 
 namespace test
 {
@@ -186,6 +187,25 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect ) const
 QString Parameters::ModelId() const
 {
     return mGsType;
+}
+
+void Parameters::WriteToController() const
+{
+    auto& mem = cpu::CpuMemory::Instance().DB37;
+
+    mem.s4_20ma = mSignalType == ST_4_20_mA;
+    mem.s0_20ma = mSignalType == ST_0_20_mA;
+    mem.s10v = mSignalType == ST_10_10_V;
+    mem.s10ma = mSignalType == ST_10_10_mA;
+    mem.s15ma = mSignalType == ST_15_15_mA;
+    mem.s20ma = mSignalType == ST_20_20_mA;
+    mem.s40ma = mSignalType == ST_40_40_mA;
+
+    mem.nominal_volt = mVoltage;
+    mem.output_current_max = mMaxAmperage;
+    mem.resistance = mReelResist;
+
+    mem.Write();
 }
 
 bool Parameters::GsType ( QString const& val )

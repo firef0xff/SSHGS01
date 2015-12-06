@@ -8,11 +8,11 @@ class CpuMemory;
 namespace data
 {
 
-class DB38 : public In
+class DB38 : public Out
 {
 public:
 
-    void Read();
+    void Write();
 
     float& p_max;           //2 макс давление нагрузки ГЦ   
     float& p_function;      //6 давление при испытании фнкциониования
@@ -33,7 +33,7 @@ private:
         FLOAT_COUNT = 5
     };
 
-    bool mBoolData[ BOOL_COUNT ] = {false};
+//    bool mBoolData[ BOOL_COUNT ] = {false};
     float mFloatData[ FLOAT_COUNT ] = { 0.0 };
     uint64_t mGroupID = 0;
 

@@ -25,7 +25,7 @@ public:
     bool Draw(QPainter &painter, QRect &free_rect ) const;
     QString ModelId() const;
 
-    virtual void WriteToController() const {}
+    void WriteToController() const;
 
     bool GsType ( QString const& val );
     QString const& GsType () const;

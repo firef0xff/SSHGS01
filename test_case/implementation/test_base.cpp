@@ -7,7 +7,8 @@ namespace test
 
 TestCommonData::TestCommonData( TestCase* test_case, QString const& name, uint8_t number, uint8_t id ):
     test::Test( test_case, name, number, id ),
-    OilTemp(0)
+    OilTemp(0),
+    mCommand( cpu::CpuMemory::Instance().DB31 )
 {}
 
 QJsonObject TestCommonData::Serialise() const
@@ -24,20 +25,8 @@ bool TestCommonData::Deserialize( QJsonObject const& obj )
     TestingTime = obj.value("TestingTime").toInt();
     return true;
 }
-namespace hydro
-{
 
-uint8_t Test::mTestsCount = 1;
-
-Test::Test( QString const& name, uint8_t id ):
-    test::TestCommonData( &HydroTests, name, mTestsCount, id ),
-    mCommand( cpu::CpuMemory::Instance().DB31 ),
-    mResults( cpu::CpuMemory::Instance().DB32 )
-{
-    ++mTestsCount;
-}
-
-void Test::Start()
+void TestCommonData::Start()
 {
     mCommand.N_Operation = mId;
     mCommand.Start_Oper = true;
@@ -46,16 +35,31 @@ void Test::Start()
     mCommand.Write();
     StartTime.start();
 }
-void Test::Wait( bool& work, bool& done)
+void TestCommonData::Wait( bool& work, bool& done)
 {
     work = false;
     done = false;
     while( !done )
     {
-        std::this_thread::sleep_for( std::chrono::seconds(1) );
-        mResults.Read();
+        UpdateData();
     }
     TestingTime = StartTime.elapsed()/1000;
+}
+namespace hydro
+{
+
+uint8_t Test::mTestsCount = 1;
+
+Test::Test( QString const& name, uint8_t id ):
+    test::TestCommonData( &HydroTests, name, mTestsCount, id ),
+    mResults( cpu::CpuMemory::Instance().DB32 )
+{
+    ++mTestsCount;
+}
+
+void Test::UpdateData()
+{
+    mResults.Read();
 }
 
 }//namespace hydro
@@ -77,9 +81,16 @@ namespace control_board
 uint8_t Test::mTestsCount = 1;
 
 Test::Test( QString const& name, uint8_t id ):
-    test::TestCommonData( &ControlBoardTests, name, mTestsCount, id )
+    test::TestCommonData( &ControlBoardTests, name, mTestsCount, id ),
+    mBits( cpu::CpuMemory::Instance().DB39 ),
+    mTemperature( cpu::CpuMemory::Instance().DB32 )
 {
     ++mTestsCount;
+}
+void Test::UpdateData()
+{
+    mBits.Read();
+    mTemperature.Read();
 }
 }//namespace control_board
 
@@ -88,10 +99,19 @@ namespace hydro_cylinder
 uint8_t Test::mTestsCount = 1;
 
 Test::Test( QString const& name, uint8_t id ):
-    test::TestCommonData( &HydroCylinder, name, mTestsCount, id )
+    test::TestCommonData( &HydroCylinder, name, mTestsCount, id ),
+    mBits( cpu::CpuMemory::Instance().DB39 ),
+    mTemperature( cpu::CpuMemory::Instance().DB32 )
 {
     ++mTestsCount;
 }
+
+void Test::UpdateData()
+{
+    mBits.Read();
+    mTemperature.Read();
+}
+
 }//namespace hydro_cylinder
 
 

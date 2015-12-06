@@ -6,6 +6,7 @@
 #include "../test_params_hydro_cilinder.h"
 #include <QTextDocument>
 #include <QAbstractTextDocumentLayout>
+#include <mutex>
 
 namespace test
 {
@@ -13,29 +14,55 @@ namespace hydro_cylinder
 {
 
 FunctionalTest::FunctionalTest():
-    test::hydro_cylinder::Test( "Испытание функционирования", 17 ),
-    Result(false)
+    test::hydro_cylinder::Test( "Испытание функционирования", 32 ),
+    HermResult(false),
+    MaxPressureResult(false),
+    WorkPressureResult(false),
+    ExpenditureResult(false),
+    MoveTimeResult(false)
 {}
 
 bool FunctionalTest::Run()
 {
-    Question();
-    return Result;
+    Start();
+    Wait( mBits.op32_ok, mBits.op32_end );
+
+    OilTemp = mTemperature.T_oil;
+
+    std::mutex mutex;
+    std::unique_lock< std::mutex > lock( mutex );
+    Launcher( std::bind( &FunctionalTest::Question, this ) );
+
+    mCondVar.wait( lock );
+
+    return Success();
 }
 
 QJsonObject FunctionalTest::Serialise() const
 {
     QJsonObject obj;
-    obj.insert("Result", Result );
+    obj.insert("HermResult",            HermResult );
+    obj.insert("MaxPressureResult",     MaxPressureResult );
+    obj.insert("WorkPressureResult",    WorkPressureResult );
+    obj.insert("ExpenditureResult",     ExpenditureResult );
+    obj.insert("MoveTimeResult",        MoveTimeResult );
 
     return obj;
 }
 bool FunctionalTest::Deserialize( QJsonObject const& obj )
 {
-    Result = obj.value("Result").toBool();
+    HermResult = obj.value("HermResult").toBool();
+    MaxPressureResult = obj.value("MaxPressureResult").toBool();
+    WorkPressureResult = obj.value("WorkPressureResult").toBool();
+    ExpenditureResult = obj.value("ExpenditureResult").toBool();
+    MoveTimeResult = obj.value("MoveTimeResult").toBool();
     return true;
 }
 
+bool FunctionalTest::Success() const
+{
+    return HermResult && MaxPressureResult && WorkPressureResult && ExpenditureResult && MoveTimeResult;
+}
 bool FunctionalTest::Draw( QPainter& painter, QRect &free_rect ) const
 {
     test::hydro_cylinder::Parameters *params = static_cast< test::hydro_cylinder::Parameters * >( CURRENT_PARAMS );
@@ -133,11 +160,11 @@ bool FunctionalTest::Draw( QPainter& painter, QRect &free_rect ) const
 
     typedef std::pair<QString, bool> Item;
     std::vector< Item > tests;
-    tests.push_back( Item( "Наружная герметичность ", true ) );
-    tests.push_back( Item( "Максимальное давление", true ) );
-    tests.push_back( Item( "Рабочее давление", true ) );
-    tests.push_back( Item( "Номинальный расход", true ) );
-    tests.push_back( Item( "Время перемещения в одну сторону", true ) );
+    tests.push_back( Item( "Наружная герметичность ", HermResult ) );
+    tests.push_back( Item( "Максимальное давление", MaxPressureResult ) );
+    tests.push_back( Item( "Рабочее давление", WorkPressureResult ) );
+    tests.push_back( Item( "Номинальный расход", ExpenditureResult ) );
+    tests.push_back( Item( "Время перемещения в одну сторону", MoveTimeResult ) );
 
     QString rows;
     for ( size_t i =  1, end = tests.size(); i <= end; ++i )
@@ -188,17 +215,17 @@ bool FunctionalTest::Draw( QPainter& painter, QRect &free_rect ) const
 }
 void FunctionalTest::Question()
 {
-#warning найти как обойти падение
-    /*QMessageBox msg;
+    QMessageBox msg;
     msg.setWindowTitle( "Визуальный контроль" );
-    msg.setText( "Заметна ли течь по резьбам и стыкам,\nпотение наружных поверхностей гидрораспределителя" );
-    QPushButton *no = msg.addButton("Течь не обнаружена", QMessageBox::NoRole );
-    QPushButton *yes = msg.addButton("Течь обнаружена", QMessageBox::YesRole );
+    msg.setText( "Обнаружена ли течь или потение наружных\nповерхностей на испытуемом гидроцилиндре" );
+    QPushButton *no = msg.addButton("Нет", QMessageBox::NoRole );
+    QPushButton *yes = msg.addButton("Да", QMessageBox::YesRole );
     msg.setModal( true );
     no->setDefault( false );
     yes->setDefault( false );
     msg.exec();
-    LeakFounded = msg.clickedButton() == yes;*/
+    HermResult = msg.clickedButton() == no;
+    mCondVar.notify_all();
 }
 
 }//namespace hydro_cylinder

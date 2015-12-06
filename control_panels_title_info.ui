@@ -74,7 +74,17 @@
        </item>
        <item>
         <property name="text">
-         <string>+-10мА</string>
+         <string>+-10 мА</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>+-15 мА</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>+-20 мА</string>
         </property>
        </item>
        <item>

@@ -1,6 +1,7 @@
 #include "power_test.h"
 #include <QJsonObject>
 
+
 namespace test
 {
 
@@ -8,12 +9,17 @@ namespace control_board
 {
 
 PowerTest::PowerTest():
-    test::control_board::Test( "Проверка на отсутствие ошибок", 15 ),
+    test::control_board::Test( "Проверка на отсутствие ошибок", 30 ),
   Result(false)
 {}
 
 bool PowerTest::Run()
 {
+    Start();
+    Wait( mBits.op30_ok, mBits.op30_end );
+
+    OilTemp = mTemperature.T_oil;
+    Result = false;
     return Success();
 }
 

@@ -1,6 +1,7 @@
 #pragma once
 #include "../test_base.h"
 #include <QVector>
+#include <condition_variable>
 
 namespace test
 {
@@ -18,10 +19,16 @@ public:
     bool Deserialize( QJsonObject const& obj );
 
     bool Draw(QPainter &painter, QRect &free_rect ) const;
+
+    bool Success() const;
 private:
     void Question();
-    bool Result; /// в отчет список параметров
-    /// и диалоговое окно пригоден не пригоден для оператора
+    bool HermResult; //да если течь не обнаружена
+    bool MaxPressureResult;
+    bool WorkPressureResult;
+    bool ExpenditureResult;
+    bool MoveTimeResult;
+    std::condition_variable mCondVar;
 
 };
 

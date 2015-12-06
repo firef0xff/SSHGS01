@@ -129,6 +129,16 @@ bool ParseValue (SIGNAL_TYPE &param, QString const& val )
         param = ST_10_10_mA;
         return true;
     }
+    else if( !val.compare( "+-15 мА", Qt::CaseInsensitive ) )
+    {
+        param = ST_15_15_mA;
+        return true;
+    }
+    else if( !val.compare( "+-20 мА", Qt::CaseInsensitive ) )
+    {
+        param = ST_20_20_mA;
+        return true;
+    }
     else if ( !val.compare( "+-40 мА", Qt::CaseInsensitive ) )
     {
         param = ST_40_40_mA;
@@ -261,6 +271,10 @@ QString ToString( SIGNAL_TYPE const& v )
             return "4..20 мА";
         case ST_10_10_mA:
             return "+-10 мА";
+        case ST_15_15_mA:
+            return "+-15 мА";
+        case ST_20_20_mA:
+            return "+-20 мА";
         case ST_40_40_mA:
             return "+-40 мА";
         case ST_10_10_V:

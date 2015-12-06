@@ -18,7 +18,7 @@ public:
     QJsonObject Serialise() const;
     bool Deserialize(const QJsonObject &obj );
 
-    virtual void WriteToController() const {}
+    void WriteToController() const;
 
     bool Draw(QPainter &painter, QRect &free_rect ) const;
 
@@ -48,13 +48,13 @@ private:
     Parameters( Parameters const& ) = delete;
     void operator = ( Parameters& ) = delete;
 
-    QString mSerNo;
-    QString mGsType;
-    double  mMaxPressure;
-    double  mMoveTime;
-    double  mTestPressure;
-    double  mHermTestTime;
-    double  mExpenditure;
+    QString mSerNo;         //серийный номер
+    QString mGsType;        //тип гидроцилиндра
+    double  mMaxPressure;   //максимальное давление нагрузки Г/Ц
+    double  mMoveTime;      //время перемещения в каждую сторону
+    double  mTestPressure;  //давление при испытании функционирования
+    double  mHermTestTime;  //время испытания наружной герметичности
+    double  mExpenditure;   //номинальный расход Г/Ц
 };
 }//namespace hydro_cylinder
 

@@ -22,22 +22,10 @@ DB37::DB37():
     mGroupID = opc::miniOPC::Instance().AddGroup( L"DB37", mAdresses, BOOL_COUNT + FLOAT_COUNT );
 }
 
-void DB37::Read()
+void DB37::Write()
 {
-    OPCITEMSTATE* rez = opc::miniOPC::Instance().Read( mGroupID );
-    if (!rez)
-    {
-        //ошибка подключения..
-        return;
-    }
-    for (size_t i = 0; i < BOOL_COUNT + FLOAT_COUNT; i++)
-    {
-        if ( i < BOOL_COUNT )
-            mBoolData[ i ] = rez[i].vDataValue.boolVal;
-        else
-            mFloatData[ i - BOOL_COUNT ] = rez[i].vDataValue.fltVal;
-    }
-    opc::miniOPC::Instance().OpcMassFree( mGroupID, rez );
+    opc::miniOPC::Instance().WriteMass( mGroupID, 0, BOOL_COUNT, static_cast<void*>( mBoolData ), opc::tBOOL );
+    opc::miniOPC::Instance().WriteMass( mGroupID, BOOL_COUNT, FLOAT_COUNT, static_cast<void*>( mFloatData ), opc::tFLOAT );
 }
 
 }//namespace data

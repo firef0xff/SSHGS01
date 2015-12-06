@@ -9,11 +9,15 @@ namespace control_board
 {
 
 VACharacteristic::VACharacteristic():
-    test::control_board::Test( "Построение зависимости выходного тока на катушку от входного опорного сигнала", 16 )
+    test::control_board::Test( "Построение зависимости выходного тока на катушку от входного опорного сигнала", 31 )
 {}
 
 bool VACharacteristic::Run()
 {
+    Start();
+    Wait( mBits.op31_ok, mBits.op31_end );
+
+    OilTemp = mTemperature.T_oil;
     return true;
 }
 QJsonObject VACharacteristic::Serialise() const

@@ -14,6 +14,15 @@ DB39::DB39():
     op32_end( mBoolData[5] )
 {
     mGroupID = opc::miniOPC::Instance().AddGroup( L"DB39", mAdresses, BOOL_COUNT + FLOAT_COUNT );
+#ifdef DEMO
+    op30_ok = true;
+    op31_ok = true;
+    op32_ok = true;
+    op30_end = true;
+    op31_end = true;
+    op32_end = true;
+    opc::miniOPC::Instance().WriteMass( mGroupID, 0, BOOL_COUNT, static_cast<void*>( mBoolData ), opc::tBOOL );
+#endif
 }
 
 void DB39::Read()
@@ -28,8 +37,8 @@ void DB39::Read()
     {
         if ( i < BOOL_COUNT )
             mBoolData[ i ] = rez[i].vDataValue.boolVal;
-        else
-            mFloatData[ i - BOOL_COUNT ] = rez[i].vDataValue.fltVal;
+//        else
+//            mFloatData[ i - BOOL_COUNT ] = rez[i].vDataValue.fltVal;
     }
     opc::miniOPC::Instance().OpcMassFree( mGroupID, rez );
 }

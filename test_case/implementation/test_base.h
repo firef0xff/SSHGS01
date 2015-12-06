@@ -19,6 +19,11 @@ protected:
 
     QJsonObject Serialise() const;
     bool Deserialize( QJsonObject const& obj );
+
+    void Start();
+    void Wait( bool& work, bool& done);
+    virtual void UpdateData(){}
+    cpu::data::DB31& mCommand;
 };
 
 namespace hydro
@@ -29,9 +34,8 @@ class Test :public test::TestCommonData
 public:
     Test( QString const& name, uint8_t id );
 protected:
-    void Start();
-    void Wait( bool& work, bool& done);
-    cpu::data::DB31& mCommand;
+
+    void UpdateData();
     cpu::data::DB32& mResults;
 
 private:
@@ -59,6 +63,10 @@ class Test :public test::TestCommonData
 {
 public:
     Test( QString const& name, uint8_t id );
+protected:
+    void UpdateData();
+    cpu::data::DB39& mBits;
+    cpu::data::DB32& mTemperature;
 private:
     static uint8_t mTestsCount;
 };
@@ -70,6 +78,11 @@ class Test :public test::TestCommonData
 {
 public:
     Test( QString const& name, uint8_t id );
+protected:
+    void UpdateData();
+    cpu::data::DB39& mBits;
+    cpu::data::DB32& mTemperature;
+
 private:
     static uint8_t mTestsCount;
 };

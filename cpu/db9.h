@@ -14,7 +14,7 @@ public:
     enum
     {
         CONSUMPTION_A_COUNT = 50,
-        BP3_A_COUNT
+        BP3_A_COUNT = 50,
         BP5_A_COUNT = 50,
         CONSUMPTION_B_COUNT = 50,
         BP4_B_COUNT = 50,

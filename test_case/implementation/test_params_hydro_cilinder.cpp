@@ -2,6 +2,7 @@
 #include "../tests.h"
 #include <memory>
 #include <mutex>
+#include "../../cpu/cpu_memory.h"
 
 namespace test
 {
@@ -110,6 +111,19 @@ bool Parameters::Deserialize(const QJsonObject &obj )
         ret = false;
 
     return ret;
+}
+
+void Parameters::WriteToController() const
+{
+    auto& mem = cpu::CpuMemory::Instance().DB38;
+
+    mem.p_function = mTestPressure;
+    mem.p_max = mMaxPressure;
+    mem.q_nominal = mExpenditure;
+    mem.time_function = mMoveTime;
+    mem.time_tightness = mHermTestTime;
+
+    mem.Write();
 }
 
 bool Parameters::Draw(QPainter &painter, QRect &free_rect ) const

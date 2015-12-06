@@ -61,8 +61,8 @@ void DB40::Read()
     {
         if ( i < BOOL_COUNT )
             mBoolData[ i ] = rez[i].vDataValue.boolVal;
-        else
-            mFloatData[ i - BOOL_COUNT ] = rez[i].vDataValue.fltVal;
+//        else
+//            mFloatData[ i - BOOL_COUNT ] = rez[i].vDataValue.fltVal;
     }
     opc::miniOPC::Instance().OpcMassFree( mGroupID, rez );
 }
