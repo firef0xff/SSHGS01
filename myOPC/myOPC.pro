@@ -8,7 +8,8 @@ SOURCES += main.cpp \
     opc_i.c \
     impl/demo_mode.cpp \
     impl/cache/memory.cpp \
-    impl/win_ole_mode.cpp
+    impl/win_ole_mode.cpp \
+    impl/sync_thread.cpp
 
 HEADERS += \
     miniOPC.h \
@@ -18,7 +19,9 @@ HEADERS += \
     impl/cache/cache.h \
     impl/cache/def.h \
     impl/cache/memory.h \
-    impl/win_ole_mode.h
+    impl/win_ole_mode.h \
+    impl/sync_thread.h
+
 
 
 win32 {
@@ -29,6 +32,7 @@ win32 {
 unix {
     DEFINES -= WINDOWS
     DEFINES += DEMO
+    LIBS += -lpthread
 }
 
 debug {

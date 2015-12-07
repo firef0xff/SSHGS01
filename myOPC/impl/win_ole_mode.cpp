@@ -12,52 +12,6 @@ namespace opc
 #define REQUESTED_UPDATE_RATE 500
 
 
-SyncThread::SyncThread():
-    interrupt(false)
-{}
-SyncThread::~SyncThread()
-{
-    interrupt = true;
-    mRunWaiter.notify_all();
-    mExecWaiter.notify_all();
-    if ( mThread.joinable() )
-        mThread.join();
-}
-void SyncThread::Start()
-{
-    std::unique_lock< std::mutex > lock( Mutex );
-    mThread = std::thread( &SyncThread::Run, this );
-    mRunWaiter.wait(lock);
-}
-void SyncThread::Exec( Function func )
-{
-    std::unique_lock< std::mutex > lock( Mutex );
-    mFunc = func;
-    mRunWaiter.notify_one();
-    mExecWaiter.wait( lock );
-}
-void SyncThread::Run()
-{
-    for(;;)
-    {
-        try
-        {
-            mRunWaiter.notify_all();
-            std::unique_lock< std::mutex > lock( Mutex );
-            mRunWaiter.wait(lock);
-            if ( interrupt )
-                return;
-            if (mFunc)
-                mFunc();
-            mExecWaiter.notify_one();
-        }
-        catch(...)
-        {
-
-        }
-    }
-}
-
 
 WinOleMode::WinOleMode( wchar_t const* ServerName ):
     pIOPCServer( nullptr ),

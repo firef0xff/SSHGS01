@@ -1,5 +1,6 @@
 #include <iostream>
 #include "miniOPC.h"
+#include "impl/sync_thread.h"
 
 class Test
 {
@@ -156,11 +157,87 @@ public:
     bool mBoolData[ BOOL_COUNT ] = {false};
     float mFloatData[ FLOAT_COUNT ] = { 0.0 };
 };
+class Test2
+{
+public:
+    Test2()
+    {
+        std::cout << "connecting to opc" << std::endl;
+        opc::miniOPC& server = opc::miniOPC::Instance();
+        std::cout << "connecting done" << std::endl;
+
+        std::cout << "add group" << std::endl;
+        mGroupID = server.AddGroup( L"TestArray", mAdresses, ArrayCount );
+        std::cout << "add group done" << std::endl;
+    }
+
+    void Run()
+    {
+        while ( true )
+        {
+            OPCITEMSTATE* rez = opc::miniOPC::Instance().Read( mGroupID );
+            if (!rez)
+            {
+                //ошибка подключения..
+                return;
+            }
+
+            opc::ReadToArray( rez[0].vDataValue, mFloatData,           ArraySize         );
+
+            opc::miniOPC::Instance().OpcMassFree( mGroupID, rez );
+
+            for ( size_t i = 0; i < ArraySize; ++i )
+            {
+                std::cout << mFloatData[i] << " ";
+            }
+            std::cout <<std::endl;
+        }
+    }
+
+    enum
+    {
+        ArrayCount = 1,
+        ArraySize = 3
+    };
+
+    wchar_t const* mAdresses[ ArrayCount ] = {
+        //bool
+        L"CPU/test_array"
+    };
+
+    uint64_t mGroupID = 0;
+
+    float mFloatData[ ArraySize ] = { 0.0 };
+};
+
+class Test3
+{
+public:
+    Test3()
+    {
+        thread.Start();
+    }
+
+    void Run()
+    {
+        int i =0;
+        while ( true )
+        {
+            thread.Exec( [ &i ]()
+            {
+            std::cout << i << std::endl;
+            } );
+            ++i;
+        }
+    }
+
+    SyncThread thread;
+};
 
 int main()
 {
-    Test t;
-    new std::thread( &Test::Run, &t );
+    Test3 t;
+    new std::thread( &Test3::Run, &t );
 
     std::this_thread::sleep_for(std::chrono::seconds(3600));
 

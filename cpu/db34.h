@@ -10,7 +10,7 @@ class CpuMemory;
 namespace data
 {
 
-class DB34 :public Out
+class DB34 :public In
 {
 public:
 

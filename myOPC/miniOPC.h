@@ -69,9 +69,12 @@ void    ReadToArray (  VARIANT& variant, T* array, uint32_t size )
 {
     T* values = nullptr;
     miniOPC::Instance().GetArrayData( variant, reinterpret_cast<void**>(&values) );
-    for (size_t i = 0; i < size; i++)
+    if ( values )
     {
-        array[ i ] = values[i];
+        for (size_t i = 0; i < size; i++)
+        {
+            array[ i ] = values[i];
+        }
     }
     miniOPC::Instance().FreeArrayData( variant );
 }

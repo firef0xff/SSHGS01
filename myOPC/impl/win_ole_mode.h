@@ -1,38 +1,14 @@
 #pragma once
 #include "types.h"
-
+#include "sync_thread.h"
 
 #ifdef WINDOWS
 #include "../opc.h"
 #include <vector>
 #include <memory>
-#include <thread>
-#include <mutex>
-#include <condition_variable>
-#include <functional>
 
 namespace opc
 {
-
-class SyncThread
-{
-public:
-    typedef std::function<void(void)> Function;
-
-    SyncThread();
-    ~SyncThread();
-
-    void Start();
-    void Exec( Function func );
-private:
-    void Run();
-    bool interrupt;
-    std::thread mThread;
-    Function mFunc;
-    std::mutex Mutex;
-    std::condition_variable mRunWaiter;
-    std::condition_variable mExecWaiter;
-};
 
 class WinOleMode
 {
