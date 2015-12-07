@@ -25,7 +25,7 @@ public:
 
     QString const& Name() const;
     uint8_t const& Number() const;
-    uint8_t const& ID() const;
+    virtual uint8_t const& ID() const;
 
     virtual QJsonObject Serialise() const = 0;
     virtual bool Deserialize( QJsonObject const& obj ) = 0;

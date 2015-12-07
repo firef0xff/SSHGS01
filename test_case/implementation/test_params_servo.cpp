@@ -2,6 +2,7 @@
 #include <mutex>
 #include <memory>
 #include "../tests.h"
+#include "../../cpu/cpu_memory.h"
 
 namespace test
 {
@@ -155,6 +156,18 @@ bool Parameters::Deserialize( QJsonObject const& obj )
         res = false;
 
     return res;
+}
+
+void Parameters::WriteToController() const
+{
+    if ( test::servo::Parameters::Instance().ReelControl() == RC_REEL )
+    {
+        auto& mem = cpu::CpuMemory::Instance().DB35;
+    }
+    else
+    {
+        auto& mem = cpu::CpuMemory::Instance().DB33;
+    }
 }
 
 bool Parameters::Draw(QPainter &painter, QRect &free_rect ) const

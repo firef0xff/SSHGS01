@@ -22,8 +22,10 @@ protected:
 
     void Start();
     void Wait( bool& work, bool& done);
+    virtual uint8_t CommandID();
     virtual void UpdateData(){}
     cpu::data::DB31& mCommand;
+    cpu::data::DB40& Exceptions;
 };
 
 namespace hydro
@@ -50,9 +52,14 @@ namespace servo
 class Test :public test::TestCommonData
 {
 public:
-    Test( QString const& name, uint8_t id );
+    Test( QString const& name, uint8_t id_board, uint8_t id_reel );
 private:
     static uint8_t mTestsCount;
+    void UpdateData();
+    uint8_t CommandID();
+    uint8_t mIdReel;
+    cpu::data::DB34& mControlBoardBits;    //биты завершения испытаний серво оборудования с блоком управления
+    cpu::data::DB36& mControlReelBits;    //биты завершения испытаний серво оборудования с катушками управления
 };
 
 }//namespace servo
@@ -65,6 +72,7 @@ public:
     Test( QString const& name, uint8_t id );
 protected:
     void UpdateData();
+#warning partial implemented
     cpu::data::DB39& mBits;
     cpu::data::DB32& mTemperature;
 private:
@@ -80,6 +88,7 @@ public:
     Test( QString const& name, uint8_t id );
 protected:
     void UpdateData();
+#warning partial implemented
     cpu::data::DB39& mBits;
     cpu::data::DB32& mTemperature;
 

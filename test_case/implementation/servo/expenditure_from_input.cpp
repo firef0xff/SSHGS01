@@ -9,7 +9,7 @@ namespace servo
 {
 
 ExpeditureFromInput::ExpeditureFromInput():
-    test::servo::Test( "Зависимость расхода «к потребителю» от входного тока без нагрузки", 11 ),
+    test::servo::Test( "Зависимость расхода «к потребителю» от входного тока без нагрузки", 12, 22 ),
     Gain(0),
     Hysteresis(0)
 {}

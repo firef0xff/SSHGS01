@@ -9,7 +9,7 @@ namespace servo
 {
 
 TransientPerformance::TransientPerformance():
-    test::servo::Test( "Проверка переходных характеристик", 14 )
+    test::servo::Test( "Проверка переходных характеристик", 15, 25 )
 {}
 
 bool TransientPerformance::Run()

@@ -19,7 +19,7 @@ public:
     virtual QJsonObject Serialise() const;
     virtual bool Deserialize( QJsonObject const& obj );
 
-    virtual void WriteToController() const {}
+    virtual void WriteToController() const;
 
     bool Draw(QPainter &painter, QRect &free_rect ) const;
 

@@ -10,7 +10,7 @@ namespace servo
 {
 
 FrequencyCharacteristics::FrequencyCharacteristics():
-    test::servo::Test( "Проверка частотных характеристик", 13 )
+    test::servo::Test( "Проверка частотных характеристик", 14, 24 )
 {}
 
 bool FrequencyCharacteristics::Run()

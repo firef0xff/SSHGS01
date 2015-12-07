@@ -12,7 +12,7 @@ namespace servo
 {
 
 ExpeditureFromPressureDuration::ExpeditureFromPressureDuration():
-    test::servo::Test( "Проверка зависимости расхода «к потребителю» от перепада давлений нагрузки", 12 )
+    test::servo::Test( "Проверка зависимости расхода «к потребителю» от перепада давлений нагрузки", 13, 23 )
 {}
 
 bool ExpeditureFromPressureDuration::Run()

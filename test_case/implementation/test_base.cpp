@@ -2,6 +2,7 @@
 #include "../tests.h"
 #include "../../settings/settings.h"
 #include <thread>
+#include "test_params_servo.h"
 namespace test
 {
 
@@ -26,9 +27,13 @@ bool TestCommonData::Deserialize( QJsonObject const& obj )
     return true;
 }
 
+uint8_t TestCommonData::CommandID()
+{
+    return mId;
+}
 void TestCommonData::Start()
 {
-    mCommand.N_Operation = mId;
+    mCommand.N_Operation = CommandID();
     mCommand.Start_Oper = true;
     mCommand.Stop_Oper = false;
     mCommand.Nasos_M2 = app::Settings::Instance().MainPupm() == "M2";
@@ -44,6 +49,8 @@ void TestCommonData::Wait( bool& work, bool& done)
         UpdateData();
     }
     TestingTime = StartTime.elapsed()/1000;
+
+    Exceptions.Read();
 }
 namespace hydro
 {
@@ -69,11 +76,25 @@ namespace servo
 
 uint8_t Test::mTestsCount = 1;
 
-Test::Test( QString const& name, uint8_t id ):
-    test::TestCommonData( &ServoTests, name, mTestsCount, id )
+Test::Test( QString const& name, uint8_t id_board, uint8_t id_reel ):
+    test::TestCommonData( &ServoTests, name, mTestsCount, id_board ),
+    mIdReel( id_reel )
 {
     ++mTestsCount;
 }
+
+void Test::UpdateData()
+{
+    mControlBoardBits.Read();
+    mControlReelBits.Read();
+}
+uint8_t Test::CommandID()
+{
+    if ( test::servo::Parameters::Instance().ReelControl() == RC_REEL )
+        return mIdReel;
+    return mId;
+}
+
 }//namespace servo
 
 namespace control_board

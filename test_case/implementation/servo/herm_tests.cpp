@@ -12,7 +12,7 @@ namespace servo
 {
 
 OutsideHermTest::OutsideHermTest():
-    test::servo::Test( "Проверка аппарата пробным давлением", 9 ),
+    test::servo::Test( "Проверка аппарата пробным давлением", 10, 20 ),
     LeakFounded(false)
 {}
 
@@ -157,7 +157,7 @@ void OutsideHermTest::Question()
 
 //----------------------------------------------
 InsideHermTest::InsideHermTest():
-    test::servo::Test( "Проверка внутренней герметичности", 10 )
+    test::servo::Test( "Проверка внутренней герметичности", 11, 21 )
 {}
 
 bool InsideHermTest::Run()
