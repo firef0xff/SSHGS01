@@ -12,7 +12,7 @@ class ExpeditureFromInput :public test::servo::Test
 public:
     ExpeditureFromInput();
     bool Run();
-
+    bool Success() const;
     QJsonObject Serialise() const;
     bool Deserialize( QJsonObject const& obj );
 
@@ -35,10 +35,11 @@ private:
     //+ расчеты
     /// (хочу просто данные с контроллера для рисования )
 
-    QVector<Data> Graph;
+    QVector<Data> GraphA;
+    QVector<Data> GraphB;
     double Gain;            /// коэффициент усиления по расходу
     double Hysteresis;      /// гистерезис
-
+    double Nonlinearity;    /// нелинейность
 };
 
 }//namespace servo

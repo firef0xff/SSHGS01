@@ -22,6 +22,7 @@ bool PressureDurationFromExpenditure::Run()
     if ( IsStopped() )
         return false;
 
+#warning нужен расход на питающем канале?
     mData.clear();
     Data a1;
     a1.BP5 = mResults.op4_p_p_03_a;

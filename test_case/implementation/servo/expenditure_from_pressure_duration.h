@@ -12,32 +12,47 @@ class ExpeditureFromPressureDuration :public test::servo::Test
 public:
     ExpeditureFromPressureDuration();
     bool Run();
-
+    bool Success() const;
     QJsonObject Serialise() const;
     bool Deserialize( QJsonObject const& obj );
 
     bool Draw(QPainter &painter, QRect &free_rect ) const;
 
+    void ResetDrawLine();
 private:
     struct Data
     {
+        struct Channel
+        {
+            Channel():
+                BP5(0),
+                BP3(0)
+            {}
+            double BP5;
+            double BP3;
+            double BP5_3 () const
+            {
+                return BP5-BP3;
+            }
+
+            QJsonObject Serialise() const;
+            bool Deserialize( QJsonObject const& obj );
+        };
+
         Data():
-            Duration(0),
             Expenditure(0)
         {}
 
         QJsonObject Serialise() const;
         bool Deserialize( QJsonObject const& obj );
-        double Duration;
+
         double Expenditure;
+        Channel ChA;
+        Channel ChB;
     };
 
-    /// два массива данных BP5, BP3, BV ( для потебителя А и потребителя Б )
-    /// строятся 2 графика зависимости значения перепада от расхода в канале
-    /// (хочу просто массива с контроллера для рисования )
-
-    QVector<Data> BP5_3;
-    QVector<Data> BP3_V;
+    QVector<Data> mData;
+    mutable int PrintedRows = 0;
 };
 
 }//namespace servo

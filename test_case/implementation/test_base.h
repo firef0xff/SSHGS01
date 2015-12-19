@@ -61,6 +61,12 @@ protected:
 
     cpu::data::DB2&  m11Results;
     cpu::data::DB12& m21Results;
+
+    cpu::data::DB3&  m12Results;
+    cpu::data::DB22& m22Results;
+
+    cpu::data::DB9&  m13Results;
+    cpu::data::DB19& m23Results;
 private:
     static uint8_t mTestsCount;
     void UpdateData();

@@ -194,7 +194,7 @@ bool InsideHermTest::Run()
 
     if ( ReelControl() )
     {
-        for ( size_t i = 0; i <100; ++i )
+        for ( size_t i = 0; i < m21Results.CONSUMPTION_A_COUNT; ++i )
         {
             Data d;
             d.Leak = m21Results.consumption_a[i];
@@ -208,7 +208,7 @@ bool InsideHermTest::Run()
     }
     else
     {
-        for ( size_t i = 0; i <100; ++i )
+        for ( size_t i = 0; i < m11Results.CONSUMPTION_A_COUNT; ++i )
         {
             Data d;
             d.Leak = m11Results.consumption_a[i];

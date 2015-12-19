@@ -93,6 +93,10 @@ Test::Test( QString const& name, uint8_t id_board, uint8_t id_reel ):
     mControlReelBits( cpu::CpuMemory::Instance().DB36  ),
     m11Results( cpu::CpuMemory::Instance().DB2 ),
     m21Results( cpu::CpuMemory::Instance().DB12 ),
+    m12Results( cpu::CpuMemory::Instance().DB3 ),
+    m22Results( cpu::CpuMemory::Instance().DB22 ),
+    m13Results( cpu::CpuMemory::Instance().DB9 ),
+    m23Results( cpu::CpuMemory::Instance().DB19 ),
     mIdReel( id_reel )
 {
     ++mTestsCount;
@@ -103,6 +107,13 @@ void Test::UpdateData()
     mControlBoardBits.Read();
     mControlReelBits.Read();
     mTemperature.Read();
+
+    m11Results.Read();
+    m21Results.Read();
+    m12Results.Read();
+    m22Results.Read();
+    m13Results.Read();
+    m23Results.Read();
 }
 uint8_t Test::CommandID()
 {    

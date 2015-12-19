@@ -10,6 +10,10 @@
 
 #include "db2.h"
 #include "db12.h"
+#include "db3.h"
+#include "db22.h"
+#include "db9.h"
+#include "db19.h"
 
 #include "db37.h"
 #include "db38.h"
@@ -40,6 +44,10 @@ public:
 
     data::DB2   DB2;    //результаты испытания гесметичности пр11
     data::DB12  DB12;   //результаты испытания гесметичности пр21
+    data::DB3   DB3;    //результаты пр12
+    data::DB22  DB22;   //результаты пр22
+    data::DB9   DB9;    //результаты пр13
+    data::DB19  DB19;   //результаты пр23
 
 
     data::DB37 DB37;    //параметры для испытания контрольных плат

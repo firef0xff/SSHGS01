@@ -25,47 +25,72 @@ bool ExpeditureFromPressureDuration::Run()
     if ( IsStopped() )
         return false;
 
+    if ( ReelControl() )
+    {
+#warning нужен расход на питающем канале?
+        for ( size_t i = 0; i < m23Results.CONSUMPTION_A_COUNT; ++i )
+        {
+            Data d;
+            d.Expenditure = m23Results.consumption_a[i];
+            d.ChA.BP3 = m23Results.bp3_a[i];
+            d.ChB.BP3 = m23Results.bp4_b[i];
+            d.ChA.BP5 = m23Results.bp5_a[i];
+            d.ChA.BP5 = m23Results.bp5_b[i];
+            mData.push_back( d );
+        }
+    }
+    else
+    {
+#warning нужен расход на питающем канале?
+        for ( size_t i = 0; i < m13Results.CONSUMPTION_A_COUNT; ++i )
+        {
+            Data d;
+            d.Expenditure = m13Results.consumption_a[i];
+            d.ChA.BP3 = m13Results.bp3_a[i];
+            d.ChB.BP3 = m13Results.bp4_b[i];
+            d.ChA.BP5 = m13Results.bp5_a[i];
+            d.ChA.BP5 = m13Results.bp5_b[i];
+            mData.push_back( d );
+        }
+    }
+
+    OilTemp = mTemperature.T_oil;
+    return Success();
+}
+bool ExpeditureFromPressureDuration::Success() const
+{
     return true;
 }
 QJsonObject ExpeditureFromPressureDuration::Serialise() const
 {
-    QJsonObject obj;
+    QJsonObject obj = Test::Serialise();
     QJsonArray a;
-    foreach (Data const& d, BP5_3)
+    foreach (Data const& d, mData)
     {
         a.insert( a.end(), d.Serialise() );
     }
-    obj.insert("BP5_3", a );
-
-    QJsonArray b;
-    foreach (Data const& d, BP3_V)
-    {
-        b.insert( b.end(), d.Serialise() );
-    }
-    obj.insert("BP3_V", a );
+    obj.insert("Data", a );
 
     return obj;
 }
 bool ExpeditureFromPressureDuration::Deserialize( QJsonObject const& obj )
 {
-    QJsonArray a = obj.value("BP5_3").toArray();
+    QJsonArray a = obj.value("Data").toArray();
     foreach (QJsonValue const& v, a)
     {
         Data d;
         if ( d.Deserialize( v.toObject() ) )
-            BP5_3.insert( BP5_3.end(), d );
+            mData.insert( mData.end(), d );
     }
 
-    QJsonArray b = obj.value("BP3_V").toArray();
-    foreach (QJsonValue const& v, b)
-    {
-        Data d;
-        if ( d.Deserialize( v.toObject() ) )
-            BP3_V.insert( BP3_V.end(), d );
-    }
-
-
+    Test::Deserialize( obj );
     return true;
+}
+
+void ExpeditureFromPressureDuration::ResetDrawLine()
+{
+    PrintedRows = 0;
+    Test::ResetDrawLine();
 }
 
 bool ExpeditureFromPressureDuration::Draw( QPainter& painter, QRect &free_rect ) const
@@ -188,40 +213,40 @@ bool ExpeditureFromPressureDuration::Draw( QPainter& painter, QRect &free_rect )
             "</html>";
 
     QString table = header;
-   /* auto MakeRow = [ &table, this, &params ]( int i ) -> QString
+    auto MakeRow = [ &table, this ]( int i ) -> QString
     {
         QString row =   "<tr>"
-                            "<td>" + QString::number( mData[i].first.Expenditure ) + "</td>"
-                            "<td>" + QString::number( mData[i].first.BP5 ) + "</td>"
-                            "<td>" + QString::number( mData[i].first.BP3 ) + "</td>"
-                            "<td>" + QString::number( mData[i].first.BP5_3 ) + "</td>";
-        if ( params->ReelCount() == 2 )
-        {
-                row +=      "<td>" + QString::number( mData[i].second.BP5 ) + "</td>"
-                            "<td>" + QString::number( mData[i].second.BP3 ) + "</td>"
-                            "<td>" + QString::number( mData[i].second.BP5_3 ) + "</td>";
-        }
-        else
-        {
-            row +=          "<td></td>"
-                            "<td></td>"
-                            "<td></td>";
-        }
+                            "<td>" + QString::number( mData[i].Expenditure ) + "</td>"
+                            "<td>" + QString::number( mData[i].ChA.BP5 ) + "</td>"
+                            "<td>" + QString::number( mData[i].ChA.BP3 ) + "</td>"
+                            "<td>" + QString::number( mData[i].ChA.BP5_3() ) + "</td>";
+                row +=      "<td>" + QString::number( mData[i].ChB.BP5 ) + "</td>"
+                            "<td>" + QString::number( mData[i].ChB.BP3 ) + "</td>"
+                            "<td>" + QString::number( mData[i].ChB.BP5_3() ) + "</td>";
           row +=        "</tr>";
         return row;
     };
-
-    for ( auto i = 0; i < mData.size(); ++i )
-    {
-        table += MakeRow( i );
-    }*/
-    table += footer;
 
     QTextDocument doc;
     doc.setUndoRedoEnabled( false );
     doc.setTextWidth( free_rect.width() );
     doc.setUseDesignMetrics( true );
     doc.setDefaultTextOption ( QTextOption (Qt::AlignHCenter )  );
+
+    int rows_prapared = 0;
+    for ( auto i = PrintedRows; i < mData.size(); ++i )
+    {
+        table += MakeRow( i );
+        QString tmp = table + footer;
+        doc.setHtml( tmp );
+        auto h = doc.documentLayout()->documentSize().height();
+        if ( h > free_rect.height() )
+            break;
+        ++rows_prapared;
+    }
+    PrintedRows += rows_prapared;
+    table += footer;
+
     doc.setHtml( table );
     auto h = doc.documentLayout()->documentSize().height();
 
@@ -250,13 +275,14 @@ bool ExpeditureFromPressureDuration::Draw( QPainter& painter, QRect &free_rect )
     {
         painter.save();
 
-        ff0x::GraphBuilder::LinePoints data;
-        ff0x::GraphBuilder::LinePoints data_e;
+        ff0x::GraphBuilder::LinePoints dataA;
+        ff0x::GraphBuilder::LinePoints dataA_e;
 
-        ff0x::GraphBuilder::LinePoints data2;
-        ff0x::GraphBuilder::LinePoints data2_e;
+        ff0x::GraphBuilder::LinePoints dataB;
+        ff0x::GraphBuilder::LinePoints dataB_e;
 
-        double max_signal = 0;
+        double max_signal_a = 0;
+        double max_signal_b = 0;
         double max_Leak = 0;
 
         //поиск данных теста
@@ -265,48 +291,40 @@ bool ExpeditureFromPressureDuration::Draw( QPainter& painter, QRect &free_rect )
             auto obj = val.toObject();
             if ( obj.value("id").toInt() == mId )
             {
-                QJsonArray a = obj.value("data").toObject().value("BP5_3").toArray();
+                QJsonArray a = obj.value("data").toObject().value("Data").toArray();
+
                 foreach ( QJsonValue const& v, a )
                 {
                     QJsonObject o = v.toObject();
-                    data_e.push_back( QPointF( o.value("Signal").toDouble(), o.value("Expenditure").toDouble() ) );
-                }
-                a = obj.value("data").toObject().value("BP3_V").toArray();
-                foreach ( QJsonValue const& v, a )
-                {
-                    QJsonObject o = v.toObject();
-                    data2_e.push_back( QPointF( o.value("Signal").toDouble(), o.value("Expenditure").toDouble() ) );
+                    double expenditure =  o.value("Expenditure").toDouble();
+                    double bp3_a = o.value("ChA").toObject().value("BP3").toDouble();
+                    double bp5_a = o.value("ChA").toObject().value("BP5").toDouble();
+                    double bp3_b = o.value("ChB").toObject().value("BP3").toDouble();
+                    double bp5_b = o.value("ChB").toObject().value("BP5").toDouble();
+                    dataA_e.push_back( QPointF( bp5_a - bp3_a, expenditure ) );
+                    dataB_e.push_back( QPointF( bp5_b - bp3_b, expenditure ) );
                 }
             }
         }
 
 
-        foreach ( Data const& item, BP5_3 )
+        foreach ( Data const& item, mData )
         {
-            double abs_sig = std::abs( item.Duration );
+            double abs_sig_a = std::abs( item.ChA.BP5_3() );
+            double abs_sig_b = std::abs( item.ChB.BP5_3() );
             double abs_leak = std::abs( item.Expenditure );
 
-            if ( max_signal < abs_sig )
-                max_signal = abs_sig;
+            if ( max_signal_a < abs_sig_a )
+                max_signal_a = abs_sig_a;
+
+            if ( max_signal_b < abs_sig_b )
+                max_signal_b = abs_sig_b;
 
             if ( max_Leak < abs_leak )
                 max_Leak = abs_leak;
 
-            data.push_back( QPointF( item.Duration, item.Expenditure ) );
-        }
-
-        foreach ( Data const& item, BP3_V )
-        {
-            double abs_sig = std::abs( item.Duration );
-            double abs_leak = std::abs( item.Expenditure );
-
-            if ( max_signal < abs_sig )
-                max_signal = abs_sig;
-
-            if ( max_Leak < abs_leak )
-                max_Leak = abs_leak;
-
-            data2.push_back( QPointF( item.Duration, item.Expenditure ) );
+            dataA.push_back( QPointF( item.ChA.BP5_3(), item.Expenditure ) );
+            dataB.push_back( QPointF( item.ChB.BP5_3(), item.Expenditure ) );
         }
 
         QFont f = text_font;
@@ -315,15 +333,15 @@ bool ExpeditureFromPressureDuration::Draw( QPainter& painter, QRect &free_rect )
         int h = (rect.height() - metrix.height())*0.98;
 
         ff0x::GraphBuilder builder ( w, h, ff0x::GraphBuilder::PlusPlus, f );
-        ff0x::GraphBuilder::GraphDataLine lines1;
-        lines1.push_back( ff0x::GraphBuilder::Line(data, ff0x::GraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
-        if ( !data_e.empty() )
-            lines1.push_back( ff0x::GraphBuilder::Line(data_e, ff0x::GraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
+        ff0x::GraphBuilder::GraphDataLine lines_a;
+        lines_a.push_back( ff0x::GraphBuilder::Line(dataA, ff0x::GraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
+        if ( !dataA_e.empty() )
+            lines_a.push_back( ff0x::GraphBuilder::Line(dataA_e, ff0x::GraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
 
-        ff0x::GraphBuilder::GraphDataLine lines2;
-        lines2.push_back( ff0x::GraphBuilder::Line(data2, ff0x::GraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
-        if ( !data2_e.empty() )
-            lines2.push_back( ff0x::GraphBuilder::Line(data2_e, ff0x::GraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
+        ff0x::GraphBuilder::GraphDataLine lines_b;
+        lines_b.push_back( ff0x::GraphBuilder::Line(dataB, ff0x::GraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
+        if ( !dataB_e.empty() )
+            lines_b.push_back( ff0x::GraphBuilder::Line(dataB_e, ff0x::GraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
 
 
         QRect p1(rect.left(), rect.top(), w, h );
@@ -332,8 +350,8 @@ bool ExpeditureFromPressureDuration::Draw( QPainter& painter, QRect &free_rect )
         QRect p2t(p2.left(), p2.bottom(), p2.width(), metrix.height());
         DrawRowCenter( p1t, text_font, Qt::black, "P->A" );
         DrawRowCenter( p2t, text_font, Qt::black, "P->B" );
-        painter.drawPixmap( p1, builder.Draw( lines1, max_signal * 1.25, max_Leak * 1.25, 0.05, 0.5, "Δ Р (бар)", "Расход (л/мин)", true ) );
-        painter.drawPixmap( p2, builder.Draw( lines2, max_signal * 1.25, max_Leak * 1.25, 0.05, 0.5, "Δ Р (бар)", "Расход (л/мин)", true ) );
+        painter.drawPixmap( p1, builder.Draw( lines_a, max_signal_a * 1.25, max_Leak * 1.25, ceil( max_signal_a )/10, ceil(max_Leak)/10, "Δ Р (бар)", "Расход (л/мин)", true ) );
+        painter.drawPixmap( p2, builder.Draw( lines_b, max_signal_b * 1.25, max_Leak * 1.25, ceil( max_signal_b )/10, ceil(max_Leak)/10, "Δ Р (бар)", "Расход (л/мин)", true ) );
 
         painter.restore();
     }, 1, free_rect.width()/2 + metrix.height()  );
@@ -343,18 +361,32 @@ bool ExpeditureFromPressureDuration::Draw( QPainter& painter, QRect &free_rect )
     return res;
 }
 
+QJsonObject ExpeditureFromPressureDuration::Data::Channel::Serialise() const
+{
+    QJsonObject obj;
+    obj.insert("BP3", BP3 );
+    obj.insert("BP5", BP5 );
+}
+bool ExpeditureFromPressureDuration::Data::Channel::Deserialize( QJsonObject const& obj )
+{
+    BP3 = obj.value("BP3").toDouble();
+    BP5 = obj.value("BP5").toDouble();
+}
+
 QJsonObject ExpeditureFromPressureDuration::Data::Serialise() const
 {
     QJsonObject obj;
-    obj.insert("Duration", Duration );
     obj.insert("Expenditure", Expenditure );
+    obj.insert("ChA", ChA.Serialise() );
+    obj.insert("ChB", ChB.Serialise() );
 
     return obj;
 }
 bool ExpeditureFromPressureDuration::Data::Deserialize( QJsonObject const& obj )
-{
-    Duration = obj.value("Duration").toDouble();
+{   
     Expenditure = obj.value("Expenditure").toDouble();
+    ChA.Deserialize( obj.value("ChA").toObject() );
+    ChB.Deserialize( obj.value("ChB").toObject() );
     return true;
 }
 
