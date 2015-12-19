@@ -88,6 +88,7 @@ uint8_t Test::mTestsCount = 1;
 
 Test::Test( QString const& name, uint8_t id_board, uint8_t id_reel ):
     test::TestCommonData( &ServoTests, name, mTestsCount, id_board ),
+    mTemperature( cpu::CpuMemory::Instance().DB32 ),
     mControlBoardBits( cpu::CpuMemory::Instance().DB34  ),
     mControlReelBits( cpu::CpuMemory::Instance().DB36  ),
     mIdReel( id_reel )
@@ -99,6 +100,7 @@ void Test::UpdateData()
 {
     mControlBoardBits.Read();
     mControlReelBits.Read();
+    mTemperature.Read();
 }
 uint8_t Test::CommandID()
 {    

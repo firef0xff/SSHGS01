@@ -1,6 +1,7 @@
 #pragma once
 #include "../test_base.h"
 #include <QVector>
+#include <condition_variable>
 
 namespace test
 {
@@ -19,9 +20,12 @@ public:
 
     bool Draw(QPainter &painter, QRect &free_rect ) const;
 
+    bool Success() const;
+
 private:
     void Question();
     bool LeakFounded; //наружная течь (не)замечена -- диалоговое окно
+    std::condition_variable mCondVar;
 };
 
 class InsideHermTest :public test::servo::Test

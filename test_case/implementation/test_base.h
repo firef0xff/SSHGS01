@@ -55,6 +55,7 @@ public:
     Test( QString const& name, uint8_t id_board, uint8_t id_reel );
 protected:
     bool ReelControl() const;
+    cpu::data::DB32& mTemperature;
     cpu::data::DB34& mControlBoardBits;    //биты завершения испытаний серво оборудования с блоком управления
     cpu::data::DB36& mControlReelBits;    //биты завершения испытаний серво оборудования с катушками управления
 private:
