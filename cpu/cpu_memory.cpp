@@ -40,6 +40,10 @@ void CpuMemory::ReadAll()
     DB32.Read();
     DB34.Read();
     DB36.Read();
+
+    DB2.Read();
+    DB12.Read();
+
     DB39.Read();
     DB40.Read();
 }

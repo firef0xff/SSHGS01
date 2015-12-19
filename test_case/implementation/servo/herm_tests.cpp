@@ -1,4 +1,4 @@
-#include "herm_tests.h"
+﻿#include "herm_tests.h"
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QMessageBox>
@@ -46,14 +46,14 @@ bool OutsideHermTest::Success() const
 
 QJsonObject OutsideHermTest::Serialise() const
 {
-    QJsonObject obj;
+    QJsonObject obj = Test::Serialise();
     obj.insert("LeakFounded", LeakFounded );
-
     return obj;
 }
 bool OutsideHermTest::Deserialize( QJsonObject const& obj )
 {
     LeakFounded = obj.value("LeakFounded").toBool();
+    Test::Deserialize(obj);
     return true;
 }
 
@@ -192,73 +192,80 @@ bool InsideHermTest::Run()
     if ( IsStopped() )
         return false;
 
-    Data d;
-    d.Leak = 1;
-    d.Signal = 0.25;
+    if ( ReelControl() )
+    {
+        for ( size_t i = 0; i <100; ++i )
+        {
+            Data d;
+            d.Leak = m21Results.consumption_a[i];
+            d.Signal = m21Results.ref_a[i];
+            GraphA.push_back(d);
 
-    Graph.push_back( d );
-    d.Leak += 0.1;
-    d.Signal += 0.01;
+            d.Leak = m21Results.consumption_b[i];
+            d.Signal = m21Results.ref_b[i];
+            GraphB.push_back(d);
+        }
+    }
+    else
+    {
+        for ( size_t i = 0; i <100; ++i )
+        {
+            Data d;
+            d.Leak = m11Results.consumption_a[i];
+            d.Signal = m11Results.ref_a[i];
+            GraphA.push_back(d);
 
-    Graph.push_back( d );
-    d.Leak += 0.1;
-    d.Signal += 0.01;
+            d.Leak = m11Results.consumption_b[i];
+            d.Signal = m11Results.ref_b[i];
+            GraphB.push_back(d);
+        }
+    }
 
-    Graph.push_back( d );
-    d.Leak += 0.1;
-    d.Signal += 0.01;
+    OilTemp = mTemperature.T_oil;
 
-    Graph.push_back( d );
-    d.Leak += 0.1;
-    d.Signal += 0.01;
-
-    Graph.push_back( d );
-    d.Leak += 0.1;
-    d.Signal += 0.01;
-
-    Graph.push_back( d );
-    d.Leak += 0.1;
-    d.Signal += 0.01;
-
-    Graph.push_back( d );
-    d.Leak += 0.1;
-    d.Signal += 0.01;
-
-    Graph.push_back( d );
-    d.Leak += 0.1;
-    d.Signal += 0.01;
-
-    Graph.push_back( d );
-    d.Leak += 0.1;
-    d.Signal += 0.01;
-
-    Graph.push_back( d );
-    d.Leak += 0.1;
-    d.Signal += 0.01;
-
+    return Success();
+}
+bool InsideHermTest::Success() const
+{
     return true;
 }
 QJsonObject InsideHermTest::Serialise() const
 {
-    QJsonObject obj;
+    QJsonObject obj = Test::Serialise();
     QJsonArray a;
-    foreach (Data const& d, Graph)
+    foreach (Data const& d, GraphA)
     {
         a.insert( a.end(), d.Serialise() );
     }
-    obj.insert("Graph", a );
+    obj.insert("GraphA", a );
+
+    QJsonArray b;
+    foreach (Data const& d, GraphA)
+    {
+        b.insert( b.end(), d.Serialise() );
+    }
+    obj.insert("GraphB", b );
 
     return obj;
 }
 bool InsideHermTest::Deserialize( QJsonObject const& obj )
 {
-    QJsonArray a = obj.value("Graph").toArray();
+    QJsonArray a = obj.value("GraphA").toArray();
     foreach (QJsonValue const& v, a)
     {
         Data d;
         if ( d.Deserialize( v.toObject() ) )
-            Graph.insert( Graph.end(), d );
+            GraphA.insert( GraphA.end(), d );
     }
+
+    QJsonArray b = obj.value("GraphB").toArray();
+    foreach (QJsonValue const& v, b)
+    {
+        Data d;
+        if ( d.Deserialize( v.toObject() ) )
+            GraphB.insert( GraphB.end(), d );
+    }
+    Test::Deserialize(obj);
     return true;
 }
 
@@ -369,11 +376,17 @@ bool InsideHermTest::Draw( QPainter& painter, QRect &free_rect ) const
     {
         painter.save();
 
-        ff0x::GraphBuilder::LinePoints data;
-        ff0x::GraphBuilder::LinePoints data_e;
+        ff0x::GraphBuilder::LinePoints dataA;
+        ff0x::GraphBuilder::LinePoints dataA_e;
 
-        double max_signal = 0;
-        double max_Leak = 0;
+        ff0x::GraphBuilder::LinePoints dataB;
+        ff0x::GraphBuilder::LinePoints dataB_e;
+
+        double max_signal_a = 0;
+        double max_Leak_a = 0;
+
+        double max_signal_b = 0;
+        double max_Leak_b = 0;
 
         //поиск данных теста
         foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
@@ -381,43 +394,75 @@ bool InsideHermTest::Draw( QPainter& painter, QRect &free_rect ) const
             auto obj = val.toObject();
             if ( obj.value("id").toInt() == mId )
             {
-                QJsonArray a = obj.value("data").toObject().value("Graph").toArray();
+                QJsonArray a = obj.value("data").toObject().value("GraphA").toArray();
                 foreach ( QJsonValue const& v, a )
                 {
                     QJsonObject o = v.toObject();
-                    data_e.push_back( QPointF( o.value("Signal").toDouble(), o.value("Leak").toDouble() ) );
+                    dataA_e.push_back( QPointF( o.value("Signal").toDouble(), o.value("Leak").toDouble() ) );
+                }
+                QJsonArray b = obj.value("data").toObject().value("GraphB").toArray();
+                foreach ( QJsonValue const& v, b )
+                {
+                    QJsonObject o = v.toObject();
+                    dataB_e.push_back( QPointF( o.value("Signal").toDouble(), o.value("Leak").toDouble() ) );
                 }
             }
         }
 
-        foreach ( Data const& item, Graph )
+        foreach ( Data const& item, GraphA )
         {
             double abs_sig = std::abs( item.Signal );
             double abs_leak = std::abs( item.Leak );
 
-            if ( max_signal < abs_sig )
-                max_signal = abs_sig;
+            if ( max_signal_a < abs_sig )
+                max_signal_a = abs_sig;
 
-            if ( max_Leak < abs_leak )
-                max_Leak = abs_leak;
+            if ( max_Leak_a < abs_leak )
+                max_Leak_a = abs_leak;
 
-            data.push_back( QPointF( item.Signal, item.Leak ) );
+            dataA.push_back( QPointF( item.Signal, item.Leak ) );
         }
+
+        foreach ( Data const& item, GraphB )
+        {
+            double abs_sig = std::abs( item.Signal );
+            double abs_leak = std::abs( item.Leak );
+
+            if ( max_signal_b < abs_sig )
+                max_signal_b = abs_sig;
+
+            if ( max_Leak_b < abs_leak )
+                max_Leak_b = abs_leak;
+
+            dataB.push_back( QPointF( item.Signal, item.Leak ) );
+        }
+
         QFont f = text_font;
         f.setPointSize( 6 );
         int w = (rect.height() - metrix.height())*0.98;
         int h = (rect.height() - metrix.height())*0.98;
 
         ff0x::GraphBuilder builder ( w, h, ff0x::GraphBuilder::PlusPlus, f );
-        ff0x::GraphBuilder::GraphDataLine lines;
-        lines.push_back( ff0x::GraphBuilder::Line(data, ff0x::GraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
-        if ( !data_e.empty() )
-            lines.push_back( ff0x::GraphBuilder::Line(data_e, ff0x::GraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
+        ff0x::GraphBuilder::GraphDataLine lines_a;
+        lines_a.push_back( ff0x::GraphBuilder::Line(dataA, ff0x::GraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
+        if ( !dataA_e.empty() )
+            lines_a.push_back( ff0x::GraphBuilder::Line(dataA_e, ff0x::GraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
+
+        ff0x::GraphBuilder::GraphDataLine lines_b;
+        lines_b.push_back( ff0x::GraphBuilder::Line(dataB, ff0x::GraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
+        if ( !dataB_e.empty() )
+            lines_b.push_back( ff0x::GraphBuilder::Line(dataB_e, ff0x::GraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
+
 
         QRect p1(rect.left(), rect.top(), w, h );
         QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
-        DrawRowCenter( p1t, text_font, Qt::black, "График утечек" );
-        painter.drawPixmap( p1, builder.Draw( lines, max_signal * 1.25, max_Leak * 1.25, 0.05, 0.5, "Опорный сигнал", "Расход (л/мин)", true ) );
+        DrawRowCenter( p1t, text_font, Qt::black, "График утечек (канал А)" );
+        painter.drawPixmap( p1, builder.Draw( lines_a, max_signal_a * 1.25, max_Leak_a * 1.25, ceil(max_signal_a)/10, ceil(max_Leak_a)/10, "Опорный сигнал", "Расход (л/мин)", true ) );
+
+        QRect p2(rect.right() - w, rect.top(), w, h );
+        QRect p2t(p2.left(), p2.bottom(), p2.width(), metrix.height());
+        DrawRowCenter( p2t, text_font, Qt::black, "График утечек (канал B)" );
+        painter.drawPixmap( p2, builder.Draw( lines_b, max_signal_b * 1.25, max_Leak_b * 1.25, ceil(max_signal_b)/10, ceil(max_Leak_b)/10, "Опорный сигнал", "Расход (л/мин)", true ) );
 
         painter.restore();
     }, 1, free_rect.width()/2 + metrix.height()  );

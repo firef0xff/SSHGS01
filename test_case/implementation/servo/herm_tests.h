@@ -33,7 +33,7 @@ class InsideHermTest :public test::servo::Test
 public:
     InsideHermTest();
     bool Run();
-
+    bool Success() const;
     QJsonObject Serialise() const;
     bool Deserialize( QJsonObject const& obj );
 
@@ -54,7 +54,8 @@ private:
     };
     // графиг опорного сигнала и расхода в канале утечки ( Т )
 
-    QVector<Data> Graph;
+    QVector<Data> GraphA;
+    QVector<Data> GraphB;
 };
 
 }//namespace servo

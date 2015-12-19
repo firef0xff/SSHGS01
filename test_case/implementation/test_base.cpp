@@ -91,6 +91,8 @@ Test::Test( QString const& name, uint8_t id_board, uint8_t id_reel ):
     mTemperature( cpu::CpuMemory::Instance().DB32 ),
     mControlBoardBits( cpu::CpuMemory::Instance().DB34  ),
     mControlReelBits( cpu::CpuMemory::Instance().DB36  ),
+    m11Results( cpu::CpuMemory::Instance().DB2 ),
+    m21Results( cpu::CpuMemory::Instance().DB12 ),
     mIdReel( id_reel )
 {
     ++mTestsCount;

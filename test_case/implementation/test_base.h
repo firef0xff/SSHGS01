@@ -58,6 +58,9 @@ protected:
     cpu::data::DB32& mTemperature;
     cpu::data::DB34& mControlBoardBits;    //биты завершения испытаний серво оборудования с блоком управления
     cpu::data::DB36& mControlReelBits;    //биты завершения испытаний серво оборудования с катушками управления
+
+    cpu::data::DB2&  m11Results;
+    cpu::data::DB12& m21Results;
 private:
     static uint8_t mTestsCount;
     void UpdateData();
