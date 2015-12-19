@@ -14,6 +14,13 @@ TransientPerformance::TransientPerformance():
 
 bool TransientPerformance::Run()
 {
+    Start();
+    if ( ReelControl() )
+        Wait( mControlReelBits.op25_ok, mControlReelBits.op25_end );
+    else
+        Wait( mControlBoardBits.op15_ok, mControlBoardBits.op15_end );
+    if ( IsStopped() )
+        return false;
     Data d;
     d.x = 1;
     d.y = 1.25;

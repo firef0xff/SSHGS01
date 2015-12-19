@@ -59,6 +59,11 @@
        </item>
        <item>
         <property name="text">
+         <string>30</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
          <string>48</string>
         </property>
        </item>
@@ -130,14 +135,6 @@
       <widget class="QLineEdit" name="SerNo">
        <property name="clearButtonEnabled">
         <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="12" column="0">
-      <widget class="QLabel" name="l_herm_signal">
-       <property name="text">
-        <string>Сигнал для проверки
-внутренней герметичности</string>
        </property>
       </widget>
      </item>
@@ -287,31 +284,6 @@
        </property>
       </widget>
      </item>
-     <item row="12" column="1">
-      <widget class="QComboBox" name="HermSignal">
-       <property name="currentText">
-        <string/>
-       </property>
-       <property name="currentIndex">
-        <number>-1</number>
-       </property>
-       <item>
-        <property name="text">
-         <string>Отсутствует</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Катушка А</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Катушка Б</string>
-        </property>
-       </item>
-      </widget>
-     </item>
      <item row="13" column="2">
       <widget class="QLabel" name="l_pbat_signal">
        <property name="text">
@@ -362,14 +334,6 @@
       <widget class="QLabel" name="l_gs_type">
        <property name="text">
         <string>Тип гидрораспределителя</string>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="2">
-      <widget class="QLabel" name="l_max_work_pressure">
-       <property name="text">
-        <string>Максимальное рабочее
-давление, Бар</string>
        </property>
       </widget>
      </item>
@@ -496,19 +460,6 @@
        </property>
       </widget>
      </item>
-     <item row="8" column="3">
-      <widget class="QLineEdit" name="MaxWorkPressure">
-       <property name="toolTip">
-        <string>10...315 Бар</string>
-       </property>
-       <property name="toolTipDuration">
-        <number>1000</number>
-       </property>
-       <property name="clearButtonEnabled">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
      <item row="6" column="0">
       <widget class="QLabel" name="l_test_control_Pressure">
        <property name="text">
@@ -536,6 +487,86 @@
        </property>
        <property name="value">
         <number>100</number>
+       </property>
+      </widget>
+     </item>
+     <item row="12" column="3">
+      <widget class="QComboBox" name="HermSignal">
+       <property name="currentText">
+        <string/>
+       </property>
+       <property name="currentIndex">
+        <number>-1</number>
+       </property>
+       <item>
+        <property name="text">
+         <string>Отсутствует</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Катушка А</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Катушка Б</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="12" column="2">
+      <widget class="QLabel" name="l_herm_signal">
+       <property name="text">
+        <string>Сигнал для проверки
+внутренней герметичности</string>
+       </property>
+      </widget>
+     </item>
+     <item row="12" column="0">
+      <widget class="QLabel" name="l_max_work_pressure">
+       <property name="text">
+        <string>Максимальное рабочее
+давление, Бар</string>
+       </property>
+      </widget>
+     </item>
+     <item row="12" column="1">
+      <widget class="QLineEdit" name="MaxWorkPressure">
+       <property name="toolTip">
+        <string>10...315 Бар</string>
+       </property>
+       <property name="toolTipDuration">
+        <number>1000</number>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="3">
+      <widget class="QSpinBox" name="DefExpenditure">
+       <property name="toolTip">
+        <string>10...660 л/мин.</string>
+       </property>
+       <property name="toolTipDuration">
+        <number>1000</number>
+       </property>
+       <property name="minimum">
+        <number>10</number>
+       </property>
+       <property name="maximum">
+        <number>660</number>
+       </property>
+       <property name="value">
+        <number>80</number>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="2">
+      <widget class="QLabel" name="l_def_expenditure">
+       <property name="text">
+        <string>Расход по умолчанию, л/мин</string>
        </property>
       </widget>
      </item>

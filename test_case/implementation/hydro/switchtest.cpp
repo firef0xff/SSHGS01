@@ -23,6 +23,8 @@ bool SwitchTest::Run()
         return false;
     Start();
     Wait( mResults.op7_ok, mResults.op7_end );
+    if ( IsStopped() )
+        return false;
 
     ResultMinA = mResults.op7_min_ok_a &&! mResults.op7_min_no_a;
     ResultMaxA = mResults.op7_max_ok_a &&! mResults.op7_max_no_a;

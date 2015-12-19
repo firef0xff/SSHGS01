@@ -16,6 +16,14 @@ ExpeditureFromInput::ExpeditureFromInput():
 
 bool ExpeditureFromInput::Run()
 {
+    Start();
+    if ( ReelControl() )
+        Wait( mControlReelBits.op22_ok, mControlReelBits.op22_end );
+    else
+        Wait( mControlBoardBits.op12_ok, mControlBoardBits.op12_end );
+    if ( IsStopped() )
+        return false;
+
     return true;
 }
 QJsonObject ExpeditureFromInput::Serialise() const

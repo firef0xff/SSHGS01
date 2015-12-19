@@ -70,7 +70,6 @@ bool ControlPanelsTitleInfo::SaveInputParams()
 
     res *= ParamChecker( ui->l_gs_type, params.GsType( ui->GsType->currentText() ) );
     res *= ParamChecker( ui->l_ser_no, params.SerNo( ui->SerNo->text() ) );
-
     res *= ParamChecker( ui->l_signal_type,  params.SignalType( ui->SignalType->currentText() ) );
     res *= ParamChecker( ui->l_voltage,      ValidateRange( ui->Voltage, params.Voltage( ui->Voltage->text() ) ) );
     res *= ParamChecker( ui->l_max_amperage, ValidateRange( ui->MaxAmperage, params.MaxAmperage( ui->MaxAmperage->text() ) ) );

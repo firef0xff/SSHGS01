@@ -16,6 +16,8 @@ bool VACharacteristic::Run()
 {
     Start();
     Wait( mBits.op31_ok, mBits.op31_end );
+    if ( IsStopped() )
+        return false;
 
     OilTemp = mTemperature.T_oil;
     return true;

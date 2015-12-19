@@ -84,13 +84,6 @@
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QCommandLinkButton" name="ManualControl">
-        <property name="text">
-         <string>CommandLinkButton</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </item>
     <item>
@@ -386,7 +379,7 @@ X</string>
      <x>0</x>
      <y>0</y>
      <width>1012</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">

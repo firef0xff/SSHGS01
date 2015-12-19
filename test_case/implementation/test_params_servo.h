@@ -1,6 +1,6 @@
 #pragma once
 #include "../test_params.h"
-
+#include <array>
 namespace test
 {
 namespace servo
@@ -32,16 +32,16 @@ public:
     RELL_CONTROL const& ReelControl () const;
 
     bool PressureNominal ( QString const& val );
-    qint32 const& PressureNominal () const;
+    double const& PressureNominal () const;
 
     bool PressureTesting ( QString const& val );
-    qint32 const& PressureTesting () const;
+    double const& PressureTesting () const;
 
     bool MaxExpenditureA ( QString const& val );
-    qint32 const& MaxExpenditureA () const;
+    double const& MaxExpenditureA () const;
 
     bool MaxExpenditureB ( QString const& val );
-    qint32 const& MaxExpenditureB () const;
+    double const& MaxExpenditureB () const;
 
     bool FrequencyInc ( QString const& val );
     const double &FrequencyInc() const;
@@ -63,6 +63,24 @@ public:
 
     bool ControlReelResist ( QString const& val );
     const double &ControlReelResist() const;
+
+    bool Amplitudes( QString const& val1, QString const& val2, QString const& val3 );
+    const std::array< double, 3 > &Amplitudes() const;
+
+    bool Voltage ( QString const& val );
+    const double &Voltage() const;
+
+    bool TestChannelA ( bool val );
+    const bool &TestChannelA() const;
+
+    bool TestChannelB (bool val );
+    const bool &TestChannelB() const;
+
+    bool SignalOnChannelA ( QString const& val );
+    const CONTROL_SIGNAL &SignalOnChannelA() const;
+
+    bool SignalOnChannelB ( QString const& val );
+    const CONTROL_SIGNAL &SignalOnChannelB() const;
 private:
     Parameters();
     Parameters( Parameters const& )  = delete;
@@ -70,10 +88,10 @@ private:
 
     QString mGsType;            //тип гидрораспределителя
     RELL_CONTROL mReelControl;
-    qint32 mPressureNominal;
-    qint32 mPressureTesting;
-    qint32 mMaxExpenditureA;
-    qint32 mMaxExpenditureB;
+    double mPressureNominal;
+    double mPressureTesting;
+    double mMaxExpenditureA;
+    double mMaxExpenditureB;
     double mFrequencyInc;
 
     SIGNAL_TYPE mControlSignal;
@@ -83,8 +101,18 @@ private:
 
     double mEndSgnal;
     double mControlReelResist;
+
+    std::array< double, 3 > mAmplitudes;
+
+    double mVoltage; //  напряжение на блоке управления
+
+    bool mTestChannelA;
+    bool mTestChannelB;
+    CONTROL_SIGNAL mSignalOnChannelA;
+    CONTROL_SIGNAL mSignalOnChannelB;
 };
 
 }//namespace servo
 
 }//namespace test
+

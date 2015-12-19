@@ -17,6 +17,14 @@ ExpeditureFromPressureDuration::ExpeditureFromPressureDuration():
 
 bool ExpeditureFromPressureDuration::Run()
 {
+    Start();
+    if ( ReelControl() )
+        Wait( mControlReelBits.op23_ok, mControlReelBits.op23_end );
+    else
+        Wait( mControlBoardBits.op13_ok, mControlBoardBits.op13_end );
+    if ( IsStopped() )
+        return false;
+
     return true;
 }
 QJsonObject ExpeditureFromPressureDuration::Serialise() const

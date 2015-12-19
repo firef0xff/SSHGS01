@@ -14,7 +14,7 @@ class DB33 :public Out
 {
 public:
 
-    void Read();
+    void Write();
 
     bool& s4_20ma; //2.0 сигнал 4-20 мА
     bool& s0_20ma; //2.1 сигнал 0-20 мА
@@ -25,6 +25,8 @@ public:
     bool& s40ma; //2.6 сигнал +/- 40 мА
     bool& channel_a; //60.0 испытание канала А
     bool& channel_b; //60.1 испытание канала В
+    bool& channel_k_a; //60.2 катушка на канале А( а-0 б-1)
+    bool& channel_k_b; //60.3 катушка на канале Б( а-0 б-1)
 
     float& x_max_a;             //4 сигнал переключение в А       
     float& x_max_b;             //8 сигнал переключение в В     
@@ -40,6 +42,7 @@ public:
     float& increment;           //48 инкремент частоты         
     float& press_control_min;   //52 мин. давление управления       
     float& press_control_max;   //56 макс. давление управления 
+    float& U_Plat;              //62 Напряжение на блоке управления
 private:
     friend class cpu::CpuMemory;
     DB33();
@@ -48,8 +51,8 @@ private:
 
     enum
     {
-        BOOL_COUNT = 9,
-        FLOAT_COUNT = 14
+        BOOL_COUNT = 11,
+        FLOAT_COUNT = 15
     };
 
     bool mBoolData[ BOOL_COUNT ] = {false};
@@ -67,6 +70,8 @@ private:
         L"CPU/DB33.s40ma",
         L"CPU/DB33.channel_a",
         L"CPU/DB33.channel_b",
+        L"CPU/DB33.channel_k_a",
+        L"CPU/DB33.channel_k_b",
 
         L"CPU/DB33.x_max_a",
         L"CPU/DB33.x_max_b",
@@ -81,7 +86,8 @@ private:
         L"CPU/DB33.amp_3",
         L"CPU/DB33.increment",
         L"CPU/DB33.press_control_min",
-        L"CPU/DB33.press_control_max"
+        L"CPU/DB33.press_control_max",
+        L"CPU/DB33.U_Plat",
     };
 };
 

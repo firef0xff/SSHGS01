@@ -9,19 +9,19 @@ namespace data
 {
 
 //таблица с ответапи по гидроиспытаниям
-class DB35 : public In
+class DB35 : public Out
 {
 public:
 
-    void Read();
+    void Write();
 
     bool& channel_a;            //62.0 испытание канал А
     bool& channel_b;            //62.1 испытание канала В
+    bool& channel_k_a;          //62.2 катушка на канале А( а-0 б-1)
+    bool& channel_k_b;          //62.3 катушка на канале Б( а-0 б-1)
 
     float& s860ma;              //2 управляющий сигнал
     float& x_max_a;             //6 полное перключение в А
-    float& x_max_b;             //10 полное переключение в В
-    float& x_pos_0;             //14 сигнал переключения в 0
     float& test_press;          //18 испытание пробным давлением
     float& nominal_press;       //22 номинальное давление
     float& q_max_a;             //26 макс расход в А
@@ -43,8 +43,8 @@ private:
 
     enum
     {
-        BOOL_COUNT = 2,
-        FLOAT_COUNT = 15
+        BOOL_COUNT = 4,
+        FLOAT_COUNT = 13
     };
 
     bool mBoolData[ BOOL_COUNT ] = {false};
@@ -54,11 +54,11 @@ private:
     wchar_t const* mAdresses[ BOOL_COUNT + FLOAT_COUNT ] = {
         L"CPU/DB35.channel_a",
         L"CPU/DB35.channel_b",
+        L"CPU/DB35.channel_k_a",
+        L"CPU/DB35.channel_k_b",
 
         L"CPU/DB35.s860ma",
         L"CPU/DB35.x_max_a",
-        L"CPU/DB35.x_max_b",
-        L"CPU/DB35.x_pos_0",
         L"CPU/DB35.test_press",
         L"CPU/DB35.nominal_press",
         L"CPU/DB35.q_max_a",

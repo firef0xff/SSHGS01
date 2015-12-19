@@ -47,10 +47,20 @@ void TestCommonData::Wait( bool& work, bool& done)
     while( !done )
     {
         UpdateData();
+        if ( IsStopped() )
+        {
+            mCommand.N_Operation = 0;
+            mCommand.Start_Oper = false;
+            mCommand.Stop_Oper = true;
+            mCommand.Nasos_M2 = app::Settings::Instance().MainPupm() == "M2";
+            mCommand.Write();
+            Log( "Испытание прервано" );
+            return;
+        }
     }
     TestingTime = StartTime.elapsed()/1000;
 
-    Exceptions.Read();
+//    Exceptions.Read();
 }
 namespace hydro
 {
@@ -78,6 +88,8 @@ uint8_t Test::mTestsCount = 1;
 
 Test::Test( QString const& name, uint8_t id_board, uint8_t id_reel ):
     test::TestCommonData( &ServoTests, name, mTestsCount, id_board ),
+    mControlBoardBits( cpu::CpuMemory::Instance().DB34  ),
+    mControlReelBits( cpu::CpuMemory::Instance().DB36  ),
     mIdReel( id_reel )
 {
     ++mTestsCount;
@@ -89,10 +101,13 @@ void Test::UpdateData()
     mControlReelBits.Read();
 }
 uint8_t Test::CommandID()
+{    
+    return ReelControl() ? mIdReel : mId;
+}
+
+bool Test::ReelControl() const
 {
-    if ( test::servo::Parameters::Instance().ReelControl() == RC_REEL )
-        return mIdReel;
-    return mId;
+    return test::servo::Parameters::Instance().ReelControl() == RC_REEL;
 }
 
 }//namespace servo

@@ -27,6 +27,14 @@ public:
     bool& op24_end; //3.2 частотные характеристики конец
     bool& op25_end; //3.3 переходные харарактеристики конец
 
+    bool& op22_a_ab_open;   //8.0   катушка а канал АБ открыты
+    bool& op22_a_b_close;   //8.1   катушка а канал Б закрыт
+    bool& op22_a_a_close;   //8.2   катушка а канал А закрыт
+    bool& op22_b_ab_open;   //8.3   катушка б канал АБ открыты
+    bool& op22_b_b_close;   //8.4   катушка б канал Б закрыт
+    bool& op22_b_a_close;   //8.5   катушка б канал А закрыт
+    float& op24_number;     //4.0   Число ячеек блока DB20/24
+
 private:
 
     friend class cpu::CpuMemory;
@@ -36,12 +44,12 @@ private:
 
     enum
     {
-        BOOL_COUNT = 12,
-        FLOAT_COUNT = 0
+        BOOL_COUNT = 18,
+        FLOAT_COUNT = 1
     };
 
     bool mBoolData[ BOOL_COUNT ] = {false};
-//    float mFloatData[ FLOAT_COUNT ] = { 0.0 };
+    float mFloatData[ FLOAT_COUNT ] = { 0.0 };
     uint64_t mGroupID = 0;
 
     wchar_t const* mAdresses[ BOOL_COUNT + FLOAT_COUNT ] = {
@@ -56,7 +64,14 @@ private:
         L"CPU/DB36.op22_end",
         L"CPU/DB36.op23_end",
         L"CPU/DB36.op24_end",
-        L"CPU/DB36.op25_end"
+        L"CPU/DB36.op25_end",
+        L"CPU/DB36.op22_a_ab_open",
+        L"CPU/DB36.op22_a_b_close",
+        L"CPU/DB36.op22_a_a_close",
+        L"CPU/DB36.op22_b_ab_open",
+        L"CPU/DB36.op22_b_b_close",
+        L"CPU/DB36.op22_b_a_close",
+        L"CPU/DB36.op24_number",
     };
 };
 

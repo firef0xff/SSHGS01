@@ -26,6 +26,8 @@ bool FunctionalTest::Run()
 {
     Start();
     Wait( mBits.op32_ok, mBits.op32_end );
+    if ( IsStopped() )
+        return false;
 
     OilTemp = mTemperature.T_oil;
 

@@ -15,6 +15,13 @@ FrequencyCharacteristics::FrequencyCharacteristics():
 
 bool FrequencyCharacteristics::Run()
 {
+    Start();
+    if ( ReelControl() )
+        Wait( mControlReelBits.op24_ok, mControlReelBits.op24_end );
+    else
+        Wait( mControlBoardBits.op14_ok, mControlBoardBits.op14_end );
+    if ( IsStopped() )
+        return false;
     return true;
 }
 QJsonObject FrequencyCharacteristics::Serialise() const

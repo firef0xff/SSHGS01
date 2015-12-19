@@ -18,6 +18,13 @@ OutsideHermTest::OutsideHermTest():
 
 bool OutsideHermTest::Run()
 {
+    Start();
+    if ( ReelControl() )
+        Wait( mControlReelBits.op20_ok, mControlReelBits.op20_end );
+    else
+        Wait( mControlBoardBits.op10_ok, mControlBoardBits.op10_end );
+    if ( IsStopped() )
+        return false;
     Question();
     return !LeakFounded;
 }
@@ -162,6 +169,14 @@ InsideHermTest::InsideHermTest():
 
 bool InsideHermTest::Run()
 {
+    Start();
+    if ( ReelControl() )
+        Wait( mControlReelBits.op21_ok, mControlReelBits.op21_end );
+    else
+        Wait( mControlBoardBits.op11_ok, mControlBoardBits.op11_end );
+    if ( IsStopped() )
+        return false;
+
     Data d;
     d.Leak = 1;
     d.Signal = 0.25;

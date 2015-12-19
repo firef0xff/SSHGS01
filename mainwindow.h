@@ -32,7 +32,6 @@ private:
     void StartServoTest( bool new_test );
     void StartControlPanelsTest( bool new_test );
     void StartHydroCilinderTest( bool new_test );
-    void StartManualControl();
     void AppSettrings ();
     void DeviceLists( examinee::DeviceCollection& devices );
 
@@ -68,7 +67,6 @@ private slots:
 
     void on_TestCase1_clicked();
     void on_TestCase2_clicked();
-    void on_ManualControl_clicked();
 
     void enable_modes( bool enabled = true );
     void on_act_test_case1_triggered();

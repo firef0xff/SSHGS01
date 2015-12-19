@@ -9,42 +9,31 @@ DB35::DB35():
 
     channel_a( mBoolData[0] ),
     channel_b( mBoolData[1] ),
+    channel_k_a( mBoolData[2] ),
+    channel_k_b( mBoolData[3] ),
+
 
     s860ma( mFloatData[0] ),
     x_max_a( mFloatData[1] ),
-    x_max_b( mFloatData[2] ),
-    x_pos_0( mFloatData[3] ),
-    test_press( mFloatData[4] ),
-    nominal_press( mFloatData[5] ),
-    q_max_a( mFloatData[6] ),
-    q_max_b( mFloatData[7] ),
-    q_max( mFloatData[8] ),
-    amp_1( mFloatData[9] ),
-    amp_2( mFloatData[10] ),
-    amp_3( mFloatData[11] ),
-    increment( mFloatData[12] ),
-    press_control_min( mFloatData[13] ),
-    press_control_max( mFloatData[14] )
+    test_press( mFloatData[2] ),
+    nominal_press( mFloatData[3] ),
+    q_max_a( mFloatData[4] ),
+    q_max_b( mFloatData[5] ),
+    q_max( mFloatData[6] ),
+    amp_1( mFloatData[7] ),
+    amp_2( mFloatData[8] ),
+    amp_3( mFloatData[9] ),
+    increment( mFloatData[10] ),
+    press_control_min( mFloatData[11] ),
+    press_control_max( mFloatData[12] )
 {
     mGroupID = opc::miniOPC::Instance().AddGroup( L"DB35", mAdresses, BOOL_COUNT + FLOAT_COUNT );
 }
 
-void DB35::Read()
+void DB35::Write()
 {
-    OPCITEMSTATE* rez = opc::miniOPC::Instance().Read( mGroupID );
-    if (!rez)
-    {
-        //ошибка подключения..
-        return;
-    }
-    for (size_t i = 0; i < BOOL_COUNT + FLOAT_COUNT; i++)
-    {
-        if ( i < BOOL_COUNT )
-            mBoolData[ i ] = rez[i].vDataValue.boolVal;
-        else
-            mFloatData[ i - BOOL_COUNT ] = rez[i].vDataValue.fltVal;
-    }
-    opc::miniOPC::Instance().OpcMassFree( mGroupID, rez );
+    opc::miniOPC::Instance().WriteMass( mGroupID, BOOL_COUNT, FLOAT_COUNT, static_cast<void*>( mFloatData ), opc::tFLOAT );
+    opc::miniOPC::Instance().WriteMass( mGroupID, 0, BOOL_COUNT, static_cast<void*>( mBoolData ), opc::tBOOL );
 }
 
 }//namespace data

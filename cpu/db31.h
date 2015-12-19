@@ -20,6 +20,7 @@ public:
     bool& Stop_Oper;        //2.1 стоп операции
     bool& Nasos_M2;         //2.2 основной насос М2
     float& N_Operation;     //4.0 номер операции
+    float& Q_5_5ma;         //8.0 расход по умолчанию
 
 private:
     friend class cpu::CpuMemory;
@@ -30,7 +31,7 @@ private:
     enum
     {
         BOOL_COUNT = 3,
-        FLOAT_COUNT = 1
+        FLOAT_COUNT = 2
     };
 
     bool mBoolData[ BOOL_COUNT ] = {false};
@@ -43,7 +44,8 @@ private:
         L"CPU/DB31.Stop_Oper",
         L"CPU/DB31.Nasos_M2",
 
-        L"CPU/DB31.N_Operation"
+        L"CPU/DB31.N_Operation",
+        L"CPU/DB31.Q_5_5ma"
     };
 };
 

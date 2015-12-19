@@ -65,6 +65,7 @@ SOURCES += main.cpp\
     myOPC/impl/demo_mode.cpp \
     myOPC/impl/cache/memory.cpp \
     myOPC/impl/win_ole_mode.cpp \
+    myOPC/impl/sync_thread.cpp \
     login.cpp \
     cpu/db2.cpp \
     cpu/db3.cpp \
@@ -151,6 +152,7 @@ HEADERS  += mainwindow.h \
     myOPC/impl/cache/def.h \
     myOPC/impl/cache/memory.h \
     myOPC/impl/win_ole_mode.h \
+    myOPC/impl/sync_thread.h \
     login.h \
     cpu/db2.h \
     cpu/db3.h \
@@ -222,4 +224,4 @@ release {
     DEFINES -= DEBUG
 }
 #DEFINES += WINDOWS
-DEFINES += DEMO
+#DEFINES += DEMO

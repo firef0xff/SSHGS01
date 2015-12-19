@@ -19,7 +19,15 @@ DB36::DB36():
     op22_end( mBoolData[8] ),
     op23_end( mBoolData[9] ),
     op24_end( mBoolData[10] ),
-    op25_end( mBoolData[11] )
+    op25_end( mBoolData[11] ),
+    op22_a_ab_open( mBoolData[12] ),
+    op22_a_b_close( mBoolData[13] ),
+    op22_a_a_close( mBoolData[14] ),
+    op22_b_ab_open( mBoolData[15] ),
+    op22_b_b_close( mBoolData[16] ),
+    op22_b_a_close( mBoolData[17] ),
+    op24_number( mFloatData[0] )
+
 {
     mGroupID = opc::miniOPC::Instance().AddGroup( L"DB36", mAdresses, BOOL_COUNT + FLOAT_COUNT );
 }
@@ -36,8 +44,8 @@ void DB36::Read()
     {
         if ( i < BOOL_COUNT )
             mBoolData[ i ] = rez[i].vDataValue.boolVal;
-//        else
-//            mFloatData[ i - BOOL_COUNT ] = rez[i].vDataValue.fltVal;
+        else
+            mFloatData[ i - BOOL_COUNT ] = rez[i].vDataValue.fltVal;
     }
     opc::miniOPC::Instance().OpcMassFree( mGroupID, rez );
 }

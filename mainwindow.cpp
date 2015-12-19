@@ -55,10 +55,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->act_test_case4->setIconText( test::hydro_cylinder::Parameters::Instance().TestCollection().Name() );
 
 
-
-    ui->ManualControl->setText( "Ручное управление" );
-    ui->ManualControl->setDescription( "Запуск стенда в режиме ручного управления для администрирования и обслуживания" );
-
     auto addRoundControl = [&]( ff0x::RoundDial** control, QString const& name, QLayout* place)
     {
         *control = new ff0x::RoundDial(this);
@@ -183,10 +179,6 @@ void MainWindow::StartHydroCilinderTest( bool new_test )
     ShowChildWindow( ChildPtr( new HydroCilinderTitleInfo( new_test ) ) );
 }
 
-void MainWindow::StartManualControl()
-{
-
-}
 void MainWindow::AppSettrings ()
 {
     ShowChildWindow( ChildPtr( new settings_wnd() ) );
@@ -209,7 +201,6 @@ void MainWindow::enable_modes(bool enabled)
     ui->TestCase3->setEnabled( enabled );
     ui->TestCase4->setEnabled( enabled );
 
-    ui->ManualControl->setEnabled( enabled );
     ui->app_settings->setEnabled( enabled );
     ui->device_list->setEnabled( enabled );
 
@@ -253,11 +244,6 @@ void MainWindow::on_act_test_case4_triggered()
 void MainWindow::on_TestCase4_clicked()
 {
     StartHydroCilinderTest( true );
-}
-
-void MainWindow::on_ManualControl_clicked()
-{
-    StartManualControl();
 }
 
 

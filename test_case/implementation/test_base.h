@@ -25,7 +25,7 @@ protected:
     virtual uint8_t CommandID();
     virtual void UpdateData(){}
     cpu::data::DB31& mCommand;
-    cpu::data::DB40& Exceptions;
+//    cpu::data::DB40& Exceptions;
 };
 
 namespace hydro
@@ -53,13 +53,15 @@ class Test :public test::TestCommonData
 {
 public:
     Test( QString const& name, uint8_t id_board, uint8_t id_reel );
+protected:
+    bool ReelControl() const;
+    cpu::data::DB34& mControlBoardBits;    //биты завершения испытаний серво оборудования с блоком управления
+    cpu::data::DB36& mControlReelBits;    //биты завершения испытаний серво оборудования с катушками управления
 private:
     static uint8_t mTestsCount;
     void UpdateData();
     uint8_t CommandID();
     uint8_t mIdReel;
-    cpu::data::DB34& mControlBoardBits;    //биты завершения испытаний серво оборудования с блоком управления
-    cpu::data::DB36& mControlReelBits;    //биты завершения испытаний серво оборудования с катушками управления
 };
 
 }//namespace servo

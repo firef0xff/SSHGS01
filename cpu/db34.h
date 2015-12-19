@@ -28,6 +28,13 @@ public:
     bool& op13_end; //3.1 зависимость расход/давление конец
     bool& op14_end; //3.2 частотные характеристики конец
     bool& op15_end; //3.3 переходные харарактеристики конец
+    bool& op12_ab_open_a;   //Катушка а канал АБ открыты
+    bool& op12_b_close_a;   //Катушка а канал Б закрыт
+    bool& op12_a_close_a;   //Катушка а канал А закрыт
+    bool& op12_ab_open_b;   //Катушка б канал АБ открыты
+    bool& op12_b_close_b;   //Катушка б канал Б закрыт
+    bool& op12_a_close_b;   //Катушка б канал А закрыт
+    float& op14_number;      //Число ячеек блока DB10/23
 
 private:
     friend class cpu::CpuMemory;
@@ -37,25 +44,35 @@ private:
 
     enum
     {
-        BOOL_COUNT = 12,
-        FLOAT_COUNT = 0
+        BOOL_COUNT = 18,
+        FLOAT_COUNT = 1
     };
 
     bool mBoolData[ BOOL_COUNT ] = {false};
-//    float mFloatData[ FLOAT_COUNT ] = { 0.0 };
+    float mFloatData[ FLOAT_COUNT ] = { 0.0 };
     uint64_t mGroupID = 0;
 
     wchar_t const* mAdresses[ BOOL_COUNT + FLOAT_COUNT ] = {
         //bool
-        L"CPU/DB33.s4_20ma",
-        L"CPU/DB33.s0_20ma",
-        L"CPU/DB33.s10v",
-        L"CPU/DB33.s10ma",
-        L"CPU/DB33.s15ma",
-        L"CPU/DB33.s20ma",
-        L"CPU/DB33.s40ma",
-        L"CPU/DB33.channel_a",
-        L"CPU/DB33.channel_b"
+        L"CPU/DB34.op10_ok",
+        L"CPU/DB34.op11_ok",
+        L"CPU/DB34.op12_ok",
+        L"CPU/DB34.op13_ok",
+        L"CPU/DB34.op14_ok",
+        L"CPU/DB34.op15_ok",
+        L"CPU/DB34.op10_end",
+        L"CPU/DB34.op11_end",
+        L"CPU/DB34.op12_end",
+        L"CPU/DB34.op13_end",
+        L"CPU/DB34.op14_end",
+        L"CPU/DB34.op15_end",
+        L"CPU/DB34.op12_ab_open_a",
+        L"CPU/DB34.op12_b_close_a",
+        L"CPU/DB34.op12_a_close_a",
+        L"CPU/DB34.op12_ab_open_b",
+        L"CPU/DB34.op12_b_close_b",
+        L"CPU/DB34.op12_a_close_b",
+        L"CPU/DB34.op14_number",
     };
 };
 

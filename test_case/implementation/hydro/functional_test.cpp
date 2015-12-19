@@ -18,6 +18,8 @@ bool FunctionalTest::Run()
 {
     Start();
     Wait( mResults.op1_ok, mResults.op1_end );
+    if ( IsStopped() )
+        return false;
 
     ReelA.work_on_max_pressure = mResults.op1_max_ok_a && !mResults.op1_max_o_a;
     ReelA.work_on_min_pressure = mResults.op1_min_ok_a && !mResults.op1_min_no_a;

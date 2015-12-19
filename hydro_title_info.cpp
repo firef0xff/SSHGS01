@@ -71,6 +71,7 @@ bool HydroTitleInfo::SaveInputParams()
     };
 
     res *= ParamChecker( ui->l_sn,              params.SerNo( ui->SerNo->text() ) );
+    res *= ParamChecker( ui->l_def_expenditure, params.DefaultExpenditure( ui->DefExpenditure->text() ) );
     res *= ParamChecker( ui->l_gs_type,         params.GsType( ui->GsType->currentText() ) && ui->GsType->currentIndex() >= 0 );
     res *= ParamChecker( ui->l_voltage,         params.Voltage( ui->Voltage->currentText() ) );
     res *= ParamChecker( ui->l_voltage_type,    params.VoltageType( ui->VoltageType->currentText() ) );
@@ -101,6 +102,7 @@ void HydroTitleInfo::FromParams()
 {
     test::hydro::Parameters& params = test::hydro::Parameters::Instance();
     ui->SerNo->setText( params.SerNo() );
+    ui->DefExpenditure->setValue( params.DefaultExpenditure() );
     ui->GsType->setCurrentIndex( ui->GsType->findText( params.GsType() ) );
     on_GsType_activated( ui->GsType->currentIndex() );
     ui->Voltage->setCurrentIndex( ui->Voltage->findText( test::ToString( params.Voltage()  ) ) );
@@ -131,8 +133,34 @@ void HydroTitleInfo::FromParams()
 
 void HydroTitleInfo::on_buttonBox_accepted()
 {
+    auto CheckPower = []() -> bool
+    {
+        return true;
+        test::hydro::Parameters& params = test::hydro::Parameters::Instance();
+
+        const int pomp_max_power = 55;
+        const int pomp_count = 2;
+
+        double max_expenditure = std::max( params.DefaultExpenditure(), params.MaxExpenditure() );
+        double max_pressure = std::max( params.MinTestPressure(), std::max( params.HermPressure(), params.MaxWorkPressure() ) );
+
+
+        bool res = max_expenditure*max_pressure/54 <= pomp_count * pomp_max_power;
+        if (!res)
+        {
+            QMessageBox msg;
+            msg.setWindowTitle( "Превышена допустимая мощьность насосов" );
+            msg.setText( "Необходимо скорректировать параметры расходов и давлений" );
+            msg.setStandardButtons( QMessageBox::Ok );
+            msg.setModal( true );
+            msg.exec();
+        }
+        return res;
+    };
     if ( SaveInputParams() )
     {
+        if (!CheckPower())
+            return;
         hide();
         if ( mChildWindow.get() )
             QObject::disconnect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );

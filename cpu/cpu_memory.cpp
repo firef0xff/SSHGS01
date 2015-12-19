@@ -38,11 +38,20 @@ void CpuMemory::Syncronise()
 void CpuMemory::ReadAll()
 {
     DB32.Read();
+    DB34.Read();
+    DB36.Read();
+    DB39.Read();
+    DB40.Read();
 }
 void CpuMemory::WriteAll()
 {
     DB30.Write();
     DB31.Write();
+
+    DB33.Write();
+    DB35.Write();
+    DB37.Write();
+    DB38.Write();
 }
 
 }//namespace cpu

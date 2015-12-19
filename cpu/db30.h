@@ -14,6 +14,7 @@ class DB30 : public Out
 {
 public:
     void Write();
+    void Clear();
 
     bool& Current;        //2.0 0 - постоянный ток, 1 - переменный
     bool& Coil;           //2.1 0 - 1 катушка, 1 - 2 катушки
