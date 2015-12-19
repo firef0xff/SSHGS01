@@ -19,12 +19,29 @@ bool VACharacteristic::Run()
     if ( IsStopped() )
         return false;
 
+    for ( size_t i = 0; i < m31Results.SIGNAL_COUNT; ++i )
+    {
+        Data d;
+        d.signal = m31Results.signal[i];
+        d.current = m31Results.current[i];
+        Graph.push_back(d);
+    }
+
     OilTemp = mTemperature.T_oil;
+    return true;
+}
+void VACharacteristic::UpdateData()
+{
+    Test::UpdateData();
+    m31Results.Read();
+}
+bool VACharacteristic::Success() const
+{
     return true;
 }
 QJsonObject VACharacteristic::Serialise() const
 {
-    QJsonObject obj;
+    QJsonObject obj = Test::Serialise();
     QJsonArray a;
     foreach (Data const& d, Graph)
     {
@@ -43,7 +60,7 @@ bool VACharacteristic::Deserialize( QJsonObject const& obj )
         if ( d.Deserialize( v.toObject() ) )
             Graph.insert( Graph.end(), d );
     }
-
+    Test::Deserialize( obj );
     return true;
 }
 
@@ -107,15 +124,15 @@ bool VACharacteristic::Draw( QPainter& painter, QRect &free_rect ) const
                 foreach ( QJsonValue const& v, a )
                 {
                     QJsonObject o = v.toObject();
-                    data_e.push_back( QPointF( o.value("x").toDouble(), o.value("y").toDouble() ) );
+                    data_e.push_back( QPointF( o.value("signal").toDouble(), o.value("current").toDouble() ) );
                 }
             }
         }
 
         foreach ( Data const& item, Graph )
         {
-            double abs_sig = std::abs( item.x );
-            double abs_leak = std::abs( item.y );
+            double abs_sig = std::abs( item.signal );
+            double abs_leak = std::abs( item.current );
 
             if ( max_signal < abs_sig )
                 max_signal = abs_sig;
@@ -123,7 +140,7 @@ bool VACharacteristic::Draw( QPainter& painter, QRect &free_rect ) const
             if ( max_Leak < abs_leak )
                 max_Leak = abs_leak;
 
-            data.push_back( QPointF( item.x, item.y ) );
+            data.push_back( QPointF( item.signal, item.current ) );
         }
         QFont f = text_font;
         f.setPointSize( 6 );
@@ -139,7 +156,7 @@ bool VACharacteristic::Draw( QPainter& painter, QRect &free_rect ) const
         QRect p1(rect.left(), rect.top(), w, h );
         QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
         DrawRowCenter( p1t, text_font, Qt::black, "График" );
-        painter.drawPixmap( p1, builder.Draw( lines, max_signal * 1.25, max_Leak * 1.25, 0.05, 0.5, "", "", true ) );
+        painter.drawPixmap( p1, builder.Draw( lines, max_signal * 1.25, max_Leak * 1.25, ceil(max_signal)/10, ceil(max_Leak)/10, "Опорный сигнал", "Выходной ток", true ) );
 
         painter.restore();
     }, 1, free_rect.width()/2 + metrix.height()  );
@@ -151,15 +168,15 @@ bool VACharacteristic::Draw( QPainter& painter, QRect &free_rect ) const
 QJsonObject VACharacteristic::Data::Serialise() const
 {
     QJsonObject obj;
-    obj.insert("x", x );
-    obj.insert("y", y );
+    obj.insert("signal", signal );
+    obj.insert("current", current );
 
     return obj;
 }
 bool VACharacteristic::Data::Deserialize( QJsonObject const& obj )
 {
-    x = obj.value("x").toDouble();
-    y = obj.value("y").toDouble();
+    signal = obj.value("signal").toDouble();
+    current = obj.value("current").toDouble();
     return true;
 }
 

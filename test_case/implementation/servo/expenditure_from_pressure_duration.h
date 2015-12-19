@@ -19,6 +19,8 @@ public:
     bool Draw(QPainter &painter, QRect &free_rect ) const;
 
     void ResetDrawLine();
+protected:
+    void UpdateData();
 private:
     struct Data
     {

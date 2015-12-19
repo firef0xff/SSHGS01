@@ -13,30 +13,26 @@ public:
     FrequencyCharacteristics();
     bool Run();
 
+    bool Success() const;
     QJsonObject Serialise() const;
     bool Deserialize( QJsonObject const& obj );
 
     bool Draw(QPainter &painter, QRect &free_rect ) const;
 
+protected:
+    void UpdateData();
 private:
     struct Data
     {
-        Data():
-            x(0),
-            y(0)
-        {}
+        double phase = 0;
+        double ampl = 0;
+        double frequency = 0;
 
         QJsonObject Serialise() const;
         bool Deserialize( QJsonObject const& obj );
-        double x;
-        double y;
     };
 
-    ///АЧХ, ФЧХ
-    /// (хочу просто массива с контроллера для рисования )
-
-    QVector<Data> AFC;
-    QVector<Data> FFC;
+    QVector< Data > mData;
 };
 
 }//namespace servo

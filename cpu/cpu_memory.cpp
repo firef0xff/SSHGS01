@@ -45,12 +45,22 @@ void CpuMemory::ReadAll()
     DB12.Read();
 
     DB3.Read();
-    DB22.Read();
+    DB13.Read();
 
     DB9.Read();
     DB19.Read();
 
+    DB10.Read();
+    DB23.Read();
+    DB20.Read();
+    DB24.Read();
+
+    DB11.Read();
+    DB21.Read();
+
     DB39.Read();
+    DB22.Read();
+
     DB40.Read();
 }
 void CpuMemory::WriteAll()

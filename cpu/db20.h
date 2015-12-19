@@ -13,14 +13,12 @@ class DB20 :public In
 public:
     enum
     {
-        REF_COUNT = 20,
-        COORDINATE_COUNT = 20
+        SIGNAL_COUNT = 15000
     };
 
     void Read();
 
-    float ref[REF_COUNT] = {0.0};                //DB20 REAL0   20  опорный сигнал
-    float coordinate[COORDINATE_COUNT] = {0.0};  //DB20 REAL80  20  положение цилиндра
+    float signal[SIGNAL_COUNT] = {0.0};          //DB20 REAL0   15000  опорный сигнал
 
 private:
     friend class cpu::CpuMemory;
@@ -30,13 +28,12 @@ private:
 
     enum
     {
-        ARRAYS_COUNT = 2
+        ARRAYS_COUNT = 1
     };
 
     uint64_t mGroupID = 0;
     wchar_t const* mAdresses[ ARRAYS_COUNT ] = {
-        L"CPU/DB20.ref",
-        L"CPU/DB20.coordinate"
+        L"CPU/DB20.signal"
     };
 
 };

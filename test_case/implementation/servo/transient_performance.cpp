@@ -21,51 +21,29 @@ bool TransientPerformance::Run()
         Wait( mControlBoardBits.op15_ok, mControlBoardBits.op15_end );
     if ( IsStopped() )
         return false;
+    OilTemp = mTemperature.T_oil;
+
+#warning какие - то действия, нужны перемещения и время
+
     Data d;
-    d.x = 1;
-    d.y = 1.25;
 
-    Graph.push_back( d );
-    d.x += 0.5;
-    d.y += 0.7;
-
-    Graph.push_back( d );
-    d.x += 0.5;
-    d.y += 0.7;
-
-    Graph.push_back( d );
-    d.x += 0.5;
-    d.y += 0.7;
-
-    Graph.push_back( d );
-    d.x += 0.5;
-    d.y += 0.7;
-
-    Graph.push_back( d );
-    d.x += 0.5;
-    d.y += 0.7;
-
-    Graph.push_back( d );
-    d.x += 0.5;
-    d.y += 0.7;
-
-    Graph.push_back( d );
-    d.x += 0.5;
-    d.y += 0.7;
-
-    Graph.push_back( d );
-    d.x += 0.5;
-    d.y += 0.7;
-
-    Graph.push_back( d );
-    d.x += 0.5;
-    d.y += 0.7;
-
+    return Success();
+}
+void TransientPerformance::UpdateData()
+{
+    Test::UpdateData();
+    if (ReelControl())
+        m25Result.Read();
+    else
+        m15Result.Read();
+}
+bool TransientPerformance::Success() const
+{
     return true;
 }
 QJsonObject TransientPerformance::Serialise() const
 {
-    QJsonObject obj;
+    QJsonObject obj = Test::Serialise();
     QJsonArray a;
     foreach (Data const& d, Graph)
     {
@@ -84,7 +62,7 @@ bool TransientPerformance::Deserialize( QJsonObject const& obj )
         if ( d.Deserialize( v.toObject() ) )
             Graph.insert( Graph.end(), d );
     }
-
+    Test::Deserialize( obj );
     return true;
 }
 
@@ -207,15 +185,15 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
                 foreach ( QJsonValue const& v, a )
                 {
                     QJsonObject o = v.toObject();
-                    data_e.push_back( QPointF( o.value("x").toDouble(), o.value("y").toDouble() ) );
+                    data_e.push_back( QPointF( o.value("time").toDouble(), o.value("expenditure").toDouble() ) );
                 }
             }
         }
 
         foreach ( Data const& item, Graph )
         {
-            double abs_sig = std::abs( item.x );
-            double abs_leak = std::abs( item.y );
+            double abs_sig = std::abs( item.time );
+            double abs_leak = std::abs( item.expenditure );
 
             if ( max_signal < abs_sig )
                 max_signal = abs_sig;
@@ -223,7 +201,7 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
             if ( max_Leak < abs_leak )
                 max_Leak = abs_leak;
 
-            data.push_back( QPointF( item.x, item.y ) );
+            data.push_back( QPointF( item.time, item.expenditure ) );
         }
         QFont f = text_font;
         f.setPointSize( 6 );
@@ -239,7 +217,7 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
         QRect p1(rect.left(), rect.top(), w, h );
         QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
         DrawRowCenter( p1t, text_font, Qt::black, "Переходные характеристики" );
-        painter.drawPixmap( p1, builder.Draw( lines, max_signal * 1.25, max_Leak * 1.25, max_signal/10, max_Leak/10, "Время (мс)", "Расход (л/мин)", true ) );
+        painter.drawPixmap( p1, builder.Draw( lines, max_signal * 1.25, max_Leak * 1.25, ceil(max_signal)/10, ceil(max_Leak)/10, "Время (мс)", "Расход (л/мин)", true ) );
 
         painter.restore();
     }, 1, free_rect.width()/2 + metrix.height()  );
@@ -251,15 +229,15 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
 QJsonObject TransientPerformance::Data::Serialise() const
 {
     QJsonObject obj;
-    obj.insert("x", x );
-    obj.insert("y", y );
+    obj.insert("time", time );
+    obj.insert("expenditure", expenditure );
 
     return obj;
 }
 bool TransientPerformance::Data::Deserialize( QJsonObject const& obj )
 {
-    x = obj.value("x").toDouble();
-    y = obj.value("y").toDouble();
+    time = obj.value("time").toDouble();
+    expenditure = obj.value("expenditure").toDouble();
     return true;
 }
 

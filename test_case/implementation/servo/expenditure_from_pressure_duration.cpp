@@ -57,6 +57,14 @@ bool ExpeditureFromPressureDuration::Run()
     OilTemp = mTemperature.T_oil;
     return Success();
 }
+void ExpeditureFromPressureDuration::UpdateData()
+{
+    Test::UpdateData();
+    if (ReelControl())
+        m23Results.Read();
+    else
+        m13Results.Read();
+}
 bool ExpeditureFromPressureDuration::Success() const
 {
     return true;

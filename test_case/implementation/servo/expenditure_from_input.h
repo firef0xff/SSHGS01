@@ -17,6 +17,8 @@ public:
     bool Deserialize( QJsonObject const& obj );
 
     bool Draw(QPainter &painter, QRect &free_rect ) const;
+protected:
+    void UpdateData();
 private:
     struct Data
     {

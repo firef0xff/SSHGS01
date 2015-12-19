@@ -53,6 +53,14 @@ bool ExpeditureFromInput::Run()
 ///     1. max( q1[x] - q2[x] ) / q_max * 100;
     return Success();
 }
+void ExpeditureFromInput::UpdateData()
+{
+    Test::UpdateData();
+    if (ReelControl())
+        m22Results.Read();
+    else
+        m12Results.Read();
+}
 bool ExpeditureFromInput::Success() const
 {
     return true;

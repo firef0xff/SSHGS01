@@ -63,14 +63,24 @@ protected:
     cpu::data::DB12& m21Results;
 
     cpu::data::DB3&  m12Results;
-    cpu::data::DB22& m22Results;
+    cpu::data::DB13& m22Results;
 
     cpu::data::DB9&  m13Results;
     cpu::data::DB19& m23Results;
+
+
+    cpu::data::DB10&  m14Result1;   //результаты пр14.1
+    cpu::data::DB23&  m14Result2;   //результаты пр14.2
+    cpu::data::DB20&  m24Result1;   //результаты пр24.1
+    cpu::data::DB24&  m24Result2;   //результаты пр24.2
+
+    cpu::data::DB11&  m15Result;
+    cpu::data::DB21&  m25Result;
+protected:
+    void UpdateData();
 private:
     static uint8_t mTestsCount;
-    void UpdateData();
-    uint8_t CommandID();
+    uint8_t CommandID();    
     uint8_t mIdReel;
 };
 
@@ -87,6 +97,7 @@ protected:
 #warning partial implemented
     cpu::data::DB39& mBits;
     cpu::data::DB32& mTemperature;
+    cpu::data::DB22& m31Results;
 private:
     static uint8_t mTestsCount;
 };

@@ -39,6 +39,8 @@ public:
 
     bool Draw(QPainter &painter, QRect &free_rect ) const;
 
+protected:
+    void UpdateData();
 private:
     struct Data
     {

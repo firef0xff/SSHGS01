@@ -225,6 +225,14 @@ bool InsideHermTest::Run()
 
     return Success();
 }
+void InsideHermTest::UpdateData()
+{
+    Test::UpdateData();
+    if ( ReelControl() )
+        m21Results.Read();
+    else
+        m11Results.Read();
+}
 bool InsideHermTest::Success() const
 {
     return true;

@@ -94,9 +94,15 @@ Test::Test( QString const& name, uint8_t id_board, uint8_t id_reel ):
     m11Results( cpu::CpuMemory::Instance().DB2 ),
     m21Results( cpu::CpuMemory::Instance().DB12 ),
     m12Results( cpu::CpuMemory::Instance().DB3 ),
-    m22Results( cpu::CpuMemory::Instance().DB22 ),
+    m22Results( cpu::CpuMemory::Instance().DB13 ),
     m13Results( cpu::CpuMemory::Instance().DB9 ),
     m23Results( cpu::CpuMemory::Instance().DB19 ),
+    m14Result1( cpu::CpuMemory::Instance().DB10 ),
+    m14Result2( cpu::CpuMemory::Instance().DB23 ),
+    m24Result1( cpu::CpuMemory::Instance().DB20 ),
+    m24Result2( cpu::CpuMemory::Instance().DB24 ),
+    m15Result( cpu::CpuMemory::Instance().DB11 ),
+    m25Result( cpu::CpuMemory::Instance().DB21 ),
     mIdReel( id_reel )
 {
     ++mTestsCount;
@@ -104,16 +110,11 @@ Test::Test( QString const& name, uint8_t id_board, uint8_t id_reel ):
 
 void Test::UpdateData()
 {
-    mControlBoardBits.Read();
-    mControlReelBits.Read();
+    if (ReelControl())
+        mControlReelBits.Read();
+    else
+        mControlBoardBits.Read();
     mTemperature.Read();
-
-    m11Results.Read();
-    m21Results.Read();
-    m12Results.Read();
-    m22Results.Read();
-    m13Results.Read();
-    m23Results.Read();
 }
 uint8_t Test::CommandID()
 {    
@@ -134,7 +135,8 @@ uint8_t Test::mTestsCount = 1;
 Test::Test( QString const& name, uint8_t id ):
     test::TestCommonData( &ControlBoardTests, name, mTestsCount, id ),
     mBits( cpu::CpuMemory::Instance().DB39 ),
-    mTemperature( cpu::CpuMemory::Instance().DB32 )
+    mTemperature( cpu::CpuMemory::Instance().DB32 ),
+    m31Results( cpu::CpuMemory::Instance().DB22 )
 {
     ++mTestsCount;
 }
