@@ -26,6 +26,8 @@ bool ActivationTime::Run()
 
     Start();
     Wait( mResults.op8_ok, mResults.op8_end );
+    if ( IsStopped() )
+        return false;
 
     ReelA.TimeOn = mResults.op8_time_on_a;
     ReelA.TimeOff = mResults.op8_time_off_a;

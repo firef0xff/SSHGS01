@@ -60,6 +60,14 @@ void DB30::Write()
     opc::miniOPC::Instance().WriteMass( mGroupID, BOOL_COUNT, FLOAT_COUNT, static_cast<void*>( mFloatData ), opc::tFLOAT );
 }
 
+void DB30::Clear()
+{
+    for ( int i = 0; i < BOOL_COUNT; ++i )
+        mBoolData[i] = false;
+    for ( int i = 0; i < FLOAT_COUNT; ++i )
+        mFloatData[i] = 0;
+}
+
 }//namespace data
 
 }//namespace cpu

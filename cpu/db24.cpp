@@ -21,7 +21,7 @@ void DB24::Read()
     }
 
     opc::ReadToArray( rez[0].vDataValue, coordinate, COORDINATE_COUNT );
-    
+
     opc::miniOPC::Instance().OpcMassFree( mGroupID, rez );
 }
 

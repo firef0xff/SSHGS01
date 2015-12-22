@@ -293,13 +293,15 @@ QString ToString( SIGNAL_TYPE const& v )
 }
 
 Parameters::Parameters():
-    mTestCase()
+    mTestCase(),
+    mDefaultExpenditure( 0.0 )
 {}
 void Parameters::Reset()
 {
     mTestCase.clear();
     mUser.clear();
     mDate = QDateTime();
+    mDefaultExpenditure = 0.0;
 }
 
 void Parameters::TestCase ( TestsList const& test_case)
@@ -329,6 +331,15 @@ QString const& Parameters::User()
     return mUser;
 }
 
+bool Parameters::DefaultExpenditure( QString const& value )
+{
+    return ParseValue( mDefaultExpenditure, value );
+}
+const double &Parameters::DefaultExpenditure() const
+{
+    return mDefaultExpenditure;
+}
+
 QJsonObject Parameters::Serialise() const
 {
     QJsonObject obj;
@@ -340,6 +351,7 @@ QJsonObject Parameters::Serialise() const
     obj.insert("TestCase", tests);
     obj.insert("Date", mDate.toString(Qt::ISODate));
     obj.insert("User", mUser);
+    obj.insert("DefaultExpenditure", mDefaultExpenditure);
     return obj;
 }
 bool Parameters::Deserialize(const QJsonObject &obj )
@@ -367,6 +379,7 @@ bool Parameters::Deserialize(const QJsonObject &obj )
 
     mDate = QDateTime::fromString( obj.value("Date").toString(), Qt::ISODate );
     mUser = obj.value("User").toString();
+    mDefaultExpenditure = obj.value("DefaultExpenditure").toDouble();
 
     return res;
 }

@@ -300,6 +300,8 @@ void Parameters::WriteToController() const
     mem.TypeD_close_b = static_cast< int >(mOffDynamic_2) >= 0 ? static_cast< int >(mOffDynamic_2) : 0;
 
     mem.Write();
+
+    cpu::CpuMemory::Instance().DB31.Q_5_5ma = mDefaultExpenditure;
 }
 
 bool Parameters::Draw(QPainter &painter, QRect &free_rect ) const

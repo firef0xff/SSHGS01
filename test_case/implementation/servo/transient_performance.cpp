@@ -3,6 +3,7 @@
 #include <QJsonArray>
 #include "../../../../mylib/Widgets/GraphBuilder/graph_builder.h"
 #include "test_case/test_params.h"
+#include "../test_params_servo.h"
 namespace test
 {
 namespace servo
@@ -14,51 +15,76 @@ TransientPerformance::TransientPerformance():
 
 bool TransientPerformance::Run()
 {
-    Data d;
-    d.x = 1;
-    d.y = 1.25;
+    Graph.clear();
+    Start();
+    if ( ReelControl() )
+        Wait( mControlReelBits.op25_ok, mControlReelBits.op25_end );
+    else
+        Wait( mControlBoardBits.op15_ok, mControlBoardBits.op15_end );
+    if ( IsStopped() )
+        return false;
+    OilTemp = mTemperature.T_oil;
 
-    Graph.push_back( d );
-    d.x += 0.5;
-    d.y += 0.7;
 
-    Graph.push_back( d );
-    d.x += 0.5;
-    d.y += 0.7;
+    //dt = 1мс;
+    //t = DB60, INT60 count - количестко показаний перемещений
+    //диаметры цилиндров из параметров по заданному расходу
 
-    Graph.push_back( d );
-    d.x += 0.5;
-    d.y += 0.7;
+    return Success();
+}
+void TransientPerformance::UpdateData()
+{
+    Test::UpdateData();
+    if (ReelControl())
+        m25Result.Read();
+    else
+        m15Result.Read();
+    m1525Counts.Read();
 
-    Graph.push_back( d );
-    d.x += 0.5;
-    d.y += 0.7;
+    if ( m1525Counts.OP15_25_Opor_1 ||
+         m1525Counts.OP15_25_Opor_2 ||
+         m1525Counts.OP15_25_Opor_3)
+    {
+        auto f_d2d1 = []( double exp )
+        {
+            if ( exp < 30 )
+                return (25.0 - 18.0)*(25.0 - 18.0);
+            return (63.0-36.0)*(63.0-36.0);
+        };
 
-    Graph.push_back( d );
-    d.x += 0.5;
-    d.y += 0.7;
+        double d2d1 = f_d2d1( test::servo::Parameters::Instance().DefaultExpenditure() );
 
-    Graph.push_back( d );
-    d.x += 0.5;
-    d.y += 0.7;
+        if ( ReelControl() )
+        {
+            for ( size_t i = 0; i < m1525Counts.OP15_25_count && i < m25Result.COORDINATE_COUNT; ++i )
+            {
+                Data d;
+                d.time = i;
+                d.expenditure = 10000.0/1270.0 * m25Result.coordinate[i] * d2d1;
+                Graph.push_back( d );
+            }
+        }
+        else
+        {
+            for ( size_t i = 0; i < m1525Counts.OP15_25_count && i < m15Result.COORDINATE_COUNT; ++i )
+            {
+                Data d;
+                d.time = i;
+                d.expenditure = 10000.0/1270.0 * m15Result.coordinate[i] * d2d1;
+                Graph.push_back( d );
+            }
+        }
 
-    Graph.push_back( d );
-    d.x += 0.5;
-    d.y += 0.7;
-
-    Graph.push_back( d );
-    d.x += 0.5;
-    d.y += 0.7;
-
-    Graph.push_back( d );
-    d.x += 0.5;
-    d.y += 0.7;
-
+        cpu::CpuMemory::Instance().DB31.SendContinue();
+    }
+}
+bool TransientPerformance::Success() const
+{
     return true;
 }
 QJsonObject TransientPerformance::Serialise() const
 {
-    QJsonObject obj;
+    QJsonObject obj = Test::Serialise();
     QJsonArray a;
     foreach (Data const& d, Graph)
     {
@@ -77,12 +103,16 @@ bool TransientPerformance::Deserialize( QJsonObject const& obj )
         if ( d.Deserialize( v.toObject() ) )
             Graph.insert( Graph.end(), d );
     }
-
+    Test::Deserialize( obj );
     return true;
 }
 
 bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
 {
+    test::servo::Parameters *params = static_cast< test::servo::Parameters * >( CURRENT_PARAMS );
+    if ( !params )
+        return true;
+
     QFont header_font = painter.font();
     header_font.setFamily("Arial");
     header_font.setPointSize( 14 );
@@ -149,14 +179,14 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
 
 
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
+    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font, &params ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Диапазон давление при проведении испытаний, бар"), Qt::red, "что писать?" );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Диапазон давлений при проведении испытаний, бар"), Qt::red, test::ToString( params->PressureNominal() ) );
     }, 2 );
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
+    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font, &params ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Расход при проведении испытаний, л/мин"), Qt::red, "что писать?" );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Расход при проведении испытаний, л/мин"), Qt::red, test::ToString( params->DefaultExpenditure() ) );
     }, 2 );
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
@@ -200,15 +230,15 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
                 foreach ( QJsonValue const& v, a )
                 {
                     QJsonObject o = v.toObject();
-                    data_e.push_back( QPointF( o.value("x").toDouble(), o.value("y").toDouble() ) );
+                    data_e.push_back( QPointF( o.value("time").toDouble(), o.value("expenditure").toDouble() ) );
                 }
             }
         }
 
         foreach ( Data const& item, Graph )
         {
-            double abs_sig = std::abs( item.x );
-            double abs_leak = std::abs( item.y );
+            double abs_sig = std::abs( item.time );
+            double abs_leak = std::abs( item.expenditure );
 
             if ( max_signal < abs_sig )
                 max_signal = abs_sig;
@@ -216,7 +246,7 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
             if ( max_Leak < abs_leak )
                 max_Leak = abs_leak;
 
-            data.push_back( QPointF( item.x, item.y ) );
+            data.push_back( QPointF( item.time, item.expenditure ) );
         }
         QFont f = text_font;
         f.setPointSize( 6 );
@@ -232,7 +262,7 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
         QRect p1(rect.left(), rect.top(), w, h );
         QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
         DrawRowCenter( p1t, text_font, Qt::black, "Переходные характеристики" );
-        painter.drawPixmap( p1, builder.Draw( lines, max_signal * 1.25, max_Leak * 1.25, max_signal/10, max_Leak/10, "Время (мс)", "Расход (л/мин)", true ) );
+        painter.drawPixmap( p1, builder.Draw( lines, max_signal * 1.25, max_Leak * 1.25, ceil(max_signal)/10, ceil(max_Leak)/10, "Время (мс)", "Расход (л/мин)", true ) );
 
         painter.restore();
     }, 1, free_rect.width()/2 + metrix.height()  );
@@ -244,15 +274,15 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
 QJsonObject TransientPerformance::Data::Serialise() const
 {
     QJsonObject obj;
-    obj.insert("x", x );
-    obj.insert("y", y );
+    obj.insert("time", time );
+    obj.insert("expenditure", expenditure );
 
     return obj;
 }
 bool TransientPerformance::Data::Deserialize( QJsonObject const& obj )
 {
-    x = obj.value("x").toDouble();
-    y = obj.value("y").toDouble();
+    time = obj.value("time").toDouble();
+    expenditure = obj.value("expenditure").toDouble();
     return true;
 }
 

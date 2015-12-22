@@ -65,6 +65,7 @@ SOURCES += main.cpp\
     myOPC/impl/demo_mode.cpp \
     myOPC/impl/cache/memory.cpp \
     myOPC/impl/win_ole_mode.cpp \
+    myOPC/impl/sync_thread.cpp \
     login.cpp \
     cpu/db2.cpp \
     cpu/db3.cpp \
@@ -96,7 +97,9 @@ SOURCES += main.cpp\
     cpu/db37.cpp \
     cpu/db38.cpp \
     cpu/db39.cpp \
-    cpu/db40.cpp
+    cpu/db40.cpp \
+    cpu/db50.cpp \
+    cpu/db60.cpp
 
 HEADERS  += mainwindow.h \
     test_case/test_case.h \
@@ -151,6 +154,7 @@ HEADERS  += mainwindow.h \
     myOPC/impl/cache/def.h \
     myOPC/impl/cache/memory.h \
     myOPC/impl/win_ole_mode.h \
+    myOPC/impl/sync_thread.h \
     login.h \
     cpu/db2.h \
     cpu/db3.h \
@@ -182,7 +186,9 @@ HEADERS  += mainwindow.h \
     cpu/db37.h \
     cpu/db38.h \
     cpu/db39.h \
-    cpu/db40.h
+    cpu/db40.h \
+    cpu/db50.h \
+    cpu/db60.h
 
 FORMS    += mainwindow.ui \
     hydro_title_info.ui \
@@ -222,4 +228,4 @@ release {
     DEFINES -= DEBUG
 }
 #DEFINES += WINDOWS
-DEFINES += DEMO
+#DEFINES += DEMO

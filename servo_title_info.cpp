@@ -19,6 +19,7 @@ ServoTitleInfo::ServoTitleInfo(bool new_mode, QWidget *parent) :
     ui->ControlReelResist->setValidator( new QDoubleValidator( INT32_MIN, INT32_MAX , 2, this ) );
     on_RaspredControl_activated( ui->RaspredControl->currentIndex() );    
     on_ControlType_activated( ui->ControlType->currentIndex() );
+    on_ReelCount_valueChanged( ui->ReelCount->value() );
 
     if ( !mNewMode )
         FromParams();
@@ -39,7 +40,7 @@ bool ServoTitleInfo::SaveInputParams()
 
     bool res = true;
 
-    auto ParamChecker = []( QLabel* control, bool r ) -> bool
+    auto ParamChecker = []( QWidget* control, bool r ) -> bool
     {
         QPalette palette = control->palette();
 
@@ -63,6 +64,8 @@ bool ServoTitleInfo::SaveInputParams()
     };
 
     res *= ParamChecker( ui->l_ser_no,          params.SerNo( ui->SerNo->text() ) );
+    res *= ParamChecker( ui->l_def_expenditure, params.DefaultExpenditure( ui->DefExpenditure->text() ) );
+    res *= ParamChecker( ui->l_reel_count,      params.ReelCount( ui->ReelCount->text() ) );
 
     res *= ParamChecker( ui->l_raspred_control,    params.ControlType( ui->RaspredControl->currentText() ) );
     if ( params.ControlType() == test::CT_HYDRO_ELECTRIC )
@@ -79,37 +82,40 @@ bool ServoTitleInfo::SaveInputParams()
     res *= ParamChecker( ui->l_nominal_pressure,     ValidateRange( ui->PressureNominal, params.PressureNominal( ui->PressureNominal->text() ) ) );
 
     res *= ParamChecker( ui->l_control_signal,    params.ControlSignal( ui->ControlSignal->currentText() ) );
+    res *= ParamChecker( ui->l_control_signal_ampl,    params.Amplitudes( ui->ControlSignalAmpl0->text(), ui->ControlSignalAmpl1->text(), ui->ControlSignalAmpl2->text() ) );
 
     if ( params.ReelControl() == test::RC_REEL )
     {
         res *= ParamChecker( ui->l_end_signal,          ValidateRange( ui->EndSgnal, params.EndSgnal( ui->EndSgnal->text() ) ) );
-        res *= ParamChecker( ui->l_control_reel_resist, ValidateRange( ui->ControlReelResist, params.ControlReelResist( ui->ControlReelResist->text() ) ) );
-        params.ReelCount( "1" );
+        res *= ParamChecker( ui->l_control_reel_resist, ValidateRange( ui->ControlReelResist, params.ControlReelResist( ui->ControlReelResist->text() ) ) );       
     }
+    res *= ParamChecker( ui->l_max_expenditure_a,    ValidateRange( ui->MaxExpenditureA, params.MaxExpenditureA( ui->MaxExpenditureA->text() ) ) );
+    res *= ParamChecker( ui->l_max_expenditure_b,    ValidateRange( ui->MaxExpenditureB, params.MaxExpenditureB( ui->MaxExpenditureB->text() ) ) );
 
     if ( params.ReelControl() == test::RC_CONTROL_BOX )
     {
-        res *= ParamChecker( ui->l_max_expenditure_a,    ValidateRange( ui->MaxExpenditureA, params.MaxExpenditureA( ui->MaxExpenditureA->text() ) ) );
+        res *= ParamChecker( ui->l_voltage,         params.Voltage( ui->Voltage->currentText() ) );
         res *= ParamChecker( ui->l_signal_state_a,    ValidateRange( ui->SignalStateA, params.SignalStateA( ui->SignalStateA->text() ) ) );
+        res *= ParamChecker( ui->l_signal_state_b,    ValidateRange( ui->SignalStateB, params.SignalStateB( ui->SignalStateB->text() ) ) );
         res *= ParamChecker( ui->l_signal_state_0,    ValidateRange( ui->SignalState0, params.SignalState0( ui->SignalState0->text() ) ) );
+    }
 
-        //определим используется ли вторая катушка
-        bool p1 = params.MaxExpenditureB( ui->MaxExpenditureB->text() );
-        bool p2 = params.SignalStateB( ui->SignalStateB->text() );
-        if ( p1 || p2 )
-            params.ReelCount( "2" );
-        else
-            params.ReelCount( "1" );
-
-        if ( params.ReelCount() > 1  )
-        {
-            res *= ParamChecker( ui->l_max_expenditure_b,    ValidateRange( ui->MaxExpenditureB, p1 ) );
-            res *= ParamChecker( ui->l_signal_state_b,    ValidateRange( ui->SignalStateB, p2 ) );
-        }
-        else
-        {
-            ParamChecker( ui->l_max_expenditure_b, true );
-        }
+    bool channel_a = ui->TestChA->checkState() == Qt::Checked;
+    bool channel_b = ui->TestChB->checkState() == Qt::Checked;
+    if (!channel_a && !channel_b )
+    {
+        ParamChecker(ui->TestChA , false);
+        ParamChecker(ui->TestChB, false);
+        res *= false;
+    }
+    else
+    {
+        ParamChecker(ui->TestChA, true);
+        ParamChecker(ui->TestChB, true);
+        params.TestChannelA( channel_a );
+        params.TestChannelB( channel_b );
+        params.SignalOnChannelA( ui->ControlReelChA->currentText() );
+        params.SignalOnChannelB( ui->ControlReelChB->currentText() );
     }
 
     return res;
@@ -119,6 +125,9 @@ void ServoTitleInfo::FromParams()
     test::servo::Parameters& params = test::servo::Parameters::Instance();
 
     ui->SerNo->setText( params.SerNo() );
+    ui->DefExpenditure->setValue( params.DefaultExpenditure() );
+    ui->ReelCount->setValue( params.ReelCount() );
+    on_ReelCount_valueChanged( ui->ReelCount->value() );
     ui->RaspredControl->setCurrentIndex( ui->RaspredControl->findText( test::ToString( params.ControlType() ) ) );
     on_RaspredControl_activated( ui->RaspredControl->currentIndex() );
     ui->MinControlPressure->setValue( params.MinControlPressure() );
@@ -137,29 +146,74 @@ void ServoTitleInfo::FromParams()
     ui->ControlSignal->setCurrentIndex( ui->ControlSignal->findText( test::ToString( params.ControlSignal() ) ) );
     on_ControlSignal_activated( ui->ControlSignal->currentIndex() );
 
+    ui->ControlSignalAmpl0->setText( test::ToString( params.Amplitudes()[0] ) );
+    ui->ControlSignalAmpl1->setText( test::ToString( params.Amplitudes()[1] ) );
+    ui->ControlSignalAmpl2->setText( test::ToString( params.Amplitudes()[2] ) );
+
     if ( params.ReelControl() == test::RC_REEL )
     {
         ui->EndSgnal->setText( test::ToString( params.EndSgnal() ) );
         ui->ControlReelResist->setText( test::ToString( params.ControlReelResist() ) );
     }
 
+    ui->MaxExpenditureA->setText( test::ToString( params.MaxExpenditureA() ) );
+    if ( params.ReelCount() == 2)
+        ui->MaxExpenditureB->setText( test::ToString( params.MaxExpenditureB() ) );
     if ( params.ReelControl() == test::RC_CONTROL_BOX )
     {
-        ui->MaxExpenditureA->setText( test::ToString( params.MaxExpenditureA() ) );
-        if ( params.ReelCount() == 2)
-            ui->MaxExpenditureB->setText( test::ToString( params.MaxExpenditureB() ) );
+        ui->Voltage->setCurrentIndex( ui->Voltage->findText( test::ToString( params.Voltage() ) ) );
 
         ui->SignalStateA->setText( test::ToString( params.SignalStateA() ) );
         if ( params.ReelCount() == 2)
             ui->SignalStateB->setText( test::ToString( params.SignalStateB() ) );
         ui->SignalState0->setText( test::ToString( params.SignalState0() ) );
     }
+
+    bool channel_a = params.TestChannelA();
+    if ( channel_a )
+    {
+        ui->TestChA->setChecked( Qt::Checked );
+        ui->ControlReelChA->setCurrentIndex(ui->ControlReelChA->findText( test::ToString( params.SignalOnChannelA() ) ) );
+    }
+    bool channel_b = params.TestChannelB();
+    if ( channel_b )
+    {
+        ui->TestChB->setChecked( Qt::Checked );
+        ui->ControlReelChB->setCurrentIndex(ui->ControlReelChB->findText( test::ToString( params.SignalOnChannelB() ) ) );
+    }
 }
 
 void ServoTitleInfo::on_buttonBox_accepted()
 {
+    auto CheckPower = []() -> bool
+    {
+        return true;
+        test::servo::Parameters& params = test::servo::Parameters::Instance();
+
+        const int pomp_max_power = 55;
+        const int pomp_count = 2;
+
+        double max_expenditure = std::max( std::max( params.DefaultExpenditure(), params.MaxExpenditure() ),
+                                           (double)std::max( params.MaxExpenditureA(), params.MaxExpenditureB()) );
+        double max_pressure = std::max( params.PressureNominal(), params.PressureTesting() );
+
+
+        bool res = max_expenditure*max_pressure/54 <= pomp_count * pomp_max_power;
+        if (!res)
+        {
+            QMessageBox msg;
+            msg.setWindowTitle( "Превышена допустимая мощьность насосов" );
+            msg.setText( "Необходимо скорректировать параметры расходов и давлений" );
+            msg.setStandardButtons( QMessageBox::Ok );
+            msg.setModal( true );
+            msg.exec();
+        }
+        return res;
+    };
     if ( SaveInputParams() )
     {
+        if (!CheckPower())
+            return;
         hide();
         if ( mChildWindow.get() )
             QObject::disconnect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
@@ -286,8 +340,6 @@ void ServoTitleInfo::on_ControlSignal_activated(int index)
             ui->EndSgnal->setEnabled(false);
             break;
     }
-#warning неясна сутьба поля с амплитудами
-
 }
 
 void ServoTitleInfo::on_ControlType_activated(int index)
@@ -299,14 +351,12 @@ void ServoTitleInfo::on_ControlType_activated(int index)
     ui->SignalStateA->setVisible( control == test::RC_CONTROL_BOX );
     ui->SignalStateB->setVisible( control == test::RC_CONTROL_BOX );
     ui->SignalState0->setVisible( control == test::RC_CONTROL_BOX );
-    ui->MaxExpenditureA->setVisible( control == test::RC_CONTROL_BOX );
-    ui->MaxExpenditureB->setVisible( control == test::RC_CONTROL_BOX );
+    ui->Voltage->setVisible( control == test::RC_CONTROL_BOX );
 
     ui->l_signal_state_a->setVisible( control == test::RC_CONTROL_BOX );
     ui->l_signal_state_b->setVisible( control == test::RC_CONTROL_BOX );
     ui->l_signal_state_0->setVisible( control == test::RC_CONTROL_BOX );
-    ui->l_max_expenditure_a->setVisible( control == test::RC_CONTROL_BOX );
-    ui->l_max_expenditure_b->setVisible( control == test::RC_CONTROL_BOX );
+    ui->l_voltage->setVisible( control == test::RC_CONTROL_BOX );
 
     ui->EndSgnal->setVisible( control == test::RC_REEL );
     ui->l_end_signal->setVisible( control == test::RC_REEL );
@@ -332,4 +382,146 @@ void ServoTitleInfo::on_ControlType_activated(int index)
     }
     ui->ControlSignal->setCurrentIndex( -1 );
     on_ControlSignal_activated( ui->ControlSignal->currentIndex() );
+}
+
+void ServoTitleInfo::on_ReelCount_valueChanged( int arg1 )
+{
+    // когда меняется количество катушек происходит обновление комбобоксов назначения катушек на каналы испытания
+    ui->ControlReelChA->clear();
+    ui->ControlReelChA->addItem( test::ToString( test::CS_REEL_A ) );
+    ui->ControlReelChB->clear();
+    ui->ControlReelChB->addItem( test::ToString( test::CS_REEL_A ) );
+    if ( arg1 == 2 )
+    {
+        ui->ControlReelChA->addItem( test::ToString( test::CS_REEL_B ) );
+        ui->ControlReelChB->addItem( test::ToString( test::CS_REEL_B ) );
+    }
+    if ( arg1 == 1 )
+    {
+        ui->TestChA->setChecked( Qt::Unchecked );
+        ui->TestChB->setChecked( Qt::Unchecked );
+    }
+
+}
+
+void ServoTitleInfo::on_TestChA_clicked()
+{
+    if ( ui->TestChA->checkState() == Qt::Checked )
+    {
+        if ( ui->TestChB->checkState() == Qt::Checked )
+        {
+            //если канал Б кликнут, смотрим что выставленно там и выставляем другой если возможно
+            test::CONTROL_SIGNAL sig = test::CS_UNKNOWN;
+            test::CONTROL_SIGNAL sig_toSet = test::CS_UNKNOWN;
+            test::ParseValue( sig, ui->ControlReelChB->currentText() );
+            if ( sig == test::CS_REEL_A )
+                sig_toSet = test::CS_REEL_B;
+            if ( sig == test::CS_REEL_B )
+                sig_toSet = test::CS_REEL_A;
+            int index_to_set = ui->ControlReelChA->findText( test::ToString( sig_toSet ) );
+            if ( index_to_set == -1 )
+            {
+                //если не возможно то сбрасываем checked
+                ui->TestChA->setChecked( Qt::Unchecked );
+                return;
+            }
+            ui->ControlReelChA->setCurrentIndex( index_to_set );
+        }
+        else
+        {
+            //если канал Б не кликнут то выставляем канал А по умолчанию
+            ui->ControlReelChA->setCurrentIndex( ui->ControlReelChA->findText( test::ToString( test::CS_REEL_A ) ) );
+        }
+    }
+}
+
+void ServoTitleInfo::on_TestChB_clicked()
+{
+    if ( ui->TestChB->checkState() == Qt::Checked )
+    {
+        if ( ui->TestChA->checkState() == Qt::Checked )
+        {
+            //если канал Б кликнут, смотрим что выставленно там и выставляем другой если возможно
+            test::CONTROL_SIGNAL sig = test::CS_UNKNOWN;
+            test::CONTROL_SIGNAL sig_toSet = test::CS_UNKNOWN;
+            test::ParseValue( sig, ui->ControlReelChA->currentText() );
+            if ( sig == test::CS_REEL_A )
+                sig_toSet = test::CS_REEL_B;
+            if ( sig == test::CS_REEL_B )
+                sig_toSet = test::CS_REEL_A;
+            int index_to_set = ui->ControlReelChB->findText( test::ToString( sig_toSet ) );
+            if ( index_to_set == -1 )
+            {
+                //если не возможно то сбрасываем checked
+                ui->TestChB->setChecked( Qt::Unchecked );
+                return;
+            }
+            ui->ControlReelChB->setCurrentIndex( index_to_set );
+        }
+        else
+        {
+            //если канал Б не кликнут то выставляем канал А по умолчанию
+            int index_to_set = ui->ControlReelChA->findText( test::ToString( test::CS_REEL_B ) );
+            if ( index_to_set == -1 )
+            {
+                //если не возможно то выставляем Канал А
+                index_to_set = ui->ControlReelChA->findText( test::ToString( test::CS_REEL_A ) );
+            }
+            ui->ControlReelChB->setCurrentIndex( index_to_set );
+        }
+    }
+}
+
+void ServoTitleInfo::on_ControlReelChA_activated(const QString &arg1)
+{
+    if ( ui->TestChA->checkState() == Qt::Checked )
+    {
+        if ( ui->TestChB->checkState() == Qt::Checked )
+        {
+            //если канал Б кликнут, смотрим что выставленно там и выставляем другой если возможно
+            test::CONTROL_SIGNAL sig = test::CS_UNKNOWN;
+            test::CONTROL_SIGNAL sig_toSet = test::CS_UNKNOWN;
+            test::ParseValue( sig, arg1 );
+            if ( sig == test::CS_REEL_A )
+                sig_toSet = test::CS_REEL_B;
+            if ( sig == test::CS_REEL_B )
+                sig_toSet = test::CS_REEL_A;
+            int index_to_set = ui->ControlReelChB->findText( test::ToString( sig_toSet ) );
+            if ( index_to_set == -1 )
+            {
+                //если не возможно то сбрасываем checked
+                ui->TestChB->setChecked( Qt::Unchecked );
+                return;
+            }
+            ui->ControlReelChB->setCurrentIndex( index_to_set );
+        }
+        //если канал Б не кликнут то ничего не делаем
+    }
+}
+
+void ServoTitleInfo::on_ControlReelChB_activated(const QString &arg1)
+{
+    if ( ui->TestChB->checkState() == Qt::Checked )
+    {
+        if ( ui->TestChA->checkState() == Qt::Checked )
+        {
+            //если канал Б кликнут, смотрим что выставленно там и выставляем другой если возможно
+            test::CONTROL_SIGNAL sig = test::CS_UNKNOWN;
+            test::CONTROL_SIGNAL sig_toSet = test::CS_UNKNOWN;
+            test::ParseValue( sig, arg1 );
+            if ( sig == test::CS_REEL_A )
+                sig_toSet = test::CS_REEL_B;
+            if ( sig == test::CS_REEL_B )
+                sig_toSet = test::CS_REEL_A;
+            int index_to_set = ui->ControlReelChA->findText( test::ToString( sig_toSet ) );
+            if ( index_to_set == -1 )
+            {
+                //если не возможно то сбрасываем checked
+                ui->TestChA->setChecked( Qt::Unchecked );
+                return;
+            }
+            ui->ControlReelChA->setCurrentIndex( index_to_set );
+        }
+        //если канал A не кликнут то ничего не делаем
+    }
 }

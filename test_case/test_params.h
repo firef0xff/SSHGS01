@@ -33,8 +33,8 @@ enum VOLTAGE_TYPE
 enum DYNAMIC
 {
     DN_UNKNOWN = -1,
-    DN_UP = 0,
-    DN_DOWN = 1
+    DN_DOWN = 0,
+    DN_UP = 1
 };
 enum RELL_CONTROL
 {
@@ -112,10 +112,15 @@ public:
     void User( QString const& user );
     QString const& User();
 
+    bool DefaultExpenditure( QString const& value );
+    double const& DefaultExpenditure() const;
+
 protected:
     TestsList mTestCase;        //набор тестов для выполнения
     QDateTime mDate;            //дата проведения испытаний
     QString   mUser;            //испытатель.
+
+    double mDefaultExpenditure; //расход по умолчанию
 };
 
 class CommonParameters :public Parameters
@@ -136,19 +141,19 @@ public:
 
     bool SerNo ( QString const& val );
     QString const& SerNo () const;
-
+//находится в DB30
     bool ReelCount ( QString const& val );
     qint32 const& ReelCount () const;
-
+//находится в DB30
     bool MaxExpenditure ( QString const& val );
     const double &MaxExpenditure() const;
-
+//находится в DB30
     bool ControlType ( QString const& val );
     CONTROL_TYPE const& ControlType () const;
-
+//находится в DB30
     bool MinControlPressure ( QString const& val );
     const double &MinControlPressure() const;
-
+//находится в DB30
     bool MaxControlPressure ( QString const& val );
     const double &MaxControlPressure() const;
 

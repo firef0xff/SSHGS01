@@ -19,6 +19,8 @@ bool OutsideHermTest::Run()
 {
     Start();
     Wait( mResults.op2_ok, mResults.op2_end );
+    if ( IsStopped() )
+        return false;
 
     OilTemp = mResults.T_oil;
 
@@ -184,6 +186,8 @@ bool InsideHermTest::Run()
 {
     Start();
     Wait( mResults.op3_ok, mResults.op3_end );
+    if ( IsStopped() )
+        return false;
 
     Result = mResults.op3_consumption_2 && !mResults.op3_consumption_3;
     Leak = mResults.op3_consumption_1;

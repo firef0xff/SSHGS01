@@ -19,6 +19,8 @@ bool PressureDurationFromExpenditure::Run()
 {
     Start();
     Wait( mResults.op4_ok, mResults.op4_end );
+    if ( IsStopped() )
+        return false;
 
     mData.clear();
     Data a1;

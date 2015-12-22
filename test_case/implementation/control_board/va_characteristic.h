@@ -12,23 +12,26 @@ class VACharacteristic :public test::control_board::Test
 public:
     VACharacteristic();
     bool Run();
-
+    bool Success() const;
     QJsonObject Serialise() const;
     bool Deserialize( QJsonObject const& obj );
 
     bool Draw(QPainter &painter, QRect &free_rect ) const;
+protected:
+    void UpdateData();
 private:
+
     struct Data
     {
         Data():
-            x(0),
-            y(0)
+            signal(0),
+            current(0)
         {}
 
         QJsonObject Serialise() const;
         bool Deserialize( QJsonObject const& obj );
-        double x;
-        double y;
+        double signal;
+        double current;
     };
 
     QVector<Data> Graph;

@@ -1,6 +1,7 @@
 #pragma once
 #include "../test_base.h"
 #include <QVector>
+#include <condition_variable>
 
 namespace test
 {
@@ -19,9 +20,12 @@ public:
 
     bool Draw(QPainter &painter, QRect &free_rect ) const;
 
+    bool Success() const;
+
 private:
     void Question();
     bool LeakFounded; //наружная течь (не)замечена -- диалоговое окно
+    std::condition_variable mCondVar;
 };
 
 class InsideHermTest :public test::servo::Test
@@ -29,12 +33,14 @@ class InsideHermTest :public test::servo::Test
 public:
     InsideHermTest();
     bool Run();
-
+    bool Success() const;
     QJsonObject Serialise() const;
     bool Deserialize( QJsonObject const& obj );
 
     bool Draw(QPainter &painter, QRect &free_rect ) const;
 
+protected:
+    void UpdateData();
 private:
     struct Data
     {
@@ -50,7 +56,8 @@ private:
     };
     // графиг опорного сигнала и расхода в канале утечки ( Т )
 
-    QVector<Data> Graph;
+    QVector<Data> GraphA;
+    QVector<Data> GraphB;
 };
 
 }//namespace servo

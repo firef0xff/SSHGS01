@@ -2,8 +2,10 @@ DB2.ref_a;DB2,REAL0,100;RW;TST=;CMT=опорный сигнал катушки а
 DB2.consumption_a;DB2,REAL400,100;RW;TST=;CMT=расход катушки а
 DB2.ref_b;DB2,REAL800,100;RW;TST=;CMT=опорный сигнал катушки b
 DB2.consumption_b;DB2,REAL1200,100;RW;TST=;CMT=расход катушки b
-
-
+DB12.ref_a;DB12,REAL0,100;RW;TST=;CMT=опорный сигнал А
+DB12.consumption_a;DB12,REAL400,100;RW;TST=;CMT=расход А
+DB12.ref_b;DB12,REAL800,100;RW;TST=;CMT=опорный сигнал В
+DB12.consumption_b;DB12,REAL1200,100;RW;TST=;CMT=расход В
 DB3.open_ref;DB3,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
 DB3.open_consumption;DB3,REAL400,100;RW;TST=;CMT=расход на открытие
 DB3.open_bp3;DB3,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
@@ -14,89 +16,6 @@ DB3.close_consumption;DB3,REAL2400,100;RW;TST=;CMT=расход на закрытие
 DB3.close_bp3;DB3,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
 DB3.close_bp4;DB3,REAL3200,100;RW;TST=;CMT=давление ВР4 на закрытие
 DB3.close_bp5;DB3,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
-
-
-DB4.open_ref;DB4,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
-DB4.open_consumption;DB4,REAL400,100;RW;TST=;CMT=расход на открытие
-DB4.open_bp3;DB4,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
-DB4.open_bp4;DB4,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
-DB4.open_bp5;DB4,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
-DB4.close_ref;DB4,REAL2000,100;RW;TST=;CMT=опорный сигнал назакрытие
-DB4.close_consumption;DB4,REAL2400,100;RW;TST=;CMT=расход на закрытие
-DB4.close_bp3;DB4,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
-DB4.close_bp4;DB4,REAL3200,100;RW;TST=;CMT=давление ВР4 на закрытие
-DB4.close_bp5;DB4,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
-
-
-DB5.open_ref;DB5,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
-DB5.open_consumption;DB5,REAL400,100;RW;TST=;CMT=расход на открытие
-DB5.open_bp3;DB5,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
-DB5.open_bp4;DB5,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
-DB5.open_bp5;DB5,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
-DB5.close_ref;DB5,REAL2000,100;RW;TST=;CMT=опорный сигнал назакрытие
-DB5.close_consumption;DB5,REAL2400,100;RW;TST=;CMT=расход на закрытие
-DB5.close_bp3;DB5,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
-DB5.close_bp4;DB5,REAL3200,100;RW;TST=;CMT=давление ВР4 на закрытие
-DB5.close_bp5;DB5,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
-
-
-DB6.open_ref;DB6,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
-DB6.open_consumption;DB6,REAL400,100;RW;TST=;CMT=расход на открытие
-DB6.open_bp3;DB6,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
-DB6.open_bp4;DB6,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
-DB6.open_bp5;DB6,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
-DB6.close_ref;DB6,REAL2000,100;RW;TST=;CMT=опорный сигнал назакрытие
-DB6.close_consumption;DB6,REAL2400,100;RW;TST=;CMT=расход на закрытие
-DB6.close_bp3;DB6,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
-DB6.close_bp4;DB6,REAL3200,100;RW;TST=;CMT=давление ВР4 на закрытие
-DB6.close_bp5;DB6,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
-
-
-DB7.open_ref;DB7,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
-DB7.open_consumption;DB7,REAL400,100;RW;TST=;CMT=расход на открытие
-DB7.open_bp3;DB7,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
-DB7.open_bp4;DB7,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
-DB7.open_bp5;DB7,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
-DB7.close_ref;DB7,REAL2000,100;RW;TST=;CMT=опорный сигнал назакрытие
-DB7.close_consumption;DB7,REAL2400,100;RW;TST=;CMT=расход на закрытие
-DB7.close_bp3;DB7,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
-DB7.close_bp4;DB7,REAL3200,100;RW;TST=;CMT=давление ВР4 на закрытие
-DB7.close_bp5;DB7,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
-
-
-DB8.open_ref;DB8,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
-DB8.open_consumption;DB8,REAL400,100;RW;TST=;CMT=расход на открытие
-DB8.open_bp3;DB8,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
-DB8.open_bp4;DB8,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
-DB8.open_bp5;DB8,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
-DB8.close_ref;DB8,REAL2000,100;RW;TST=;CMT=опорный сигнал назакрытие
-DB8.close_consumption;DB8,REAL2400,100;RW;TST=;CMT=расход на закрытие
-DB8.close_bp3;DB8,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
-DB8.close_bp4;DB8,REAL3200,100;RW;TST=;CMT=давление ВР4 на закрытие
-DB8.close_bp5;DB8,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
-
-
-DB9.consumption_a;DB9,REAL0,50;RW;TST=;CMT=расход канал А
-DB9.bp3_a;DB9,REAL200,50;RW;TST=;CMT=давление ВР3 канал А
-DB9.bp5_a;DB9,REAL400,50;RW;TST=;CMT=давление ВР5 канал В
-DB9.consumption_b;DB9,REAL600,50;RW;TST=;CMT=расход канал В
-DB9.bp4_b;DB9,REAL800,50;RW;TST=;CMT=давление ВР4 канал В
-DB9.bp5_b;DB9,REAL1000,50;RW;TST=;CMT=давление ВР5 канал В
-
-
-DB10.ref;DB10,REAL0,20;RW;TST=;CMT=опорный сигнал
-DB10.coordinate;DB10,REAL80,20;RW;TST=;CMT=положение цилиндра
-
-
-DB11.coordinate;DB11,REAL0,10000;RW;TST=;CMT=положение цилиндра
-
-
-DB12.ref_a;DB12,REAL0,100;RW;TST=;CMT=опорный сигнал А
-DB12.consumption_a;DB12,REAL400,100;RW;TST=;CMT=расход А
-DB12.ref_b;DB12,REAL800,100;RW;TST=;CMT=опорный сигнал В
-DB12.consumption_b;DB12,REAL1200,100;RW;TST=;CMT=расход В
-
-
 DB13.open_ref;DB13,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
 DB13.open_consumption;DB13,REAL400,100;RW;TST=;CMT=расход на открытие
 DB13.open_bp3;DB13,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
@@ -107,93 +26,26 @@ DB13.close_consumption;DB13,REAL2400,100;RW;TST=;CMT=расход на закрытие
 DB13.close_bp3;DB13,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
 DB13.close_bp4;DB13,REAL3200,100;RW;TST=;CMT=давление ВР4 на закрытие
 DB13.close_bp5;DB13,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
-
-
-DB14.open_ref;DB14,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
-DB14.open_consumption;DB14,REAL400,100;RW;TST=;CMT=расход на открытие
-DB14.open_bp3;DB14,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
-DB14.open_bp4;DB14,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
-DB14.open_bp5;DB14,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
-DB14.close_ref;DB14,REAL2000,100;RW;TST=;CMT=опорный сигнал на закрытие
-DB14.close_consumption;DB14,REAL2400,100;RW;TST=;CMT=расход на закрытие
-DB14.close_bp3;DB14,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
-DB14.close_bp4;DB14,REAL3200,100;RW;TST=;CMT=давление ВР4 на закрытие
-DB14.close_bp5;DB14,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
-
-
-DB15.open_ref;DB15,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
-DB15.open_consumption;DB15,REAL400,100;RW;TST=;CMT=расход на открытие
-DB15.open_bp3;DB15,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
-DB15.open_bp4;DB15,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
-DB15.open_bp5;DB15,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
-DB15.close_ref;DB15,REAL2000,100;RW;TST=;CMT=опорный сигнал на закрытие
-DB15.close_consumption;DB15,REAL2400,100;RW;TST=;CMT=расход на закрытие
-DB15.close_bp3;DB15,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
-DB15.close_bp4;DB15,REAL3200,100;RW;TST=;CMT=давление ВР4 на закрытие
-DB15.close_bp5;DB15,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
-
-
-DB16.open_ref;DB16,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
-DB16.open_consumption;DB16,REAL400,100;RW;TST=;CMT=расход на открытие
-DB16.open_bp3;DB16,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
-DB16.open_bp4;DB16,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
-DB16.open_bp5;DB16,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
-DB16.close_ref;DB16,REAL2000,100;RW;TST=;CMT=опорный сигнал на закрытие
-DB16.close_consumption;DB16,REAL2400,100;RW;TST=;CMT=расход на закрытие
-DB16.close_bp3;DB16,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
-DB16.close_bp4;DB16,REAL3200,100;RW;TST=;CMT=давление ВР4 на закрытие
-DB16.close_bp5;DB16,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
-
-
-DB17.open_ref;DB17,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
-DB17.open_consumption;DB17,REAL400,100;RW;TST=;CMT=расход на открытие
-DB17.open_bp3;DB17,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
-DB17.open_bp4;DB17,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
-DB17.open_bp5;DB17,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
-DB17.close_ref;DB17,REAL2000,100;RW;TST=;CMT=опорный сигнал на закрытие
-DB17.close_consumption;DB17,REAL2400,100;RW;TST=;CMT=расход на закрытие
-DB17.close_bp3;DB17,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
-DB17.close_bp4;DB17,REAL3200,100;RW;TST=;CMT=давление ВР4 на закрытие
-DB17.close_bp5;DB17,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
-
-
-DB18.open_ref;DB18,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
-DB18.open_consumption;DB18,REAL400,100;RW;TST=;CMT=расход на открытие
-DB18.open_bp3;DB18,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
-DB18.open_bp4;DB18,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
-DB18.open_bp5;DB18,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
-DB18.close_ref;DB18,REAL2000,100;RW;TST=;CMT=опорный сигнал на закрытие
-DB18.close_consumption;DB18,REAL2400,100;RW;TST=;CMT=расход на закрытие
-DB18.close_bp3;DB18,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
-DB18.close_bp4;DB18,REAL3200,100;RW;TST=;CMT=давление ВР4 на закрытие
-DB18.close_bp5;DB18,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
-
-
+DB9.consumption_a;DB9,REAL0,50;RW;TST=;CMT=расход канал А
+DB9.bp3_a;DB9,REAL200,50;RW;TST=;CMT=давление ВР3 канал А
+DB9.bp5_a;DB9,REAL400,50;RW;TST=;CMT=давление ВР5 канал В
+DB9.consumption_b;DB9,REAL600,50;RW;TST=;CMT=расход канал В
+DB9.bp4_b;DB9,REAL800,50;RW;TST=;CMT=давление ВР4 канал В
+DB9.bp5_b;DB9,REAL1000,50;RW;TST=;CMT=давление ВР5 канал В
 DB19.consumption_a;DB19,REAL0,50;RW;TST=;CMT=расход канал А
 DB19.bp3_a;DB19,REAL200,50;RW;TST=;CMT=давление ВР3 канал А
 DB19.bp5_a;DB19,REAL400,50;RW;TST=;CMT=давление ВР5 канал В
 DB19.consumption_b;DB19,REAL600,50;RW;TST=;CMT=расход канал В
 DB19.bp4_b;DB19,REAL800,50;RW;TST=;CMT=давление ВР4 канал В
 DB19.bp5_b;DB19,REAL1000,50;RW;TST=;CMT=давление ВР5 канал В
-
-
-DB20.ref;DB20,REAL0,20;RW;TST=;CMT=опорный сигнал
-DB20.coordinate;DB20,REAL80,20;RW;TST=;CMT=положение цилиндра
-
-
+DB10.signal;DB10,REAL0,15000;RW;TST=;CMT=опорный сигнал на плату
+DB23.coord;DB23,REAL0,15000;RW;TST=;CMT=расположение цилиндра
+DB20.signal;DB20,REAL0,15000;RW;TST=;CMT=опорный сигнал на плату
+DB24.coord;DB24,REAL0,15000;RW;TST=;CMT=расположение цилиндра
+DB11.coordinate;DB11,REAL0,10000;RW;TST=;CMT=положение цилиндра
 DB21.coordinate;DB21,REAL0,10000;RW;TST=;CMT=положение цилиндра
-
-
-DB22.ref;DB22,REAL0,100;RW;TST=;CMT=опорный сигнал
-DB22.output_current;DB22,REAL400,100;RW;TST=;CMT=выходной ток
-
-
-DB23.coordinate;DB23,REAL0,10000;RW;TST=;CMT=положение цилиндра
-
-
-DB24.coordinate;DB24,REAL0,10000;RW;TST=;CMT=положение цилиндра
-
-
+DB22.signal;DB22,REAL0,100;RW;TST=;CMT=опорный сигнал
+DB22.current;DB22,REAL400,100;RW;TST=;CMT=выходной ток
 DB30.Current;DB30,X2.0;RW;TST=;CMT=
 DB30.Coil;DB30,X2.1;RW;TST=;CMT=
 DB30.TypeControl;DB30,X2.2;RW;TST=;CMT=
@@ -213,7 +65,6 @@ DB30.DD1_close_b;DB30,X65.4;RW;TST=;CMT=
 DB30.DD2_close_b;DB30,X65.5;RW;TST=;CMT=
 DB30.DD3_close_b;DB30,X65.6;RW;TST=;CMT=
 DB30.TypeD_close_b;DB30,X65.7;RW;TST=;CMT=
-
 DB30.Voltage;DB30,REAL4;RW;TST=;CMT=
 DB30.Delta_U;DB30,REAL8;RW;TST=;CMT=
 DB30.Q_max;DB30,REAL12;RW;TST=;CMT=
@@ -229,16 +80,13 @@ DB30.Time_OFF;DB30,REAL48;RW;TST=;CMT=
 DB30.Min_P;DB30,REAL52;RW;TST=;CMT=
 DB30.Max_P;DB30,REAL56;RW;TST=;CMT=
 DB30.Time_P;DB30,REAL60;RW;TST=;CMT=
-
-
 DB31.Start_Oper;DB31,X2.0;RW;TST=;CMT=
 DB31.Stop_Oper;DB31,X2.1;RW;TST=;CMT=
 DB31.Nasos_M2;DB31,X2.2;RW;TST=;CMT=
 DB31.N_Operation;DB31,REAL4;RW;TST=;CMT=
-
+DB31.Q_5_5ma;DB31,REAL8;RW;TST=;CMT=расход по умолчанию
 DB32.p_e_ok;DB32,X2.4;RW;TST=;CMT=давление в системе установлено (электро)
 DB32.p_eg_ok;DB32,X2.5;RW;TST=;CMT=давление в системе установлено (электрогидрав)
-
 DB32.op1_min_ok_a;DB32,X2.0;RW;TST=;CMT=переключение при мин давлении А
 DB32.op1_min_no_a;DB32,X2.1;RW;TST=;CMT=нет переключения при мин давлени А
 DB32.op1_min_ok_b;DB32,X2.2;RW;TST=;CMT=переключение при мин давлении В
@@ -249,67 +97,56 @@ DB32.op1_max_ok_a;DB32,X2.7;RW;TST=;CMT=переключение при макс давлении А
 DB32.op1_max_o_a;DB32,X3.0;RW;TST=;CMT=нет переключения при макс давлени А
 DB32.op1_max_ok_b;DB32,X3.1;RW;TST=;CMT=переключение при макс давлении В
 DB32.op1_max_no_b;DB32,X3.2;RW;TST=;CMT=нет переключения при макс давлени В
-
 DB32.op2_ok_no;DB32,X36.1;RW;TST=;CMT=течь есть/нет
-
 DB32.op3_consumption_2;DB32,X42.0;RW;TST=;CMT=расход в норме
 DB32.op3_consumption_3;DB32,X42.1;RW;TST=;CMT=расход выше нормы
-
 DB32.op5_ok_a;DB32,X140.0;RW;TST=;CMT=пропускная способность соотвествует А
 DB32.op5_no_a;DB32,X140.1;RW;TST=;CMT=пропускная способность не соотвествует А
 DB32.op5_ok_b;DB32,X140.2;RW;TST=;CMT=пропускная способность соотвествует В
 DB32.op5_no_b;DB32,X140.3;RW;TST=;CMT=пропускная способность не соотвествует В
-
-DB32.op6_min_min_ok_a;DB32,X140.4;RW;TST=;CMT="а" перекл. при мин. давл. (мин упр.)
-DB32.op6_min_min_no_a;DB32,X140.5;RW;TST=;CMT="а" не перекл. при мин. давл. (мин упр.)
-DB32.op6_min_max_ok_a;DB32,X140.6;RW;TST=;CMT="а" перекл. при мин. давл. (макс упр.)
-DB32.op6_min_max_no_a;DB32,X140.7;RW;TST=;CMT="а" перекл. при мин. давл. (макс упр.)
-DB32.op6_max_min_ok_a;DB32,X141.0;RW;TST=;CMT="а" перекл. при макс. давл. (мин упр.)
-DB32.op6_mex_min_no_a;DB32,X141.1;RW;TST=;CMT="а" перекл. при макс. давл. (мин упр.)
-DB32.op6_max_max_ok_a;DB32,X141.2;RW;TST=;CMT="а" перекл. при макс. давл. (макс упр.)
-DB32.op6_max_max_no_a;DB32,X141.3;RW;TST=;CMT="а" перекл. при макс. давл. (макс упр.)
-
-DB32.op6_min_min_ok_b;DB32,X141.4;RW;TST=;CMT="б" перекл. при мин. давл. (мин упр.)
-DB32.op6_min_min_no_b;DB32,X141.5;RW;TST=;CMT="б" не перекл. при мин. давл. (мин упр.)
-DB32.op6_min_max_ok_b;DB32,X141.6;RW;TST=;CMT="б" перекл. при мин. давл. (макс упр.)
-DB32.op6_min_max_no_b;DB32,X141.7;RW;TST=;CMT="б" перекл. при мин. давл. (макс упр.)
-DB32.op6_max_min_ok_b;DB32,X142.0;RW;TST=;CMT="б" перекл. при макс. давл. (мин упр.)
-DB32.op6_max_min_no_b;DB32,X142.1;RW;TST=;CMT="б" перекл. при макс. давл. (мин упр.)
-DB32.op6_max_max_ok_b;DB32,X142.2;RW;TST=;CMT="б" перекл. при макс. давл. (макс упр.)
-DB32.op6_max_max_no_b;DB32,X142.3;RW;TST=;CMT="б" перекл. при макс. давл. (макс упр.)
-
-DB32.op7_min_ok_a;DB32,X142.4;RW;TST=;CMT="а" перекл. при мин. давлении (Vmin)
-DB32.op7_min_no_a;DB32,X142.5;RW;TST=;CMT="а" не перекл. при мин. давлении (Vmin)
-DB32.op7_min_ok_b;DB32,X142.6;RW;TST=;CMT="б" перекл. при мин. давлении (Vmin)
-DB32.op7_min_no_b;DB32,X142.7;RW;TST=;CMT="б" не перекл. при мин. давлении (Vmin)
-DB32.op7_max_ok_a;DB32,X143.0;RW;TST=;CMT="а" перекл. при макс. давлении (Vmin)
-DB32.op7_max_no_a;DB32,X143.1;RW;TST=;CMT="а" не перекл. при макс. давлении (Vmin)
-DB32.op7_max_ok_b;DB32,X143.2;RW;TST=;CMT="б" перекл. при макс. давлении (Vmin)
-DB32.op7_max_no_b;DB32,X143.3;RW;TST=;CMT="б" не перекл. при макс. давлении (Vmin)
-
-DB32.unk_1;DB32,X143.4;RW;TST=;CMT=???;
-DB32.unk_2;DB32,X143.5;RW;TST=;CMT=???;
-DB32.unk_3;DB32,X143.6;RW;TST=;CMT=???;
-DB32.unk_4;DB32,X143.7;RW;TST=;CMT=???;
-
-DB32.op8_open_ok_a;DB32,X160.0;RW;TST=;CMT="а" время включения соответствует
-DB32.op8_open_no_a;DB32,X160.1;RW;TST=;CMT="а" время включения не соответствует
-DB32.op8_close_ok_a;DB32,X160.2;RW;TST=;CMT="а" время отключения соответствует
-DB32.op8_close_no_a;DB32,X160.3;RW;TST=;CMT="а" время отключения не соответствует
-DB32.op8_open_ok_b;DB32,X160.4;RW;TST=;CMT="б" время включения соответствует
-DB32.op8_open_no_b;DB32,X160.5;RW;TST=;CMT="б" время включения не соответствует
-DB32.op8_close_ok_b;DB32,X160.6;RW;TST=;CMT="б" время отключения соответствует
-DB32.op8_close_no_b;DB32,X160.7;RW;TST=;CMT="б" время отключения не соответствует
-
-DB32.op8_fault_on_a;DB32,X161.0;RW;TST=;CMT=катушка "а" не включилась
-DB32.op8_fault_off_a;DB32,X161.1;RW;TST=;CMT=катушка "а" не отключилась
-DB32.op8_fault_on_b;DB32,X161.2;RW;TST=;CMT=катушка "б" не включилась
-DB32.op8_fault_off_b;DB32,X161.3;RW;TST=;CMT=катушка "б" не отключилась
-
-DB32.unk_5;DB32,X161.4;RW;TST=;CMT=???;
-DB32.unk_6;DB32,X161.5;RW;TST=;CMT=???;
-DB32.unk_7;DB32,X161.6;RW;TST=;CMT=???;
-
+DB32.op6_min_min_ok_a;DB32,X140.4;RW;TST=;"CMT=""а"" перекл. при мин. давл. (мин упр.)"
+DB32.op6_min_min_no_a;DB32,X140.5;RW;TST=;"CMT=""а"" не перекл. при мин. давл. (мин упр.)"
+DB32.op6_min_max_ok_a;DB32,X140.6;RW;TST=;"CMT=""а"" перекл. при мин. давл. (макс упр.)"
+DB32.op6_min_max_no_a;DB32,X140.7;RW;TST=;"CMT=""а"" перекл. при мин. давл. (макс упр.)"
+DB32.op6_max_min_ok_a;DB32,X141.0;RW;TST=;"CMT=""а"" перекл. при макс. давл. (мин упр.)"
+DB32.op6_mex_min_no_a;DB32,X141.1;RW;TST=;"CMT=""а"" перекл. при макс. давл. (мин упр.)"
+DB32.op6_max_max_ok_a;DB32,X141.2;RW;TST=;"CMT=""а"" перекл. при макс. давл. (макс упр.)"
+DB32.op6_max_max_no_a;DB32,X141.3;RW;TST=;"CMT=""а"" перекл. при макс. давл. (макс упр.)"
+DB32.op6_min_min_ok_b;DB32,X141.4;RW;TST=;"CMT=""б"" перекл. при мин. давл. (мин упр.)"
+DB32.op6_min_min_no_b;DB32,X141.5;RW;TST=;"CMT=""б"" не перекл. при мин. давл. (мин упр.)"
+DB32.op6_min_max_ok_b;DB32,X141.6;RW;TST=;"CMT=""б"" перекл. при мин. давл. (макс упр.)"
+DB32.op6_min_max_no_b;DB32,X141.7;RW;TST=;"CMT=""б"" перекл. при мин. давл. (макс упр.)"
+DB32.op6_max_min_ok_b;DB32,X142.0;RW;TST=;"CMT=""б"" перекл. при макс. давл. (мин упр.)"
+DB32.op6_max_min_no_b;DB32,X142.1;RW;TST=;"CMT=""б"" перекл. при макс. давл. (мин упр.)"
+DB32.op6_max_max_ok_b;DB32,X142.2;RW;TST=;"CMT=""б"" перекл. при макс. давл. (макс упр.)"
+DB32.op6_max_max_no_b;DB32,X142.3;RW;TST=;"CMT=""б"" перекл. при макс. давл. (макс упр.)"
+DB32.op7_min_ok_a;DB32,X142.4;RW;TST=;"CMT=""а"" перекл. при мин. давлении (Vmin)"
+DB32.op7_min_no_a;DB32,X142.5;RW;TST=;"CMT=""а"" не перекл. при мин. давлении (Vmin)"
+DB32.op7_min_ok_b;DB32,X142.6;RW;TST=;"CMT=""б"" перекл. при мин. давлении (Vmin)"
+DB32.op7_min_no_b;DB32,X142.7;RW;TST=;"CMT=""б"" не перекл. при мин. давлении (Vmin)"
+DB32.op7_max_ok_a;DB32,X143.0;RW;TST=;"CMT=""а"" перекл. при макс. давлении (Vmin)"
+DB32.op7_max_no_a;DB32,X143.1;RW;TST=;"CMT=""а"" не перекл. при макс. давлении (Vmin)"
+DB32.op7_max_ok_b;DB32,X143.2;RW;TST=;"CMT=""б"" перекл. при макс. давлении (Vmin)"
+DB32.op7_max_no_b;DB32,X143.3;RW;TST=;"CMT=""б"" не перекл. при макс. давлении (Vmin)"
+DB32.unk_1;DB32,X143.4;RW;TST=;CMT=???
+DB32.unk_2;DB32,X143.5;RW;TST=;CMT=???
+DB32.unk_3;DB32,X143.6;RW;TST=;CMT=???
+DB32.unk_4;DB32,X143.7;RW;TST=;CMT=???
+DB32.op8_open_ok_a;DB32,X160.0;RW;TST=;"CMT=""а"" время включения соответствует"
+DB32.op8_open_no_a;DB32,X160.1;RW;TST=;"CMT=""а"" время включения не соответствует"
+DB32.op8_close_ok_a;DB32,X160.2;RW;TST=;"CMT=""а"" время отключения соответствует"
+DB32.op8_close_no_a;DB32,X160.3;RW;TST=;"CMT=""а"" время отключения не соответствует"
+DB32.op8_open_ok_b;DB32,X160.4;RW;TST=;"CMT=""б"" время включения соответствует"
+DB32.op8_open_no_b;DB32,X160.5;RW;TST=;"CMT=""б"" время включения не соответствует"
+DB32.op8_close_ok_b;DB32,X160.6;RW;TST=;"CMT=""б"" время отключения соответствует"
+DB32.op8_close_no_b;DB32,X160.7;RW;TST=;"CMT=""б"" время отключения не соответствует"
+DB32.op8_fault_on_a;DB32,X161.0;RW;TST=;"CMT=катушка ""а"" не включилась"
+DB32.op8_fault_off_a;DB32,X161.1;RW;TST=;"CMT=катушка ""а"" не отключилась"
+DB32.op8_fault_on_b;DB32,X161.2;RW;TST=;"CMT=катушка ""б"" не включилась"
+DB32.op8_fault_off_b;DB32,X161.3;RW;TST=;"CMT=катушка ""б"" не отключилась"
+DB32.unk_5;DB32,X161.4;RW;TST=;CMT=???
+DB32.unk_6;DB32,X161.5;RW;TST=;CMT=???
+DB32.unk_7;DB32,X161.6;RW;TST=;CMT=???
 DB32.op1_ok;DB32,X166.0;RW;TST=;CMT=Выполнение операции 1
 DB32.op2_ok;DB32,X166.1;RW;TST=;CMT=Выполнение операции 2
 DB32.op3_ok;DB32,X166.2;RW;TST=;CMT=Выполнение операции 3
@@ -318,7 +155,6 @@ DB32.op5_ok;DB32,X166.4;RW;TST=;CMT=Выполнение операции 5
 DB32.op6_ok;DB32,X166.5;RW;TST=;CMT=Выполнение операции 6
 DB32.op7_ok;DB32,X166.6;RW;TST=;CMT=Выполнение операции 7
 DB32.op8_ok;DB32,X166.7;RW;TST=;CMT=Выполнение операции 8
-
 DB32.op1_end;DB32,X167.0;RW;TST=;CMT=Конец операции 1
 DB32.op2_end;DB32,X167.1;RW;TST=;CMT=Конец операции 2
 DB32.op3_end;DB32,X167.2;RW;TST=;CMT=Конец операции 3
@@ -327,7 +163,6 @@ DB32.op5_end;DB32,X167.4;RW;TST=;CMT=Конец операции 5
 DB32.op6_end;DB32,X167.5;RW;TST=;CMT=Конец операции 6
 DB32.op7_end;DB32,X167.6;RW;TST=;CMT=Конец операции 7
 DB32.op8_end;DB32,X167.7;RW;TST=;CMT=Конец операции 8
-
 DB32.op1_volt_a;DB32,REAL4;RW;TST=;CMT=измерянное напряжение А
 DB32.op1_current_a;DB32,REAL8;RW;TST=;CMT=измеренный ток А
 DB32.op1_power_a;DB32,REAL12;RW;TST=;CMT=расчетаня мощность А
@@ -336,47 +171,36 @@ DB32.op1_volt_b;DB32,REAL20;RW;TST=;CMT=измерянное напряжение В
 DB32.op1_current_b;DB32,REAL24;RW;TST=;CMT=измеренный ток В
 DB32.op1_power_b;DB32,REAL28;RW;TST=;CMT=расчетаня мощность В
 DB32.op1_resist_b;DB32,REAL32;RW;TST=;CMT=расчетное сопротивление В
-
 DB32.op3_consumption_1;DB32,REAL38;RW;TST=;CMT=средний расход
-
 DB32.op4_q_03_a;DB32,REAL44;RW;TST=;CMT=факт расход 0,3 Qmax A
 DB32.op4_p_p_03_a;DB32,REAL48;RW;TST=;CMT=давление в канале Р 0,3 Qmax A
 DB32.op4_p_a_03_a;DB32,REAL52;RW;TST=;CMT=давление в канале A 0,3 Qmax A
 DB32.op4_bp5_bp3_03_a;DB32,REAL116;RW;TST=;CMT=перепад ВР3/ВР5 0,3 Qmax A
-
 DB32.op4_q_06_a;DB32,REAL56;RW;TST=;CMT=факт расход 0,6 Qmax A
 DB32.op4_p_p_06_a;DB32,REAL60;RW;TST=;CMT=давление в канале Р 0,6 Qmax A
 DB32.op4_p_a_06_a;DB32,REAL64;RW;TST=;CMT=давление в канале А 0,6 Qmax A
 DB32.op4_bp5_bp3_06_a;DB32,REAL120;RW;TST=;CMT=перепад ВР3/ВР5 0,6 Qmax A
-
 DB32.op4_q_max_a;DB32,REAL68;RW;TST=;CMT=факт расход Qmax А
 DB32.op4_p_p_max_a;DB32,REAL72;RW;TST=;CMT=давление в канале Р Qmax A
 DB32.op4_p_a_max_a;DB32,REAL76;RW;TST=;CMT=давление в канале А Qmax A
 DB32.op4_bp5_bp3_max_a;DB32,REAL124;RW;TST=;CMT=перепад ВР3/ВР5 Qmax A
-
 DB32.op4_q_03_b;DB32,REAL80;RW;TST=;CMT=факт расход 0,3 Qmax B
 DB32.op4_p_p_03_b;DB32,REAL84;RW;TST=;CMT=давление в канале Р 0,3 Qmax B
 DB32.op4_p_a_03_b;DB32,REAL88;RW;TST=;CMT=давление в канале A 0,3 Qmax B
 DB32.op4_bp5_bp3_03_b;DB32,REAL128;RW;TST=;CMT=перепад ВР3/ВР5 0,3 Qmax В
-
 DB32.op4_q_06_b;DB32,REAL92;RW;TST=;CMT=факт расход 0,6 Qmax B
 DB32.op4_p_p_06_b;DB32,REAL96;RW;TST=;CMT=давление в канале Р 0,6 Qmax B
 DB32.op4_p_a_06_b;DB32,REAL100;RW;TST=;CMT=давление в канале А 0,6 Qmax B
 DB32.op4_bp5_bp3_06_b;DB32,REAL132;RW;TST=;CMT=перепад ВР3/ВР5 0,6 Qmax В
-
 DB32.op4_q_max_b;DB32,REAL104;RW;TST=;CMT=факт расход Qmax B
 DB32.op4_p_p_max_b;DB32,REAL108;RW;TST=;CMT=давление в канале Р Qmax B
 DB32.op4_p_a_max_b;DB32,REAL112;RW;TST=;CMT=давление в канале А Qmax B
 DB32.op4_bp5_bp3_max_b;DB32,REAL136;RW;TST=;CMT=перепад ВР3/ВР5 Qmax В
-
 DB32.op8_time_on_a;DB32,REAL144;RW;TST=;CMT=время включения А
 DB32.op8_time_off_a;DB32,REAL148;RW;TST=;CMT=время выключения А
 DB32.op8_time_on_b;DB32,REAL152;RW;TST=;CMT=время включения В
 DB32.op8_time_off_b;DB32,REAL156;RW;TST=;CMT=время выключения В
-
 DB32.T_oil;DB32,REAL162;RW;TST=;CMT=температура масла
-
-
 DB33.s4_20ma;DB33,X2.0;RW;TST=;CMT=сигнал 4-20 мА
 DB33.s0_20ma;DB33,X2.1;RW;TST=;CMT=сигнал 0-20 мА
 DB33.s10v;DB33,X2.2;RW;TST=;CMT=сигнал +/- 10В
@@ -386,7 +210,8 @@ DB33.s20ma;DB33,X2.5;RW;TST=;CMT=сиганл +/- 20 мА
 DB33.s40ma;DB33,X2.6;RW;TST=;CMT=сигнал +/- 40 мА
 DB33.channel_a;DB33,X60.0;RW;TST=;CMT=испытание канала А
 DB33.channel_b;DB33,X60.1;RW;TST=;CMT=испытание канала В
-
+DB33.channel_k_a;DB33,X60.2;RW;TST=;CMT=катушка на канале А( а-0 б-1)
+DB33.channel_k_b;DB33,X60.3;RW;TST=;CMT=Катушка на канале Б( а-0 б-1)
 DB33.x_max_a;DB33,REAL4;RW;TST=;CMT=сигнал переключение в А
 DB33.x_max_b;DB33,REAL8;RW;TST=;CMT=сигнал переключение в В
 DB33.x_pos_0;DB33,REAL12;RW;TST=;CMT=сигнал переключение в 0
@@ -401,8 +226,7 @@ DB33.amp_3;DB33,REAL44;RW;TST=;CMT=амплитуда 3
 DB33.increment;DB33,REAL48;RW;TST=;CMT=инкремент частоты
 DB33.press_control_min;DB33,REAL52;RW;TST=;CMT=мин. давление управления
 DB33.press_control_max;DB33,REAL56;RW;TST=;CMT=макс. давление управления
-
-
+DB33.U_Plat;DB33,REAL62;RW;TST=;CMT=Напряжение на блоке управления
 DB34.op10_ok;DB34,X2.0;RW;TST=;CMT=наружняя герметичность выполнение
 DB34.op11_ok;DB34,X2.1;RW;TST=;CMT=внутренняя герметичность выполнение
 DB34.op12_ok;DB34,X2.2;RW;TST=;CMT=зависимоть расход/ток выполнение
@@ -415,15 +239,19 @@ DB34.op12_end;DB34,X3.0;RW;TST=;CMT=зависимоть расход/ток конец
 DB34.op13_end;DB34,X3.1;RW;TST=;CMT=зависимость расход/давление конец
 DB34.op14_end;DB34,X3.2;RW;TST=;CMT=частотные характеристики конец
 DB34.op15_end;DB34,X3.3;RW;TST=;CMT=переходные харарактеристики конец
-
-
+DB34.op12_ab_open_a;DB34,X8.0;RW;TST=;CMT= Катушка а канал АБ открыты
+DB34.op12_b_close_a;DB34,X8.1;RW;TST=;CMT=Катушка а канал Б закрыт
+DB34.op12_a_close_a;DB34,X8.2;RW;TST=;CMT=Катушка а канал А закрыт
+DB34.op12_ab_open_b;DB34,X8.3;RW;TST=;CMT= Катушка б канал АБ открыты
+DB34.op12_b_close_b;DB34,X8.4;RW;TST=;CMT=Катушка б канал Б закрыт
+DB34.op12_a_close_b;DB34,X8.5;RW;TST=;CMT=Катушка б канал А закрыт
+DB34.op14_number;DB34,REAL4;RW;TST=;CMT=Число ячеек блока DB10/23
 DB35.channel_a;DB35,X62.0;RW;TST=;CMT=испытание канал А
 DB35.channel_b;DB35,X62.1;RW;TST=;CMT=испытание канала В
-
+DB35.channel_k_a;DB35,X62.2;RW;TST=;CMT=катушка на канале А( а-0 б-1)
+DB35.channel_k_b;DB35,X62.3;RW;TST=;CMT=катушка на канале Б( а-0 б-1)
 DB35.s860ma;DB35,REAL2;RW;TST=;CMT=управляющий сигнал
 DB35.x_max_a;DB35,REAL6;RW;TST=;CMT=полное перключение в А
-DB35.x_max_b;DB35,REAL10;RW;TST=;CMT=полное переключение в В
-DB35.x_pos_0;DB35,REAL14;RW;TST=;CMT=сигнал переключения в 0
 DB35.test_press;DB35,REAL18;RW;TST=;CMT=испытание пробным давлением
 DB35.nominal_press;DB35,REAL22;RW;TST=;CMT=номинальное давление
 DB35.q_max_a;DB35,REAL26;RW;TST=;CMT=макс расход в А
@@ -435,8 +263,6 @@ DB35.amp_3;DB35,REAL46;RW;TST=;CMT=амплитуда 3
 DB35.increment;DB35,REAL50;RW;TST=;CMT=инкремент частоты
 DB35.press_control_min;DB35,REAL54;RW;TST=;CMT=мин давдение управления
 DB35.press_control_max;DB35,REAL58;RW;TST=;CMT=макс давление управления
-
-
 DB36.op20_ok;DB36,X2.0;RW;TST=;CMT=наружняя герметичность выполнение
 DB36.op21_ok;DB36,X2.1;RW;TST=;CMT=внутренняя герметичность выполнение
 DB36.op22_ok;DB36,X2.2;RW;TST=;CMT=зависимоть расход/ток выполнение
@@ -449,8 +275,13 @@ DB36.op22_end;DB36,X3.0;RW;TST=;CMT=зависимоть расход/ток конец
 DB36.op23_end;DB36,X3.1;RW;TST=;CMT=зависимость расход/давление конец
 DB36.op24_end;DB36,X3.2;RW;TST=;CMT=частотные характеристики конец
 DB36.op25_end;DB36,X3.3;RW;TST=;CMT=переходные харарактеристики конец
-
-
+DB36.op22_a_ab_open;DB36,X8.0;RW;TST=;CMT=катушка а канал АБ открыты
+DB36.op22_a_b_close;DB36,X8.1;RW;TST=;CMT=катушка а канал Б закрыт
+DB36.op22_a_a_close;DB36,X8.2;RW;TST=;CMT=катушка а канал А закрыт
+DB36.op22_b_ab_open;DB36,X8.3;RW;TST=;CMT=катушка б канал АБ открыты
+DB36.op22_b_b_close;DB36,X8.4;RW;TST=;CMT=катушка б канал Б закрыт
+DB36.op22_b_a_close;DB36,X8.5;RW;TST=;CMT=катушка б канал А закрыт
+DB36.op24_number;DB36,REAL4;RW;TST=;CMT=Число ячеек блока DB20/24
 DB37.s4_20ma;DB37,X2.0;RW;TST=;CMT=сигнал 4-20 мА
 DB37.s0_20ma;DB37,X2.1;RW;TST=;CMT=сигнал 0-20 мА
 DB37.s10v;DB37,X2.2;RW;TST=;CMT=синал +/-10 В
@@ -458,27 +289,20 @@ DB37.s10ma;DB37,X2.3;RW;TST=;CMT=сигнал +/-10 мА
 DB37.s15ma;DB37,X2.4;RW;TST=;CMT=сигнал +/-15 мА
 DB37.s20ma;DB37,X2.5;RW;TST=;CMT=сигнал +/-20 мА
 DB37.s40ma;DB37,X2.6;RW;TST=;CMT=сигнал +/-40 мА
-
 DB37.nominal_volt;DB37,REAL4;RW;TST=;CMT=номинальное напряжение платы
 DB37.output_current_max;DB37,REAL8;RW;TST=;CMT=макс вых ток платы
 DB37.resistance;DB37,REAL12;RW;TST=;CMT=сопротивление катушки распределителя
-
-
 DB38.p_max;DB38,REAL2;RW;TST=;CMT=макс давление нагрузки ГЦ
 DB38.p_function;DB38,REAL6;RW;TST=;CMT=давление при испытании фнкциониования
 DB38.q_nominal;DB38,REAL10;RW;TST=;CMT=ном расход ГЦ
 DB38.time_function;DB38,REAL14;RW;TST=;CMT=время перемещения
 DB38.time_tightness;DB38,REAL18;RW;TST=;CMT=время испытания наружней гермтичности
-
-
 DB39.op30_ok;DB39,X2.0;RW;TST=;CMT=питание плат выполнение
 DB39.op31_ok;DB39,X2.1;RW;TST=;CMT=зависимость вых ток/ опорон сигнал выполнение
 DB39.op32_ok;DB39,X2.2;RW;TST=;CMT=испытание ГЦ выполнение
 DB39.op30_end;DB39,X2.3;RW;TST=;CMT=питание плат конец
 DB39.op31_end;DB39,X2.4;RW;TST=;CMT=зависимость вых ток/ опорон сигнал конец
 DB39.op32_end;DB39,X2.5;RW;TST=;CMT=испытание ГЦ конец
-
-
 DB40.sl1;DB40,X2.0;RW;TST=;CMT=уровень масла в норме
 DB40.sl2;DB40,X2.1;RW;TST=;CMT=пониженный уровень масла
 DB40.sl3;DB40,X2.2;RW;TST=;CMT=аварийный уровень масла
@@ -518,3 +342,43 @@ DB40.fault_m8;DB40,X6.3;RW;TST=;CMT=нет включения М8, М9
 DB40.fault_m10;DB40,X6.4;RW;TST=;CMT=нет включения М10, М11
 DB40.fault_m12;DB40,X6.5;RW;TST=;CMT=нет включения М12
 DB40.fault_phasing;DB40,X6.6;RW;TST=;CMT=не правильная фазировка
+DB50.BP1;DB50,REAL2;RW;TST=;CMT=давление после М1/М2 (real)
+DB50.BP2;DB50,REAL6;RW;TST=;CMT=давление на сливе испытуемого аппарата (real)
+DB50.BP3;DB50,REAL10;RW;TST=;CMT=давление в полости А (real)
+DB50.BP4;DB50,REAL14;RW;TST=;CMT=давление в полости В (real)
+DB50.BP5;DB50,REAL18;RW;TST=;CMT=давление в полости Р (real)
+DB50.BP6;DB50,REAL22;RW;TST=;CMT=давление в полости Х (real)
+DB50.BT1;DB50,REAL26;RW;TST=;CMT=температура масла в баке (real)
+DB50.BV1;DB50,REAL30;RW;TST=;CMT=расход в полости Р (0-60 л/мин) (real)
+DB50.BV2;DB50,REAL34;RW;TST=;CMT=расход в полости Р (60-1000 л/мин) (real)
+DB50.BV4;DB50,REAL38;RW;TST=;CMT=расход утечки (0.5-25 л/мин) (real)
+DB50.BV3;DB50,REAL42;RW;TST=;CMT=расход утечки (0.005-2 л/мин) (real)
+DB50.V1_do60V;DB50,REAL46;RW;TST=;CMT=Вольтметр до 60В (real)
+DB50.V0_300B;DB50,REAL50;RW;TST=;CMT=Вольтметр 0-300В (real)
+DB50.A1;DB50,REAL54;RW;TST=;CMT=Амперметр постоянного тока (mA) 
+DB50.A2;DB50,REAL58;RW;TST=;CMT=Амперметр переменного тока (mA)
+DB50.A_Plata;DB50,REAL62;RW;TST=;CMT=Ток платы управления
+DB50.Osh_M;DB50,W66;RW;TST=;CMT=
+DB50.YB1;DB50,REAL68;RW;TST=;CMT=Регулировка расхода основного насоса М1 (real)
+DB50.YB2;DB50,REAL72;RW;TST=;CMT=Регулировка расхода основного насоса М2 (real)
+DB50.YB3;DB50,REAL76;RW;TST=;CMT=Настройка давления в системе (real)
+DB50.YB4;DB50,REAL80;RW;TST=;CMT=Настройка давления в канале управления (real)
+DB50.YB5;DB50,REAL84;RW;TST=;CMT=Нагрузка в канеле А (real)
+DB50.YB6;DB50,REAL88;RW;TST=;CMT=Нагрузка в канале В (real)
+DB50.Z_U_Post;DB50,REAL92;RW;TST=;CMT=Задание на регулятор постоянного напряжения
+DB50.Z_U_Per;DB50,REAL96;RW;TST=;CMT=Задание на регулятор переменного напряжения
+DB50.Plata_1;DB50,REAL100;RW;TST=;CMT=Задание на плату 4..20мА (real)
+DB50.Plata_2;DB50,REAL104;RW;TST=;CMT=Задание на плату 0..20мА (real)
+DB50.Plata_3;DB50,REAL108;RW;TST=;CMT=Задание на плату +/-10В
+DB50.Plata_4_5_6;DB50,REAL112;RW;TST=;CMT=Задание на плату +/-20/15/10мА
+DB50.Plata_7;DB50,REAL116;RW;TST=;CMT=Задание на плату +/-20мА (1)
+DB50.Plata_8;DB50,REAL120;RW;TST=;CMT=Задание на плату +/-20мА (2)
+DB50.Plata_860mA;DB50,REAL124;RW;TST=;CMT=Задание на плату 0..20мА (860мА)
+DB50.Osh_DM;DB50,W128;RW;TST=;CMT=
+DB50.POS_1_REAL;DB50,REAL130;RW;TST=;CMT=Позиция Г/Ц (1..10л/мин) 100мм
+DB50.POS_2_REAL;DB50,REAL134;RW;TST=;CMT=Позиция Г/Ц (0..1л/мин) 100мм
+DB60.OP15_25_count;DB60,INT60;RW;TST=;CMT=количестви измерений для заданий 15 и 25
+DB60.OP15_25_Opor_1;DB60,X210.0;RW;TST=;CMT=
+DB60.OP15_25_Opor_2;DB60,X210.1;RW;TST=;CMT=
+DB60.OP15_25_Opor_3;DB60,X210.2;RW;TST=;CMT=
+DB60.OP15_25_Continum;DB60,X210.3;RW;TST=;CMT=

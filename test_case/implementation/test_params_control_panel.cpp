@@ -206,6 +206,8 @@ void Parameters::WriteToController() const
     mem.resistance = mReelResist;
 
     mem.Write();
+
+    cpu::CpuMemory::Instance().DB31.Q_5_5ma = mDefaultExpenditure;
 }
 
 bool Parameters::GsType ( QString const& val )

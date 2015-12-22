@@ -17,6 +17,8 @@ bool PowerTest::Run()
 {
     Start();
     Wait( mBits.op30_ok, mBits.op30_end );
+    if ( IsStopped() )
+        return false;
 
     OilTemp = mTemperature.T_oil;
     Result = false;

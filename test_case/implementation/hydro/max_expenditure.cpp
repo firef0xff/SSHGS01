@@ -22,6 +22,8 @@ bool MaxExpenditureTest::Run()
 
     Start();
     Wait( mResults.op5_ok, mResults.op5_end );
+    if ( IsStopped() )
+        return false;
 
     ResultA = mResults.op5_ok_a && !mResults.op5_no_a;
     ResultB = mResults.op5_ok_b && !mResults.op5_no_b;

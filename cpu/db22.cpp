@@ -20,10 +20,11 @@ void DB22::Read()
         return;
     }
 
-    opc::ReadToArray( rez[0].vDataValue, ref,               REF_COUNT         );
-    opc::ReadToArray( rez[1].vDataValue, output_current,    OUTPUT_CURRENT_COUNT );
+    opc::ReadToArray( rez[0].vDataValue, signal,   SIGNAL_COUNT );
+    opc::ReadToArray( rez[1].vDataValue, current,  CURRENT_COUNT );
 
     opc::miniOPC::Instance().OpcMassFree( mGroupID, rez );
+
 }
 
 }

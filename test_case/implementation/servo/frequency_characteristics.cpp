@@ -3,6 +3,7 @@
 #include <QJsonArray>
 #include "../../../../mylib/Widgets/GraphBuilder/graph_builder.h"
 #include "test_case/test_params.h"
+#include "../test_params_servo.h"
 
 namespace test
 {
@@ -15,50 +16,93 @@ FrequencyCharacteristics::FrequencyCharacteristics():
 
 bool FrequencyCharacteristics::Run()
 {
+    Start();
+    if ( ReelControl() )
+        Wait( mControlReelBits.op24_ok, mControlReelBits.op24_end );
+    else
+        Wait( mControlBoardBits.op14_ok, mControlBoardBits.op14_end );
+    if ( IsStopped() )
+        return false;
+
+    OilTemp = mTemperature.T_oil;
+    return Success();
+}
+void FrequencyCharacteristics::UpdateData()
+{
+    Test::UpdateData();
+
+    Data d;
+    if ( ReelControl() )
+    {
+        m24Result1.Read();
+        m24Result2.Read();
+
+        bool ready = false;
+        if (ready)
+        {
+            for ( size_t i = 0; i < mControlReelBits.op24_number && i < m24Result1.SIGNAL_COUNT; ++i )
+            {
+    #warning как то что считаем
+                // амплитуда считается по дельте соседних перемещений
+                // фаза
+                // частота с контроллера
+            }
+            ready = false;
+            mData.push_back( d );
+        }
+    }
+    else
+    {
+        m14Result1.Read();
+        m14Result2.Read();
+
+        bool ready = false;
+        if (ready)
+        {
+            for ( size_t i = 0; i < mControlReelBits.op24_number && i < m24Result1.SIGNAL_COUNT; ++i )
+            {
+    #warning как то что считаем
+            }
+            ready = false;
+            mData.push_back( d );
+        }
+    }
+}
+bool FrequencyCharacteristics::Success() const
+{
     return true;
 }
 QJsonObject FrequencyCharacteristics::Serialise() const
 {
-    QJsonObject obj;
+    QJsonObject obj = Test::Serialise();
     QJsonArray a;
-    foreach (Data const& d, AFC)
+    foreach (Data const& d, mData)
     {
         a.insert( a.end(), d.Serialise() );
     }
-    obj.insert("AFC", a );
-
-    QJsonArray b;
-    foreach (Data const& d, FFC)
-    {
-        b.insert( b.end(), d.Serialise() );
-    }
-    obj.insert("FFC", a );
+    obj.insert("Data", a );
 
     return obj;
 }
 bool FrequencyCharacteristics::Deserialize( QJsonObject const& obj )
 {
-    QJsonArray a = obj.value("AFC").toArray();
+    QJsonArray a = obj.value("Data").toArray();
     foreach (QJsonValue const& v, a)
     {
         Data d;
         if ( d.Deserialize( v.toObject() ) )
-            AFC.insert( AFC.end(), d );
+            mData.insert( mData.end(), d );
     }
-
-    QJsonArray b = obj.value("FFC").toArray();
-    foreach (QJsonValue const& v, b)
-    {
-        Data d;
-        if ( d.Deserialize( v.toObject() ) )
-            FFC.insert( FFC.end(), d );
-    }
-
+    Test::Deserialize( obj );
     return true;
 }
 
 bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
 {
+    test::servo::Parameters *params = static_cast< test::servo::Parameters * >( CURRENT_PARAMS );
+    if ( !params )
+        return true;
+
     QFont header_font = painter.font();
     header_font.setFamily("Arial");
     header_font.setPointSize( 14 );
@@ -130,14 +174,14 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
 
 
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
+    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font, &params ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении испытаний, бар"), Qt::red, "что писать?" );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении испытаний, бар"), Qt::red, test::ToString( params->PressureNominal() ) );
     }, 2 );
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
+    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font, &params ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Расход при проведении испытаний, л/мин"), Qt::red, "что писать?" );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Расход при проведении испытаний, л/мин"), Qt::red, test::ToString( params->DefaultExpenditure() ) );
     }, 2 );
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
@@ -170,8 +214,9 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
         ff0x::GraphBuilder::LinePoints data2;
         ff0x::GraphBuilder::LinePoints data2_e;
 
-        double max_signal = 0;
-        double max_Leak = 0;
+        double max_frequency = 0;
+        double max_ampl = 0;
+        double max_phase = 0;
 
         //поиск данных теста
         foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
@@ -179,48 +224,39 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
             auto obj = val.toObject();
             if ( obj.value("id").toInt() == mId )
             {
-                QJsonArray a = obj.value("data").toObject().value("AFC").toArray();
+                QJsonArray a = obj.value("data").toObject().value("Data").toArray();
                 foreach ( QJsonValue const& v, a )
                 {
                     QJsonObject o = v.toObject();
-                    data_e.push_back( QPointF( o.value("x").toDouble(), o.value("y").toDouble() ) );
-                }
-                a = obj.value("data").toObject().value("FFC").toArray();
-                foreach ( QJsonValue const& v, a )
-                {
-                    QJsonObject o = v.toObject();
-                    data2_e.push_back( QPointF( o.value("x").toDouble(), o.value("y").toDouble() ) );
+
+                    double phase = o.value("phase").toDouble();
+                    double ampl = o.value("ampl").toDouble();
+                    double frequency = o.value("frequency").toDouble();
+
+                    data_e.push_back( QPointF( frequency, ampl ) );
+                    data2_e.push_back( QPointF( frequency, phase  ) );
                 }
             }
         }
 
 
-        foreach ( Data const& item, AFC )
+        foreach ( Data const& item, mData )
         {
-            double abs_sig = std::abs( item.x );
-            double abs_leak = std::abs( item.y );
+            double abs_sig = std::abs( item.frequency );
+            double abs_ampl = std::abs( item.ampl );
+            double abs_phase = std::abs( item.phase );
 
-            if ( max_signal < abs_sig )
-                max_signal = abs_sig;
+            if ( max_frequency < abs_sig )
+                max_frequency = abs_sig;
 
-            if ( max_Leak < abs_leak )
-                max_Leak = abs_leak;
+            if ( max_ampl < abs_ampl )
+                max_ampl = abs_ampl;
 
-            data.push_back( QPointF( item.x, item.y ) );
-        }
+            if ( max_phase < abs_phase )
+                max_phase = abs_phase;
 
-        foreach ( Data const& item, FFC )
-        {
-            double abs_sig = std::abs( item.x );
-            double abs_leak = std::abs( item.y );
-
-            if ( max_signal < abs_sig )
-                max_signal = abs_sig;
-
-            if ( max_Leak < abs_leak )
-                max_Leak = abs_leak;
-
-            data2.push_back( QPointF( item.x, item.y ) );
+            data.push_back( QPointF( item.frequency, item.ampl ) );
+            data2.push_back( QPointF( item.frequency, item.phase ) );
         }
 
         QFont f = text_font;
@@ -246,8 +282,8 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
         QRect p2t(p2.left(), p2.bottom(), p2.width(), metrix.height());
         DrawRowCenter( p1t, text_font, Qt::black, "АЧХ" );
         DrawRowCenter( p2t, text_font, Qt::black, "ФЧХ" );
-        painter.drawPixmap( p1, builder.Draw( lines1, max_signal * 1.25, max_Leak * 1.25, 0.05, 0.5, "Частота (Гц)", "Дб", true ) );
-        painter.drawPixmap( p2, builder.Draw( lines2, max_signal * 1.25, max_Leak * 1.25, 0.05, 0.5, "Частота (Гц)", "φ (гр.)", true ) );
+        painter.drawPixmap( p1, builder.Draw( lines1, max_frequency * 1.25, max_ampl * 1.25, ceil(max_frequency)/10, ceil(max_ampl)/10, "Частота (Гц)", "Дб", true ) );
+        painter.drawPixmap( p2, builder.Draw( lines2, max_frequency * 1.25, max_phase * 1.25, ceil(max_frequency)/10, ceil(max_phase)/10, "Частота (Гц)", "φ (гр.)", true ) );
 
         painter.restore();
     }, 1, free_rect.width()/2 + metrix.height()  );
@@ -261,15 +297,17 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
 QJsonObject FrequencyCharacteristics::Data::Serialise() const
 {
     QJsonObject obj;
-    obj.insert("x", x );
-    obj.insert("y", y );
+    obj.insert("phase", phase );
+    obj.insert("ampl", ampl );
+    obj.insert("frequency", frequency );
 
     return obj;
 }
 bool FrequencyCharacteristics::Data::Deserialize( QJsonObject const& obj )
 {
-    y = obj.value("y").toDouble();
-    x = obj.value("x").toDouble();
+    phase = obj.value("phase").toDouble();
+    ampl = obj.value("ampl").toDouble();
+    frequency = obj.value("frequency").toDouble();
     return true;
 }
 

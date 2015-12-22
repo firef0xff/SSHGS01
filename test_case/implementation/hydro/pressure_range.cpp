@@ -28,6 +28,8 @@ bool PressureRange::Run()
 
     Start();
     Wait( mResults.op6_ok, mResults.op6_end );
+    if ( IsStopped() )
+        return false;
 
     ResultMinMinA = mResults.op6_min_min_ok_a && !mResults.op6_min_min_no_a;
     ResultMinMaxA = mResults.op6_min_max_ok_a && !mResults.op6_min_max_no_a;

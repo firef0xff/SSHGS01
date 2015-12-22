@@ -19,7 +19,14 @@ DB34::DB34():
 	op12_end ( mBoolData[8]),
 	op13_end ( mBoolData[9]),
 	op14_end ( mBoolData[10]),
-	op15_end ( mBoolData[11])
+    op15_end ( mBoolData[11]),
+    op12_ab_open_a( mBoolData[12]),
+    op12_b_close_a( mBoolData[13]),
+    op12_a_close_a( mBoolData[14]),
+    op12_ab_open_b( mBoolData[15]),
+    op12_b_close_b( mBoolData[16]),
+    op12_a_close_b( mBoolData[17]),
+    op14_number( mFloatData[0])
 {
     mGroupID = opc::miniOPC::Instance().AddGroup( L"DB34", mAdresses, BOOL_COUNT + FLOAT_COUNT );
 }
@@ -36,8 +43,8 @@ void DB34::Read()
     {
         if ( i < BOOL_COUNT )
             mBoolData[ i ] = rez[i].vDataValue.boolVal;
-//        else
-//            mFloatData[ i - BOOL_COUNT ] = rez[i].vDataValue.fltVal;
+        else
+            mFloatData[ i - BOOL_COUNT ] = rez[i].vDataValue.fltVal;
     }
     opc::miniOPC::Instance().OpcMassFree( mGroupID, rez );
 }

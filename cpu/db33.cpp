@@ -14,8 +14,10 @@ DB33::DB33():
 	s15ma ( mBoolData[4]),
 	s20ma ( mBoolData[5]),
 	s40ma ( mBoolData[6]),
-	channel_a ( mBoolData[7]),
-	channel_b ( mBoolData[8]),
+    channel_a ( mBoolData[7] ),
+    channel_b ( mBoolData[8] ),
+    channel_k_a( mBoolData[9] ),
+    channel_k_b( mBoolData[10] ),
 
 	x_max_a ( mFloatData[0] ),
 	x_max_b ( mFloatData[1] ),
@@ -30,27 +32,16 @@ DB33::DB33():
 	amp_3 ( mFloatData[10] ),
 	increment ( mFloatData[11] ),
 	press_control_min ( mFloatData[12] ),
-	press_control_max ( mFloatData[13] )
+    press_control_max ( mFloatData[13] ),
+    U_Plat( mFloatData[14] )
 {
     mGroupID = opc::miniOPC::Instance().AddGroup( L"DB33", mAdresses, BOOL_COUNT + FLOAT_COUNT );
 }
 
-void DB33::Read()
+void DB33::Write()
 {
-    OPCITEMSTATE* rez = opc::miniOPC::Instance().Read( mGroupID );
-    if (!rez)
-    {
-        //ошибка подключения..
-        return;
-    }
-    for (size_t i = 0; i < BOOL_COUNT + FLOAT_COUNT; i++)
-    {
-        if ( i < BOOL_COUNT )
-            mBoolData[ i ] = rez[i].vDataValue.boolVal;
-        else
-            mFloatData[ i - BOOL_COUNT ] = rez[i].vDataValue.fltVal;
-    }
-    opc::miniOPC::Instance().OpcMassFree( mGroupID, rez );
+    opc::miniOPC::Instance().WriteMass( mGroupID, BOOL_COUNT, FLOAT_COUNT, static_cast<void*>( mFloatData ), opc::tFLOAT );
+    opc::miniOPC::Instance().WriteMass( mGroupID, 0, BOOL_COUNT, static_cast<void*>( mBoolData ), opc::tBOOL );
 }
 
 

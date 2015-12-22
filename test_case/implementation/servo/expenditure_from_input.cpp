@@ -3,6 +3,7 @@
 #include <QJsonArray>
 #include "../../../../mylib/Widgets/GraphBuilder/graph_builder.h"
 #include "test_case/test_params.h"
+#include "test_case/implementation/test_params_servo.h"
 namespace test
 {
 namespace servo
@@ -16,40 +17,109 @@ ExpeditureFromInput::ExpeditureFromInput():
 
 bool ExpeditureFromInput::Run()
 {
+    Start();
+    if ( ReelControl() )
+        Wait( mControlReelBits.op22_ok, mControlReelBits.op22_end );
+    else
+        Wait( mControlBoardBits.op12_ok, mControlBoardBits.op12_end );
+    if ( IsStopped() )
+        return false;
+
+    if ( ReelControl() )
+    {
+        m22Results;
+    }
+    else
+    {
+        m12Results;
+    }
+
+    OilTemp = mTemperature.T_oil;
+    auto& params = Parameters::Instance();
+#warning нет получения данных
+///     Коэффициент усиления по расходу
+///     1. сигнал (x_p0) при котором расход равен 0 ( а, б )
+///     2. сигнал (x_max) при котором достигнут максимальны расход (q_max) ( максимальный расход см в параметрах ) ( а, б )
+///     3. коффициент = Q_max/( x_max - x_p0 )
+    // для 12 считается по параметрам
+    // для 22 x_p0 = 0 а крание равны +- параметру
+
+///     Нелинейность
+///     1. q_max - расход при максимальном управляющем сигнале x_max //из параметра
+///        q_0   - расход при при нулевом управляющем сигнале x_0    // 0
+///     2. вычислить коэффициент k = (q_max - q_0) / ( x_max - x_0 )
+///     3. для каждого управляющего сигнала вычислить q_et[i] = k * x[i];
+///     4. вычислить массив r[i] = q_et[i] - q[i];
+///     5. результат равен max( r[i] ) / q_max * 100;
+
+///     Гистерезис
+///     1. max( q1[x] - q2[x] ) / q_max * 100;
+    return Success();
+}
+void ExpeditureFromInput::UpdateData()
+{
+    Test::UpdateData();
+    if (ReelControl())
+        m22Results.Read();
+    else
+        m12Results.Read();
+}
+bool ExpeditureFromInput::Success() const
+{
     return true;
 }
 QJsonObject ExpeditureFromInput::Serialise() const
 {
-    QJsonObject obj;
+    QJsonObject obj = Test::Serialise();
     QJsonArray a;
-    foreach (Data const& d, Graph)
+    foreach (Data const& d, GraphA)
     {
         a.insert( a.end(), d.Serialise() );
     }
-    obj.insert("Graph", a );
+    QJsonArray b;
+    foreach (Data const& d, GraphB)
+    {
+        b.insert( a.end(), d.Serialise() );
+    }
+    obj.insert("GraphA", a );
+    obj.insert("GraphB", b );
     obj.insert("Gain", Gain);
     obj.insert("Hysteresis", Hysteresis);
+    obj.insert("Nonlinearity", Nonlinearity);
 
     return obj;
 }
 bool ExpeditureFromInput::Deserialize( QJsonObject const& obj )
 {
-    QJsonArray a = obj.value("Graph").toArray();
+    QJsonArray a = obj.value("GraphA").toArray();
     foreach (QJsonValue const& v, a)
     {
         Data d;
         if ( d.Deserialize( v.toObject() ) )
-            Graph.insert( Graph.end(), d );
+            GraphA.insert( GraphA.end(), d );
+    }
+    QJsonArray b = obj.value("GraphB").toArray();
+    foreach (QJsonValue const& v, b)
+    {
+        Data d;
+        if ( d.Deserialize( v.toObject() ) )
+            GraphB.insert( GraphB.end(), d );
     }
 
     Gain = obj.value("Gain").toDouble();
     Hysteresis = obj.value("Hysteresis").toDouble();
+    Nonlinearity = obj.value("Nonlinearity").toDouble();
 
+    Test::Deserialize( obj );
     return true;
 }
 
 bool ExpeditureFromInput::Draw( QPainter& painter, QRect &free_rect ) const
 {
+    test::servo::Parameters *params = static_cast< test::servo::Parameters * >( CURRENT_PARAMS );
+    if ( !params )
+        return true;
+
     QFont header_font = painter.font();
     header_font.setFamily("Arial");
     header_font.setPointSize( 14 );
@@ -132,9 +202,9 @@ bool ExpeditureFromInput::Draw( QPainter& painter, QRect &free_rect ) const
 
 
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
+    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font, &params ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении испытаний, бар"), Qt::red, "что писать?" );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении испытаний, бар"), Qt::red, test::ToString( params->PressureNominal() ) );
     }, 2 );
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
@@ -162,14 +232,17 @@ bool ExpeditureFromInput::Draw( QPainter& painter, QRect &free_rect ) const
     {
         painter.save();
 
-        ff0x::GraphBuilder::LinePoints data;
-        ff0x::GraphBuilder::LinePoints data_e;
+        ff0x::GraphBuilder::LinePoints dataA;
+        ff0x::GraphBuilder::LinePoints dataA_e;
 
-        ff0x::GraphBuilder::LinePoints data2;
-        ff0x::GraphBuilder::LinePoints data2_e;
+        ff0x::GraphBuilder::LinePoints dataB;
+        ff0x::GraphBuilder::LinePoints dataB_e;
 
-        double max_signal = 0;
-        double max_Leak = 0;
+        double max_signal_a = 0;
+        double max_Leak_a = 0;
+
+        double max_signal_b = 0;
+        double max_Leak_b = 0;
 
         //поиск данных теста
         foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
@@ -177,27 +250,46 @@ bool ExpeditureFromInput::Draw( QPainter& painter, QRect &free_rect ) const
             auto obj = val.toObject();
             if ( obj.value("id").toInt() == mId )
             {
-                QJsonArray a = obj.value("data").toObject().value("Graph").toArray();
+                QJsonArray a = obj.value("data").toObject().value("GraphA").toArray();
                 foreach ( QJsonValue const& v, a )
                 {
                     QJsonObject o = v.toObject();
-                    data_e.push_back( QPointF( o.value("Signal").toDouble(), o.value("Expenditure").toDouble() ) );
+                    dataA_e.push_back( QPointF( o.value("Signal").toDouble(), o.value("Expenditure").toDouble() ) );
+                }
+                QJsonArray b = obj.value("data").toObject().value("GraphB").toArray();
+                foreach ( QJsonValue const& v, b )
+                {
+                    QJsonObject o = v.toObject();
+                    dataB_e.push_back( QPointF( o.value("Signal").toDouble(), o.value("Expenditure").toDouble() ) );
                 }
             }
         }
 
-        foreach ( Data const& item, Graph )
+        foreach ( Data const& item, GraphA )
         {
             double abs_sig = std::abs( item.Signal );
             double abs_leak = std::abs( item.Expenditure );
 
-            if ( max_signal < abs_sig )
-                max_signal = abs_sig;
+            if ( max_signal_a < abs_sig )
+                max_signal_a = abs_sig;
 
-            if ( max_Leak < abs_leak )
-                max_Leak = abs_leak;
+            if ( max_Leak_a < abs_leak )
+                max_Leak_a = abs_leak;
 
-            data.push_back( QPointF( item.Signal, item.Expenditure ) );
+            dataA.push_back( QPointF( item.Signal, item.Expenditure ) );
+        }
+        foreach ( Data const& item, GraphB )
+        {
+            double abs_sig = std::abs( item.Signal );
+            double abs_leak = std::abs( item.Expenditure );
+
+            if ( max_signal_b < abs_sig )
+                max_signal_b = abs_sig;
+
+            if ( max_Leak_b < abs_leak )
+                max_Leak_b = abs_leak;
+
+            dataB.push_back( QPointF( item.Signal, item.Expenditure ) );
         }
 
         QFont f = text_font;
@@ -206,15 +298,15 @@ bool ExpeditureFromInput::Draw( QPainter& painter, QRect &free_rect ) const
         int h = (rect.height() - metrix.height())*0.98;
 
         ff0x::GraphBuilder builder ( w, h, ff0x::GraphBuilder::PlusPlus, f );
-        ff0x::GraphBuilder::GraphDataLine lines1;
-        lines1.push_back( ff0x::GraphBuilder::Line(data, ff0x::GraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
-        if ( !data_e.empty() )
-            lines1.push_back( ff0x::GraphBuilder::Line(data_e, ff0x::GraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
+        ff0x::GraphBuilder::GraphDataLine lines_a;
+        lines_a.push_back( ff0x::GraphBuilder::Line(dataA, ff0x::GraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
+        if ( !dataA_e.empty() )
+            lines_a.push_back( ff0x::GraphBuilder::Line(dataA_e, ff0x::GraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
 
-        ff0x::GraphBuilder::GraphDataLine lines2;
-        lines2.push_back( ff0x::GraphBuilder::Line(data2, ff0x::GraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
-        if ( !data2_e.empty() )
-            lines2.push_back( ff0x::GraphBuilder::Line(data2_e, ff0x::GraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
+        ff0x::GraphBuilder::GraphDataLine lines_b;
+        lines_b.push_back( ff0x::GraphBuilder::Line(dataB, ff0x::GraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
+        if ( !dataB_e.empty() )
+            lines_b.push_back( ff0x::GraphBuilder::Line(dataB_e, ff0x::GraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
 
 
         QRect p1(rect.left(), rect.top(), w, h );
@@ -223,8 +315,8 @@ bool ExpeditureFromInput::Draw( QPainter& painter, QRect &free_rect ) const
         QRect p2t(p2.left(), p2.bottom(), p2.width(), metrix.height());
         DrawRowCenter( p1t, text_font, Qt::black, "P->A" );
         DrawRowCenter( p2t, text_font, Qt::black, "P->B" );
-        painter.drawPixmap( p1, builder.Draw( lines1, max_signal * 1.25, max_Leak * 1.25, 0.05, 0.5, "Опорный сигнал", "Расход (л/мин)", true ) );
-        painter.drawPixmap( p2, builder.Draw( lines2, max_signal * 1.25, max_Leak * 1.25, 0.05, 0.5, "Опорный сигнал", "Расход (л/мин)", true ) );
+        painter.drawPixmap( p1, builder.Draw( lines_a, max_signal_a * 1.25, max_Leak_a * 1.25, ceil(max_signal_a)/10, ceil(max_Leak_a)/10, "Опорный сигнал", "Расход (л/мин)", true ) );
+        painter.drawPixmap( p2, builder.Draw( lines_b, max_signal_b * 1.25, max_Leak_b * 1.25, ceil(max_signal_b)/10, ceil(max_Leak_b)/10, "Опорный сигнал", "Расход (л/мин)", true ) );
 
         painter.restore();
     }, 1, free_rect.width()/2 + metrix.height()  );
@@ -238,7 +330,7 @@ bool ExpeditureFromInput::Draw( QPainter& painter, QRect &free_rect ) const
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Нелинейность, %"), Qt::red, "не ясно что выводить" );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Нелинейность, %"), Qt::red, test::ToString( Nonlinearity ) );
     }, 2 );
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )

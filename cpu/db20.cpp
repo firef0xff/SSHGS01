@@ -1,46 +1,29 @@
-#pragma once
-#include "data_block_base.h"
-#include <inttypes.h>
+#include "db20.h"
+
+#include "../myOPC/miniOPC.h"
 
 namespace cpu
 {
-class CpuMemory;
 namespace data
 {
-
-class DB20 :public In
+DB20::DB20()
 {
-public:
-    enum
-    {
-        REF_COUNT = 20,
-        COORDINATE_COUNT = 20
-    };
-
-    void Read();
-
-    float ref[REF_COUNT] = {0.0};                //DB20 REAL0   20  опорный сигнал
-    float coordinate[COORDINATE_COUNT] = {0.0};  //DB20 REAL80  20  положение цилиндра
-
-private:
-    friend class cpu::CpuMemory;
-    DB20();
-    DB20( const DB20& ) = delete;
-    void operator = ( const DB20& ) = delete;
-
-    enum
-    {
-        ARRAYS_COUNT = 2
-    };
-
-    uint64_t mGroupID = 0;
-    wchar_t const* mAdresses[ ARRAYS_COUNT ] = {
-        L"CPU/DB20.ref",
-        L"CPU/DB20.coordinate"
-    };
-
-};
-
+    mGroupID = opc::miniOPC::Instance().AddGroup( L"DB20", mAdresses, ARRAYS_COUNT );
 }
 
+void DB20::Read()
+{
+    OPCITEMSTATE* rez = opc::miniOPC::Instance().Read( mGroupID );
+    if (!rez)
+    {
+        //ошибка подключения..
+        return;
+    }
+
+    opc::ReadToArray( rez[0].vDataValue, signal, SIGNAL_COUNT );
+
+    opc::miniOPC::Instance().OpcMassFree( mGroupID, rez );
+}
+
+}
 }

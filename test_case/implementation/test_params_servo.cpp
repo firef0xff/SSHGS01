@@ -41,8 +41,17 @@ Parameters::Parameters():
     mSignalStateB(0),
     mSignalState0(0),
     mEndSgnal(0),
-    mControlReelResist(0)
-{}
+    mControlReelResist(0),
+    mVoltage(0),
+    mTestChannelA( false ),
+    mTestChannelB( false ),
+    mSignalOnChannelA( CS_UNKNOWN ),
+    mSignalOnChannelB( CS_UNKNOWN )
+{
+    mAmplitudes[0] = 0;
+    mAmplitudes[1] = 0;
+    mAmplitudes[2] = 0;
+}
 
 void Parameters::Reset()
 {
@@ -63,6 +72,17 @@ void Parameters::Reset()
 
     mEndSgnal = 0;
     mControlReelResist = 0;
+
+    mAmplitudes[0] = 0;
+    mAmplitudes[1] = 0;
+    mAmplitudes[2] = 0;
+
+    mVoltage = 0;
+
+    mTestChannelA = false;
+    mTestChannelB = false;
+    mSignalOnChannelA = CS_UNKNOWN;
+    mSignalOnChannelB = CS_UNKNOWN;
 }
 QString Parameters::ToString() const
 {
@@ -76,13 +96,15 @@ QString Parameters::ToString() const
     res+= "  Максимальное давление управления, Бар: " + test::ToString( mMaxControlPressure ) + "\n";
     res+= "  Минимальное давление управления, Бар: " + test::ToString( mMinControlPressure ) + "\n";
     res+= "  Уровень управляющих сигналов: " + test::ToString( mControlSignal ) + "\n";
+    res+= "  Амплитуды: " + test::ToString( mAmplitudes[0] ) + " " + test::ToString( mAmplitudes[1] ) + " "  + test::ToString( mAmplitudes[2] ) + "\n";
     res+= "Парамеры для аппаратуры с типом управления: " + test::ToString( RC_CONTROL_BOX );
+    res+= "  Напряжение на блоке управления: " + test::ToString( mVoltage ) + "\n";
     res+= "  Сигнал, соответствующий полному переключению в состояние А: " + test::ToString( mSignalStateA ) + "\n";
     res+= "  Сигнал, соответствующий полному переключению в состояние Б: " + test::ToString( mSignalStateB ) + "\n";
     res+= "  Сигнал, соответствующий нулевому положению: " + test::ToString( mSignalState0 ) + "\n";
     res+= "Парамеры для аппаратуры с типом управления: " + test::ToString( RC_REEL );
     res+= "  Сигнал, соответствующий переключению аппарата в конечное состоние: " + test::ToString( mEndSgnal ) + "\n";
-    res+= "  Сопротивление катушки управления, Ом: " + test::ToString( mSignalState0 ) + "\n";
+    res+= "  Сопротивление катушки управления, Ом: " + test::ToString( mControlReelResist ) + "\n";
     res+= "\n";
     res+= "Параметры стенда:\n";
     res+= "  Максимальный расход, л/мин: " + test::ToString( mMaxExpenditure ) + "\n";
@@ -93,6 +115,10 @@ QString Parameters::ToString() const
     res+= "  Максимальный расход в канале А, при следующем опорном сигнале, X_max_A, л/мин: " + test::ToString( mMaxExpenditureA ) + "\n";
     res+= "  Максимальный расход в канале Б, при следующем опорном сигнале, X_max_Б, л/мин: " + test::ToString( mMaxExpenditureB ) + "\n";
     res+= "  Инкремент частоты при построении частотных характеристик, Гц: " + test::ToString( mFrequencyInc ) + "\n";
+    res+= "  Тестирование канала А: " + test::ToString( mTestChannelA ) + "\n";
+    res+= "  Катушка для тестирования канала А: " + test::ToString( mSignalOnChannelA ) + "\n";
+    res+= "  Тестирование канала Б " + test::ToString( mTestChannelB ) + "\n";
+    res+= "  Катушка для тестирования канала Б: " + test::ToString( mSignalOnChannelB ) + "\n";
 
     return res;
 }
@@ -122,6 +148,18 @@ QJsonObject Parameters::Serialise() const
     servo.insert("EndSgnal", mEndSgnal);
     servo.insert("ControlReelResist", mControlReelResist);
 
+    servo.insert("Amplitudes0", mAmplitudes[0]);
+    servo.insert("Amplitudes1", mAmplitudes[1]);
+    servo.insert("Amplitudes2", mAmplitudes[2]);
+
+    servo.insert("Voltage", mVoltage);
+
+    servo.insert("TestChannelA", mTestChannelA);
+    servo.insert("TestChannelB", mTestChannelB);
+    servo.insert("SignalOnChannelA", mSignalOnChannelA);
+    servo.insert("SignalOnChannelB", mSignalOnChannelB);
+
+
     res.insert("servo", servo);
     return res;
 }
@@ -137,10 +175,10 @@ bool Parameters::Deserialize( QJsonObject const& obj )
 
         mGsType = obj.value("GsType").toString();
         mReelControl = static_cast<RELL_CONTROL>(obj.value("ReelControl").toInt());
-        mPressureNominal = obj.value("PressureNominal").toInt();
-        mPressureTesting = obj.value("PressureTesting").toInt();
-        mMaxExpenditureA = obj.value("MaxExpenditureA").toInt();
-        mMaxExpenditureB = obj.value("MaxExpenditureB").toInt();
+        mPressureNominal = obj.value("PressureNominal").toDouble();
+        mPressureTesting = obj.value("PressureTesting").toDouble();
+        mMaxExpenditureA = obj.value("MaxExpenditureA").toDouble();
+        mMaxExpenditureB = obj.value("MaxExpenditureB").toDouble();
         mFrequencyInc = obj.value("FrequencyInc").toDouble();
 
         mControlSignal = static_cast<SIGNAL_TYPE>(obj.value("ControlSignal").toInt());
@@ -150,6 +188,17 @@ bool Parameters::Deserialize( QJsonObject const& obj )
 
         mEndSgnal = obj.value("EndSgnal").toDouble();
         mControlReelResist = obj.value("ControlReelResist").toDouble();
+
+        mAmplitudes[0] = obj.value("Amplitudes0").toDouble();
+        mAmplitudes[1] = obj.value("Amplitudes1").toDouble();
+        mAmplitudes[2] = obj.value("Amplitudes2").toDouble();
+
+        mVoltage = obj.value("Voltage").toDouble();
+
+        mTestChannelA = obj.value("TestChannelA").toBool();
+        mTestChannelB = obj.value("TestChannelB").toBool();
+        mSignalOnChannelA = static_cast<CONTROL_SIGNAL>( obj.value("SignalOnChannelA").toInt() );
+        mSignalOnChannelB = static_cast<CONTROL_SIGNAL>( obj.value("SignalOnChannelB").toInt() );
         res = true;
     }
     else
@@ -163,11 +212,82 @@ void Parameters::WriteToController() const
     if ( test::servo::Parameters::Instance().ReelControl() == RC_REEL )
     {
         auto& mem = cpu::CpuMemory::Instance().DB35;
+        mem.channel_a = mTestChannelA; //62.0 испытание канал А
+        mem.channel_b = mTestChannelB; //62.1 испытание канала В
+        mem.channel_k_a = mSignalOnChannelA == CS_REEL_B ? 1: 0;
+        mem.channel_k_a = mSignalOnChannelA == CS_REEL_B ? 1: 0;
+        switch (mControlSignal)                   //2 управляющий сигнал
+        {
+            case ST_100_mA:
+                mem.s860ma = 100;
+                break;
+            case ST_300_mA:
+                mem.s860ma = 300;
+                break;
+            case ST_600_mA:
+                mem.s860ma = 600;
+                break;
+            case ST_860_mA:
+                mem.s860ma = 860;
+                break;
+            default:
+                mem.s860ma = 0;
+                break;
+        }
+        mem.x_max_a = mEndSgnal;             //6 полное перключение в А
+        mem.test_press = mPressureTesting;          //18 испытание пробным давлением
+        mem.nominal_press = mPressureNominal;       //22 номинальное давление
+        mem.q_max_a = mMaxExpenditureA;             //26 макс расход в А    ПОКАЗАТЬ НА ФОРМЕ
+        mem.q_max_b = mMaxExpenditureB;             //30 макс расход в В
+        mem.q_max = mMaxExpenditure;               //34 максимальный расход
+        mem.amp_1 = mAmplitudes[0];               //38 амплитуда 1
+        mem.amp_2 = mAmplitudes[1];               //42 амплитуда 2
+        mem.amp_3 = mAmplitudes[2];               //46 амплитуда 3
+        mem.increment = mFrequencyInc;           //50 инкремент частоты
+        mem.press_control_min = mMinControlPressure;   //54 мин давдение управления
+        mem.press_control_max = mMaxControlPressure;   //58 макс давление управления
+        mem.Write();
     }
     else
     {
-        auto& mem = cpu::CpuMemory::Instance().DB33;
+        auto& mem = cpu::CpuMemory::Instance().DB33;       
+        mem.s4_20ma = mControlSignal == ST_4_20_mA; //2.0 сигнал 4-20 мА
+        mem.s0_20ma = mControlSignal == ST_0_20_mA; //2.1 сигнал 0-20 мА
+        mem.s10v = mControlSignal == ST_10_10_V; //2.2 сигнал +/- 10В
+        mem.s10ma = mControlSignal == ST_10_10_mA; //2.3 сигнал +/- 10 мА
+        mem.s15ma = mControlSignal == ST_15_15_mA; //2.4 сигнал +/- 15мА
+        mem.s20ma = mControlSignal == ST_20_20_mA; //2.5 сиганл +/- 20 мА
+        mem.s40ma = mControlSignal == ST_40_40_mA; //2.6 сигнал +/- 40 мА
+
+        mem.channel_a = mTestChannelA; //62.0 испытание канал А
+        mem.channel_b = mTestChannelB; //62.1 испытание канала В
+        mem.channel_k_a = mSignalOnChannelA == CS_REEL_B ? 1: 0;
+        mem.channel_k_a = mSignalOnChannelA == CS_REEL_B ? 1: 0;
+
+        mem.x_max_a = mSignalStateA;             //4 сигнал переключение в А
+        mem.x_max_b = mSignalStateB;             //8 сигнал переключение в В
+        mem.x_pos_0 = mSignalState0;             //12 сигнал переключение в 0
+
+        mem.test_press = mPressureTesting;          //16 пробное давление
+        mem.nominal_press = mPressureNominal;       //20 номинальное давление
+        mem.q_max_a = mMaxExpenditureA;             //24 макс. расход в А
+        mem.q_max_b = mMaxExpenditureB;             //28 макс. расход в В
+        mem.q_max = mMaxExpenditure;               //32 макс. допустимый расход
+        mem.amp_1 = mAmplitudes[0];               //36 амплитуда 1
+        mem.amp_2 = mAmplitudes[1];               //40 амплитуда 2
+        mem.amp_3 = mAmplitudes[2];               //44 амплитуда 3
+        mem.increment = mFrequencyInc;           //48 инкремент частоты
+        mem.press_control_min = mMinControlPressure;   //52 мин. давление управления
+        mem.press_control_max = mMaxControlPressure;   //56 макс. давление управления
+        mem.U_Plat = mVoltage;
+        mem.Write();
     }
+    auto& mem1 = cpu::CpuMemory::Instance().DB30;
+    mem1.Clear();
+    mem1.Coil = mReelCount == 1 ? 0 : 1;
+    mem1.TypeControl = mControlType == CT_ELECTRIC ? 0: 1;
+    mem1.Write();
+    cpu::CpuMemory::Instance().DB31.Q_5_5ma = mDefaultExpenditure;
 }
 
 bool Parameters::Draw(QPainter &painter, QRect &free_rect ) const
@@ -263,13 +383,22 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect ) const
 
     DrawRowLeft( text_font, Qt::black, Qt::red, "Сигнал, соответствующий:", "" );
     QString ed_izm = mControlSignal == ST_10_10_V ? " В": " мА";
-    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- полному переключению в положение А"), test::ToString(mSignalStateA) + ed_izm, row_skale );
-    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- полному переключению в положение В"), test::ToString(mSignalStateB) + ed_izm, row_skale );
-    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- нулевому положению"), test::ToString(mSignalState0) + ed_izm, row_skale );
 
+    if ( mReelControl == RC_CONTROL_BOX )
+    {
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- полному переключению в положение А"), test::ToString(mSignalStateA) + ed_izm, row_skale );
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- полному переключению в положение В"), test::ToString(mSignalStateB) + ed_izm, row_skale );
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- нулевому положению"), test::ToString(mSignalState0) + ed_izm, row_skale );
+    }
+    else
+    {
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- полному переключению в положение А"), test::ToString(mEndSgnal) + ed_izm, row_skale );
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- полному переключению в положение В"), test::ToString(mEndSgnal) + ed_izm, row_skale );
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- нулевому положению"), test::ToString(0) + ed_izm, row_skale );
+    }
     DrawRowLeft( text_font, Qt::black, Qt::red, "Максимальный расход:", "" );
-    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- в канале А при максимально опорном сигнале, л/мин"), test::ToString(mMaxExpenditureA) + ed_izm, row_skale );
-    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- в канале В при максимально опорном сигнале, л/мин"), test::ToString(mMaxExpenditureB) + ed_izm, row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- в канале А при максимально опорном сигнале, л/мин"), test::ToString(mMaxExpenditureA), row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- в канале В при максимально опорном сигнале, л/мин"), test::ToString(mMaxExpenditureB), row_skale );
 
     DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Амплитуды управляющих сигналов, %"), "не реализовано", row_skale );
     DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Инкремент частоты, Гц"), test::ToString(mFrequencyInc), row_skale );
@@ -319,7 +448,7 @@ bool Parameters::PressureNominal ( QString const& val )
 {
     return ParseValue( mPressureNominal, val );
 }
-qint32 const& Parameters::PressureNominal () const
+double const& Parameters::PressureNominal () const
 {
     return mPressureNominal;
 }
@@ -328,7 +457,7 @@ bool Parameters::PressureTesting ( QString const& val )
 {
     return ParseValue( mPressureTesting, val );
 }
-qint32 const& Parameters::PressureTesting () const
+double const& Parameters::PressureTesting () const
 {
     return mPressureTesting;
 }
@@ -337,7 +466,7 @@ bool Parameters::MaxExpenditureA ( QString const& val )
 {
     return ParseValue( mMaxExpenditureA, val );
 }
-qint32 const& Parameters::MaxExpenditureA () const
+double const& Parameters::MaxExpenditureA () const
 {
     return mMaxExpenditureA;
 }
@@ -346,7 +475,7 @@ bool Parameters::MaxExpenditureB ( QString const& val )
 {
     return ParseValue( mMaxExpenditureB, val );
 }
-qint32 const& Parameters::MaxExpenditureB () const
+double const& Parameters::MaxExpenditureB () const
 {
     return mMaxExpenditureB;
 }
@@ -414,6 +543,65 @@ const double &Parameters::ControlReelResist() const
     return mControlReelResist;
 }
 
+bool Parameters::Amplitudes( QString const& val1, QString const& val2, QString const& val3 )
+{
+    bool res  = ParseValue( mAmplitudes[0], val1 );
+         res &= ParseValue( mAmplitudes[1], val2 );
+         res &= ParseValue( mAmplitudes[2], val3 );
+    return res;
+}
+const std::array< double, 3 > &Parameters::Amplitudes() const
+{
+    return mAmplitudes;
+}
+
+bool Parameters::Voltage ( QString const& val )
+{
+    return ParseValue( mVoltage, val );
+}
+const double &Parameters::Voltage() const
+{
+    return mVoltage;
+}
+
+bool Parameters::TestChannelA ( bool val )
+{
+    mTestChannelA = val;
+    return true;
+}
+const bool &Parameters::TestChannelA() const
+{
+    return mTestChannelA;
+}
+
+bool Parameters::TestChannelB ( bool val )
+{
+    mTestChannelB = val;
+    return true;
+}
+const bool &Parameters::TestChannelB() const
+{
+    return mTestChannelB;
+}
+
+bool Parameters::SignalOnChannelA ( QString const& val )
+{
+    return ParseValue( mSignalOnChannelA, val );
+}
+const CONTROL_SIGNAL &Parameters::SignalOnChannelA() const
+{
+    return mSignalOnChannelA;
+}
+
+bool Parameters::SignalOnChannelB ( QString const& val )
+{
+    return ParseValue( mSignalOnChannelB, val );
+}
+
+const CONTROL_SIGNAL &Parameters::SignalOnChannelB() const
+{
+    return mSignalOnChannelB;
+}
 }//namespace servo
 
 }//namespace test
