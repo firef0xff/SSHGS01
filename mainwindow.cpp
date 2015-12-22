@@ -129,8 +129,8 @@ MainWindow::MainWindow(QWidget *parent) :
             ff0x::RoundDial* ptr = *control;
             ptr->setObjectName( name );
             ptr->SetAngle( 210 );
-            ptr->SetRange( 0, 15 );
-            ptr->SetStep( 1 );
+            ptr->SetRange( 0, 14 );
+            ptr->SetStep( 0.2 );
             ptr->SetUnits("л/мин");
             QFont w_font = font();
             w_font.setPointSize( w_font.pointSize() - 2 );
@@ -139,7 +139,7 @@ MainWindow::MainWindow(QWidget *parent) :
             ff0x::RoundDial::RangeList green_zone;
             green_zone.push_back( QPointF(0, 10) );
             ff0x::RoundDial::RangeList red_zone;
-            red_zone.push_back( QPointF(10, 15) );
+            red_zone.push_back( QPointF(10, 14) );
 
 
             ptr->SetGreenRanges( green_zone );

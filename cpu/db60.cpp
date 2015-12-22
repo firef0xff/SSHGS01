@@ -28,7 +28,7 @@ void DB60::Read()
         if ( i < BOOL_COUNT )
             mBoolData[ i ] = rez[i].vDataValue.boolVal;
         else
-            mIntData[ i - BOOL_COUNT ] = rez[i].vDataValue.intVal;
+            mIntData[ i - BOOL_COUNT ] = rez[i].vDataValue.lVal;
     }
     opc::miniOPC::Instance().OpcMassFree( mGroupID, rez );
 }

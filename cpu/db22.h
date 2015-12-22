@@ -31,7 +31,7 @@ private:
 
     enum
     {
-        ARRAYS_COUNT = 10
+        ARRAYS_COUNT = 2
     };
 
     uint64_t mGroupID = 0;

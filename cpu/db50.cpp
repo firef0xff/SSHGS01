@@ -58,7 +58,7 @@ void DB50::Read()
     for (size_t i = 0; i < INT_COUNT + FLOAT_COUNT; i++)
     {
         if ( i < INT_COUNT )
-            mIntData[ i ] = rez[i].vDataValue.intVal;
+            mIntData[ i ] = rez[i].vDataValue.lVal;
         else
             mFloatData[ i - INT_COUNT ] = rez[i].vDataValue.fltVal;
     }
