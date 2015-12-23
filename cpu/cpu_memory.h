@@ -27,6 +27,8 @@
 #include "db22.h"
 
 #include "db40.h"
+#include "db50.h"
+#include "db60.h"
 
 namespace cpu
 {
@@ -72,6 +74,8 @@ public:
     data::DB22 DB22;
 
     data::DB40 DB40;    //аварийные биты (исключения)
+    data::DB50 DB50;    //данные датчиков
+    data::DB60 DB60;
 
 private:
     CpuMemory();

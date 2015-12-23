@@ -383,13 +383,22 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect ) const
 
     DrawRowLeft( text_font, Qt::black, Qt::red, "Сигнал, соответствующий:", "" );
     QString ed_izm = mControlSignal == ST_10_10_V ? " В": " мА";
-    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- полному переключению в положение А"), test::ToString(mSignalStateA) + ed_izm, row_skale );
-    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- полному переключению в положение В"), test::ToString(mSignalStateB) + ed_izm, row_skale );
-    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- нулевому положению"), test::ToString(mSignalState0) + ed_izm, row_skale );
 
+    if ( mReelControl == RC_CONTROL_BOX )
+    {
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- полному переключению в положение А"), test::ToString(mSignalStateA) + ed_izm, row_skale );
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- полному переключению в положение В"), test::ToString(mSignalStateB) + ed_izm, row_skale );
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- нулевому положению"), test::ToString(mSignalState0) + ed_izm, row_skale );
+    }
+    else
+    {
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- полному переключению в положение А"), test::ToString(mEndSgnal) + ed_izm, row_skale );
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- полному переключению в положение В"), test::ToString(mEndSgnal) + ed_izm, row_skale );
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- нулевому положению"), test::ToString(0) + ed_izm, row_skale );
+    }
     DrawRowLeft( text_font, Qt::black, Qt::red, "Максимальный расход:", "" );
-    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- в канале А при максимально опорном сигнале, л/мин"), test::ToString(mMaxExpenditureA) + ed_izm, row_skale );
-    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- в канале В при максимально опорном сигнале, л/мин"), test::ToString(mMaxExpenditureB) + ed_izm, row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- в канале А при максимально опорном сигнале, л/мин"), test::ToString(mMaxExpenditureA), row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- в канале В при максимально опорном сигнале, л/мин"), test::ToString(mMaxExpenditureB), row_skale );
 
     DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Амплитуды управляющих сигналов, %"), "не реализовано", row_skale );
     DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Инкремент частоты, Гц"), test::ToString(mFrequencyInc), row_skale );

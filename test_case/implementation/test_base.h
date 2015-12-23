@@ -76,6 +76,7 @@ protected:
 
     cpu::data::DB11&  m15Result;
     cpu::data::DB21&  m25Result;
+    cpu::data::DB60&  m1525Counts;
 protected:
     void UpdateData();
 private:

@@ -3,6 +3,7 @@
 #include <QJsonArray>
 #include "../../../../mylib/Widgets/GraphBuilder/graph_builder.h"
 #include "test_case/test_params.h"
+#include "../test_params_servo.h"
 
 namespace test
 {
@@ -42,6 +43,9 @@ void FrequencyCharacteristics::UpdateData()
             for ( size_t i = 0; i < mControlReelBits.op24_number && i < m24Result1.SIGNAL_COUNT; ++i )
             {
     #warning как то что считаем
+                // амплитуда считается по дельте соседних перемещений
+                // фаза
+                // частота с контроллера
             }
             ready = false;
             mData.push_back( d );
@@ -95,6 +99,10 @@ bool FrequencyCharacteristics::Deserialize( QJsonObject const& obj )
 
 bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
 {
+    test::servo::Parameters *params = static_cast< test::servo::Parameters * >( CURRENT_PARAMS );
+    if ( !params )
+        return true;
+
     QFont header_font = painter.font();
     header_font.setFamily("Arial");
     header_font.setPointSize( 14 );
@@ -166,14 +174,14 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
 
 
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
+    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font, &params ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении испытаний, бар"), Qt::red, "что писать?" );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении испытаний, бар"), Qt::red, test::ToString( params->PressureNominal() ) );
     }, 2 );
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
+    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font, &params ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Расход при проведении испытаний, л/мин"), Qt::red, "что писать?" );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Расход при проведении испытаний, л/мин"), Qt::red, test::ToString( params->DefaultExpenditure() ) );
     }, 2 );
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )

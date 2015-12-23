@@ -16,6 +16,7 @@
 #include "test_case/implementation/test_params_hydro_cilinder.h"
 #include "test_case/test.h"
 #include "viewer.h"
+#include "cpu/cpu_memory.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -62,20 +63,19 @@ MainWindow::MainWindow(QWidget *parent) :
             ff0x::RoundDial* ptr = *control;
             ptr->setObjectName( name );
             ptr->SetAngle( 210 );
-            ptr->SetRange( 0, 500 );
+            ptr->SetRange( 0, 400 );
             ptr->SetStep( 10 );
             ptr->SetUnits("Бар.");
             QFont w_font = font();
             w_font.setPointSize( w_font.pointSize() - 2 );
             ptr->setFont( w_font );
             ff0x::RoundDial::RangeList green_zone;
-            green_zone.push_back( QPointF(100, 400) );
+            green_zone.push_back( QPointF(10, 315) );
             ff0x::RoundDial::RangeList yelow_zone;
-            yelow_zone.push_back( QPointF(50, 100) );
-            yelow_zone.push_back( QPointF( 400, 450) );
+            yelow_zone.push_back( QPointF(0, 10) );
             ff0x::RoundDial::RangeList red_zone;
-            red_zone.push_back( QPointF(0, 50) );
-            red_zone.push_back( QPointF( 450, 500) );
+            red_zone.push_back( QPointF(315, 400) );
+
 
             ptr->SetGreenRanges( green_zone );
             ptr->SetYellowRanges( yelow_zone );
@@ -88,18 +88,16 @@ MainWindow::MainWindow(QWidget *parent) :
 
             ptr->setSizePolicy( QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding );
             place->addWidget( ptr );
-
-            ptr->update_value( 101 );
         }
     };
 
-    addRoundControl( &DD1, "DD1", ui->p_dd1);
-    addRoundControl( &DD2, "DD2", ui->p_dd2);
-    addRoundControl( &DD3, "DD3", ui->p_dd3);
+    addRoundControl( &DD1, "DD1", ui->p_dd1);   //A BP3
+    addRoundControl( &DD2, "DD2", ui->p_dd2);   //B BP4
+    addRoundControl( &DD3, "DD3", ui->p_dd3);   //P BP5
 
-    addRoundControl( &M1M2, "M1M2", ui->p_m1m2);
-    addRoundControl( &T, "T", ui->p_T);
-    addRoundControl( &X, "X", ui->p_X);
+    addRoundControl( &M1M2, "M1M2", ui->p_m1m2);    //M1M2 BP1
+    addRoundControl( &T, "T", ui->p_T);             //T BP2
+    addRoundControl( &X, "X", ui->p_X);         //x BP6
 
     auto addRoundControl2 = [&]( ff0x::RoundDial** control, QString const& name, QLayout* place)
     {
@@ -108,8 +106,8 @@ MainWindow::MainWindow(QWidget *parent) :
             ff0x::RoundDial* ptr = *control;
             ptr->setObjectName( name );
             ptr->SetAngle( 210 );
-            ptr->SetRange( -100, 100 );
-            ptr->SetStep( 5 );
+            ptr->SetRange( 0, 700 );
+            ptr->SetStep( 10 );
             ptr->SetUnits("л/мин");
             QFont w_font = font();
             w_font.setPointSize( w_font.pointSize() - 2 );
@@ -122,16 +120,50 @@ MainWindow::MainWindow(QWidget *parent) :
 
             ptr->setSizePolicy( QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding );
             place->addWidget( ptr );
+        }
+    };
+    auto addRoundControl3 = [&]( ff0x::RoundDial** control, QString const& name, QLayout* place)
+    {
+        *control = new ff0x::RoundDial(this);
+        {
+            ff0x::RoundDial* ptr = *control;
+            ptr->setObjectName( name );
+            ptr->SetAngle( 210 );
+            ptr->SetRange( 0, 14 );
+            ptr->SetStep( 0.2 );
+            ptr->SetUnits("л/мин");
+            QFont w_font = font();
+            w_font.setPointSize( w_font.pointSize() - 2 );
+            ptr->setFont( w_font );
 
-            ptr->update_value( 10 );
+            ff0x::RoundDial::RangeList green_zone;
+            green_zone.push_back( QPointF(0, 10) );
+            ff0x::RoundDial::RangeList red_zone;
+            red_zone.push_back( QPointF(10, 14) );
+
+
+            ptr->SetGreenRanges( green_zone );
+            ptr->SetRedRanges( red_zone );
+
+            ptr->EnableSaffetyRanges( true );
+
+            ptr->setMinimumSize( 200, 170 );
+            ptr->setMaximumSize( 200, 170 );
+
+            ptr->setSizePolicy( QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding );
+            place->addWidget( ptr );
         }
     };
     addRoundControl2( &R_P, "R_P", ui->p_p);
-    addRoundControl2( &R_Lost, "R_Lost", ui->p_lost);
+    addRoundControl3( &R_Lost, "R_Lost", ui->p_lost);
+
+    QObject::connect( &Updater, SIGNAL(update()), this, SLOT(onUpdateControls()) );
+    Updater.start();
 }
 
 MainWindow::~MainWindow()
 {
+    Updater.stop();
     DD1->deleteLater();
     DD2->deleteLater();
     DD3->deleteLater();
@@ -315,7 +347,62 @@ void MainWindow::on_Open_results_triggered()
         test::DataFromFile( file_name );
         on_LastTest_triggered();
     }
+}
 
+void MainWindow::onUpdateControls()
+{
+    auto& table = cpu::CpuMemory::Instance().DB50;
+    table.Read();
 
+    DD1->update_value( table.BP3 );
+    DD2->update_value( table.BP4 );
+    DD3->update_value( table.BP5 );
+    M1M2->update_value( table.BP1 );
+    T->update_value( table.BP2 );
+    X->update_value( table.BP6 );
 
+    float lost = table.BV4;
+    if ( lost < 1.9 )
+        lost = table.BV3;
+
+    R_Lost->update_value( lost );
+
+    float exp_t = table.BV2;
+    if ( exp_t < 60.0 )
+        exp_t = table.BV1;
+    R_P->update_value( exp_t );
+
+    float voltage = table.V0_300B;
+//    if ( voltage == 60.0 )
+//        voltage = table.V0_300B;
+    ui->Voltage->display( voltage );
+
+    float amperage_dc = table.A1;  //постоянный ток
+    ui->Amperage->display(amperage_dc);
+
+    float amperage_ac = table.A1;  //переменный ток
+//    ui->Amperage->display(amperage_dc);
+
+    //уровень масла
+    //см DB40
+}
+
+ControlsUpdater::ControlsUpdater():
+    mStopSignal(false)
+{}
+void ControlsUpdater::run()
+{
+    auto& table = cpu::CpuMemory::Instance().DB50;
+    mStopSignal = false;
+    while ( !mStopSignal )
+    {
+        table.Read();
+        emit update();
+        msleep(100);
+    }
+}
+void ControlsUpdater::stop()
+{
+    mStopSignal = true;
+    wait();
 }

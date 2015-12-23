@@ -3,6 +3,7 @@
 #include <QJsonArray>
 #include "../../../../mylib/Widgets/GraphBuilder/graph_builder.h"
 #include "test_case/test_params.h"
+#include "test_case/implementation/test_params_servo.h"
 namespace test
 {
 namespace servo
@@ -34,16 +35,18 @@ bool ExpeditureFromInput::Run()
     }
 
     OilTemp = mTemperature.T_oil;
-
+    auto& params = Parameters::Instance();
 #warning нет получения данных
 ///     Коэффициент усиления по расходу
-///     1. сигнал (x_min) при котором расход равен 0 ( а, б )
+///     1. сигнал (x_p0) при котором расход равен 0 ( а, б )
 ///     2. сигнал (x_max) при котором достигнут максимальны расход (q_max) ( максимальный расход см в параметрах ) ( а, б )
-///     3. коффициент = Q_max/( x_max - x_min )
+///     3. коффициент = Q_max/( x_max - x_p0 )
+    // для 12 считается по параметрам
+    // для 22 x_p0 = 0 а крание равны +- параметру
 
 ///     Нелинейность
-///     1. q_max - расход при максимальном управляющем сигнале x_max
-///        q_0   - расход при при нулевом управляющем сигнале x_0
+///     1. q_max - расход при максимальном управляющем сигнале x_max //из параметра
+///        q_0   - расход при при нулевом управляющем сигнале x_0    // 0
 ///     2. вычислить коэффициент k = (q_max - q_0) / ( x_max - x_0 )
 ///     3. для каждого управляющего сигнала вычислить q_et[i] = k * x[i];
 ///     4. вычислить массив r[i] = q_et[i] - q[i];
@@ -113,6 +116,10 @@ bool ExpeditureFromInput::Deserialize( QJsonObject const& obj )
 
 bool ExpeditureFromInput::Draw( QPainter& painter, QRect &free_rect ) const
 {
+    test::servo::Parameters *params = static_cast< test::servo::Parameters * >( CURRENT_PARAMS );
+    if ( !params )
+        return true;
+
     QFont header_font = painter.font();
     header_font.setFamily("Arial");
     header_font.setPointSize( 14 );
@@ -195,9 +202,9 @@ bool ExpeditureFromInput::Draw( QPainter& painter, QRect &free_rect ) const
 
 
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
+    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font, &params ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении испытаний, бар"), Qt::red, "что писать?" );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении испытаний, бар"), Qt::red, test::ToString( params->PressureNominal() ) );
     }, 2 );
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )

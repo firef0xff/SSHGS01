@@ -21,6 +21,7 @@ public:
 
 class InOut : public In, Out
 {
+public:
     virtual ~InOut(){}
 };
 

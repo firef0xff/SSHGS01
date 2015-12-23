@@ -27,9 +27,11 @@ private:
         struct Channel
         {
             Channel():
+                Expenditure(0.0),
                 BP5(0),
                 BP3(0)
             {}
+            double Expenditure;
             double BP5;
             double BP3;
             double BP5_3 () const
@@ -41,20 +43,20 @@ private:
             bool Deserialize( QJsonObject const& obj );
         };
 
-        Data():
-            Expenditure(0)
+        Data()
         {}
 
         QJsonObject Serialise() const;
         bool Deserialize( QJsonObject const& obj );
 
-        double Expenditure;
+
         Channel ChA;
         Channel ChB;
     };
 
     QVector<Data> mData;
     mutable int PrintedRows = 0;
+    mutable int PrintedPage = 0;
 };
 
 }//namespace servo

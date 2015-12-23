@@ -96,7 +96,11 @@
        </widget>
       </item>
       <item>
-       <widget class="QLCDNumber" name="lcdNumber_2"/>
+       <widget class="QLCDNumber" name="Voltage">
+        <property name="intValue" stdset="0">
+         <number>0</number>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QLabel" name="label_4">
@@ -106,7 +110,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLCDNumber" name="lcdNumber"/>
+       <widget class="QLCDNumber" name="Amperage"/>
       </item>
       <item>
        <widget class="QLabel" name="label_7">
@@ -137,25 +141,6 @@
       </item>
       <item>
        <widget class="QLCDNumber" name="lcdNumber_3"/>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_6">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>Положение цилиндра</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignBottom|Qt::AlignHCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLCDNumber" name="lcdNumber_4"/>
       </item>
       <item>
        <spacer name="horizontalSpacer">

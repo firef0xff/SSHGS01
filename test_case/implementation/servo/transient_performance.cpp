@@ -3,6 +3,7 @@
 #include <QJsonArray>
 #include "../../../../mylib/Widgets/GraphBuilder/graph_builder.h"
 #include "test_case/test_params.h"
+#include "../test_params_servo.h"
 namespace test
 {
 namespace servo
@@ -14,6 +15,7 @@ TransientPerformance::TransientPerformance():
 
 bool TransientPerformance::Run()
 {
+    Graph.clear();
     Start();
     if ( ReelControl() )
         Wait( mControlReelBits.op25_ok, mControlReelBits.op25_end );
@@ -23,9 +25,10 @@ bool TransientPerformance::Run()
         return false;
     OilTemp = mTemperature.T_oil;
 
-#warning какие - то действия, нужны перемещения и время
 
-    Data d;
+    //dt = 1мс;
+    //t = DB60, INT60 count - количестко показаний перемещений
+    //диаметры цилиндров из параметров по заданному расходу
 
     return Success();
 }
@@ -36,6 +39,44 @@ void TransientPerformance::UpdateData()
         m25Result.Read();
     else
         m15Result.Read();
+    m1525Counts.Read();
+
+    if ( m1525Counts.OP15_25_Opor_1 ||
+         m1525Counts.OP15_25_Opor_2 ||
+         m1525Counts.OP15_25_Opor_3)
+    {
+        auto f_d2d1 = []( double exp )
+        {
+            if ( exp < 30 )
+                return (25.0 - 18.0)*(25.0 - 18.0);
+            return (63.0-36.0)*(63.0-36.0);
+        };
+
+        double d2d1 = f_d2d1( test::servo::Parameters::Instance().DefaultExpenditure() );
+
+        if ( ReelControl() )
+        {
+            for ( size_t i = 0; i < m1525Counts.OP15_25_count && i < m25Result.COORDINATE_COUNT; ++i )
+            {
+                Data d;
+                d.time = i;
+                d.expenditure = 10000.0/1270.0 * m25Result.coordinate[i] * d2d1;
+                Graph.push_back( d );
+            }
+        }
+        else
+        {
+            for ( size_t i = 0; i < m1525Counts.OP15_25_count && i < m15Result.COORDINATE_COUNT; ++i )
+            {
+                Data d;
+                d.time = i;
+                d.expenditure = 10000.0/1270.0 * m15Result.coordinate[i] * d2d1;
+                Graph.push_back( d );
+            }
+        }
+
+        cpu::CpuMemory::Instance().DB31.SendContinue();
+    }
 }
 bool TransientPerformance::Success() const
 {
@@ -68,6 +109,10 @@ bool TransientPerformance::Deserialize( QJsonObject const& obj )
 
 bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
 {
+    test::servo::Parameters *params = static_cast< test::servo::Parameters * >( CURRENT_PARAMS );
+    if ( !params )
+        return true;
+
     QFont header_font = painter.font();
     header_font.setFamily("Arial");
     header_font.setPointSize( 14 );
@@ -134,14 +179,14 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
 
 
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
+    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font, &params ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Диапазон давление при проведении испытаний, бар"), Qt::red, "что писать?" );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Диапазон давлений при проведении испытаний, бар"), Qt::red, test::ToString( params->PressureNominal() ) );
     }, 2 );
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
+    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font, &params ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Расход при проведении испытаний, л/мин"), Qt::red, "что писать?" );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Расход при проведении испытаний, л/мин"), Qt::red, test::ToString( params->DefaultExpenditure() ) );
     }, 2 );
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )

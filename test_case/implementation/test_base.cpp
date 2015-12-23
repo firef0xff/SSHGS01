@@ -44,8 +44,11 @@ void TestCommonData::Wait( bool& work, bool& done)
 {
     work = false;
     done = false;
-    while( !done )
+    bool started = false;
+    while( !done || !started )
     {
+        if (work)
+            started = true;
         UpdateData();
         if ( IsStopped() )
         {
@@ -103,6 +106,7 @@ Test::Test( QString const& name, uint8_t id_board, uint8_t id_reel ):
     m24Result2( cpu::CpuMemory::Instance().DB24 ),
     m15Result( cpu::CpuMemory::Instance().DB11 ),
     m25Result( cpu::CpuMemory::Instance().DB21 ),
+    m1525Counts( cpu::CpuMemory::Instance().DB60 ),
     mIdReel( id_reel )
 {
     ++mTestsCount;

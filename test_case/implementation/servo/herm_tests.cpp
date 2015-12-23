@@ -27,7 +27,6 @@ bool OutsideHermTest::Run()
         Wait( mControlBoardBits.op10_ok, mControlBoardBits.op10_end );
     if ( IsStopped() )
         return false;
-    Question();
 
     OilTemp = mTemperature.T_oil;
 
@@ -59,6 +58,10 @@ bool OutsideHermTest::Deserialize( QJsonObject const& obj )
 
 bool OutsideHermTest::Draw( QPainter& painter, QRect &free_rect ) const
 {
+    test::servo::Parameters *params = static_cast< test::servo::Parameters * >( CURRENT_PARAMS );
+    if ( !params )
+        return true;
+
     QFont header_font = painter.font();
     header_font.setFamily("Arial");
     header_font.setPointSize( 14 );
@@ -130,9 +133,9 @@ bool OutsideHermTest::Draw( QPainter& painter, QRect &free_rect ) const
 
 
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
+    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font, &params ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении испытаний, бар"), Qt::red, "что писать?" );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении испытаний, бар"), Qt::red, test::ToString( params->PressureTesting()) );
     }, 2 );
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
@@ -184,6 +187,8 @@ InsideHermTest::InsideHermTest():
 
 bool InsideHermTest::Run()
 {
+    GraphA.clear();
+    GraphB.clear();
     Start();
     if ( ReelControl() )
         Wait( mControlReelBits.op21_ok, mControlReelBits.op21_end );
@@ -202,7 +207,7 @@ bool InsideHermTest::Run()
             GraphA.push_back(d);
 
             d.Leak = m21Results.consumption_b[i];
-            d.Signal = m21Results.ref_b[i];
+            d.Signal = -m21Results.ref_b[i];
             GraphB.push_back(d);
         }
     }
@@ -216,7 +221,7 @@ bool InsideHermTest::Run()
             GraphA.push_back(d);
 
             d.Leak = m11Results.consumption_b[i];
-            d.Signal = m11Results.ref_b[i];
+            d.Signal = -m11Results.ref_b[i];
             GraphB.push_back(d);
         }
     }
@@ -354,9 +359,9 @@ bool InsideHermTest::Draw( QPainter& painter, QRect &free_rect ) const
 
 
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
+    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font, &params ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении испытаний, бар"), Qt::red, "что писать?" );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении испытаний, бар"), Qt::red, test::ToString( params->PressureTesting()) );
     }, 2 );
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )

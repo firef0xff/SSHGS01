@@ -97,7 +97,9 @@ SOURCES += main.cpp\
     cpu/db37.cpp \
     cpu/db38.cpp \
     cpu/db39.cpp \
-    cpu/db40.cpp
+    cpu/db40.cpp \
+    cpu/db50.cpp \
+    cpu/db60.cpp
 
 HEADERS  += mainwindow.h \
     test_case/test_case.h \
@@ -184,7 +186,9 @@ HEADERS  += mainwindow.h \
     cpu/db37.h \
     cpu/db38.h \
     cpu/db39.h \
-    cpu/db40.h
+    cpu/db40.h \
+    cpu/db50.h \
+    cpu/db60.h
 
 FORMS    += mainwindow.ui \
     hydro_title_info.ui \

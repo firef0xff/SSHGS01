@@ -62,6 +62,9 @@ void CpuMemory::ReadAll()
     DB22.Read();
 
     DB40.Read();
+    DB50.Read();
+
+    DB60.Read();
 }
 void CpuMemory::WriteAll()
 {

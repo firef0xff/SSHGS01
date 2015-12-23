@@ -2,7 +2,7 @@
 #include <QMainWindow>
 #include <memory>
 #include "RoundDial/round_dial.h"
-
+#include <QThread>
 namespace examinee
 {
 class DeviceCollection;
@@ -11,6 +11,19 @@ class DeviceCollection;
 namespace Ui {
 class MainWindow;
 }
+
+class ControlsUpdater : public QThread
+{
+    Q_OBJECT
+public:
+    ControlsUpdater();
+    void run();
+    void stop();
+private:
+    mutable bool mStopSignal;
+signals:
+    void update();
+};
 
 class MainWindow : public QMainWindow
 {
@@ -60,7 +73,8 @@ private:
     //цилиндр
     ff0x::RoundDial* R_Cilindr;
 
-    //расходомер
+    //Поток обновления данных датчиков
+    ControlsUpdater Updater;
 
 private slots:
 
@@ -82,4 +96,8 @@ private slots:
     void on_act_test_case4_triggered();
     void on_LastTest_triggered();
     void on_Open_results_triggered();
+
+    void onUpdateControls();
 };
+
+

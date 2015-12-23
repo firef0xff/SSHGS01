@@ -65,7 +65,6 @@ bool ServoTitleInfo::SaveInputParams()
 
     res *= ParamChecker( ui->l_ser_no,          params.SerNo( ui->SerNo->text() ) );
     res *= ParamChecker( ui->l_def_expenditure, params.DefaultExpenditure( ui->DefExpenditure->text() ) );
-    res *= ParamChecker( ui->l_voltage,         params.Voltage( ui->Voltage->currentText() ) );
     res *= ParamChecker( ui->l_reel_count,      params.ReelCount( ui->ReelCount->text() ) );
 
     res *= ParamChecker( ui->l_raspred_control,    params.ControlType( ui->RaspredControl->currentText() ) );
@@ -95,6 +94,7 @@ bool ServoTitleInfo::SaveInputParams()
 
     if ( params.ReelControl() == test::RC_CONTROL_BOX )
     {
+        res *= ParamChecker( ui->l_voltage,         params.Voltage( ui->Voltage->currentText() ) );
         res *= ParamChecker( ui->l_signal_state_a,    ValidateRange( ui->SignalStateA, params.SignalStateA( ui->SignalStateA->text() ) ) );
         res *= ParamChecker( ui->l_signal_state_b,    ValidateRange( ui->SignalStateB, params.SignalStateB( ui->SignalStateB->text() ) ) );
         res *= ParamChecker( ui->l_signal_state_0,    ValidateRange( ui->SignalState0, params.SignalState0( ui->SignalState0->text() ) ) );
@@ -126,7 +126,6 @@ void ServoTitleInfo::FromParams()
 
     ui->SerNo->setText( params.SerNo() );
     ui->DefExpenditure->setValue( params.DefaultExpenditure() );
-    ui->Voltage->setCurrentIndex( ui->Voltage->findText( test::ToString( params.Voltage() ) ) );
     ui->ReelCount->setValue( params.ReelCount() );
     on_ReelCount_valueChanged( ui->ReelCount->value() );
     ui->RaspredControl->setCurrentIndex( ui->RaspredControl->findText( test::ToString( params.ControlType() ) ) );
@@ -157,11 +156,12 @@ void ServoTitleInfo::FromParams()
         ui->ControlReelResist->setText( test::ToString( params.ControlReelResist() ) );
     }
 
+    ui->MaxExpenditureA->setText( test::ToString( params.MaxExpenditureA() ) );
+    if ( params.ReelCount() == 2)
+        ui->MaxExpenditureB->setText( test::ToString( params.MaxExpenditureB() ) );
     if ( params.ReelControl() == test::RC_CONTROL_BOX )
     {
-        ui->MaxExpenditureA->setText( test::ToString( params.MaxExpenditureA() ) );
-        if ( params.ReelCount() == 2)
-            ui->MaxExpenditureB->setText( test::ToString( params.MaxExpenditureB() ) );
+        ui->Voltage->setCurrentIndex( ui->Voltage->findText( test::ToString( params.Voltage() ) ) );
 
         ui->SignalStateA->setText( test::ToString( params.SignalStateA() ) );
         if ( params.ReelCount() == 2)
