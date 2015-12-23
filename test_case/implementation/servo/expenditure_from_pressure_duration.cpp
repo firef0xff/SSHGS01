@@ -257,7 +257,7 @@ bool ExpeditureFromPressureDuration::Draw( QPainter& painter, QRect &free_rect )
         table += row;
     }
     if ( PrintedRows && rows_prapared )
-        ++num;
+        num += PrintedPage;
     PrintedRows += rows_prapared;
     table += footer;
 
@@ -274,6 +274,7 @@ bool ExpeditureFromPressureDuration::Draw( QPainter& painter, QRect &free_rect )
         painter.translate( rect.topLeft() );
         doc.drawContents( &painter, r);
         painter.restore();
+        ++PrintedPage;
     }, 1, h );
     ///----------------
 

@@ -27,7 +27,6 @@ bool OutsideHermTest::Run()
         Wait( mControlBoardBits.op10_ok, mControlBoardBits.op10_end );
     if ( IsStopped() )
         return false;
-    Question();
 
     OilTemp = mTemperature.T_oil;
 

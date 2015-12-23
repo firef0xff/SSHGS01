@@ -56,6 +56,7 @@ private:
 
     QVector<Data> mData;
     mutable int PrintedRows = 0;
+    mutable int PrintedPage = 0;
 };
 
 }//namespace servo
