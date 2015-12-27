@@ -303,6 +303,11 @@ bool ExpeditureFromPressureDuration::Draw( QPainter& painter, QRect &free_rect )
         double max_Leak_a = 0;
         double max_Leak_b = 0;
 
+        double min_signal_a = 0;
+        double min_signal_b = 0;
+        double min_Leak_a = 0;
+        double min_Leak_b = 0;
+
         //поиск данных теста
         foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
         {
@@ -336,7 +341,6 @@ bool ExpeditureFromPressureDuration::Draw( QPainter& painter, QRect &free_rect )
 
             if ( max_signal_a < abs_sig_a )
                 max_signal_a = abs_sig_a;
-
             if ( max_signal_b < abs_sig_b )
                 max_signal_b = abs_sig_b;
 
@@ -344,6 +348,16 @@ bool ExpeditureFromPressureDuration::Draw( QPainter& painter, QRect &free_rect )
                 max_Leak_a = abs_leak_a;
             if ( max_Leak_b < abs_leak_b )
                 max_Leak_b = abs_leak_b;
+
+            if ( min_signal_a > abs_sig_a )
+                min_signal_a = abs_sig_a;
+            if ( min_signal_b > abs_sig_b )
+                min_signal_b = abs_sig_b;
+
+            if ( min_Leak_a > abs_leak_a )
+                min_Leak_a = abs_leak_a;
+            if ( min_Leak_b > abs_leak_b )
+                min_Leak_b = abs_leak_b;
 
             dataA.push_back( QPointF( item.ChA.BP5_3(), item.ChA.Expenditure ) );
             dataB.push_back( QPointF( item.ChB.BP5_3(), item.ChB.Expenditure ) );
@@ -354,16 +368,16 @@ bool ExpeditureFromPressureDuration::Draw( QPainter& painter, QRect &free_rect )
         int w = (rect.height() - metrix.height())*0.98;
         int h = (rect.height() - metrix.height())*0.98;
 
-        ff0x::GraphBuilder builder ( w, h, ff0x::GraphBuilder::PlusPlus, f );
-        ff0x::GraphBuilder::GraphDataLine lines_a;
-        lines_a.push_back( ff0x::GraphBuilder::Line(dataA, ff0x::GraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
+        ff0x::NoAxisGraphBuilder builder ( w, h, f );
+        ff0x::NoAxisGraphBuilder::GraphDataLine lines_a;
+        lines_a.push_back( ff0x::NoAxisGraphBuilder::Line(dataA, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
         if ( !dataA_e.empty() )
-            lines_a.push_back( ff0x::GraphBuilder::Line(dataA_e, ff0x::GraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
+            lines_a.push_back( ff0x::NoAxisGraphBuilder::Line(dataA_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
 
-        ff0x::GraphBuilder::GraphDataLine lines_b;
-        lines_b.push_back( ff0x::GraphBuilder::Line(dataB, ff0x::GraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
+        ff0x::NoAxisGraphBuilder::GraphDataLine lines_b;
+        lines_b.push_back( ff0x::NoAxisGraphBuilder::Line(dataB, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
         if ( !dataB_e.empty() )
-            lines_b.push_back( ff0x::GraphBuilder::Line(dataB_e, ff0x::GraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
+            lines_b.push_back( ff0x::NoAxisGraphBuilder::Line(dataB_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
 
 
         QRect p1(rect.left(), rect.top(), w, h );
@@ -372,8 +386,13 @@ bool ExpeditureFromPressureDuration::Draw( QPainter& painter, QRect &free_rect )
         QRect p2t(p2.left(), p2.bottom(), p2.width(), metrix.height());
         DrawRowCenter( p1t, text_font, Qt::black, "P->A" );
         DrawRowCenter( p2t, text_font, Qt::black, "P->B" );
-        painter.drawPixmap( p1, builder.Draw( lines_a, max_signal_a * 1.25, max_Leak_a * 1.25, ceil( max_signal_a )/10, ceil(max_Leak_a)/10, "Δ Р (бар)", "Расход (л/мин)", true ) );
-        painter.drawPixmap( p2, builder.Draw( lines_b, max_signal_b * 1.25, max_Leak_b * 1.25, ceil( max_signal_b )/10, ceil(max_Leak_b)/10, "Δ Р (бар)", "Расход (л/мин)", true ) );
+
+        QPointF x_range_a( max_signal_a, min_signal_a );
+        QPointF y_range_a( max_Leak_a, min_Leak_a );
+        painter.drawPixmap( p1, builder.Draw( lines_a, x_range_a, y_range_a, ceil( max_signal_a - min_signal_a )/10, ceil(max_Leak_a - min_Leak_a)/10, "Δ Р (бар)", "Расход (л/мин)", true ) );
+        QPointF x_range_b( max_signal_b, min_signal_b );
+        QPointF y_range_b( max_Leak_b, min_Leak_b );
+        painter.drawPixmap( p2, builder.Draw( lines_b, x_range_b, y_range_b, ceil( max_signal_b - min_signal_b )/10, ceil(max_Leak_b - min_Leak_b)/10, "Δ Р (бар)", "Расход (л/мин)", true ) );
 
         painter.restore();
     }, 1, free_rect.width()/2 + metrix.height()  );

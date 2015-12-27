@@ -36,13 +36,31 @@ bool ExpeditureFromInput::Run()
 
     OilTemp = mTemperature.T_oil;
     auto& params = Parameters::Instance();
+    if ( ReelControl() )
+    {
+        ///     Коэффициент усиления по расходу
+        ///     1. сигнал (x_p0) при котором расход равен 0 ( а, б )
+        ///     2. сигнал (x_max) при котором достигнут максимальны расход (q_max) ( максимальный расход см в параметрах ) ( а, б )
+        ///     3. коффициент = Q_max/( x_max - x_p0 )
+        double x_p0 = 0;
+        double x_max = params.EndSgnal();
+        Gain = params.MaxExpenditureA()/( x_max - x_p0 );
+        Gain = params.MaxExpenditureB()/( x_max - x_p0 );
+    }
+    else
+    {
+        ///     Коэффициент усиления по расходу
+        ///     1. сигнал (x_p0) при котором расход равен 0 ( а, б )
+        ///     2. сигнал (x_max) при котором достигнут максимальны расход (q_max) ( максимальный расход см в параметрах ) ( а, б )
+        ///     3. коффициент = Q_max/( x_max - x_p0 )
+        double x_p0 = params.SignalState0();
+        double x_max_a = params.SignalStateA();
+        double x_max_b = -params.SignalStateB();
+        Gain = params.MaxExpenditureA()/( x_max_a - x_p0 );
+        Gain = params.MaxExpenditureB()/( x_max_b - x_p0 );
+    }
 #warning нет получения данных
-///     Коэффициент усиления по расходу
-///     1. сигнал (x_p0) при котором расход равен 0 ( а, б )
-///     2. сигнал (x_max) при котором достигнут максимальны расход (q_max) ( максимальный расход см в параметрах ) ( а, б )
-///     3. коффициент = Q_max/( x_max - x_p0 )
-    // для 12 считается по параметрам
-    // для 22 x_p0 = 0 а крание равны +- параметру
+
 
 ///     Нелинейность
 ///     1. q_max - расход при максимальном управляющем сигнале x_max //из параметра

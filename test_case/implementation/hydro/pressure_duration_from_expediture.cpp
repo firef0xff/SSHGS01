@@ -219,6 +219,7 @@ bool PressureDurationFromExpenditure::Draw( QPainter& painter, QRect &free_rect 
                "<tr>"
                    "<th rowspan='2'>Расход<br>л/мин</th>"
                    "<th colspan='3'>Перепад P-->А</th>"
+                   "<th rowspan='2'>Расход<br>л/мин</th>"
                    "<th colspan='3'>Перепад P-->B</th>"
                "</tr>"
                "<tr>"
@@ -242,18 +243,11 @@ bool PressureDurationFromExpenditure::Draw( QPainter& painter, QRect &free_rect 
                             "<td>" + QString::number( mData[i].first.BP5 ) + "</td>"
                             "<td>" + QString::number( mData[i].first.BP3 ) + "</td>"
                             "<td>" + QString::number( mData[i].first.BP5_3 ) + "</td>";
-        if ( params->ReelCount() == 2 )
-        {
-                row +=      "<td>" + QString::number( mData[i].second.BP5 ) + "</td>"
+                row +=      "<td>" + QString::number( mData[i].second.Expenditure ) + "</td>"
+                            "<td>" + QString::number( mData[i].second.BP5 ) + "</td>"
                             "<td>" + QString::number( mData[i].second.BP3 ) + "</td>"
                             "<td>" + QString::number( mData[i].second.BP5_3 ) + "</td>";
-        }
-        else
-        {
-            row +=          "<td></td>"
-                            "<td></td>"
-                            "<td></td>";
-        }
+
           row +=        "</tr>";
         return row;
     };

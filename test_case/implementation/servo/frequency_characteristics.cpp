@@ -16,6 +16,7 @@ FrequencyCharacteristics::FrequencyCharacteristics():
 
 bool FrequencyCharacteristics::Run()
 {
+    mData.clear();
     Start();
     if ( ReelControl() )
         Wait( mControlReelBits.op24_ok, mControlReelBits.op24_end );
@@ -25,6 +26,7 @@ bool FrequencyCharacteristics::Run()
         return false;
 
     OilTemp = mTemperature.T_oil;
+
     return Success();
 }
 void FrequencyCharacteristics::UpdateData()
@@ -32,23 +34,78 @@ void FrequencyCharacteristics::UpdateData()
     Test::UpdateData();
 
     Data d;
+
+    auto f_S = []( double expenditure )
+    {
+        double r1 = 0, r2 = 0;
+        if ( expenditure < 30 )
+        {
+            r1 = 25.0/2.0;
+            r2 = 18.0/2.0;
+        }
+        else
+        {
+            r1 = 63.0/2.0;
+            r2 = 36.0/2.0;
+        }
+        return 2 *3.14 * ( r1*r1 - r2*r2 );
+    };
+    double K = 0.00006 * f_S( test::servo::Parameters::Instance().DefaultExpenditure() );
+    double time_period = 1/1000; //время между замерами данных с
+
     if ( ReelControl() )
     {
         m24Result1.Read();
         m24Result2.Read();
 
-        bool ready = false;
-        if (ready)
+        if (mControlReelBits.op24_ready)
         {
+            std::vector< double > expenditure;
             for ( size_t i = 0; i < mControlReelBits.op24_number && i < m24Result1.SIGNAL_COUNT; ++i )
             {
-    #warning как то что считаем
-                // амплитуда считается по дельте соседних перемещений
-                // фаза
-                // частота с контроллера
+                double ext = 0; // пройденное расстояние в мм
+                if ( i > 1 )
+                    ext = m24Result2.coordinate[i] - m24Result2.coordinate[i - 1];
+
+                double speed = ext / time_period; //скорость движения мм/сек
+                if ( i > 1 )
+                    expenditure.push_back( speed * K ); // расход л/мин
             }
-            ready = false;
+            //определим амплитуду
+            size_t q_min = 0;
+            size_t q_max = 0;
+            if ( !expenditure.empty() )
+            {
+                q_max = 0;
+                q_min = 0;
+            }
+            for ( size_t i = 0; i < expenditure.size(); ++i )
+            {
+                if ( expenditure[i] > expenditure[q_max] )
+                    q_max = i;
+                if ( expenditure[i] < expenditure[q_min] )
+                    q_min = i;
+            }
+            size_t s_min = 0;
+            size_t s_max = 0;
+
+            for ( size_t i = 0; i < mControlReelBits.op24_number && i < m24Result1.SIGNAL_COUNT; ++i )
+            {
+                if ( m24Result1.signal[i] > m24Result1.signal[s_max] )
+                    s_max = i;
+                if ( m24Result1.signal[i] < m24Result1.signal[s_min] )
+                    s_min = i;
+            }
+
+            double Tsm = q_max - s_max - 1;
+            double T = 1/mControlReelBits.op24_frequency;
+            double fi = -Tsm/T*360;
+
+            d.frequency = mControlReelBits.op24_frequency;
+            d.ampl = q_max - q_min;
+            d.phase = fi;
             mData.push_back( d );
+            cpu::CpuMemory::Instance().DB31.SendContinue();
         }
     }
     else
@@ -56,15 +113,54 @@ void FrequencyCharacteristics::UpdateData()
         m14Result1.Read();
         m14Result2.Read();
 
-        bool ready = false;
-        if (ready)
+        if (mControlBoardBits.op14_ready)
         {
-            for ( size_t i = 0; i < mControlReelBits.op24_number && i < m24Result1.SIGNAL_COUNT; ++i )
+            std::vector< double > expenditure;
+            for ( size_t i = 0; i < mControlBoardBits.op14_number && i < m14Result1.SIGNAL_COUNT; ++i )
             {
-    #warning как то что считаем
+                double ext = 0; // пройденное расстояние в мм
+                if ( i > 1 )
+                    ext = m14Result2.coordinate[i] - m14Result2.coordinate[i - 1];
+
+                double speed = ext / time_period; //скорость движения мм/сек
+                if ( i > 1 )
+                    expenditure.push_back( speed * K ); // расход л/мин
             }
-            ready = false;
+            //определим амплитуду
+            size_t q_min = 0;
+            size_t q_max = 0;
+            if ( !expenditure.empty() )
+            {
+                q_max = 0;
+                q_min = 0;
+            }
+            for ( size_t i = 0; i < expenditure.size(); ++i )
+            {
+                if ( expenditure[i] > expenditure[q_max] )
+                    q_max = i;
+                if ( expenditure[i] < expenditure[q_min] )
+                    q_min = i;
+            }
+            size_t s_min = 0;
+            size_t s_max = 0;
+
+            for ( size_t i = 0; i < mControlBoardBits.op14_number && i < m14Result1.SIGNAL_COUNT; ++i )
+            {
+                if ( m14Result1.signal[i] > m14Result1.signal[s_max] )
+                    s_max = i;
+                if ( m14Result1.signal[i] < m14Result1.signal[s_min] )
+                    s_min = i;
+            }
+
+            double Tsm = q_max - s_max - 1;
+            double T = 1/mControlBoardBits.op14_frequency;
+            double fi = -Tsm/T*360;
+
+            d.frequency = mControlBoardBits.op14_frequency;
+            d.ampl = q_max - q_min;
+            d.phase = fi;
             mData.push_back( d );
+            cpu::CpuMemory::Instance().DB31.SendContinue();
         }
     }
 }
