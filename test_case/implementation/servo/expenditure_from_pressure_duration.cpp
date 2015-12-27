@@ -332,7 +332,7 @@ bool ExpeditureFromPressureDuration::Draw( QPainter& painter, QRect &free_rect )
             }
         }
 
-        for ( size_t i = 0; i < mData.size(); ++i )
+        for ( int i = 0; i < mData.size(); ++i )
         {
             Data const& item = mData[i];
             double abs_sig_a = std::abs( item.ChA.BP5_3() );

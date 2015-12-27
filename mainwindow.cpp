@@ -398,7 +398,7 @@ void ControlsUpdater::run()
     {
         table.Read();
         emit update();
-        msleep(100);
+        msleep(1000);
     }
 }
 void ControlsUpdater::stop()

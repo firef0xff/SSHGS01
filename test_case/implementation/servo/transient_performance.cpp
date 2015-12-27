@@ -218,8 +218,10 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
         ff0x::GraphBuilder::LinePoints data;
         ff0x::GraphBuilder::LinePoints data_e;
 
-        double max_signal = 0;
-        double max_Leak = 0;
+        double max_signal_a = 0;
+        double max_Leak_a = 0;
+        double min_signal_a = 0;
+        double min_Leak_a = 0;
 
         //поиск данных теста
         foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
@@ -236,34 +238,52 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
             }
         }
 
-        foreach ( Data const& item, Graph )
+        for ( int i = 0; i < Graph.size(); ++i )
         {
-            double abs_sig = std::abs( item.time );
-            double abs_leak = std::abs( item.expenditure );
+            Data const& item = Graph[i];
+            double abs_sig_a = std::abs( item.time );
+            double abs_leak_a = std::abs( item.expenditure );
+            if ( i == 0 )
+            {
+                max_signal_a = abs_sig_a;
+                max_Leak_a = abs_leak_a;
+                min_signal_a = abs_sig_a;
+                min_Leak_a = abs_leak_a;
+            }
+            else
+            {
+                if ( max_signal_a < abs_sig_a )
+                    max_signal_a = abs_sig_a;
 
-            if ( max_signal < abs_sig )
-                max_signal = abs_sig;
+                if ( max_Leak_a < abs_leak_a )
+                    max_Leak_a = abs_leak_a;
 
-            if ( max_Leak < abs_leak )
-                max_Leak = abs_leak;
+                if ( min_signal_a > abs_sig_a )
+                    min_signal_a = abs_sig_a;
 
+                if ( min_Leak_a > abs_leak_a )
+                    min_Leak_a = abs_leak_a;
+            }
             data.push_back( QPointF( item.time, item.expenditure ) );
         }
+
         QFont f = text_font;
         f.setPointSize( 6 );
         int w = (rect.height() - metrix.height())*0.98;
         int h = (rect.height() - metrix.height())*0.98;
 
-        ff0x::GraphBuilder builder ( w, h, ff0x::GraphBuilder::PlusPlus, f );
-        ff0x::GraphBuilder::GraphDataLine lines;
-        lines.push_back( ff0x::GraphBuilder::Line(data, ff0x::GraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
+        ff0x::NoAxisGraphBuilder builder ( w, h, f );
+        ff0x::NoAxisGraphBuilder::GraphDataLine lines;
+        lines.push_back( ff0x::NoAxisGraphBuilder::Line(data, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
         if ( !data_e.empty() )
-            lines.push_back( ff0x::GraphBuilder::Line(data_e, ff0x::GraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
+            lines.push_back( ff0x::NoAxisGraphBuilder::Line(data_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
 
         QRect p1(rect.left(), rect.top(), w, h );
         QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
         DrawRowCenter( p1t, text_font, Qt::black, "Переходные характеристики" );
-        painter.drawPixmap( p1, builder.Draw( lines, max_signal * 1.25, max_Leak * 1.25, ceil(max_signal)/10, ceil(max_Leak)/10, "Время (мс)", "Расход (л/мин)", true ) );
+        QPointF x_range_a( max_signal_a, min_signal_a );
+        QPointF y_range_a( max_Leak_a, min_Leak_a );
+        painter.drawPixmap( p1, builder.Draw( lines, x_range_a, y_range_a, ceil( max_signal_a - min_signal_a )/10, ceil(max_Leak_a - min_Leak_a)/10, "Время (мс)", "Расход (л/мин)", true ) );
 
         painter.restore();
     }, 1, free_rect.width()/2 + metrix.height()  );
