@@ -33,7 +33,9 @@ private:
         double expenditure;
     };
 
-    QVector<Data> Graph;
+    QVector<Data> Graph1;
+    QVector<Data> Graph2;
+    QVector<Data> Graph3;
 };
 
 }//namespace servo

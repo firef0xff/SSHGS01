@@ -135,7 +135,6 @@ void HydroTitleInfo::on_buttonBox_accepted()
 {
     auto CheckPower = []() -> bool
     {
-        return true;
         test::hydro::Parameters& params = test::hydro::Parameters::Instance();
 
         const int pomp_max_power = 55;
@@ -145,7 +144,7 @@ void HydroTitleInfo::on_buttonBox_accepted()
         double max_pressure = std::max( params.MinTestPressure(), std::max( params.HermPressure(), params.MaxWorkPressure() ) );
 
 
-        bool res = max_expenditure*max_pressure/54 <= pomp_count * pomp_max_power;
+        bool res = max_expenditure*max_pressure/540 <= pomp_count * pomp_max_power;
         if (!res)
         {
             QMessageBox msg;

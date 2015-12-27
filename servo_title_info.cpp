@@ -187,7 +187,6 @@ void ServoTitleInfo::on_buttonBox_accepted()
 {
     auto CheckPower = []() -> bool
     {
-        return true;
         test::servo::Parameters& params = test::servo::Parameters::Instance();
 
         const int pomp_max_power = 55;
@@ -198,7 +197,7 @@ void ServoTitleInfo::on_buttonBox_accepted()
         double max_pressure = std::max( params.PressureNominal(), params.PressureTesting() );
 
 
-        bool res = max_expenditure*max_pressure/54 <= pomp_count * pomp_max_power;
+        bool res = max_expenditure*max_pressure/540 <= pomp_count * pomp_max_power;
         if (!res)
         {
             QMessageBox msg;

@@ -15,7 +15,9 @@ TransientPerformance::TransientPerformance():
 
 bool TransientPerformance::Run()
 {
-    Graph.clear();
+    Graph1.clear();
+    Graph2.clear();
+    Graph3.clear();
     Start();
     if ( ReelControl() )
         Wait( mControlReelBits.op25_ok, mControlReelBits.op25_end );
@@ -41,9 +43,15 @@ void TransientPerformance::UpdateData()
         m15Result.Read();
     m1525Counts.Read();
 
-    if ( m1525Counts.OP15_25_Opor_1 ||
-         m1525Counts.OP15_25_Opor_2 ||
-         m1525Counts.OP15_25_Opor_3)
+    QVector<Data> *Graph = nullptr;
+    if ( m1525Counts.OP15_25_Opor_1 )
+        Graph = &Graph1;
+    if ( m1525Counts.OP15_25_Opor_2 )
+        Graph = &Graph2;
+    if ( m1525Counts.OP15_25_Opor_3 )
+        Graph = &Graph3;
+
+    if ( Graph )
     {
         auto f_d2d1 = []( double exp )
         {
@@ -56,22 +64,23 @@ void TransientPerformance::UpdateData()
 
         if ( ReelControl() )
         {
-            for ( size_t i = 0; i < m1525Counts.OP15_25_count && i < m25Result.COORDINATE_COUNT; ++i )
+            for ( int i = 0; i < m1525Counts.OP15_25_count && i < m25Result.COORDINATE_COUNT; ++i )
             {
                 Data d;
                 d.time = i;
                 d.expenditure = 10000.0/1270.0 * m25Result.coordinate[i] * d2d1;
-                Graph.push_back( d );
+                Graph->push_back( d );
             }
         }
         else
         {
-            for ( size_t i = 0; i < m1525Counts.OP15_25_count && i < m15Result.COORDINATE_COUNT; ++i )
+            for ( int i = 0; i < m1525Counts.OP15_25_count && i < m15Result.COORDINATE_COUNT; ++i )
             {
                 Data d;
                 d.time = i;
+                //мм*мм2*10000/1270
                 d.expenditure = 10000.0/1270.0 * m15Result.coordinate[i] * d2d1;
-                Graph.push_back( d );
+                Graph->push_back( d );
             }
         }
 
@@ -86,23 +95,53 @@ QJsonObject TransientPerformance::Serialise() const
 {
     QJsonObject obj = Test::Serialise();
     QJsonArray a;
-    foreach (Data const& d, Graph)
+    foreach (Data const& d, Graph1)
     {
         a.insert( a.end(), d.Serialise() );
     }
-    obj.insert("Graph", a );
+    obj.insert("Graph1", a );
+
+    QJsonArray b;
+    foreach (Data const& d, Graph2)
+    {
+        b.insert( b.end(), d.Serialise() );
+    }
+    obj.insert("Graph2", b );
+
+    QJsonArray c;
+    foreach (Data const& d, Graph3)
+    {
+        c.insert( c.end(), d.Serialise() );
+    }
+    obj.insert("Graph3", c );
 
     return obj;
 }
 bool TransientPerformance::Deserialize( QJsonObject const& obj )
 {
-    Graph.clear();
-    QJsonArray a = obj.value("Graph").toArray();
+    Graph1.clear();
+    Graph2.clear();
+    Graph3.clear();
+    QJsonArray a = obj.value("Graph1").toArray();
     foreach (QJsonValue const& v, a)
     {
         Data d;
         if ( d.Deserialize( v.toObject() ) )
-            Graph.insert( Graph.end(), d );
+            Graph1.insert( Graph1.end(), d );
+    }
+    QJsonArray b = obj.value("Graph2").toArray();
+    foreach (QJsonValue const& v, b)
+    {
+        Data d;
+        if ( d.Deserialize( v.toObject() ) )
+            Graph2.insert( Graph2.end(), d );
+    }
+    QJsonArray c = obj.value("Graph3").toArray();
+    foreach (QJsonValue const& v, c)
+    {
+        Data d;
+        if ( d.Deserialize( v.toObject() ) )
+            Graph3.insert( Graph3.end(), d );
     }
     Test::Deserialize( obj );
     return true;
@@ -215,13 +254,28 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
     {
         painter.save();
 
-        ff0x::GraphBuilder::LinePoints data;
-        ff0x::GraphBuilder::LinePoints data_e;
+        ff0x::GraphBuilder::LinePoints data1;
+        ff0x::GraphBuilder::LinePoints data2;
+        ff0x::GraphBuilder::LinePoints data3;
+        ff0x::GraphBuilder::LinePoints data1_e;
+        ff0x::GraphBuilder::LinePoints data2_e;
+        ff0x::GraphBuilder::LinePoints data3_e;
 
-        double max_signal_a = 0;
-        double max_Leak_a = 0;
-        double min_signal_a = 0;
-        double min_Leak_a = 0;
+        double max_signal_1 = 0;
+        double max_Leak_1 = 0;
+        double min_signal_1 = 0;
+        double min_Leak_1 = 0;
+
+        double max_signal_2 = 0;
+        double max_Leak_2 = 0;
+        double min_signal_2 = 0;
+        double min_Leak_2 = 0;
+
+
+        double max_signal_3 = 0;
+        double max_Leak_3 = 0;
+        double min_signal_3 = 0;
+        double min_Leak_3 = 0;
 
         //поиск данных теста
         foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
@@ -229,42 +283,111 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
             auto obj = val.toObject();
             if ( obj.value("id").toInt() == mId )
             {
-                QJsonArray a = obj.value("data").toObject().value("Graph").toArray();
+                QJsonArray a = obj.value("data").toObject().value("Graph1").toArray();
                 foreach ( QJsonValue const& v, a )
                 {
                     QJsonObject o = v.toObject();
-                    data_e.push_back( QPointF( o.value("time").toDouble(), o.value("expenditure").toDouble() ) );
+                    data1_e.push_back( QPointF( o.value("time").toDouble(), o.value("expenditure").toDouble() ) );
                 }
+                QJsonArray b = obj.value("data").toObject().value("Graph2").toArray();
+                foreach ( QJsonValue const& v, b )
+                {
+                    QJsonObject o = v.toObject();
+                    data2_e.push_back( QPointF( o.value("time").toDouble(), o.value("expenditure").toDouble() ) );
+                }
+                QJsonArray c = obj.value("data").toObject().value("Graph3").toArray();
+                foreach ( QJsonValue const& v, c )
+                {
+                    QJsonObject o = v.toObject();
+                    data3_e.push_back( QPointF( o.value("time").toDouble(), o.value("expenditure").toDouble() ) );
+                }
+
             }
         }
 
-        for ( int i = 0; i < Graph.size(); ++i )
+        for ( int i = 0; i < Graph1.size(); ++i )
         {
-            Data const& item = Graph[i];
+            Data const& item = Graph1[i];
             double abs_sig_a = std::abs( item.time );
             double abs_leak_a = std::abs( item.expenditure );
             if ( i == 0 )
             {
-                max_signal_a = abs_sig_a;
-                max_Leak_a = abs_leak_a;
-                min_signal_a = abs_sig_a;
-                min_Leak_a = abs_leak_a;
+                max_signal_1 = abs_sig_a;
+                max_Leak_1 = abs_leak_a;
+                min_signal_1 = abs_sig_a;
+                min_Leak_1 = abs_leak_a;
             }
             else
             {
-                if ( max_signal_a < abs_sig_a )
-                    max_signal_a = abs_sig_a;
+                if ( max_signal_1 < abs_sig_a )
+                    max_signal_1 = abs_sig_a;
 
-                if ( max_Leak_a < abs_leak_a )
-                    max_Leak_a = abs_leak_a;
+                if ( max_Leak_1 < abs_leak_a )
+                    max_Leak_1 = abs_leak_a;
 
-                if ( min_signal_a > abs_sig_a )
-                    min_signal_a = abs_sig_a;
+                if ( min_signal_1 > abs_sig_a )
+                    min_signal_1 = abs_sig_a;
 
-                if ( min_Leak_a > abs_leak_a )
-                    min_Leak_a = abs_leak_a;
+                if ( min_Leak_1 > abs_leak_a )
+                    min_Leak_1 = abs_leak_a;
             }
-            data.push_back( QPointF( item.time, item.expenditure ) );
+            data1.push_back( QPointF( item.time, item.expenditure ) );
+        }
+        for ( int i = 0; i < Graph2.size(); ++i )
+        {
+            Data const& item = Graph2[i];
+            double abs_sig_a = std::abs( item.time );
+            double abs_leak_a = std::abs( item.expenditure );
+            if ( i == 0 )
+            {
+                max_signal_2 = abs_sig_a;
+                max_Leak_2 = abs_leak_a;
+                min_signal_2 = abs_sig_a;
+                min_Leak_2 = abs_leak_a;
+            }
+            else
+            {
+                if ( max_signal_2 < abs_sig_a )
+                    max_signal_2 = abs_sig_a;
+
+                if ( max_Leak_2 < abs_leak_a )
+                    max_Leak_2 = abs_leak_a;
+
+                if ( min_signal_2 > abs_sig_a )
+                    min_signal_2 = abs_sig_a;
+
+                if ( min_Leak_2 > abs_leak_a )
+                    min_Leak_2 = abs_leak_a;
+            }
+            data2.push_back( QPointF( item.time, item.expenditure ) );
+        }
+        for ( int i = 0; i < Graph3.size(); ++i )
+        {
+            Data const& item = Graph3[i];
+            double abs_sig_a = std::abs( item.time );
+            double abs_leak_a = std::abs( item.expenditure );
+            if ( i == 0 )
+            {
+                max_signal_3 = abs_sig_a;
+                max_Leak_3 = abs_leak_a;
+                min_signal_3 = abs_sig_a;
+                min_Leak_3 = abs_leak_a;
+            }
+            else
+            {
+                if ( max_signal_3 < abs_sig_a )
+                    max_signal_3 = abs_sig_a;
+
+                if ( max_Leak_3 < abs_leak_a )
+                    max_Leak_3 = abs_leak_a;
+
+                if ( min_signal_3 > abs_sig_a )
+                    min_signal_3 = abs_sig_a;
+
+                if ( min_Leak_3 > abs_leak_a )
+                    min_Leak_3 = abs_leak_a;
+            }
+            data3.push_back( QPointF( item.time, item.expenditure ) );
         }
 
         QFont f = text_font;
@@ -274,16 +397,29 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
 
         ff0x::NoAxisGraphBuilder builder ( w, h, f );
         ff0x::NoAxisGraphBuilder::GraphDataLine lines;
-        lines.push_back( ff0x::NoAxisGraphBuilder::Line(data, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
-        if ( !data_e.empty() )
-            lines.push_back( ff0x::NoAxisGraphBuilder::Line(data_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
+        lines.push_back( ff0x::NoAxisGraphBuilder::Line(data1, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
+        lines.push_back( ff0x::NoAxisGraphBuilder::Line(data2, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::darkBlue ) ) );
+        lines.push_back( ff0x::NoAxisGraphBuilder::Line(data3, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::darkGreen ) ) );
+        if ( !data1_e.empty() )
+            lines.push_back( ff0x::NoAxisGraphBuilder::Line(data1_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
+        if ( !data2_e.empty() )
+            lines.push_back( ff0x::NoAxisGraphBuilder::Line(data2_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::darkCyan ) ) );
+        if ( !data3_e.empty() )
+            lines.push_back( ff0x::NoAxisGraphBuilder::Line(data3_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::darkMagenta ) ) );
 
         QRect p1(rect.left(), rect.top(), w, h );
         QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
         DrawRowCenter( p1t, text_font, Qt::black, "Переходные характеристики" );
-        QPointF x_range_a( max_signal_a, min_signal_a );
-        QPointF y_range_a( max_Leak_a, min_Leak_a );
-        painter.drawPixmap( p1, builder.Draw( lines, x_range_a, y_range_a, ceil( max_signal_a - min_signal_a )/10, ceil(max_Leak_a - min_Leak_a)/10, "Время (мс)", "Расход (л/мин)", true ) );
+
+        double max_signal = std::max( std::max( max_signal_1, max_signal_2), max_signal_3 );
+        double min_signal = std::min( std::min( min_signal_1, min_signal_2), min_signal_3 );
+
+        double max_leak = std::max( std::max( max_Leak_1, max_Leak_2), max_Leak_3 );
+        double min_leak = std::min( std::min( min_Leak_1, min_Leak_2), min_Leak_3 );
+
+        QPointF x_range_a( max_signal, min_signal );
+        QPointF y_range_a( max_leak, min_leak );
+        painter.drawPixmap( p1, builder.Draw( lines, x_range_a, y_range_a, ceil( max_signal - min_signal )/10, ceil(max_leak - min_leak)/10, "Время (мс)", "Расход (л/мин)", true ) );
 
         painter.restore();
     }, 1, free_rect.width()/2 + metrix.height()  );
