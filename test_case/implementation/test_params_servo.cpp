@@ -215,7 +215,7 @@ void Parameters::WriteToController() const
         mem.channel_a = mTestChannelA; //62.0 испытание канал А
         mem.channel_b = mTestChannelB; //62.1 испытание канала В
         mem.channel_k_a = mSignalOnChannelA == CS_REEL_B ? 1: 0;
-        mem.channel_k_a = mSignalOnChannelA == CS_REEL_B ? 1: 0;
+        mem.channel_k_b = mSignalOnChannelB == CS_REEL_B ? 1: 0;
         switch (mControlSignal)                   //2 управляющий сигнал
         {
             case ST_100_mA:
@@ -262,7 +262,7 @@ void Parameters::WriteToController() const
         mem.channel_a = mTestChannelA; //62.0 испытание канал А
         mem.channel_b = mTestChannelB; //62.1 испытание канала В
         mem.channel_k_a = mSignalOnChannelA == CS_REEL_B ? 1: 0;
-        mem.channel_k_a = mSignalOnChannelA == CS_REEL_B ? 1: 0;
+        mem.channel_k_b = mSignalOnChannelB == CS_REEL_B ? 1: 0;
 
         mem.x_max_a = mSignalStateA;             //4 сигнал переключение в А
         mem.x_max_b = mSignalStateB;             //8 сигнал переключение в В

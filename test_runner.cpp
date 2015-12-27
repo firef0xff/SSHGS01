@@ -56,7 +56,6 @@ void TestRunner::on_Start_clicked()
     if ( test::CURRENT_PARAMS )
         ui->LogBox->append( test::CURRENT_PARAMS->ToString() );
 
-    test::ParamsToFile( "last_test_settings.isx", *test::CURRENT_PARAMS );
     test::CURRENT_PARAMS->Date( QDateTime::currentDateTime() );
     test::CURRENT_PARAMS->User( app::Settings::Instance().User() );
 
@@ -67,6 +66,7 @@ void TestRunner::on_Start_clicked()
     QObject::connect( mWorker.get(), &Worker::finished, this, &TestRunner::on_test_stop );
     QObject::connect( mWorker.get(), &Worker::to_exec, this, &TestRunner::exec );
     mWorker->start();
+    test::ParamsToFile( "last_test_settings.isx", *test::CURRENT_PARAMS );
 }
 
 void TestRunner::StopWorker()

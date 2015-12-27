@@ -182,6 +182,7 @@ QJsonObject FrequencyCharacteristics::Serialise() const
 }
 bool FrequencyCharacteristics::Deserialize( QJsonObject const& obj )
 {
+    mData.clear();
     QJsonArray a = obj.value("Data").toArray();
     foreach (QJsonValue const& v, a)
     {

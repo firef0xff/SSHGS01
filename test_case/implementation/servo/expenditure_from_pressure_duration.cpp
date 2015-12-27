@@ -84,6 +84,7 @@ QJsonObject ExpeditureFromPressureDuration::Serialise() const
 }
 bool ExpeditureFromPressureDuration::Deserialize( QJsonObject const& obj )
 {
+    mData.clear();
     QJsonArray a = obj.value("Data").toArray();
     foreach (QJsonValue const& v, a)
     {
@@ -331,34 +332,47 @@ bool ExpeditureFromPressureDuration::Draw( QPainter& painter, QRect &free_rect )
             }
         }
 
-
-        foreach ( Data const& item, mData )
+        for ( size_t i = 0; i < mData.size(); ++i )
         {
+            Data const& item = mData[i];
             double abs_sig_a = std::abs( item.ChA.BP5_3() );
             double abs_sig_b = std::abs( item.ChB.BP5_3() );
             double abs_leak_a = std::abs( item.ChA.Expenditure );
             double abs_leak_b = std::abs( item.ChB.Expenditure );
-
-            if ( max_signal_a < abs_sig_a )
+            if ( i == 0 )
+            {
                 max_signal_a = abs_sig_a;
-            if ( max_signal_b < abs_sig_b )
                 max_signal_b = abs_sig_b;
-
-            if ( max_Leak_a < abs_leak_a )
                 max_Leak_a = abs_leak_a;
-            if ( max_Leak_b < abs_leak_b )
                 max_Leak_b = abs_leak_b;
 
-            if ( min_signal_a > abs_sig_a )
                 min_signal_a = abs_sig_a;
-            if ( min_signal_b > abs_sig_b )
                 min_signal_b = abs_sig_b;
-
-            if ( min_Leak_a > abs_leak_a )
                 min_Leak_a = abs_leak_a;
-            if ( min_Leak_b > abs_leak_b )
                 min_Leak_b = abs_leak_b;
+            }
+            else
+            {
+                if ( max_signal_a < abs_sig_a )
+                    max_signal_a = abs_sig_a;
+                if ( max_signal_b < abs_sig_b )
+                    max_signal_b = abs_sig_b;
 
+                if ( max_Leak_a < abs_leak_a )
+                    max_Leak_a = abs_leak_a;
+                if ( max_Leak_b < abs_leak_b )
+                    max_Leak_b = abs_leak_b;
+
+                if ( min_signal_a > abs_sig_a )
+                    min_signal_a = abs_sig_a;
+                if ( min_signal_b > abs_sig_b )
+                    min_signal_b = abs_sig_b;
+
+                if ( min_Leak_a > abs_leak_a )
+                    min_Leak_a = abs_leak_a;
+                if ( min_Leak_b > abs_leak_b )
+                    min_Leak_b = abs_leak_b;
+            }
             dataA.push_back( QPointF( item.ChA.BP5_3(), item.ChA.Expenditure ) );
             dataB.push_back( QPointF( item.ChB.BP5_3(), item.ChB.Expenditure ) );
         }

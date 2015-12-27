@@ -96,6 +96,7 @@ QJsonObject TransientPerformance::Serialise() const
 }
 bool TransientPerformance::Deserialize( QJsonObject const& obj )
 {
+    Graph.clear();
     QJsonArray a = obj.value("Graph").toArray();
     foreach (QJsonValue const& v, a)
     {

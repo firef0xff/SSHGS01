@@ -6,6 +6,7 @@
 #include <mutex>
 #include <functional>
 #include "../test_params_servo.h"
+#include "thread"
 
 #include "../../../../mylib/Widgets/GraphBuilder/graph_builder.h"
 namespace test
@@ -197,6 +198,8 @@ bool InsideHermTest::Run()
     if ( IsStopped() )
         return false;
 
+    std::this_thread::sleep_for( std::chrono::seconds(2));
+    UpdateData();
     if ( ReelControl() )
     {
         for ( size_t i = 0; i < m21Results.CONSUMPTION_A_COUNT; ++i )
@@ -253,7 +256,7 @@ QJsonObject InsideHermTest::Serialise() const
     obj.insert("GraphA", a );
 
     QJsonArray b;
-    foreach (Data const& d, GraphA)
+    foreach (Data const& d, GraphB)
     {
         b.insert( b.end(), d.Serialise() );
     }
@@ -263,6 +266,8 @@ QJsonObject InsideHermTest::Serialise() const
 }
 bool InsideHermTest::Deserialize( QJsonObject const& obj )
 {
+    GraphA.clear();
+    GraphB.clear();
     QJsonArray a = obj.value("GraphA").toArray();
     foreach (QJsonValue const& v, a)
     {

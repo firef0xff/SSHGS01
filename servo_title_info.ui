@@ -228,7 +228,7 @@ X_max_B, л/мин</string>
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>300...315 Бар</string>
+        <string>10...315 Бар</string>
        </property>
        <property name="toolTipDuration">
         <number>1000</number>
@@ -237,7 +237,7 @@ X_max_B, л/мин</string>
         <string> Бар</string>
        </property>
        <property name="minimum">
-        <number>300</number>
+        <number>10</number>
        </property>
        <property name="maximum">
         <number>315</number>

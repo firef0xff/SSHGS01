@@ -245,7 +245,9 @@ DB34.op12_a_close_a;DB34,X8.2;RW;TST=;CMT=Катушка а канал А закрыт
 DB34.op12_ab_open_b;DB34,X8.3;RW;TST=;CMT= Катушка б канал АБ открыты
 DB34.op12_b_close_b;DB34,X8.4;RW;TST=;CMT=Катушка б канал Б закрыт
 DB34.op12_a_close_b;DB34,X8.5;RW;TST=;CMT=Катушка б канал А закрыт
+DB34.op14_ready;DB34,X14.0;RW;TST=;CMT=бит готовности данных
 DB34.op14_number;DB34,REAL4;RW;TST=;CMT=Число ячеек блока DB10/23
+DB34.op14_frequency;DB34,REAL10;RW;TST=;CMT=частота на которой полчены данные
 DB35.channel_a;DB35,X62.0;RW;TST=;CMT=испытание канал А
 DB35.channel_b;DB35,X62.1;RW;TST=;CMT=испытание канала В
 DB35.channel_k_a;DB35,X62.2;RW;TST=;CMT=катушка на канале А( а-0 б-1)
@@ -281,7 +283,9 @@ DB36.op22_a_a_close;DB36,X8.2;RW;TST=;CMT=катушка а канал А закрыт
 DB36.op22_b_ab_open;DB36,X8.3;RW;TST=;CMT=катушка б канал АБ открыты
 DB36.op22_b_b_close;DB36,X8.4;RW;TST=;CMT=катушка б канал Б закрыт
 DB36.op22_b_a_close;DB36,X8.5;RW;TST=;CMT=катушка б канал А закрыт
+DB36.op24_ready;DB36,X14.0;RW;TST=;CMT=бит готовности данных
 DB36.op24_number;DB36,REAL4;RW;TST=;CMT=Число ячеек блока DB20/24
+DB36.op24_frequency;DB36,REAL10;RW;TST=;CMT=частота на которой полчены данные
 DB37.s4_20ma;DB37,X2.0;RW;TST=;CMT=сигнал 4-20 мА
 DB37.s0_20ma;DB37,X2.1;RW;TST=;CMT=сигнал 0-20 мА
 DB37.s10v;DB37,X2.2;RW;TST=;CMT=синал +/-10 В
@@ -377,7 +381,7 @@ DB50.Plata_860mA;DB50,REAL124;RW;TST=;CMT=Задание на плату 0..20мА (860мА)
 DB50.Osh_DM;DB50,W128;RW;TST=;CMT=
 DB50.POS_1_REAL;DB50,REAL130;RW;TST=;CMT=Позиция Г/Ц (1..10л/мин) 100мм
 DB50.POS_2_REAL;DB50,REAL134;RW;TST=;CMT=Позиция Г/Ц (0..1л/мин) 100мм
-DB60.OP15_25_count;DB60,INT60;RW;TST=;CMT=количестви измерений для заданий 15 и 25
+DB60.OP15_25_count;DB60,INT136;RW;TST=;CMT=количестви измерений для заданий 15 и 25
 DB60.OP15_25_Opor_1;DB60,X210.0;RW;TST=;CMT=
 DB60.OP15_25_Opor_2;DB60,X210.1;RW;TST=;CMT=
 DB60.OP15_25_Opor_3;DB60,X210.2;RW;TST=;CMT=
