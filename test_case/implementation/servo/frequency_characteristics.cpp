@@ -4,6 +4,7 @@
 #include "../../../../mylib/Widgets/GraphBuilder/graph_builder.h"
 #include "test_case/test_params.h"
 #include "../test_params_servo.h"
+#include <thread>
 
 namespace test
 {
@@ -17,6 +18,9 @@ FrequencyCharacteristics::FrequencyCharacteristics():
 bool FrequencyCharacteristics::Run()
 {
     mData.clear();
+    mSource1.clear();
+    mSource2.clear();
+    mSource3.clear();
     Start();
     if ( ReelControl() )
         Wait( mControlReelBits.op24_ok, mControlReelBits.op24_end );
@@ -33,133 +37,162 @@ void FrequencyCharacteristics::UpdateData()
 {
     Test::UpdateData();
 
-    Data d;
+//    Data d;
 
-    auto f_S = []( double expenditure )
-    {
-        double r1 = 0, r2 = 0;
-        if ( expenditure < 30 )
-        {
-            r1 = 25.0/2.0;
-            r2 = 18.0/2.0;
-        }
-        else
-        {
-            r1 = 63.0/2.0;
-            r2 = 36.0/2.0;
-        }
-        return 2 *3.14 * ( r1*r1 - r2*r2 );
-    };
-    double K = 0.00006 * f_S( test::servo::Parameters::Instance().DefaultExpenditure() );
-    double time_period = 1/1000; //время между замерами данных с
+//    auto f_S = []( double expenditure )
+//    {
+//        double r1 = 0, r2 = 0;
+//        if ( expenditure < 30 )
+//        {
+//            r1 = 25.0/2.0;
+//            r2 = 18.0/2.0;
+//        }
+//        else
+//        {
+//            r1 = 63.0/2.0;
+//            r2 = 36.0/2.0;
+//        }
+//        return 2 *3.14 * ( r1*r1 - r2*r2 );
+//    };
+//    double K = 0.00006 * f_S( test::servo::Parameters::Instance().DefaultExpenditure() );
+//    double time_period = 1/1000; //время между замерами данных с
 
     if ( ReelControl() )
     {
+        if (!mControlReelBits.op24_ready )
+            return;
+
+        std::this_thread::sleep_for(std::chrono::seconds(5));
+        mControlReelBits.Read();
         m24Result1.Read();
         m24Result2.Read();
+        m1525Counts.Read();
 
-        if (mControlReelBits.op24_ready)
+        Source *src = nullptr;
+        if ( m1525Counts.OP15_25_Opor_1 )
+            src = &mSource1;
+        if ( m1525Counts.OP15_25_Opor_2 )
+            src = &mSource2;
+        if ( m1525Counts.OP15_25_Opor_3 )
+            src = &mSource3;
+        if ( !src )
+            return;
+
+        if ( src->find( mControlReelBits.op24_frequency ) != src->end() )
+            return;
+
+        DataSet data;
+        for ( int i = 0; i < m1525Counts.OP15_25_count && i < m24Result1.SIGNAL_COUNT; ++i )
         {
-            std::vector< double > expenditure;
-            for ( size_t i = 0; i < mControlReelBits.op24_number && i < m24Result1.SIGNAL_COUNT; ++i )
-            {
-                double ext = 0; // пройденное расстояние в мм
-                if ( i > 1 )
-                    ext = m24Result2.coordinate[i] - m24Result2.coordinate[i - 1];
-
-                double speed = ext / time_period; //скорость движения мм/сек
-                if ( i > 1 )
-                    expenditure.push_back( speed * K ); // расход л/мин
-            }
-            //определим амплитуду
-            size_t q_min = 0;
-            size_t q_max = 0;
-            if ( !expenditure.empty() )
-            {
-                q_max = 0;
-                q_min = 0;
-            }
-            for ( size_t i = 0; i < expenditure.size(); ++i )
-            {
-                if ( expenditure[i] > expenditure[q_max] )
-                    q_max = i;
-                if ( expenditure[i] < expenditure[q_min] )
-                    q_min = i;
-            }
-            size_t s_min = 0;
-            size_t s_max = 0;
-
-            for ( size_t i = 0; i < mControlReelBits.op24_number && i < m24Result1.SIGNAL_COUNT; ++i )
-            {
-                if ( m24Result1.signal[i] > m24Result1.signal[s_max] )
-                    s_max = i;
-                if ( m24Result1.signal[i] < m24Result1.signal[s_min] )
-                    s_min = i;
-            }
-
-            double Tsm = q_max - s_max - 1;
-            double T = 1/mControlReelBits.op24_frequency;
-            double fi = -Tsm/T*360;
-
-            d.frequency = mControlReelBits.op24_frequency;
-            d.ampl = q_max - q_min;
-            d.phase = fi;
-            mData.push_back( d );
-            cpu::CpuMemory::Instance().DB31.SendContinue();
+            ArrData item;
+            item.position = m24Result2.coordinate[i];
+            item.signal = m24Result1.signal[i];
+            data.push_back( item );
         }
+        src->insert( SourceItem( mControlReelBits.op24_frequency, data ) );
+
+
+//            std::vector< double > expenditure;
+//            for ( size_t i = 0; i < mControlReelBits.op24_number && i < m24Result1.SIGNAL_COUNT; ++i )
+//            {
+//                double ext = 0; // пройденное расстояние в мм
+//                if ( i > 1 )
+//                    ext = m24Result2.coordinate[i] - m24Result2.coordinate[i - 1];
+
+//                double speed = ext / time_period; //скорость движения мм/сек
+//                if ( i > 1 )
+//                    expenditure.push_back( speed * K ); // расход л/мин
+//            }
+//            //определим амплитуду
+//            size_t q_min = 0;
+//            size_t q_max = 0;
+//            if ( !expenditure.empty() )
+//            {
+//                q_max = 0;
+//                q_min = 0;
+//            }
+//            for ( size_t i = 0; i < expenditure.size(); ++i )
+//            {
+//                if ( expenditure[i] > expenditure[q_max] )
+//                    q_max = i;
+//                if ( expenditure[i] < expenditure[q_min] )
+//                    q_min = i;
+//            }
+//            size_t s_min = 0;
+//            size_t s_max = 0;
+
+//            for ( size_t i = 0; i < mControlReelBits.op24_number && i < m24Result1.SIGNAL_COUNT; ++i )
+//            {
+//                if ( m24Result1.signal[i] > m24Result1.signal[s_max] )
+//                    s_max = i;
+//                if ( m24Result1.signal[i] < m24Result1.signal[s_min] )
+//                    s_min = i;
+//            }
+
+//            double Tsm = q_max - s_max - 1;
+//            double T = 1/mControlReelBits.op24_frequency;
+//            double fi = -Tsm/T*360;
+
+//            d.frequency = mControlReelBits.op24_frequency;
+//            d.ampl = q_max - q_min;
+//            d.phase = fi;
+//            mData.push_back( d );
+        cpu::CpuMemory::Instance().DB31.SendContinue();
+
     }
     else
     {
+#warning синхронизировать
         m14Result1.Read();
         m14Result2.Read();
 
         if (mControlBoardBits.op14_ready)
         {
-            std::vector< double > expenditure;
-            for ( size_t i = 0; i < mControlBoardBits.op14_number && i < m14Result1.SIGNAL_COUNT; ++i )
-            {
-                double ext = 0; // пройденное расстояние в мм
-                if ( i > 1 )
-                    ext = m14Result2.coordinate[i] - m14Result2.coordinate[i - 1];
+//            std::vector< double > expenditure;
+//            for ( size_t i = 0; i < mControlBoardBits.op14_number && i < m14Result1.SIGNAL_COUNT; ++i )
+//            {
+//                double ext = 0; // пройденное расстояние в мм
+//                if ( i > 1 )
+//                    ext = m14Result2.coordinate[i] - m14Result2.coordinate[i - 1];
 
-                double speed = ext / time_period; //скорость движения мм/сек
-                if ( i > 1 )
-                    expenditure.push_back( speed * K ); // расход л/мин
-            }
-            //определим амплитуду
-            size_t q_min = 0;
-            size_t q_max = 0;
-            if ( !expenditure.empty() )
-            {
-                q_max = 0;
-                q_min = 0;
-            }
-            for ( size_t i = 0; i < expenditure.size(); ++i )
-            {
-                if ( expenditure[i] > expenditure[q_max] )
-                    q_max = i;
-                if ( expenditure[i] < expenditure[q_min] )
-                    q_min = i;
-            }
-            size_t s_min = 0;
-            size_t s_max = 0;
+//                double speed = ext / time_period; //скорость движения мм/сек
+//                if ( i > 1 )
+//                    expenditure.push_back( speed * K ); // расход л/мин
+//            }
+//            //определим амплитуду
+//            size_t q_min = 0;
+//            size_t q_max = 0;
+//            if ( !expenditure.empty() )
+//            {
+//                q_max = 0;
+//                q_min = 0;
+//            }
+//            for ( size_t i = 0; i < expenditure.size(); ++i )
+//            {
+//                if ( expenditure[i] > expenditure[q_max] )
+//                    q_max = i;
+//                if ( expenditure[i] < expenditure[q_min] )
+//                    q_min = i;
+//            }
+//            size_t s_min = 0;
+//            size_t s_max = 0;
 
-            for ( size_t i = 0; i < mControlBoardBits.op14_number && i < m14Result1.SIGNAL_COUNT; ++i )
-            {
-                if ( m14Result1.signal[i] > m14Result1.signal[s_max] )
-                    s_max = i;
-                if ( m14Result1.signal[i] < m14Result1.signal[s_min] )
-                    s_min = i;
-            }
+//            for ( size_t i = 0; i < mControlBoardBits.op14_number && i < m14Result1.SIGNAL_COUNT; ++i )
+//            {
+//                if ( m14Result1.signal[i] > m14Result1.signal[s_max] )
+//                    s_max = i;
+//                if ( m14Result1.signal[i] < m14Result1.signal[s_min] )
+//                    s_min = i;
+//            }
 
-            double Tsm = q_max - s_max - 1;
-            double T = 1/mControlBoardBits.op14_frequency;
-            double fi = -Tsm/T*360;
+//            double Tsm = q_max - s_max - 1;
+//            double T = 1/mControlBoardBits.op14_frequency;
+//            double fi = -Tsm/T*360;
 
-            d.frequency = mControlBoardBits.op14_frequency;
-            d.ampl = q_max - q_min;
-            d.phase = fi;
-            mData.push_back( d );
+//            d.frequency = mControlBoardBits.op14_frequency;
+//            d.ampl = q_max - q_min;
+//            d.phase = fi;
+//            mData.push_back( d );
             cpu::CpuMemory::Instance().DB31.SendContinue();
         }
     }
@@ -168,28 +201,88 @@ bool FrequencyCharacteristics::Success() const
 {
     return true;
 }
+
+QJsonArray ToJson( FrequencyCharacteristics::Source const& in_src )
+{
+    QJsonArray source;
+    for ( auto it = in_src.begin(), end = in_src.end(); it != end; ++it )
+    {
+        double key = it->first;
+        FrequencyCharacteristics::DataSet const& data = it->second;
+        QJsonArray data_set;
+        for ( auto it2 = data.begin(), end2 = data.end(); it2!=end2; ++it2)
+        {
+            FrequencyCharacteristics::ArrData const& lnk = *it2;
+            QJsonObject item;
+            item.insert( "position", lnk.position );
+            item.insert( "signal", lnk.signal );
+            data_set.insert( data_set.end(), item );
+        }
+        QJsonObject src;
+        src.insert("key", key);
+        src.insert("data_set", data_set);
+        source.insert( source.end(), src );
+    }
+
+    return source;
+}
+
+FrequencyCharacteristics::Source FromJson( QJsonArray arr )
+{
+    FrequencyCharacteristics::Source res;
+    foreach (QJsonValue const& v, arr)
+    {
+        QJsonObject src = v.toObject();
+        double key = src.value("key").toDouble();
+        FrequencyCharacteristics::DataSet ds;
+        QJsonArray data_set = src.value("data_set").toArray();
+        foreach ( QJsonValue const& v_item, data_set )
+        {
+            QJsonObject item = v_item.toObject();
+            FrequencyCharacteristics::ArrData it;
+            it.position = item.value("position").toDouble();
+            it.signal = item.value("signal").toDouble();
+            ds.push_back( it );
+        }
+        res.insert( FrequencyCharacteristics::SourceItem( key, ds ) );
+    }
+    return std::move( res );
+}
+
 QJsonObject FrequencyCharacteristics::Serialise() const
 {
     QJsonObject obj = Test::Serialise();
-    QJsonArray a;
-    foreach (Data const& d, mData)
-    {
-        a.insert( a.end(), d.Serialise() );
-    }
-    obj.insert("Data", a );
+//    QJsonArray a;
+//    foreach (Data const& d, mData)
+//    {
+//        a.insert( a.end(), d.Serialise() );
+//    }
+//    obj.insert("Data", a );
+
+    obj.insert( "Source1", ToJson( mSource1 ) );
+    obj.insert( "Source2", ToJson( mSource2 ) );
+    obj.insert( "Source3", ToJson( mSource3 ) );
 
     return obj;
 }
 bool FrequencyCharacteristics::Deserialize( QJsonObject const& obj )
 {
     mData.clear();
-    QJsonArray a = obj.value("Data").toArray();
-    foreach (QJsonValue const& v, a)
-    {
-        Data d;
-        if ( d.Deserialize( v.toObject() ) )
-            mData.insert( mData.end(), d );
-    }
+    mSource1.clear();
+    mSource2.clear();
+    mSource3.clear();
+//    QJsonArray a = obj.value("Data").toArray();
+//    foreach (QJsonValue const& v, a)
+//    {
+//        Data d;
+//        if ( d.Deserialize( v.toObject() ) )
+//            mData.insert( mData.end(), d );
+//    }
+
+    mSource1 = FromJson( obj.value("Source1").toArray() );
+    mSource2 = FromJson( obj.value("Source2").toArray() );
+    mSource3 = FromJson( obj.value("Source3").toArray() );
+
     Test::Deserialize( obj );
     return true;
 }

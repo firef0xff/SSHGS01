@@ -37,6 +37,7 @@ void TestCommonData::Start()
     mCommand.Start_Oper = true;
     mCommand.Stop_Oper = false;
     mCommand.Nasos_M2 = app::Settings::Instance().MainPupm() == "M2";
+    mCommand.OP15_25_Continum = false;
     mCommand.Write();
     StartTime.start();
 }
@@ -51,11 +52,11 @@ void TestCommonData::Wait( bool& work, bool& done)
             started = true;
         UpdateData();
         if ( IsStopped() )
-        {
-            mCommand.N_Operation = 0;
+        {            
             mCommand.Start_Oper = false;
             mCommand.Stop_Oper = true;
             mCommand.Nasos_M2 = app::Settings::Instance().MainPupm() == "M2";
+            mCommand.OP15_25_Continum = false;
             mCommand.Write();
             Log( "Испытание прервано" );
             return;

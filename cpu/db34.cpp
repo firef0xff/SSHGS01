@@ -27,7 +27,6 @@ DB34::DB34():
     op12_b_close_b( mBoolData[16]),
     op12_a_close_b( mBoolData[17]),
     op14_ready( mBoolData[18] ),
-    op14_number( mFloatData[0]),
     op14_frequency( mFloatData[1] )
 {
     mGroupID = opc::miniOPC::Instance().AddGroup( L"DB34", mAdresses, BOOL_COUNT + FLOAT_COUNT );

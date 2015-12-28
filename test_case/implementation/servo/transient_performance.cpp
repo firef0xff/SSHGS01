@@ -4,6 +4,7 @@
 #include "../../../../mylib/Widgets/GraphBuilder/graph_builder.h"
 #include "test_case/test_params.h"
 #include "../test_params_servo.h"
+#include <thread>
 namespace test
 {
 namespace servo
@@ -37,27 +38,29 @@ bool TransientPerformance::Run()
 void TransientPerformance::UpdateData()
 {
     Test::UpdateData();
-    if (ReelControl())
-        m25Result.Read();
-    else
-        m15Result.Read();
     m1525Counts.Read();
 
     QVector<Data> *Graph = nullptr;
-    if ( m1525Counts.OP15_25_Opor_1 )
+    if ( m1525Counts.OP15_25_Opor_1 && Graph1.empty() )
         Graph = &Graph1;
-    if ( m1525Counts.OP15_25_Opor_2 )
+    if ( m1525Counts.OP15_25_Opor_2 && Graph2.empty() )
         Graph = &Graph2;
-    if ( m1525Counts.OP15_25_Opor_3 )
+    if ( m1525Counts.OP15_25_Opor_3 && Graph3.empty() )
         Graph = &Graph3;
 
     if ( Graph )
     {
+        std::this_thread::sleep_for(std::chrono::seconds(5));
+        m1525Counts.Read();
+        if (ReelControl())
+            m25Result.Read();
+        else
+            m15Result.Read();
         auto f_d2d1 = []( double exp )
         {
             if ( exp < 30 )
-                return (25.0 - 18.0)*(25.0 - 18.0);
-            return (63.0-36.0)*(63.0-36.0);
+                return 25.0*25.0 - 18.0*18.0;
+            return 63.0*63.0-36.0*36.0;
         };
 
         double d2d1 = f_d2d1( test::servo::Parameters::Instance().DefaultExpenditure() );
@@ -66,9 +69,38 @@ void TransientPerformance::UpdateData()
         {
             for ( int i = 0; i < m1525Counts.OP15_25_count && i < m25Result.COORDINATE_COUNT; ++i )
             {
+//                double xt = 0;
+//                if ( i == 0 )
+//                    xt = 0;
+//                else if  ( i < 5 )
+//                {
+//                    int count = i + 1;
+//                    double xtsr = 0;
+//                    for ( int j = 0; j < count; ++j )
+//                    {
+//                        if ( j != 0 )
+//                            xtsr += m25Result.coordinate[j] - m25Result.coordinate[ j-1 ];
+//                    }
+//                    xt = xtsr / count;
+//                }
+//                else
+//                {
+//                    int count = 5;
+//                    double xtsr = 0;
+//                    int start = i - ( count - 1 );
+//                    int stop = i;
+//                    for ( int j = start; j <= stop; ++j )
+//                    {
+//                        xtsr += m25Result.coordinate[j] - m25Result.coordinate[ j-1 ];
+//                    }
+//                    xt = xtsr / count;
+//                }
                 Data d;
                 d.time = i;
-                d.expenditure = 10000.0/1270.0 * m25Result.coordinate[i] * d2d1;
+//#warning уточнить формулу
+//                d.position = 0.785 * xt * d2d1 / 1000000 * 60000;
+
+                d.position = m25Result.coordinate[i];
                 Graph->push_back( d );
             }
         }
@@ -78,8 +110,7 @@ void TransientPerformance::UpdateData()
             {
                 Data d;
                 d.time = i;
-                //мм*мм2*10000/1270
-                d.expenditure = 10000.0/1270.0 * m15Result.coordinate[i] * d2d1;
+                d.position = m15Result.coordinate[i];
                 Graph->push_back( d );
             }
         }
@@ -309,7 +340,7 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
         {
             Data const& item = Graph1[i];
             double abs_sig_a = std::abs( item.time );
-            double abs_leak_a = std::abs( item.expenditure );
+            double abs_leak_a = std::abs( item.position );
             if ( i == 0 )
             {
                 max_signal_1 = abs_sig_a;
@@ -331,13 +362,13 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
                 if ( min_Leak_1 > abs_leak_a )
                     min_Leak_1 = abs_leak_a;
             }
-            data1.push_back( QPointF( item.time, item.expenditure ) );
+            data1.push_back( QPointF( item.time, item.position ) );
         }
         for ( int i = 0; i < Graph2.size(); ++i )
         {
             Data const& item = Graph2[i];
             double abs_sig_a = std::abs( item.time );
-            double abs_leak_a = std::abs( item.expenditure );
+            double abs_leak_a = std::abs( item.position );
             if ( i == 0 )
             {
                 max_signal_2 = abs_sig_a;
@@ -359,13 +390,13 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
                 if ( min_Leak_2 > abs_leak_a )
                     min_Leak_2 = abs_leak_a;
             }
-            data2.push_back( QPointF( item.time, item.expenditure ) );
+            data2.push_back( QPointF( item.time, item.position ) );
         }
         for ( int i = 0; i < Graph3.size(); ++i )
         {
             Data const& item = Graph3[i];
             double abs_sig_a = std::abs( item.time );
-            double abs_leak_a = std::abs( item.expenditure );
+            double abs_leak_a = std::abs( item.position );
             if ( i == 0 )
             {
                 max_signal_3 = abs_sig_a;
@@ -387,7 +418,7 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
                 if ( min_Leak_3 > abs_leak_a )
                     min_Leak_3 = abs_leak_a;
             }
-            data3.push_back( QPointF( item.time, item.expenditure ) );
+            data3.push_back( QPointF( item.time, item.position ) );
         }
 
         QFont f = text_font;
@@ -398,12 +429,12 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
         ff0x::NoAxisGraphBuilder builder ( w, h, f );
         ff0x::NoAxisGraphBuilder::GraphDataLine lines;
         lines.push_back( ff0x::NoAxisGraphBuilder::Line(data1, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
-        lines.push_back( ff0x::NoAxisGraphBuilder::Line(data2, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::darkBlue ) ) );
+        lines.push_back( ff0x::NoAxisGraphBuilder::Line(data2, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::darkCyan ) ) );
         lines.push_back( ff0x::NoAxisGraphBuilder::Line(data3, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::darkGreen ) ) );
         if ( !data1_e.empty() )
             lines.push_back( ff0x::NoAxisGraphBuilder::Line(data1_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
         if ( !data2_e.empty() )
-            lines.push_back( ff0x::NoAxisGraphBuilder::Line(data2_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::darkCyan ) ) );
+            lines.push_back( ff0x::NoAxisGraphBuilder::Line(data2_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::darkYellow ) ) );
         if ( !data3_e.empty() )
             lines.push_back( ff0x::NoAxisGraphBuilder::Line(data3_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::darkMagenta ) ) );
 
@@ -425,6 +456,7 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
     }, 1, free_rect.width()/2 + metrix.height()  );
 
     free_rect.setHeight( 0 );
+#warning TODO каждый график в своей сетке
     return res;
 }
 
@@ -432,14 +464,14 @@ QJsonObject TransientPerformance::Data::Serialise() const
 {
     QJsonObject obj;
     obj.insert("time", time );
-    obj.insert("expenditure", expenditure );
+    obj.insert("position", position );
 
     return obj;
 }
 bool TransientPerformance::Data::Deserialize( QJsonObject const& obj )
 {
     time = obj.value("time").toDouble();
-    expenditure = obj.value("expenditure").toDouble();
+    position = obj.value("position").toDouble();
     return true;
 }
 

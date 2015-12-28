@@ -24,13 +24,13 @@ private:
     {
         Data():
             time(0),
-            expenditure(0)
+            position(0)
         {}
 
         QJsonObject Serialise() const;
         bool Deserialize( QJsonObject const& obj );
         double time;
-        double expenditure;
+        double position;
     };
 
     QVector<Data> Graph1;

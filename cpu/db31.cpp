@@ -26,7 +26,9 @@ void DB31::Write()
 void DB31::SendContinue()
 {
     OP15_25_Continum = true;
-    opc::miniOPC::Instance().WriteValue( mGroupID, 3, static_cast<void*>( &OP15_25_Continum ), opc::tBOOL );
+    auto res = opc::miniOPC::Instance().WriteValue( mGroupID, 3, static_cast<void*>( &OP15_25_Continum ), opc::tBOOL );
+    while ( res == E_FAIL )
+        res = opc::miniOPC::Instance().WriteValue( mGroupID, 3, static_cast<void*>( &OP15_25_Continum ), opc::tBOOL );
 }
 
 }//namespace data

@@ -35,7 +35,6 @@ public:
     bool& op12_b_close_b;   //Катушка б канал Б закрыт
     bool& op12_a_close_b;   //Катушка б канал А закрыт
     bool& op14_ready;       // TODO
-    float& op14_number;      //Число ячеек блока DB10/23
     float& op14_frequency;  //4.0   TODO
 
 private:
@@ -47,7 +46,7 @@ private:
     enum
     {
         BOOL_COUNT = 19,
-        FLOAT_COUNT = 2
+        FLOAT_COUNT = 1
     };
 
     bool mBoolData[ BOOL_COUNT ] = {false};
@@ -75,7 +74,6 @@ private:
         L"CPU/DB34.op12_b_close_b",
         L"CPU/DB34.op12_a_close_b",
         L"CPU/DB34.op14_ready",
-        L"CPU/DB34.op14_number",
         L"CPU/DB34.op14_frequency",
     };
 };
