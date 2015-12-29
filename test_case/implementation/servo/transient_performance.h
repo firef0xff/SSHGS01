@@ -10,16 +10,6 @@ namespace servo
 class TransientPerformance :public test::servo::Test
 {
 public:
-    TransientPerformance();
-    bool Run();
-    bool Success() const;
-    QJsonObject Serialise() const;
-    bool Deserialize( QJsonObject const& obj );
-
-    bool Draw(QPainter &painter, QRect &free_rect ) const;
-protected:
-    void UpdateData();
-private:
     struct Data
     {
         Data():
@@ -32,10 +22,22 @@ private:
         double time;
         double position;
     };
+    typedef QVector<Data> Source;
 
-    QVector<Data> Graph1;
-    QVector<Data> Graph2;
-    QVector<Data> Graph3;
+    TransientPerformance();
+    bool Run();
+    bool Success() const;
+    QJsonObject Serialise() const;
+    bool Deserialize( QJsonObject const& obj );
+
+    bool Draw(QPainter &painter, QRect &free_rect ) const;
+protected:
+    void UpdateData();
+private:
+
+    Source Graph1;
+    Source Graph2;
+    Source Graph3;
 };
 
 }//namespace servo

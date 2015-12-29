@@ -17,7 +17,6 @@ FrequencyCharacteristics::FrequencyCharacteristics():
 
 bool FrequencyCharacteristics::Run()
 {
-    mData.clear();
     mSource1.clear();
     mSource2.clear();
     mSource3.clear();
@@ -36,26 +35,6 @@ bool FrequencyCharacteristics::Run()
 void FrequencyCharacteristics::UpdateData()
 {
     Test::UpdateData();
-
-//    Data d;
-
-//    auto f_S = []( double expenditure )
-//    {
-//        double r1 = 0, r2 = 0;
-//        if ( expenditure < 30 )
-//        {
-//            r1 = 25.0/2.0;
-//            r2 = 18.0/2.0;
-//        }
-//        else
-//        {
-//            r1 = 63.0/2.0;
-//            r2 = 36.0/2.0;
-//        }
-//        return 2 *3.14 * ( r1*r1 - r2*r2 );
-//    };
-//    double K = 0.00006 * f_S( test::servo::Parameters::Instance().DefaultExpenditure() );
-//    double time_period = 1/1000; //время между замерами данных с
 
     if ( ReelControl() )
     {
@@ -90,117 +69,51 @@ void FrequencyCharacteristics::UpdateData()
             data.push_back( item );
         }
         src->insert( SourceItem( mControlReelBits.op24_frequency, data ) );
-
-
-//            std::vector< double > expenditure;
-//            for ( size_t i = 0; i < mControlReelBits.op24_number && i < m24Result1.SIGNAL_COUNT; ++i )
-//            {
-//                double ext = 0; // пройденное расстояние в мм
-//                if ( i > 1 )
-//                    ext = m24Result2.coordinate[i] - m24Result2.coordinate[i - 1];
-
-//                double speed = ext / time_period; //скорость движения мм/сек
-//                if ( i > 1 )
-//                    expenditure.push_back( speed * K ); // расход л/мин
-//            }
-//            //определим амплитуду
-//            size_t q_min = 0;
-//            size_t q_max = 0;
-//            if ( !expenditure.empty() )
-//            {
-//                q_max = 0;
-//                q_min = 0;
-//            }
-//            for ( size_t i = 0; i < expenditure.size(); ++i )
-//            {
-//                if ( expenditure[i] > expenditure[q_max] )
-//                    q_max = i;
-//                if ( expenditure[i] < expenditure[q_min] )
-//                    q_min = i;
-//            }
-//            size_t s_min = 0;
-//            size_t s_max = 0;
-
-//            for ( size_t i = 0; i < mControlReelBits.op24_number && i < m24Result1.SIGNAL_COUNT; ++i )
-//            {
-//                if ( m24Result1.signal[i] > m24Result1.signal[s_max] )
-//                    s_max = i;
-//                if ( m24Result1.signal[i] < m24Result1.signal[s_min] )
-//                    s_min = i;
-//            }
-
-//            double Tsm = q_max - s_max - 1;
-//            double T = 1/mControlReelBits.op24_frequency;
-//            double fi = -Tsm/T*360;
-
-//            d.frequency = mControlReelBits.op24_frequency;
-//            d.ampl = q_max - q_min;
-//            d.phase = fi;
-//            mData.push_back( d );
         cpu::CpuMemory::Instance().DB31.SendContinue();
-
     }
     else
     {
-#warning синхронизировать
+        if (!mControlBoardBits.op14_ready )
+            return;
+
+        std::this_thread::sleep_for(std::chrono::seconds(5));
+        mControlBoardBits.Read();
         m14Result1.Read();
         m14Result2.Read();
+        m1525Counts.Read();
 
-        if (mControlBoardBits.op14_ready)
+        Source *src = nullptr;
+        if ( m1525Counts.OP15_25_Opor_1 )
+            src = &mSource1;
+        if ( m1525Counts.OP15_25_Opor_2 )
+            src = &mSource2;
+        if ( m1525Counts.OP15_25_Opor_3 )
+            src = &mSource3;
+        if ( !src )
+            return;
+
+        if ( src->find( mControlBoardBits.op14_frequency ) != src->end() )
+            return;
+
+        DataSet data;
+        for ( int i = 0; i < m1525Counts.OP15_25_count && i < m14Result1.SIGNAL_COUNT; ++i )
         {
-//            std::vector< double > expenditure;
-//            for ( size_t i = 0; i < mControlBoardBits.op14_number && i < m14Result1.SIGNAL_COUNT; ++i )
-//            {
-//                double ext = 0; // пройденное расстояние в мм
-//                if ( i > 1 )
-//                    ext = m14Result2.coordinate[i] - m14Result2.coordinate[i - 1];
-
-//                double speed = ext / time_period; //скорость движения мм/сек
-//                if ( i > 1 )
-//                    expenditure.push_back( speed * K ); // расход л/мин
-//            }
-//            //определим амплитуду
-//            size_t q_min = 0;
-//            size_t q_max = 0;
-//            if ( !expenditure.empty() )
-//            {
-//                q_max = 0;
-//                q_min = 0;
-//            }
-//            for ( size_t i = 0; i < expenditure.size(); ++i )
-//            {
-//                if ( expenditure[i] > expenditure[q_max] )
-//                    q_max = i;
-//                if ( expenditure[i] < expenditure[q_min] )
-//                    q_min = i;
-//            }
-//            size_t s_min = 0;
-//            size_t s_max = 0;
-
-//            for ( size_t i = 0; i < mControlBoardBits.op14_number && i < m14Result1.SIGNAL_COUNT; ++i )
-//            {
-//                if ( m14Result1.signal[i] > m14Result1.signal[s_max] )
-//                    s_max = i;
-//                if ( m14Result1.signal[i] < m14Result1.signal[s_min] )
-//                    s_min = i;
-//            }
-
-//            double Tsm = q_max - s_max - 1;
-//            double T = 1/mControlBoardBits.op14_frequency;
-//            double fi = -Tsm/T*360;
-
-//            d.frequency = mControlBoardBits.op14_frequency;
-//            d.ampl = q_max - q_min;
-//            d.phase = fi;
-//            mData.push_back( d );
-            cpu::CpuMemory::Instance().DB31.SendContinue();
+            ArrData item;
+            item.position = m14Result2.coordinate[i];
+            item.signal = m14Result1.signal[i];
+            data.push_back( item );
         }
+        src->insert( SourceItem( mControlBoardBits.op14_frequency, data ) );
+        cpu::CpuMemory::Instance().DB31.SendContinue();
     }
 }
 bool FrequencyCharacteristics::Success() const
 {
     return true;
 }
+
+namespace
+{
 
 QJsonArray ToJson( FrequencyCharacteristics::Source const& in_src )
 {
@@ -226,7 +139,6 @@ QJsonArray ToJson( FrequencyCharacteristics::Source const& in_src )
 
     return source;
 }
-
 FrequencyCharacteristics::Source FromJson( QJsonArray arr )
 {
     FrequencyCharacteristics::Source res;
@@ -249,15 +161,150 @@ FrequencyCharacteristics::Source FromJson( QJsonArray arr )
     return std::move( res );
 }
 
+ff0x::NoAxisGraphBuilder::LinePoints ProcessAFC( FrequencyCharacteristics::Source const& src, QPointF& x_range, QPointF& y_range )
+{
+    auto f_S = []( double expenditure )
+    {
+        double r1 = 0, r2 = 0;
+        if ( expenditure < 30 )
+        {
+            r1 = 25.0/2.0;
+            r2 = 18.0/2.0;
+        }
+        else
+        {
+            r1 = 63.0/2.0;
+            r2 = 36.0/2.0;
+        }
+        return 2 *3.14 * ( r1*r1 - r2*r2 );
+    };
+    double K = 0.00006 * f_S( test::servo::Parameters::Instance().DefaultExpenditure() );
+    double time_period = 1/1000; //время между замерами данных с
+
+    ff0x::NoAxisGraphBuilder::LinePoints result;
+    for ( auto it = src.begin(), end = src.end(); it != end; ++it  )
+    {
+        QPointF point;
+        point.setX( it->first );
+        FrequencyCharacteristics::DataSet const& data = it->second;
+
+        std::vector< double > expenditure;
+        for ( size_t i = 0; i < data.size(); ++i )
+        {
+            if ( !i )
+                expenditure.push_back(0);
+            else
+                expenditure.push_back( (data[i].position - data[i-1].position)*K / time_period );
+        }
+
+        if ( !expenditure.empty() )
+        {
+            int max = 0;
+            int min = 0;
+            for ( size_t i = 0; i < expenditure.size(); ++i )
+            {
+                if ( expenditure[ max ] < expenditure[i] )
+                    max = i;
+                if ( expenditure[ min ] > expenditure[i] )
+                    min = i;
+            }
+            point.setY( expenditure[ max ] - expenditure[ min ] );
+        }
+        else
+            point.setY(0);
+
+        if ( it == src.begin() )
+        {
+            x_range.setX(point.x());
+            x_range.setY(point.x());
+            y_range.setX(point.y());
+            y_range.setY(point.y());
+        }
+        else
+        {
+            if ( x_range.x() < point.x() )
+                x_range.setX( point.x() );
+            if ( x_range.y() > point.x() )
+                x_range.setY( point.x() );
+
+            if ( y_range.x() < point.y() )
+                y_range.setX( point.y() );
+            if ( y_range.y() > point.y() )
+                y_range.setY( point.y() );
+        }
+        result.push_back( point );
+    }
+    return std::move( result );
+}
+ff0x::NoAxisGraphBuilder::LinePoints ProcessPFC( FrequencyCharacteristics::Source const& src, QPointF& x_range, QPointF& y_range )
+{
+    ff0x::NoAxisGraphBuilder::LinePoints result;
+    for ( auto it = src.begin(), end = src.end(); it != end; ++it  )
+    {
+        QPointF point;
+        point.setX( it->first );
+        FrequencyCharacteristics::DataSet const& data = it->second;
+
+        int s_min = 0;
+        int s_max = 0;
+        std::vector< double > speed;
+        for ( size_t i = 0; i < data.size(); ++i )
+        {
+            if ( !i )
+                speed.push_back(0);
+            else
+                speed.push_back( data[i].position - data[i-1].position );
+
+            if ( data[ s_max ].signal < data[i].signal )
+                s_max = i;
+            if ( data[ s_min ].signal > data[i].signal )
+                s_min = i;
+        }
+
+        int sp_max = 0;
+        int sp_min = 0;
+        for ( size_t i = 0; i < speed.size(); ++i )
+        {
+            if ( speed[ sp_max ] < speed[i] )
+                sp_max = i;
+            if ( speed[ sp_min ] > speed[i] )
+                sp_min = i;
+        }
+
+        double Tsm = sp_max - s_max;
+        double T = 1/point.x();
+        double fi = -Tsm/T*360;
+        point.setY( fi );
+
+        if ( it == src.begin() )
+        {
+            x_range.setX(point.x());
+            x_range.setY(point.x());
+            y_range.setX(point.y());
+            y_range.setY(point.y());
+        }
+        else
+        {
+            if ( x_range.x() < point.x() )
+                x_range.setX( point.x() );
+            if ( x_range.y() > point.x() )
+                x_range.setY( point.x() );
+
+            if ( y_range.x() < point.y() )
+                y_range.setX( point.y() );
+            if ( y_range.y() > point.y() )
+                y_range.setY( point.y() );
+        }
+        result.push_back( point );
+    }
+    return std::move( result );
+}
+
+}//namespace
+
 QJsonObject FrequencyCharacteristics::Serialise() const
 {
     QJsonObject obj = Test::Serialise();
-//    QJsonArray a;
-//    foreach (Data const& d, mData)
-//    {
-//        a.insert( a.end(), d.Serialise() );
-//    }
-//    obj.insert("Data", a );
 
     obj.insert( "Source1", ToJson( mSource1 ) );
     obj.insert( "Source2", ToJson( mSource2 ) );
@@ -267,18 +314,6 @@ QJsonObject FrequencyCharacteristics::Serialise() const
 }
 bool FrequencyCharacteristics::Deserialize( QJsonObject const& obj )
 {
-    mData.clear();
-    mSource1.clear();
-    mSource2.clear();
-    mSource3.clear();
-//    QJsonArray a = obj.value("Data").toArray();
-//    foreach (QJsonValue const& v, a)
-//    {
-//        Data d;
-//        if ( d.Deserialize( v.toObject() ) )
-//            mData.insert( mData.end(), d );
-//    }
-
     mSource1 = FromJson( obj.value("Source1").toArray() );
     mSource2 = FromJson( obj.value("Source2").toArray() );
     mSource3 = FromJson( obj.value("Source3").toArray() );
@@ -398,15 +433,24 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
     {
         painter.save();
 
-        ff0x::GraphBuilder::LinePoints data;
-        ff0x::GraphBuilder::LinePoints data_e;
+        ff0x::GraphBuilder::LinePoints data1;
+        ff0x::GraphBuilder::LinePoints data1_e;
 
         ff0x::GraphBuilder::LinePoints data2;
         ff0x::GraphBuilder::LinePoints data2_e;
 
-        double max_frequency = 0;
-        double max_ampl = 0;
-        double max_phase = 0;
+
+        QPointF x_range_1;
+        QPointF y_range_1;
+
+        QPointF x_range_1e;
+        QPointF y_range_1e;
+
+        QPointF x_range_2;
+        QPointF y_range_2;
+
+        QPointF x_range_2e;
+        QPointF y_range_2e;
 
         //поиск данных теста
         foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
@@ -414,91 +458,212 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
             auto obj = val.toObject();
             if ( obj.value("id").toInt() == mId )
             {
-                QJsonArray a = obj.value("data").toObject().value("Data").toArray();
-                foreach ( QJsonValue const& v, a )
-                {
-                    QJsonObject o = v.toObject();
-
-                    double phase = o.value("phase").toDouble();
-                    double ampl = o.value("ampl").toDouble();
-                    double frequency = o.value("frequency").toDouble();
-
-                    data_e.push_back( QPointF( frequency, ampl ) );
-                    data2_e.push_back( QPointF( frequency, phase  ) );
-                }
+                QJsonArray a = obj.value("data").toObject().value("mSource1").toArray();
+                data1_e = ProcessAFC( FromJson( a ), x_range_1e, y_range_1e );
+                data2_e = ProcessPFC( FromJson( a ), x_range_2e, y_range_2e );
             }
         }
 
+        data1 = ProcessAFC( mSource1, x_range_1, y_range_1 );
+        data2 = ProcessPFC( mSource1, x_range_2, y_range_2 );
 
-        foreach ( Data const& item, mData )
-        {
-            double abs_sig = std::abs( item.frequency );
-            double abs_ampl = std::abs( item.ampl );
-            double abs_phase = std::abs( item.phase );
-
-            if ( max_frequency < abs_sig )
-                max_frequency = abs_sig;
-
-            if ( max_ampl < abs_ampl )
-                max_ampl = abs_ampl;
-
-            if ( max_phase < abs_phase )
-                max_phase = abs_phase;
-
-            data.push_back( QPointF( item.frequency, item.ampl ) );
-            data2.push_back( QPointF( item.frequency, item.phase ) );
-        }
 
         QFont f = text_font;
         f.setPointSize( 6 );
         int w = (rect.height() - metrix.height())*0.98;
         int h = (rect.height() - metrix.height())*0.98;
 
-        ff0x::GraphBuilder builder ( w, h, ff0x::GraphBuilder::PlusPlus, f );
-        ff0x::GraphBuilder::GraphDataLine lines1;
-        lines1.push_back( ff0x::GraphBuilder::Line(data, ff0x::GraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
-        if ( !data_e.empty() )
-            lines1.push_back( ff0x::GraphBuilder::Line(data_e, ff0x::GraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
+        ff0x::NoAxisGraphBuilder builder ( w, h, f );
+        ff0x::NoAxisGraphBuilder::GraphDataLine lines1;
+        lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data1, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
+        if ( !data1_e.empty() )
+            lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data1_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
 
-        ff0x::GraphBuilder::GraphDataLine lines2;
-        lines2.push_back( ff0x::GraphBuilder::Line(data2, ff0x::GraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
+        ff0x::NoAxisGraphBuilder::GraphDataLine lines2;
+        lines2.push_back( ff0x::NoAxisGraphBuilder::Line(data2, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
         if ( !data2_e.empty() )
-            lines2.push_back( ff0x::GraphBuilder::Line(data2_e, ff0x::GraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
+            lines2.push_back( ff0x::NoAxisGraphBuilder::Line(data2_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
 
 
         QRect p1(rect.left(), rect.top(), w, h );
         QRect p2(rect.right() - w, rect.top(), w, h );
         QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
         QRect p2t(p2.left(), p2.bottom(), p2.width(), metrix.height());
-        DrawRowCenter( p1t, text_font, Qt::black, "АЧХ" );
-        DrawRowCenter( p2t, text_font, Qt::black, "ФЧХ" );
-        painter.drawPixmap( p1, builder.Draw( lines1, max_frequency * 1.25, max_ampl * 1.25, ceil(max_frequency)/10, ceil(max_ampl)/10, "Частота (Гц)", "Дб", true ) );
-        painter.drawPixmap( p2, builder.Draw( lines2, max_frequency * 1.25, max_phase * 1.25, ceil(max_frequency)/10, ceil(max_phase)/10, "Частота (Гц)", "φ (гр.)", true ) );
 
+        DrawRowCenter( p1t, text_font, Qt::black, "АЧХ. Амплитуда 1" );
+        {
+            QPointF x_range( std::max( x_range_1.x(), x_range_1e.x() ), std::min( x_range_1.y(), x_range_1e.y() ) );
+            QPointF y_range( std::max( y_range_1.x(), y_range_1e.x() ), std::min( y_range_1.y(), y_range_1e.y() ) );
+            painter.drawPixmap( p1, builder.Draw( lines1, x_range, y_range, ceil( x_range.x() - x_range.y() )/10, ceil(y_range.x() - y_range.y())/10, "Частота (Гц)", "Дб", true ) );
+        }
+
+        DrawRowCenter( p2t, text_font, Qt::black, "ФЧХ. Амплитуда 1" );
+        {
+            QPointF x_range( std::max( x_range_2.x(), x_range_2e.x() ), std::min( x_range_2.y(), x_range_2e.y() ) );
+            QPointF y_range( std::max( y_range_2.x(), y_range_2e.x() ), std::min( y_range_2.y(), y_range_2e.y() ) );
+            painter.drawPixmap( p2, builder.Draw( lines2, x_range, y_range, ceil( x_range.x() - x_range.y() )/10, ceil(y_range.x() - y_range.y())/10, "Частота (Гц)", "φ (гр.)", true ) );
+        }
         painter.restore();
     }, 1, free_rect.width()/2 + metrix.height()  );
 
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter, &text_font, &DrawRowCenter, &metrix ]( QRect const& rect )
+    {
+        painter.save();
+
+        ff0x::GraphBuilder::LinePoints data1;
+        ff0x::GraphBuilder::LinePoints data1_e;
+
+        ff0x::GraphBuilder::LinePoints data2;
+        ff0x::GraphBuilder::LinePoints data2_e;
+
+
+        QPointF x_range_1;
+        QPointF y_range_1;
+
+        QPointF x_range_1e;
+        QPointF y_range_1e;
+
+        QPointF x_range_2;
+        QPointF y_range_2;
+
+        QPointF x_range_2e;
+        QPointF y_range_2e;
+
+        //поиск данных теста
+        foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
+        {
+            auto obj = val.toObject();
+            if ( obj.value("id").toInt() == mId )
+            {
+                QJsonArray a = obj.value("data").toObject().value("mSource2").toArray();
+                data1_e = ProcessAFC( FromJson( a ), x_range_1e, y_range_1e );
+                data2_e = ProcessPFC( FromJson( a ), x_range_2e, y_range_2e );
+            }
+        }
+
+        data1 = ProcessAFC( mSource2, x_range_1, y_range_1 );
+        data2 = ProcessPFC( mSource2, x_range_2, y_range_2 );
+
+
+        QFont f = text_font;
+        f.setPointSize( 6 );
+        int w = (rect.height() - metrix.height())*0.98;
+        int h = (rect.height() - metrix.height())*0.98;
+
+        ff0x::NoAxisGraphBuilder builder ( w, h, f );
+        ff0x::NoAxisGraphBuilder::GraphDataLine lines1;
+        lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data1, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
+        if ( !data1_e.empty() )
+            lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data1_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
+
+        ff0x::NoAxisGraphBuilder::GraphDataLine lines2;
+        lines2.push_back( ff0x::NoAxisGraphBuilder::Line(data2, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
+        if ( !data2_e.empty() )
+            lines2.push_back( ff0x::NoAxisGraphBuilder::Line(data2_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
+
+
+        QRect p1(rect.left(), rect.top(), w, h );
+        QRect p2(rect.right() - w, rect.top(), w, h );
+        QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
+        QRect p2t(p2.left(), p2.bottom(), p2.width(), metrix.height());
+
+        DrawRowCenter( p1t, text_font, Qt::black, "АЧХ. Амплитуда 2" );
+        {
+            QPointF x_range( std::max( x_range_1.x(), x_range_1e.x() ), std::min( x_range_1.y(), x_range_1e.y() ) );
+            QPointF y_range( std::max( y_range_1.x(), y_range_1e.x() ), std::min( y_range_1.y(), y_range_1e.y() ) );
+            painter.drawPixmap( p1, builder.Draw( lines1, x_range, y_range, ceil( x_range.x() - x_range.y() )/10, ceil(y_range.x() - y_range.y())/10, "Частота (Гц)", "Дб", true ) );
+        }
+
+        DrawRowCenter( p2t, text_font, Qt::black, "ФЧХ. Амплитуда 2" );
+        {
+            QPointF x_range( std::max( x_range_2.x(), x_range_2e.x() ), std::min( x_range_2.y(), x_range_2e.y() ) );
+            QPointF y_range( std::max( y_range_2.x(), y_range_2e.x() ), std::min( y_range_2.y(), y_range_2e.y() ) );
+            painter.drawPixmap( p2, builder.Draw( lines2, x_range, y_range, ceil( x_range.x() - x_range.y() )/10, ceil(y_range.x() - y_range.y())/10, "Частота (Гц)", "φ (гр.)", true ) );
+        }
+        painter.restore();
+    }, 1, free_rect.width()/2 + metrix.height()  );
+
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter, &text_font, &DrawRowCenter, &metrix ]( QRect const& rect )
+    {
+        painter.save();
+
+        ff0x::GraphBuilder::LinePoints data1;
+        ff0x::GraphBuilder::LinePoints data1_e;
+
+        ff0x::GraphBuilder::LinePoints data2;
+        ff0x::GraphBuilder::LinePoints data2_e;
+
+
+        QPointF x_range_1;
+        QPointF y_range_1;
+
+        QPointF x_range_1e;
+        QPointF y_range_1e;
+
+        QPointF x_range_2;
+        QPointF y_range_2;
+
+        QPointF x_range_2e;
+        QPointF y_range_2e;
+
+        //поиск данных теста
+        foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
+        {
+            auto obj = val.toObject();
+            if ( obj.value("id").toInt() == mId )
+            {
+                QJsonArray a = obj.value("data").toObject().value("mSource3").toArray();
+                data1_e = ProcessAFC( FromJson( a ), x_range_1e, y_range_1e );
+                data2_e = ProcessPFC( FromJson( a ), x_range_2e, y_range_2e );
+            }
+        }
+
+        data1 = ProcessAFC( mSource3, x_range_1, y_range_1 );
+        data2 = ProcessPFC( mSource3, x_range_2, y_range_2 );
+
+
+        QFont f = text_font;
+        f.setPointSize( 6 );
+        int w = (rect.height() - metrix.height())*0.98;
+        int h = (rect.height() - metrix.height())*0.98;
+
+        ff0x::NoAxisGraphBuilder builder ( w, h, f );
+        ff0x::NoAxisGraphBuilder::GraphDataLine lines1;
+        lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data1, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
+        if ( !data1_e.empty() )
+            lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data1_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
+
+        ff0x::NoAxisGraphBuilder::GraphDataLine lines2;
+        lines2.push_back( ff0x::NoAxisGraphBuilder::Line(data2, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
+        if ( !data2_e.empty() )
+            lines2.push_back( ff0x::NoAxisGraphBuilder::Line(data2_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
+
+
+        QRect p1(rect.left(), rect.top(), w, h );
+        QRect p2(rect.right() - w, rect.top(), w, h );
+        QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
+        QRect p2t(p2.left(), p2.bottom(), p2.width(), metrix.height());
+
+        DrawRowCenter( p1t, text_font, Qt::black, "АЧХ. Амплитуда 3" );
+        {
+            QPointF x_range( std::max( x_range_1.x(), x_range_1e.x() ), std::min( x_range_1.y(), x_range_1e.y() ) );
+            QPointF y_range( std::max( y_range_1.x(), y_range_1e.x() ), std::min( y_range_1.y(), y_range_1e.y() ) );
+            painter.drawPixmap( p1, builder.Draw( lines1, x_range, y_range, ceil( x_range.x() - x_range.y() )/10, ceil(y_range.x() - y_range.y())/10, "Частота (Гц)", "Дб", true ) );
+        }
+
+        DrawRowCenter( p2t, text_font, Qt::black, "ФЧХ. Амплитуда 3" );
+        {
+            QPointF x_range( std::max( x_range_2.x(), x_range_2e.x() ), std::min( x_range_2.y(), x_range_2e.y() ) );
+            QPointF y_range( std::max( y_range_2.x(), y_range_2e.x() ), std::min( y_range_2.y(), y_range_2e.y() ) );
+            painter.drawPixmap( p2, builder.Draw( lines2, x_range, y_range, ceil( x_range.x() - x_range.y() )/10, ceil(y_range.x() - y_range.y())/10, "Частота (Гц)", "φ (гр.)", true ) );
+        }
+        painter.restore();
+    }, 1, free_rect.width()/2 + metrix.height()  );
 
 //    free_rect.setHeight( 0 );
     return res;
-}
-
-
-QJsonObject FrequencyCharacteristics::Data::Serialise() const
-{
-    QJsonObject obj;
-    obj.insert("phase", phase );
-    obj.insert("ampl", ampl );
-    obj.insert("frequency", frequency );
-
-    return obj;
-}
-bool FrequencyCharacteristics::Data::Deserialize( QJsonObject const& obj )
-{
-    phase = obj.value("phase").toDouble();
-    ampl = obj.value("ampl").toDouble();
-    frequency = obj.value("frequency").toDouble();
-    return true;
 }
 
 }//namespace servo

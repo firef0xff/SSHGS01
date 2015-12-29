@@ -32,20 +32,10 @@ public:
 protected:
     void UpdateData();
 private:
-    struct Data
-    {
-        double phase = 0;
-        double ampl = 0;
-        double frequency = 0;
-
-        QJsonObject Serialise() const;
-        bool Deserialize( QJsonObject const& obj );
-    };
 
     Source mSource1;
     Source mSource2;
     Source mSource3;
-    QVector< Data > mData;
 };
 
 }//namespace servo
