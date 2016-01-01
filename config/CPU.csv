@@ -2,10 +2,6 @@ DB2.ref_a;DB2,REAL0,100;RW;TST=;CMT=опорный сигнал катушки а
 DB2.consumption_a;DB2,REAL400,100;RW;TST=;CMT=расход катушки а
 DB2.ref_b;DB2,REAL800,100;RW;TST=;CMT=опорный сигнал катушки b
 DB2.consumption_b;DB2,REAL1200,100;RW;TST=;CMT=расход катушки b
-DB12.ref_a;DB12,REAL0,100;RW;TST=;CMT=опорный сигнал А
-DB12.consumption_a;DB12,REAL400,100;RW;TST=;CMT=расход А
-DB12.ref_b;DB12,REAL800,100;RW;TST=;CMT=опорный сигнал В
-DB12.consumption_b;DB12,REAL1200,100;RW;TST=;CMT=расход В
 DB3.open_ref;DB3,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
 DB3.open_consumption;DB3,REAL400,100;RW;TST=;CMT=расход на открытие
 DB3.open_bp3;DB3,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
@@ -16,34 +12,15 @@ DB3.close_consumption;DB3,REAL2400,100;RW;TST=;CMT=расход на закрытие
 DB3.close_bp3;DB3,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
 DB3.close_bp4;DB3,REAL3200,100;RW;TST=;CMT=давление ВР4 на закрытие
 DB3.close_bp5;DB3,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
-DB13.open_ref;DB13,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
-DB13.open_consumption;DB13,REAL400,100;RW;TST=;CMT=расход на открытие
-DB13.open_bp3;DB13,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
-DB13.open_bp4;DB13,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
-DB13.open_bp5;DB13,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
-DB13.close_ref;DB13,REAL2000,100;RW;TST=;CMT=опорный сигнал на закрытие
-DB13.close_consumption;DB13,REAL2400,100;RW;TST=;CMT=расход на закрытие
-DB13.close_bp3;DB13,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
-DB13.close_bp4;DB13,REAL3200,100;RW;TST=;CMT=давление ВР4 на закрытие
-DB13.close_bp5;DB13,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
 DB9.consumption_a;DB9,REAL0,50;RW;TST=;CMT=расход канал А
 DB9.bp3_a;DB9,REAL200,50;RW;TST=;CMT=давление ВР3 канал А
 DB9.bp5_a;DB9,REAL400,50;RW;TST=;CMT=давление ВР5 канал В
 DB9.consumption_b;DB9,REAL600,50;RW;TST=;CMT=расход канал В
 DB9.bp4_b;DB9,REAL800,50;RW;TST=;CMT=давление ВР4 канал В
 DB9.bp5_b;DB9,REAL1000,50;RW;TST=;CMT=давление ВР5 канал В
-DB19.consumption_a;DB19,REAL0,50;RW;TST=;CMT=расход канал А
-DB19.bp3_a;DB19,REAL200,50;RW;TST=;CMT=давление ВР3 канал А
-DB19.bp5_a;DB19,REAL400,50;RW;TST=;CMT=давление ВР5 канал В
-DB19.consumption_b;DB19,REAL600,50;RW;TST=;CMT=расход канал В
-DB19.bp4_b;DB19,REAL800,50;RW;TST=;CMT=давление ВР4 канал В
-DB19.bp5_b;DB19,REAL1000,50;RW;TST=;CMT=давление ВР5 канал В
-DB10.signal;DB10,REAL0,15000;RW;TST=;CMT=опорный сигнал на плату
-DB23.coord;DB23,REAL0,15000;RW;TST=;CMT=расположение цилиндра
-DB20.signal;DB20,REAL0,15000;RW;TST=;CMT=опорный сигнал на плату
-DB24.coord;DB24,REAL0,15000;RW;TST=;CMT=расположение цилиндра
+DB10.signal;DB10,REAL0,1000;RW;TST=;CMT=опорный сигнал на плату
+DB23.coord;DB23,REAL0,1000;RW;TST=;CMT=расположение цилиндра
 DB11.coordinate;DB11,REAL0,10000;RW;TST=;CMT=положение цилиндра
-DB21.coordinate;DB21,REAL0,10000;RW;TST=;CMT=положение цилиндра
 DB22.signal;DB22,REAL0,100;RW;TST=;CMT=опорный сигнал
 DB22.current;DB22,REAL400,100;RW;TST=;CMT=выходной ток
 DB30.Current;DB30,X2.0;RW;TST=;CMT=

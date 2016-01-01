@@ -13,7 +13,7 @@ class DB10 :public In
 public:
     enum
     {
-        SIGNAL_COUNT = 15000
+        SIGNAL_COUNT = 1000
     };
 
     void Read();

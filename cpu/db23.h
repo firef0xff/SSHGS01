@@ -13,7 +13,7 @@ class DB23 :public In
 public:
     enum
     {
-        COORDINATE_COUNT = 15000
+        COORDINATE_COUNT = 1000
     };
 
     void Read();

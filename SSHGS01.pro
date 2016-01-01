@@ -69,27 +69,11 @@ SOURCES += main.cpp\
     login.cpp \
     cpu/db2.cpp \
     cpu/db3.cpp \
-    cpu/db4.cpp \
-    cpu/db5.cpp \
-    cpu/db6.cpp \
-    cpu/db7.cpp \
-    cpu/db8.cpp \
     cpu/db9.cpp \
     cpu/db10.cpp \
     cpu/db11.cpp \
-    cpu/db12.cpp \
-    cpu/db13.cpp \
-    cpu/db14.cpp \
-    cpu/db15.cpp \
-    cpu/db16.cpp \
-    cpu/db17.cpp \
-    cpu/db18.cpp \
-    cpu/db19.cpp \
-    cpu/db20.cpp \
-    cpu/db21.cpp \
     cpu/db22.cpp \
     cpu/db23.cpp \
-    cpu/db24.cpp \
     cpu/db33.cpp \
     cpu/db34.cpp \
     cpu/db35.cpp \
@@ -158,27 +142,11 @@ HEADERS  += mainwindow.h \
     login.h \
     cpu/db2.h \
     cpu/db3.h \
-    cpu/db4.h \
-    cpu/db5.h \
-    cpu/db6.h \
-    cpu/db7.h \
-    cpu/db8.h \
     cpu/db9.h \
     cpu/db10.h \
     cpu/db11.h \
-    cpu/db12.h \
-    cpu/db13.h \
-    cpu/db14.h \
-    cpu/db15.h \
-    cpu/db16.h \
-    cpu/db17.h \
-    cpu/db18.h \
-    cpu/db19.h \
-    cpu/db20.h \
-    cpu/db21.h \
     cpu/db22.h \
     cpu/db23.h \
-    cpu/db24.h \
     cpu/db33.h \
     cpu/db34.h \
     cpu/db35.h \
