@@ -98,7 +98,7 @@ static MaxExpenditureTest t4;
 static PressureDurationFromExpenditure t5;
 static SwitchTest t6;
 static PressureRange t7;
-static ActivationTime t8;
+//static ActivationTime t8;
 }
 
 }//namespace hydro

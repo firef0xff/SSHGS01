@@ -30,6 +30,13 @@ HydroTitleInfo::HydroTitleInfo(bool new_mode, QWidget *parent) :
     {
         FromParams();
     }
+
+//убраны из набора тестов
+    ui->ActuationOffTime->setVisible( false );
+    ui->ActuationOnTime->setVisible( false );
+
+    ui->l_actuation_off_time->setVisible( false );
+    ui->l_actuation_on_time->setVisible( false );
 }
 
 HydroTitleInfo::~HydroTitleInfo()
@@ -92,8 +99,9 @@ bool HydroTitleInfo::SaveInputParams()
     res *= ParamChecker( ui->l_herm_signal,        params.HermSignal( ui->HermSignal->currentText() ) );
     res *= ParamChecker( ui->l_pabt_signal,        params.PABTSignal( ui->PABTSignal->currentText() ) );
     res *= ParamChecker( ui->l_pbat_signal,        params.PBATSignal( ui->PBATSignal->currentText() ) );
-    res *= ParamChecker( ui->l_actuation_on_time,  ValidateRange( ui->ActuationOnTime, params.ActuationOnTime( ui->ActuationOnTime->text() ) ) );
-    res *= ParamChecker( ui->l_actuation_off_time, ValidateRange( ui->ActuationOffTime, params.ActuationOffTime( ui->ActuationOffTime->text() ) ) );
+//убраны из набора тестов
+//    res *= ParamChecker( ui->l_actuation_on_time,  ValidateRange( ui->ActuationOnTime, params.ActuationOnTime( ui->ActuationOnTime->text() ) ) );
+//    res *= ParamChecker( ui->l_actuation_off_time, ValidateRange( ui->ActuationOffTime, params.ActuationOffTime( ui->ActuationOffTime->text() ) ) );
 
     return res;
 }
@@ -127,8 +135,9 @@ void HydroTitleInfo::FromParams()
     ui->PABTSignal->setCurrentIndex( ui->PABTSignal->findText( test::ToString( params.PABTSignal() ) ) );
     ui->PBATSignal->setCurrentIndex( ui->PBATSignal->findText( test::ToString( params.PBATSignal() ) ) );
 
-    ui->ActuationOnTime->setText( test::ToString( params.ActuationOnTime() ) );
-    ui->ActuationOffTime->setText( test::ToString( params.ActuationOffTime() ) );
+    //убраны из набора тестов
+//    ui->ActuationOnTime->setText( test::ToString( params.ActuationOnTime() ) );
+//    ui->ActuationOffTime->setText( test::ToString( params.ActuationOffTime() ) );
 }
 
 void HydroTitleInfo::on_buttonBox_accepted()

@@ -11,15 +11,6 @@ namespace hydro
 class PressureDurationFromExpenditure :public test::hydro::Test
 {
 public:
-    PressureDurationFromExpenditure();
-    bool Run();
-
-    QJsonObject Serialise() const;
-    bool Deserialize( QJsonObject const& obj );
-
-    bool Draw(QPainter &painter, QRect &free_rect ) const;
-    bool Success() const;
-private:
     struct Data
     {
         Data():
@@ -37,8 +28,18 @@ private:
         bool Deserialize( QJsonObject const& obj );
     };
     typedef std::pair<Data, Data> Channels;
+    typedef QVector< Channels > DataSet;
 
-    QVector< Channels > mData;
+    PressureDurationFromExpenditure();
+    bool Run();
+
+    QJsonObject Serialise() const;
+    bool Deserialize( QJsonObject const& obj );
+
+    bool Draw(QPainter &painter, QRect &free_rect ) const;
+    bool Success() const;
+private:
+    DataSet mData;
 
     //Зависимость перепада давления от расхода
     /// |--------------------------------------------|--------------------------------------------|
