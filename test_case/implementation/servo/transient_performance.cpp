@@ -52,31 +52,14 @@ void TransientPerformance::UpdateData()
     {
         std::this_thread::sleep_for(std::chrono::seconds(5));
         m1525Counts.Read();
-        if (ReelControl())
-            m25Result.Read();
-        else
-            m15Result.Read();
+        m15Result.Read();
 
-        if ( ReelControl() )
+        for ( int i = 0; i < m1525Counts.OP15_25_count && i < m15Result.COORDINATE_COUNT; ++i )
         {
-            for ( int i = 0; i < m1525Counts.OP15_25_count && i < m25Result.COORDINATE_COUNT; ++i )
-            {
-
-                Data d;
-                d.time = i;
-                d.position = m25Result.coordinate[i];
-                Graph->push_back( d );
-            }
-        }
-        else
-        {
-            for ( int i = 0; i < m1525Counts.OP15_25_count && i < m15Result.COORDINATE_COUNT; ++i )
-            {
-                Data d;
-                d.time = i;
-                d.position = m15Result.coordinate[i];
-                Graph->push_back( d );
-            }
+            Data d;
+            d.time = i;
+            d.position = m15Result.coordinate[i];
+            Graph->push_back( d );
         }
 
         cpu::CpuMemory::Instance().DB31.SendContinue();

@@ -60,22 +60,16 @@ protected:
     cpu::data::DB36& mControlReelBits;    //биты завершения испытаний серво оборудования с катушками управления
 
     cpu::data::DB2&  m11Results;
-    cpu::data::DB12& m21Results;
 
     cpu::data::DB3&  m12Results;
-    cpu::data::DB13& m22Results;
 
     cpu::data::DB9&  m13Results;
-    cpu::data::DB19& m23Results;
 
 
     cpu::data::DB10&  m14Result1;   //результаты пр14.1
     cpu::data::DB23&  m14Result2;   //результаты пр14.2
-    cpu::data::DB20&  m24Result1;   //результаты пр24.1
-    cpu::data::DB24&  m24Result2;   //результаты пр24.2
 
     cpu::data::DB11&  m15Result;
-    cpu::data::DB21&  m25Result;
     cpu::data::DB60&  m1525Counts;
 protected:
     void UpdateData();

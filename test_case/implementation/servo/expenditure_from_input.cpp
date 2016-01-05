@@ -25,14 +25,8 @@ bool ExpeditureFromInput::Run()
     if ( IsStopped() )
         return false;
 
-    if ( ReelControl() )
-    {
-        m22Results;
-    }
-    else
-    {
-        m12Results;
-    }
+    m12Results;
+
 
     OilTemp = mTemperature.T_oil;
     auto& params = Parameters::Instance();
@@ -77,10 +71,7 @@ bool ExpeditureFromInput::Run()
 void ExpeditureFromInput::UpdateData()
 {
     Test::UpdateData();
-    if (ReelControl())
-        m22Results.Read();
-    else
-        m12Results.Read();
+    m12Results.Read();
 }
 bool ExpeditureFromInput::Success() const
 {

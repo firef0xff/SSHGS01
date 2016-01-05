@@ -26,33 +26,16 @@ bool ExpeditureFromPressureDuration::Run()
     if ( IsStopped() )
         return false;
 
-    if ( ReelControl() )
+    for ( size_t i = 0; i < m13Results.CONSUMPTION_A_COUNT; ++i )
     {
-        for ( size_t i = 0; i < m23Results.CONSUMPTION_A_COUNT; ++i )
-        {
-            Data d;
-            d.ChA.Expenditure = m23Results.consumption_a[i];
-            d.ChB.Expenditure = m23Results.consumption_b[i];
-            d.ChA.BP3 = m23Results.bp3_a[i];
-            d.ChB.BP3 = m23Results.bp4_b[i];
-            d.ChA.BP5 = m23Results.bp5_a[i];
-            d.ChB.BP5 = m23Results.bp5_b[i];
-            mData.push_back( d );
-        }
-    }
-    else
-    {
-        for ( size_t i = 0; i < m13Results.CONSUMPTION_A_COUNT; ++i )
-        {
-            Data d;
-            d.ChA.Expenditure = m23Results.consumption_a[i];
-            d.ChB.Expenditure = m23Results.consumption_b[i];
-            d.ChA.BP3 = m13Results.bp3_a[i];
-            d.ChB.BP3 = m13Results.bp4_b[i];
-            d.ChA.BP5 = m13Results.bp5_a[i];
-            d.ChB.BP5 = m13Results.bp5_b[i];
-            mData.push_back( d );
-        }
+        Data d;
+        d.ChA.Expenditure = m13Results.consumption_a[i];
+        d.ChB.Expenditure = m13Results.consumption_b[i];
+        d.ChA.BP3 = m13Results.bp3_a[i];
+        d.ChB.BP3 = m13Results.bp4_b[i];
+        d.ChA.BP5 = m13Results.bp5_a[i];
+        d.ChB.BP5 = m13Results.bp5_b[i];
+        mData.push_back( d );
     }
 
     OilTemp = mTemperature.T_oil;
@@ -61,10 +44,7 @@ bool ExpeditureFromPressureDuration::Run()
 void ExpeditureFromPressureDuration::UpdateData()
 {
     Test::UpdateData();
-    if (ReelControl())
-        m23Results.Read();
-    else
-        m13Results.Read();
+    m13Results.Read();
 }
 bool ExpeditureFromPressureDuration::Success() const
 {

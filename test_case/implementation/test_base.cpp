@@ -96,17 +96,11 @@ Test::Test( QString const& name, uint8_t id_board, uint8_t id_reel ):
     mControlBoardBits( cpu::CpuMemory::Instance().DB34  ),
     mControlReelBits( cpu::CpuMemory::Instance().DB36  ),
     m11Results( cpu::CpuMemory::Instance().DB2 ),
-    m21Results( cpu::CpuMemory::Instance().DB12 ),
     m12Results( cpu::CpuMemory::Instance().DB3 ),
-    m22Results( cpu::CpuMemory::Instance().DB13 ),
     m13Results( cpu::CpuMemory::Instance().DB9 ),
-    m23Results( cpu::CpuMemory::Instance().DB19 ),
     m14Result1( cpu::CpuMemory::Instance().DB10 ),
     m14Result2( cpu::CpuMemory::Instance().DB23 ),
-    m24Result1( cpu::CpuMemory::Instance().DB20 ),
-    m24Result2( cpu::CpuMemory::Instance().DB24 ),
     m15Result( cpu::CpuMemory::Instance().DB11 ),
-    m25Result( cpu::CpuMemory::Instance().DB21 ),
     m1525Counts( cpu::CpuMemory::Instance().DB60 ),
     mIdReel( id_reel )
 {

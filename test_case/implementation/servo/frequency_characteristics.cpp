@@ -36,76 +36,39 @@ void FrequencyCharacteristics::UpdateData()
 {
     Test::UpdateData();
 
-    if ( ReelControl() )
+    if (!mControlBoardBits.op14_ready )
+        return;
+
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+    mControlBoardBits.Read();
+    m14Result1.Read();
+    m14Result2.Read();
+    m1525Counts.Read();
+
+    Source *src = nullptr;
+    if ( m1525Counts.OP15_25_Opor_1 )
+        src = &mSource1;
+    if ( m1525Counts.OP15_25_Opor_2 )
+        src = &mSource2;
+    if ( m1525Counts.OP15_25_Opor_3 )
+        src = &mSource3;
+    if ( !src )
+        return;
+
+    if ( src->find( mControlBoardBits.op14_frequency ) != src->end() )
+        return;
+
+    DataSet data;
+    for ( int i = 0; i < m1525Counts.OP15_25_count && i < m14Result1.SIGNAL_COUNT; ++i )
     {
-        if (!mControlReelBits.op24_ready )
-            return;
-
-        std::this_thread::sleep_for(std::chrono::seconds(5));
-        mControlReelBits.Read();
-        m24Result1.Read();
-        m24Result2.Read();
-        m1525Counts.Read();
-
-        Source *src = nullptr;
-        if ( m1525Counts.OP15_25_Opor_1 )
-            src = &mSource1;
-        if ( m1525Counts.OP15_25_Opor_2 )
-            src = &mSource2;
-        if ( m1525Counts.OP15_25_Opor_3 )
-            src = &mSource3;
-        if ( !src )
-            return;
-
-        if ( src->find( mControlReelBits.op24_frequency ) != src->end() )
-            return;
-
-        DataSet data;
-        for ( int i = 0; i < m1525Counts.OP15_25_count && i < m24Result1.SIGNAL_COUNT; ++i )
-        {
-            ArrData item;
-            item.position = m24Result2.coordinate[i];
-            item.signal = m24Result1.signal[i];
-            data.push_back( item );
-        }
-        src->insert( SourceItem( mControlReelBits.op24_frequency, data ) );
-        cpu::CpuMemory::Instance().DB31.SendContinue();
+        ArrData item;
+        item.position = m14Result2.coordinate[i];
+        item.signal = m14Result1.signal[i];
+        data.push_back( item );
     }
-    else
-    {
-        if (!mControlBoardBits.op14_ready )
-            return;
+    src->insert( SourceItem( mControlBoardBits.op14_frequency, data ) );
+    cpu::CpuMemory::Instance().DB31.SendContinue();
 
-        std::this_thread::sleep_for(std::chrono::seconds(5));
-        mControlBoardBits.Read();
-        m14Result1.Read();
-        m14Result2.Read();
-        m1525Counts.Read();
-
-        Source *src = nullptr;
-        if ( m1525Counts.OP15_25_Opor_1 )
-            src = &mSource1;
-        if ( m1525Counts.OP15_25_Opor_2 )
-            src = &mSource2;
-        if ( m1525Counts.OP15_25_Opor_3 )
-            src = &mSource3;
-        if ( !src )
-            return;
-
-        if ( src->find( mControlBoardBits.op14_frequency ) != src->end() )
-            return;
-
-        DataSet data;
-        for ( int i = 0; i < m1525Counts.OP15_25_count && i < m14Result1.SIGNAL_COUNT; ++i )
-        {
-            ArrData item;
-            item.position = m14Result2.coordinate[i];
-            item.signal = m14Result1.signal[i];
-            data.push_back( item );
-        }
-        src->insert( SourceItem( mControlBoardBits.op14_frequency, data ) );
-        cpu::CpuMemory::Instance().DB31.SendContinue();
-    }
 }
 bool FrequencyCharacteristics::Success() const
 {

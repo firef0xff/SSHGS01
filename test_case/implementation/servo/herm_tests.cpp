@@ -200,34 +200,18 @@ bool InsideHermTest::Run()
 
     std::this_thread::sleep_for( std::chrono::seconds(2));
     UpdateData();
-    if ( ReelControl() )
+    for ( size_t i = 0; i < m11Results.CONSUMPTION_A_COUNT; ++i )
     {
-        for ( size_t i = 0; i < m21Results.CONSUMPTION_A_COUNT; ++i )
-        {
-            Data d;
-            d.Leak = m21Results.consumption_a[i];
-            d.Signal = m21Results.ref_a[i];
-            GraphA.push_back(d);
+        Data d;
+        d.Leak = m11Results.consumption_a[i];
+        d.Signal = m11Results.ref_a[i];
+        GraphA.push_back(d);
 
-            d.Leak = m21Results.consumption_b[i];
-            d.Signal = -m21Results.ref_b[i];
-            GraphB.push_back(d);
-        }
+        d.Leak = m11Results.consumption_b[i];
+        d.Signal = -m11Results.ref_b[i];
+        GraphB.push_back(d);
     }
-    else
-    {
-        for ( size_t i = 0; i < m11Results.CONSUMPTION_A_COUNT; ++i )
-        {
-            Data d;
-            d.Leak = m11Results.consumption_a[i];
-            d.Signal = m11Results.ref_a[i];
-            GraphA.push_back(d);
 
-            d.Leak = m11Results.consumption_b[i];
-            d.Signal = -m11Results.ref_b[i];
-            GraphB.push_back(d);
-        }
-    }
 
     OilTemp = mTemperature.T_oil;
 
@@ -236,10 +220,7 @@ bool InsideHermTest::Run()
 void InsideHermTest::UpdateData()
 {
     Test::UpdateData();
-    if ( ReelControl() )
-        m21Results.Read();
-    else
-        m11Results.Read();
+    m11Results.Read();
 }
 bool InsideHermTest::Success() const
 {
