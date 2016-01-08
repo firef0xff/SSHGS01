@@ -48,7 +48,7 @@ private:
     void AppSettrings ();
     void DeviceLists( examinee::DeviceCollection& devices );
 
-    void ShowChildWindow( ChildPtr child );
+    void ShowChildWindow( ChildPtr child, bool maximized = false );
 
 
     Ui::MainWindow *ui;
@@ -98,6 +98,7 @@ private slots:
     void on_Open_results_triggered();
 
     void onUpdateControls();
+    void on_ManualControl_clicked();
 };
 
 

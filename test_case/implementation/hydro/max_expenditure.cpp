@@ -30,7 +30,7 @@ bool MaxExpenditureTest::Run()
 
     OilTemp = mResults.T_oil;
 
-    return ResultA && (params->ReelCount() == 2 ? ResultB : true);
+    return Success();
 }
 
 QJsonObject MaxExpenditureTest::Serialise() const
@@ -174,10 +174,7 @@ bool MaxExpenditureTest::Draw( QPainter& painter, QRect &free_rect ) const
 
 bool MaxExpenditureTest::Success() const
 {
-    test::hydro::Parameters *params = static_cast< test::hydro::Parameters * >( CURRENT_PARAMS );
-    if ( !params )
-        return false;
-    return ResultA && (params->ReelCount() == 2 ? ResultB : true);
+    return ResultA && ResultB;
 }
 }//namespace hydro
 

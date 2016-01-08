@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1012</width>
-    <height>266</height>
+    <width>874</width>
+    <height>304</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -36,8 +36,26 @@
     <enum>Qt::NoContextMenu</enum>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">
+     <number>2</number>
+    </property>
+    <property name="leftMargin">
+     <number>2</number>
+    </property>
+    <property name="topMargin">
+     <number>2</number>
+    </property>
+    <property name="rightMargin">
+     <number>2</number>
+    </property>
+    <property name="bottomMargin">
+     <number>2</number>
+    </property>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <property name="spacing">
+       <number>2</number>
+      </property>
       <item>
        <widget class="QCommandLinkButton" name="TestCase1">
         <property name="text">
@@ -84,10 +102,23 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QCommandLinkButton" name="ManualControl">
+        <property name="text">
+         <string>Ручное управление</string>
+        </property>
+        <property name="description">
+         <string>Перевод стенда в режим ручного управления</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="spacing">
+       <number>2</number>
+      </property>
       <item>
        <widget class="QLabel" name="label_5">
         <property name="text">
@@ -166,6 +197,9 @@
     </item>
     <item>
      <layout class="QHBoxLayout" name="labels_1">
+      <property name="spacing">
+       <number>2</number>
+      </property>
       <property name="sizeConstraint">
        <enum>QLayout::SetMinAndMaxSize</enum>
       </property>
@@ -177,6 +211,9 @@
       </property>
       <item>
        <layout class="QVBoxLayout" name="p_dd1">
+        <property name="spacing">
+         <number>2</number>
+        </property>
         <item>
          <widget class="QLabel" name="l_dd1">
           <property name="sizePolicy">
@@ -198,6 +235,9 @@
       </item>
       <item>
        <layout class="QVBoxLayout" name="p_dd2">
+        <property name="spacing">
+         <number>2</number>
+        </property>
         <item>
          <widget class="QLabel" name="l_dd2">
           <property name="sizePolicy">
@@ -219,6 +259,9 @@
       </item>
       <item>
        <layout class="QVBoxLayout" name="p_dd3">
+        <property name="spacing">
+         <number>2</number>
+        </property>
         <item>
          <widget class="QLabel" name="l_dd3">
           <property name="sizePolicy">
@@ -240,6 +283,9 @@
       </item>
       <item>
        <layout class="QVBoxLayout" name="p_p">
+        <property name="spacing">
+         <number>2</number>
+        </property>
         <item>
          <widget class="QLabel" name="label">
           <property name="sizePolicy">
@@ -263,8 +309,14 @@ P</string>
     </item>
     <item>
      <layout class="QHBoxLayout" name="labels_2">
+      <property name="spacing">
+       <number>2</number>
+      </property>
       <item>
        <layout class="QVBoxLayout" name="p_m1m2">
+        <property name="spacing">
+         <number>2</number>
+        </property>
         <item>
          <widget class="QLabel" name="l_pd1">
           <property name="sizePolicy">
@@ -292,6 +344,9 @@ P</string>
       </item>
       <item>
        <layout class="QVBoxLayout" name="p_T">
+        <property name="spacing">
+         <number>2</number>
+        </property>
         <item>
          <widget class="QLabel" name="l_pd2">
           <property name="sizePolicy">
@@ -313,6 +368,9 @@ T</string>
       </item>
       <item>
        <layout class="QVBoxLayout" name="p_X">
+        <property name="spacing">
+         <number>2</number>
+        </property>
         <item>
          <widget class="QLabel" name="l_pd3">
           <property name="sizePolicy">
@@ -334,6 +392,9 @@ X</string>
       </item>
       <item>
        <layout class="QVBoxLayout" name="p_lost">
+        <property name="spacing">
+         <number>2</number>
+        </property>
         <item>
          <widget class="QLabel" name="label_2">
           <property name="sizePolicy">
@@ -363,7 +424,7 @@ X</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1012</width>
+     <width>874</width>
      <height>21</height>
     </rect>
    </property>

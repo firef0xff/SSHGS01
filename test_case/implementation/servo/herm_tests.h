@@ -31,17 +31,6 @@ private:
 class InsideHermTest :public test::servo::Test
 {
 public:
-    InsideHermTest();
-    bool Run();
-    bool Success() const;
-    QJsonObject Serialise() const;
-    bool Deserialize( QJsonObject const& obj );
-
-    bool Draw(QPainter &painter, QRect &free_rect ) const;
-
-protected:
-    void UpdateData();
-private:
     struct Data
     {
         Data():
@@ -54,10 +43,25 @@ private:
         double Signal;
         double Leak;
     };
+
+    typedef QVector<Data> DataSet;
+
+    InsideHermTest();
+    bool Run();
+    bool Success() const;
+    QJsonObject Serialise() const;
+    bool Deserialize( QJsonObject const& obj );
+
+    bool Draw(QPainter &painter, QRect &free_rect ) const;
+
+protected:
+    void UpdateData();
+private:
+
     // графиг опорного сигнала и расхода в канале утечки ( Т )
 
-    QVector<Data> GraphA;
-    QVector<Data> GraphB;
+    DataSet GraphA;
+    DataSet GraphB;
 };
 
 }//namespace servo

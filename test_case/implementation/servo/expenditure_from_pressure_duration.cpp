@@ -50,29 +50,108 @@ bool ExpeditureFromPressureDuration::Success() const
 {
     return true;
 }
+
+namespace
+{
+
+QJsonArray ToJson( ExpeditureFromPressureDuration::DataSet const& data )
+{
+    QJsonArray arr;
+    foreach ( ExpeditureFromPressureDuration::Data const& d, data )
+    {
+        arr.insert( arr.end(), d.Serialise() );
+    }
+    return std::move( arr );
+}
+ExpeditureFromPressureDuration::DataSet FromJson( QJsonArray const& arr )
+{
+    ExpeditureFromPressureDuration::DataSet data;
+
+    foreach (QJsonValue const& v, arr)
+    {
+        ExpeditureFromPressureDuration::Data d;
+        if ( d.Deserialize( v.toObject() ) )
+            data.insert( data.end(), d );
+    }
+    return std::move( data );
+}
+
+ff0x::NoAxisGraphBuilder::LinePoints ProcessA( ExpeditureFromPressureDuration::DataSet const& src, QPointF& x_range, QPointF& y_range )
+{
+    ff0x::NoAxisGraphBuilder::LinePoints result;
+
+    for ( int i = 0; i < src.size(); ++i )
+    {
+        double const& y = src[i].ChA.Expenditure;
+        double const& x = src[i].ChA.BP5_3();
+        if ( !i )
+        {
+            x_range.setX( x );
+            x_range.setY( x );
+            y_range.setX( y );
+            y_range.setY( y );
+        }
+        else
+        {
+            if ( x > x_range.x() )
+                x_range.setX( x );
+            if ( x < x_range.y() )
+                x_range.setY( x );
+
+            if ( y > y_range.x() )
+                y_range.setX( y );
+            if ( y < y_range.y() )
+                y_range.setY( y );
+        }
+
+        result.push_back( QPointF( x, y ) );
+    }
+    return std::move( result );
+}
+ff0x::NoAxisGraphBuilder::LinePoints ProcessB( ExpeditureFromPressureDuration::DataSet const& src, QPointF& x_range, QPointF& y_range )
+{
+    ff0x::NoAxisGraphBuilder::LinePoints result;
+
+    for ( int i = 0; i < src.size(); ++i )
+    {
+        double const& y = src[i].ChB.Expenditure;
+        double const& x = src[i].ChB.BP5_3();
+        if ( !i )
+        {
+            x_range.setX( x );
+            x_range.setY( x );
+            y_range.setX( y );
+            y_range.setY( y );
+        }
+        else
+        {
+            if ( x > x_range.x() )
+                x_range.setX( x );
+            if ( x < x_range.y() )
+                x_range.setY( x );
+
+            if ( y > y_range.x() )
+                y_range.setX( y );
+            if ( y < y_range.y() )
+                y_range.setY( y );
+        }
+
+        result.push_back( QPointF( x, y ) );
+    }
+    return std::move( result );
+}
+}//namespace
+
 QJsonObject ExpeditureFromPressureDuration::Serialise() const
 {
     QJsonObject obj = Test::Serialise();
-    QJsonArray a;
-    foreach (Data const& d, mData)
-    {
-        a.insert( a.end(), d.Serialise() );
-    }
-    obj.insert("Data", a );
+    obj.insert("Data", ToJson( mData ) );
 
     return obj;
 }
 bool ExpeditureFromPressureDuration::Deserialize( QJsonObject const& obj )
 {
-    mData.clear();
-    QJsonArray a = obj.value("Data").toArray();
-    foreach (QJsonValue const& v, a)
-    {
-        Data d;
-        if ( d.Deserialize( v.toObject() ) )
-            mData.insert( mData.end(), d );
-    }
-
+    mData = FromJson( obj.value("Data").toArray() );
     Test::Deserialize( obj );
     return true;
 }
@@ -279,15 +358,17 @@ bool ExpeditureFromPressureDuration::Draw( QPainter& painter, QRect &free_rect )
         ff0x::GraphBuilder::LinePoints dataB;
         ff0x::GraphBuilder::LinePoints dataB_e;
 
-        double max_signal_a = 0;
-        double max_signal_b = 0;
-        double max_Leak_a = 0;
-        double max_Leak_b = 0;
+        QPointF x_range_1;
+        QPointF y_range_1;
 
-        double min_signal_a = 0;
-        double min_signal_b = 0;
-        double min_Leak_a = 0;
-        double min_Leak_b = 0;
+        QPointF x_range_1e;
+        QPointF y_range_1e;
+
+        QPointF x_range_2;
+        QPointF y_range_2;
+
+        QPointF x_range_2e;
+        QPointF y_range_2e;
 
         //поиск данных теста
         foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
@@ -295,67 +376,15 @@ bool ExpeditureFromPressureDuration::Draw( QPainter& painter, QRect &free_rect )
             auto obj = val.toObject();
             if ( obj.value("id").toInt() == mId )
             {
-                QJsonArray a = obj.value("data").toObject().value("Data").toArray();
-
-                foreach ( QJsonValue const& v, a )
-                {
-                    QJsonObject o = v.toObject();
-                    double expenditure_a =  o.value("ChA").toObject().value("Expenditure").toDouble();
-                    double expenditure_b =  o.value("ChB").toObject().value("Expenditure").toDouble();
-                    double bp3_a = o.value("ChA").toObject().value("BP3").toDouble();
-                    double bp5_a = o.value("ChA").toObject().value("BP5").toDouble();
-                    double bp3_b = o.value("ChB").toObject().value("BP3").toDouble();
-                    double bp5_b = o.value("ChB").toObject().value("BP5").toDouble();
-                    dataA_e.push_back( QPointF( bp5_a - bp3_a, expenditure_a ) );
-                    dataB_e.push_back( QPointF( bp5_b - bp3_b, expenditure_b ) );
-                }
+                DataSet data = FromJson( obj.value("data").toObject().value("Data").toArray() );
+                dataA_e = ProcessA( data, x_range_1e, y_range_1e );
+                dataB_e = ProcessB( data, x_range_2e, y_range_2e );
             }
         }
 
-        for ( int i = 0; i < mData.size(); ++i )
-        {
-            Data const& item = mData[i];
-            double abs_sig_a = std::abs( item.ChA.BP5_3() );
-            double abs_sig_b = std::abs( item.ChB.BP5_3() );
-            double abs_leak_a = std::abs( item.ChA.Expenditure );
-            double abs_leak_b = std::abs( item.ChB.Expenditure );
-            if ( i == 0 )
-            {
-                max_signal_a = abs_sig_a;
-                max_signal_b = abs_sig_b;
-                max_Leak_a = abs_leak_a;
-                max_Leak_b = abs_leak_b;
+        dataA = ProcessA( mData, x_range_1, y_range_1 );
+        dataB = ProcessB( mData, x_range_2, y_range_2 );
 
-                min_signal_a = abs_sig_a;
-                min_signal_b = abs_sig_b;
-                min_Leak_a = abs_leak_a;
-                min_Leak_b = abs_leak_b;
-            }
-            else
-            {
-                if ( max_signal_a < abs_sig_a )
-                    max_signal_a = abs_sig_a;
-                if ( max_signal_b < abs_sig_b )
-                    max_signal_b = abs_sig_b;
-
-                if ( max_Leak_a < abs_leak_a )
-                    max_Leak_a = abs_leak_a;
-                if ( max_Leak_b < abs_leak_b )
-                    max_Leak_b = abs_leak_b;
-
-                if ( min_signal_a > abs_sig_a )
-                    min_signal_a = abs_sig_a;
-                if ( min_signal_b > abs_sig_b )
-                    min_signal_b = abs_sig_b;
-
-                if ( min_Leak_a > abs_leak_a )
-                    min_Leak_a = abs_leak_a;
-                if ( min_Leak_b > abs_leak_b )
-                    min_Leak_b = abs_leak_b;
-            }
-            dataA.push_back( QPointF( item.ChA.BP5_3(), item.ChA.Expenditure ) );
-            dataB.push_back( QPointF( item.ChB.BP5_3(), item.ChB.Expenditure ) );
-        }
 
         QFont f = text_font;
         f.setPointSize( 6 );
@@ -378,15 +407,54 @@ bool ExpeditureFromPressureDuration::Draw( QPainter& painter, QRect &free_rect )
         QRect p2(rect.right() - w, rect.top(), w, h );
         QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
         QRect p2t(p2.left(), p2.bottom(), p2.width(), metrix.height());
-        DrawRowCenter( p1t, text_font, Qt::black, "P->A" );
-        DrawRowCenter( p2t, text_font, Qt::black, "P->B" );
 
-        QPointF x_range_a( max_signal_a, min_signal_a );
-        QPointF y_range_a( max_Leak_a, min_Leak_a );
-        painter.drawPixmap( p1, builder.Draw( lines_a, x_range_a, y_range_a, ceil( max_signal_a - min_signal_a )/10, ceil(max_Leak_a - min_Leak_a)/10, "Δ Р (бар)", "Расход (л/мин)", true ) );
-        QPointF x_range_b( max_signal_b, min_signal_b );
-        QPointF y_range_b( max_Leak_b, min_Leak_b );
-        painter.drawPixmap( p2, builder.Draw( lines_b, x_range_b, y_range_b, ceil( max_signal_b - min_signal_b )/10, ceil(max_Leak_b - min_Leak_b)/10, "Δ Р (бар)", "Расход (л/мин)", true ) );
+
+        DrawRowCenter( p1t, text_font, Qt::black, "P->A" );
+        {
+            QPointF x_range;
+            QPointF y_range;
+            if ( !dataA_e.empty() )
+            {
+                x_range = QPointF( ceil ( std::max( x_range_1.x(), x_range_1e.x() )/10 )*10,
+                                   floor( std::min( x_range_1.y(), x_range_1e.y() )/10 )*10 );
+
+                y_range = QPointF ( ceil ( std::max( y_range_1.x(), y_range_1e.x() )/10 )*10,
+                                    floor( std::min( y_range_1.y(), y_range_1e.y() )/10 )*10 );
+            }
+            else
+            {
+                x_range = QPointF( ceil ( x_range_1.x()/10 )*10,
+                                   floor( x_range_1.y()/10 )*10 );
+
+                y_range = QPointF ( ceil ( y_range_1.x()/10 )*10,
+                                    floor( y_range_1.y()/10 )*10 );
+            }
+
+            painter.drawPixmap( p1, builder.Draw( lines_a, x_range, y_range, ceil( x_range.x() - x_range.y() )/10, ceil(y_range.x() - y_range.y())/10, "Δ Р (бар)", "Расход (л/мин)", true ) );
+        }
+        DrawRowCenter( p2t, text_font, Qt::black, "P->B" );
+        {
+            QPointF x_range;
+            QPointF y_range;
+            if ( !dataB_e.empty() )
+            {
+                x_range = QPointF( ceil ( std::max( x_range_2.x(), x_range_2e.x() )/10 )*10,
+                                   floor( std::min( x_range_2.y(), x_range_2e.y() )/10 )*10 );
+
+                y_range = QPointF ( ceil ( std::max( y_range_2.x(), y_range_2e.x() )/10 )*10,
+                                    floor( std::min( y_range_2.y(), y_range_2e.y() )/10 )*10 );
+            }
+            else
+            {
+                x_range = QPointF( ceil ( x_range_2.x()/10 )*10,
+                                   floor( x_range_2.y()/10 )*10 );
+
+                y_range = QPointF ( ceil ( y_range_2.x()/10 )*10,
+                                    floor( y_range_2.y()/10 )*10 );
+            }
+            painter.drawPixmap( p2, builder.Draw( lines_b, x_range, y_range, ceil( x_range.x() - x_range.y() )/10, ceil(y_range.x() - y_range.y())/10, "Δ Р (бар)", "Расход (л/мин)", true ) );
+
+        }
 
         painter.restore();
     }, 1, free_rect.width()/2 + metrix.height()  );

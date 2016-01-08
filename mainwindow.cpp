@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "manual_control.h"
 #include "ui_mainwindow.h"
 #include "hydro_title_info.h"
 #include "servo_title_info.h"
@@ -184,14 +185,18 @@ void MainWindow::closeEvent(QCloseEvent *e)
     QWidget::closeEvent( e );
 }
 
-void MainWindow::ShowChildWindow( std::unique_ptr< QWidget > child )
+void MainWindow::ShowChildWindow( std::unique_ptr< QWidget > child, bool maximized )
 {
     enable_modes(false);
     if ( mChildWindow.get() )
         QObject::disconnect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(enable_modes()) );
     mChildWindow.reset( child.release() );
     QObject::connect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(enable_modes()) );
-    mChildWindow->show();
+
+    if ( maximized )
+        mChildWindow->showMaximized();
+    else
+        mChildWindow->show();
 }
 
 void MainWindow::StartHydroTest( bool new_test )
@@ -227,6 +232,7 @@ void MainWindow::enable_modes(bool enabled)
     ui->act_test_case2->setEnabled( enabled );
     ui->act_test_case3->setEnabled( enabled );
     ui->act_test_case4->setEnabled( enabled );
+    ui->ManualControl->setEnabled( enabled );
 
     ui->TestCase1->setEnabled( enabled );
     ui->TestCase2->setEnabled( enabled );
@@ -278,6 +284,10 @@ void MainWindow::on_TestCase4_clicked()
     StartHydroCilinderTest( true );
 }
 
+void MainWindow::on_ManualControl_clicked()
+{
+    ShowChildWindow( ChildPtr( new ManualControl() ) );
+}
 
 //ACTIONS
 void MainWindow::on_load_isp_params_triggered()
@@ -386,6 +396,7 @@ void MainWindow::onUpdateControls()
     //уровень масла
     //см DB40
 }
+
 
 ControlsUpdater::ControlsUpdater():
     mStopSignal(false)

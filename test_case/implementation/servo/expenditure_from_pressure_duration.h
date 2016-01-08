@@ -10,18 +10,6 @@ namespace servo
 class ExpeditureFromPressureDuration :public test::servo::Test
 {
 public:
-    ExpeditureFromPressureDuration();
-    bool Run();
-    bool Success() const;
-    QJsonObject Serialise() const;
-    bool Deserialize( QJsonObject const& obj );
-
-    bool Draw(QPainter &painter, QRect &free_rect ) const;
-
-    void ResetDrawLine();
-protected:
-    void UpdateData();
-private:
     struct Data
     {
         struct Channel
@@ -54,7 +42,23 @@ private:
         Channel ChB;
     };
 
-    QVector<Data> mData;
+    typedef QVector<Data> DataSet;
+
+    ExpeditureFromPressureDuration();
+    bool Run();
+    bool Success() const;
+    QJsonObject Serialise() const;
+    bool Deserialize( QJsonObject const& obj );
+
+    bool Draw(QPainter &painter, QRect &free_rect ) const;
+
+    void ResetDrawLine();
+protected:
+    void UpdateData();
+private:
+
+
+    DataSet mData;
     mutable int PrintedRows = 0;
     mutable int PrintedPage = 0;
 };

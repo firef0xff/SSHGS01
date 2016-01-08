@@ -83,7 +83,8 @@ SOURCES += main.cpp\
     cpu/db39.cpp \
     cpu/db40.cpp \
     cpu/db50.cpp \
-    cpu/db60.cpp
+    cpu/db60.cpp \
+    manual_control.cpp
 
 HEADERS  += mainwindow.h \
     test_case/test_case.h \
@@ -156,7 +157,8 @@ HEADERS  += mainwindow.h \
     cpu/db39.h \
     cpu/db40.h \
     cpu/db50.h \
-    cpu/db60.h
+    cpu/db60.h \
+    manual_control.h
 
 FORMS    += mainwindow.ui \
     hydro_title_info.ui \
@@ -169,7 +171,8 @@ FORMS    += mainwindow.ui \
     control_panels_title_info.ui \
     hydro_cilinder_title_info.ui \
     viewer.ui \
-    login.ui
+    login.ui \
+    manual_control.ui
 
 OTHER_FILES += devices/*.json\
     тз/*\
@@ -196,4 +199,4 @@ release {
     DEFINES -= DEBUG
 }
 #DEFINES += WINDOWS
-#DEFINES += DEMO
+DEFINES += DEMO

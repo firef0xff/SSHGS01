@@ -45,8 +45,7 @@ bool PressureRange::Run()
 
     OilTemp = mResults.T_oil;
 
-    return ResultMinMinA && ResultMinMaxA && ResultMaxMinA && ResultMaxMaxA &&
-            ( params->ReelCount() == 2 ? ResultMinMinB && ResultMinMaxB && ResultMaxMinB && ResultMaxMaxB : true );
+    return Success();
 }
 
 QJsonObject PressureRange::Serialise() const

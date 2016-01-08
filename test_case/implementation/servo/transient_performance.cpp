@@ -337,7 +337,7 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
                           ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
 
         lines2.push_back( ff0x::NoAxisGraphBuilder::Line(data2,
-                          ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::darkCyan ) ) );
+                          ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
 
         if ( !data1_e.empty() )
             lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data1_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
@@ -351,14 +351,46 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
 
         DrawRowCenter( p1t, text_font, Qt::black, "Переходные характеристики. Амплитуда 1" );
         {
-            QPointF x_range( std::max( x_range_1.x(), x_range_1e.x() ), std::min( x_range_1.y(), x_range_1e.y() ) );
-            QPointF y_range( std::max( y_range_1.x(), y_range_1e.x() ), std::min( y_range_1.y(), y_range_1e.y() ) );
+            QPointF x_range;
+            QPointF y_range;
+            if ( !data1_e.empty() )
+            {
+                x_range = QPointF( ceil ( std::max( x_range_1.x(), x_range_1e.x() )/10 )*10,
+                                   floor( std::min( x_range_1.y(), x_range_1e.y() )/10 )*10 );
+
+                y_range = QPointF ( ceil ( std::max( y_range_1.x(), y_range_1e.x() )/10 )*10,
+                                    floor( std::min( y_range_1.y(), y_range_1e.y() )/10 )*10 );
+            }
+            else
+            {
+                x_range = QPointF( ceil ( x_range_1.x()/10 )*10,
+                                   floor( x_range_1.y()/10 )*10 );
+
+                y_range = QPointF ( ceil ( y_range_1.x()/10 )*10,
+                                    floor( y_range_1.y()/10 )*10 );
+            }
             painter.drawPixmap( p1, builder.Draw( lines1, x_range, y_range, ceil( x_range.x() - x_range.y() )/10, ceil(y_range.x() - y_range.y())/10, "Время (мс)", "Расход (л/мин)", true ) );
         }
         DrawRowCenter( p2t, text_font, Qt::black, "Переходные характеристики. Амплитуда 2" );
         {
-            QPointF x_range( std::max( x_range_2.x(), x_range_2e.x() ), std::min( x_range_2.y(), x_range_2e.y() ) );
-            QPointF y_range( std::max( y_range_2.x(), y_range_2e.x() ), std::min( y_range_2.y(), y_range_2e.y() ) );
+            QPointF x_range;
+            QPointF y_range;
+            if ( !data2_e.empty() )
+            {
+                x_range = QPointF( ceil ( std::max( x_range_2.x(), x_range_2e.x() )/10 )*10,
+                                   floor( std::min( x_range_2.y(), x_range_2e.y() )/10 )*10 );
+
+                y_range = QPointF ( ceil ( std::max( y_range_2.x(), y_range_2e.x() )/10 )*10,
+                                    floor( std::min( y_range_2.y(), y_range_2e.y() )/10 )*10 );
+            }
+            else
+            {
+                x_range = QPointF( ceil ( x_range_2.x()/10 )*10,
+                                   floor( x_range_2.y()/10 )*10 );
+
+                y_range = QPointF ( ceil ( y_range_2.x()/10 )*10,
+                                    floor( y_range_2.y()/10 )*10 );
+            }
             painter.drawPixmap( p2, builder.Draw( lines2, x_range, y_range, ceil( x_range.x() - x_range.y() )/10, ceil(y_range.x() - y_range.y())/10, "Время (мс)", "Расход (л/мин)", true ) );
         }
 
@@ -412,8 +444,25 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
 
         DrawRowCenter( p1t, text_font, Qt::black, "Переходные характеристики. Амплитуда 3" );
         {
-            QPointF x_range( std::max( x_range_3.x(), x_range_3e.x() ), std::min( x_range_3.y(), x_range_3e.y() ) );
-            QPointF y_range( std::max( y_range_3.x(), y_range_3e.x() ), std::min( y_range_3.y(), y_range_3e.y() ) );
+            QPointF x_range;
+            QPointF y_range;
+            if ( !data3_e.empty() )
+            {
+                x_range = QPointF( ceil ( std::max( x_range_3.x(), x_range_3e.x() )/10 )*10,
+                                   floor( std::min( x_range_3.y(), x_range_3e.y() )/10 )*10 );
+
+                y_range = QPointF ( ceil ( std::max( y_range_3.x(), y_range_3e.x() )/10 )*10,
+                                    floor( std::min( y_range_3.y(), y_range_3e.y() )/10 )*10 );
+            }
+            else
+            {
+                x_range = QPointF( ceil ( x_range_3.x()/10 )*10,
+                                   floor( x_range_3.y()/10 )*10 );
+
+                y_range = QPointF ( ceil ( y_range_3.x()/10 )*10,
+                                    floor( y_range_3.y()/10 )*10 );
+            }
+
             painter.drawPixmap( p1, builder.Draw( lines3, x_range, y_range, ceil( x_range.x() - x_range.y() )/10, ceil(y_range.x() - y_range.y())/10, "Время (мс)", "Расход (л/мин)", true ) );
         }
 
