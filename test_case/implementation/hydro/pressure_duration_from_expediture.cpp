@@ -482,7 +482,7 @@ bool PressureDurationFromExpenditure::Draw( QPainter& painter, QRect &free_rect 
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &text_font ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, "Испытание ", Qt::red, QString("нет критерия успеха теста!!!") + (Success()? "пройдено" : "не пройдено") );
+        DrawRowLeft( rect, text_font, Qt::black, "Испытание ", Qt::red, Success()? "пройдено" : "не пройдено" );
     }, 2 );
     return res;
 }

@@ -21,6 +21,8 @@ public:
 private:
     bool ResultA; //Максимальный расход (не)удовлетворяет установленным критериям
     bool ResultB;
+    double ExpenditureA;
+    double ExpenditureB;
 };
 
 

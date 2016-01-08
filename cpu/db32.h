@@ -85,6 +85,8 @@ public:
     bool& op5_no_a;    //140.1 пропускная способность не соотвествует А
     bool& op5_ok_b;    //140.2 пропускная способность соотвествует В
     bool& op5_no_b;    //140.3 пропускная способность не соотвествует В
+    float& op5_pa;     //174   Расход на канале А
+    float& op5_pb;     //178   Расход на канале Б
 
     //test6
     bool& op6_min_min_ok_a;    //140.4 "а" перекл. при мин. давл. (мин упр.)
@@ -167,7 +169,7 @@ private:
     enum
     {
         BOOL_COUNT = 71,
-        FLOAT_COUNT = 38
+        FLOAT_COUNT = 40
     };
 
     bool mBoolData[ BOOL_COUNT ] = {false};
@@ -305,7 +307,10 @@ private:
         L"CPU/DB32.op8_time_on_b",
         L"CPU/DB32.op8_time_off_b",
 
-        L"CPU/DB32.T_oil"
+        L"CPU/DB32.T_oil",
+
+        L"CPU/DB32.op5_pa",
+        L"CPU/DB32.op5_pb"
     };
 };
 

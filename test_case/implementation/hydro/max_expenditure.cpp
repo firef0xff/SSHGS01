@@ -27,6 +27,8 @@ bool MaxExpenditureTest::Run()
 
     ResultA = mResults.op5_ok_a && !mResults.op5_no_a;
     ResultB = mResults.op5_ok_b && !mResults.op5_no_b;
+    ExpenditureA = mResults.op5_pa;
+    ExpenditureB = mResults.op5_pb;
 
     OilTemp = mResults.T_oil;
 
@@ -38,6 +40,8 @@ QJsonObject MaxExpenditureTest::Serialise() const
     QJsonObject obj = Test::Serialise();
     obj.insert("ResultA", ResultA );
     obj.insert("ResultB", ResultB );
+    obj.insert("ExpenditureA", ExpenditureA );
+    obj.insert("ExpenditureB", ExpenditureB );
 
     return obj;
 }
@@ -45,6 +49,9 @@ bool MaxExpenditureTest::Deserialize( QJsonObject const& obj )
 {
     ResultA = obj.value("ResultA").toBool();
     ResultB = obj.value("ResultB").toBool();
+    ExpenditureA = obj.value("ExpenditureA").toDouble();
+    ExpenditureB = obj.value("ExpenditureB").toDouble();
+
     Test::Deserialize( obj );
     return true;
 }
@@ -131,9 +138,9 @@ bool MaxExpenditureTest::Draw( QPainter& painter, QRect &free_rect ) const
 
 
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
+    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font, params ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении испытаний, бар"), Qt::red, "что писать?" );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении испытаний, бар"), Qt::red, test::ToString( params->MaxWorkPressure()) );
     }, 2 );
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
@@ -157,12 +164,12 @@ bool MaxExpenditureTest::Draw( QPainter& painter, QRect &free_rect ) const
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &text_font, &FillToSize ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Максимальный расход Р-->A , л/мин"), Qt::red, "значение? (норма 'значение?' л/мин)" );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Максимальный расход Р-->A , л/мин"), Qt::red, test::ToString( ExpenditureA ) );
     }, 2 );
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &text_font, &FillToSize ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Максимальный расход Р-->В , л/мин"), Qt::red, "значение? (норма 'значение?' л/мин)" );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Максимальный расход Р-->В , л/мин"), Qt::red, test::ToString( ExpenditureB ) );
     }, 2 );
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &text_font ]( QRect const& rect )
