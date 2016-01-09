@@ -31,8 +31,8 @@ private:
         INT_COUNT = 1
     };
 
-    bool mBoolData[ BOOL_COUNT ] = {0};
-    int mIntData[ INT_COUNT ] = {0};
+    bool mBoolData[ BOOL_COUNT ];
+    int mIntData[ INT_COUNT ];
     uint64_t mGroupID = 0;
 
     wchar_t const* mAdresses[ BOOL_COUNT+INT_COUNT ] = {

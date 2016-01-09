@@ -1,6 +1,6 @@
 #include "db36.h"
 #include "../myOPC/miniOPC.h"
-
+#include "memory.h"
 namespace cpu
 {
 namespace data
@@ -30,6 +30,8 @@ DB36::DB36():
     op24_frequency( mFloatData[0] )
 
 {
+    memset( mBoolData, 0, sizeof(mBoolData) );
+    memset( mFloatData, 0, sizeof(mFloatData) );
     mGroupID = opc::miniOPC::Instance().AddGroup( L"DB36", mAdresses, BOOL_COUNT + FLOAT_COUNT );
 }
 

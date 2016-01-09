@@ -21,10 +21,10 @@ public:
 
     void Read();
 
-    float ref_a[REF_A_COUNT] = {0.0};                  //DB2,REAL0,100 опорный сигнал катушки а
-    float consumption_a[CONSUMPTION_A_COUNT] = {0.0};  //DB2,REAL0,400 расход катушки а
-    float ref_b[REF_B_COUNT] = {0.0};                  //DB2,REAL0,800 опорный сигнал катушки б
-    float consumption_b[CONSUMPTION_B_COUNT] = {0.0};  //DB2,REAL0,1200 расход катушки б
+    float ref_a[REF_A_COUNT];                  //DB2,REAL0,100 опорный сигнал катушки а
+    float consumption_a[CONSUMPTION_A_COUNT];  //DB2,REAL0,400 расход катушки а
+    float ref_b[REF_B_COUNT];                  //DB2,REAL0,800 опорный сигнал катушки б
+    float consumption_b[CONSUMPTION_B_COUNT];  //DB2,REAL0,1200 расход катушки б
 private:
     friend class cpu::CpuMemory;
     DB2();

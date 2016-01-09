@@ -1,13 +1,17 @@
 #include "db2.h"
 
 #include "../myOPC/miniOPC.h"
-
+#include "memory.h"
 namespace cpu
 {
 namespace data
 {
 DB2::DB2()
 {
+    memset( ref_a, 0, sizeof(ref_a) );
+    memset( consumption_a, 0, sizeof(consumption_a) );
+    memset( ref_b, 0, sizeof(ref_b) );
+    memset( consumption_b, 0, sizeof(consumption_b) );
     mGroupID = opc::miniOPC::Instance().AddGroup( L"DB2", mAdresses, ARRAYS_COUNT );
 }
 

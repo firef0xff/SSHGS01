@@ -1,6 +1,7 @@
 #include "db22.h"
 
 #include "../myOPC/miniOPC.h"
+#include "memory.h"
 
 namespace cpu
 {
@@ -8,6 +9,8 @@ namespace data
 {
 DB22::DB22()
 {
+    memset( signal, 0, sizeof(signal) );
+    memset( current, 0, sizeof(current) );
     mGroupID = opc::miniOPC::Instance().AddGroup( L"DB22", mAdresses, ARRAYS_COUNT );
 }
 

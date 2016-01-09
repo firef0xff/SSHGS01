@@ -1,6 +1,7 @@
 #include "db9.h"
 
 #include "../myOPC/miniOPC.h"
+#include "memory.h"
 
 namespace cpu
 {
@@ -8,6 +9,12 @@ namespace data
 {
 DB9::DB9()
 {
+    memset( consumption_a, 0, sizeof(consumption_a) );
+    memset( bp3_a, 0, sizeof(bp3_a) );
+    memset( bp5_a, 0, sizeof(bp5_a) );
+    memset( consumption_b, 0, sizeof(consumption_b) );
+    memset( bp4_b, 0, sizeof(bp4_b) );
+    memset( bp5_b, 0, sizeof(bp5_b) );
     mGroupID = opc::miniOPC::Instance().AddGroup( L"DB9", mAdresses, ARRAYS_COUNT );
 }
 

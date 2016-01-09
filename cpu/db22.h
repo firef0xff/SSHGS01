@@ -21,8 +21,8 @@ public:
 
     void Read();
 
-    float signal[SIGNAL_COUNT] = {0.0};         //DB22,REAL0,100 опорный сигнал
-    float current[CURRENT_COUNT] = {0.0};     //DB22,REAL400,100 выходной ток
+    float signal[SIGNAL_COUNT];         //DB22,REAL0,100 опорный сигнал
+    float current[CURRENT_COUNT];     //DB22,REAL400,100 выходной ток
 private:
     friend class cpu::CpuMemory;
     DB22();

@@ -1,6 +1,7 @@
 #include "db23.h"
 
 #include "../myOPC/miniOPC.h"
+#include "memory.h"
 
 namespace cpu
 {
@@ -8,6 +9,8 @@ namespace data
 {
 DB23::DB23()
 {
+    memset( coordinate, 0, sizeof(coordinate) );
+
     mGroupID = opc::miniOPC::Instance().AddGroup( L"DB23", mAdresses, ARRAYS_COUNT );
 }
 

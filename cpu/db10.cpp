@@ -1,6 +1,7 @@
 #include "db10.h"
 
 #include "../myOPC/miniOPC.h"
+#include "memory.h"
 
 namespace cpu
 {
@@ -8,6 +9,7 @@ namespace data
 {
 DB10::DB10()
 {
+    memset( signal, 0, sizeof(signal) );
     mGroupID = opc::miniOPC::Instance().AddGroup( L"DB10", mAdresses, ARRAYS_COUNT );
 }
 

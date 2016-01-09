@@ -1,6 +1,6 @@
 #include "db50.h"
 #include "../myOPC/miniOPC.h"
-
+#include "memory.h"
 namespace cpu
 {
 namespace data
@@ -26,14 +26,14 @@ DB50::DB50():
     A1(mFloatData[13]),
     A2(mFloatData[14]),
     A_Plata(mFloatData[15]),
-    YB1(mFloatData[16]),
-    YB2(mFloatData[17]),
-    YB3(mFloatData[18]),
-    YB4(mFloatData[19]),
-    YB5(mFloatData[20]),
-    YB6(mFloatData[21]),
-    Z_U_Post(mFloatData[22]),
-    Z_U_Per(mFloatData[23]),
+    YB1(mFloatData[16]),        /*w*/
+    YB2(mFloatData[17]),        /*w*/
+    YB3(mFloatData[18]),        /*w*/
+    YB4(mFloatData[19]),        /*w*/
+    YB5(mFloatData[20]),        /*w*/
+    YB6(mFloatData[21]),        /*w*/
+    Z_U_Post(mFloatData[22]),   /*w*/
+    Z_U_Per(mFloatData[23]),    /*w*/
     Plata_1(mFloatData[24]),
     Plata_2(mFloatData[25]),
     Plata_3(mFloatData[26]),
@@ -44,6 +44,8 @@ DB50::DB50():
     POS_1_REAL(mFloatData[31]),
     POS_2_REAL(mFloatData[32])
 {
+    memset( mIntData, 0, sizeof(mIntData) );
+    memset( mFloatData, 0, sizeof(mFloatData) );
     mGroupID = opc::miniOPC::Instance().AddGroup( L"DB50", mAdresses, INT_COUNT + FLOAT_COUNT );
 }
 
@@ -63,6 +65,11 @@ void DB50::Read()
             mFloatData[ i - INT_COUNT ] = rez[i].vDataValue.fltVal;
     }
     opc::miniOPC::Instance().OpcMassFree( mGroupID, rez );
+}
+
+void DB50::WriteTask()
+{
+    opc::miniOPC::Instance().WriteMass( mGroupID, INT_COUNT + 16, 8, static_cast<void*>( &YB1 ), opc::tFLOAT );
 }
 
 }

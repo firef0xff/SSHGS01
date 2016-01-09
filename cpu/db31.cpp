@@ -1,5 +1,6 @@
 #include "db31.h"
 #include "../myOPC/miniOPC.h"
+#include "memory.h"
 
 namespace cpu
 {
@@ -14,6 +15,8 @@ DB31::DB31():
     N_Operation( mFloatData[0] ),
     Q_5_5ma ( mFloatData[1] )
 {
+    memset( mBoolData, 0, sizeof(mBoolData) );
+    memset( mFloatData, 0, sizeof(mFloatData) );
     mGroupID = opc::miniOPC::Instance().AddGroup( L"DB31", mAdresses, BOOL_COUNT + FLOAT_COUNT );
 }
 

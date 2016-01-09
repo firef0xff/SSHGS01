@@ -18,7 +18,7 @@ public:
 
     void Read();
 
-    float signal[SIGNAL_COUNT] = {0.0};          //DB10 REAL0   15000  опорный сигнал
+    float signal[SIGNAL_COUNT];          //DB10 REAL0   15000  опорный сигнал
 
 private:
     friend class cpu::CpuMemory;

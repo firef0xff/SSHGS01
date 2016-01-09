@@ -1,5 +1,6 @@
 #include "db39.h"
 #include "../myOPC/miniOPC.h"
+#include "memory.h"
 
 namespace cpu
 {
@@ -13,6 +14,8 @@ DB39::DB39():
     op31_end( mBoolData[4] ),
     op32_end( mBoolData[5] )
 {
+    memset( mBoolData, 0, sizeof(mBoolData) );
+//    memset( mFloatData, 0, sizeof(mFloatData) );
     mGroupID = opc::miniOPC::Instance().AddGroup( L"DB39", mAdresses, BOOL_COUNT + FLOAT_COUNT );
 #ifdef DEMO
     op30_ok = true;

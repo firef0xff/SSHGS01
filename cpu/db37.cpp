@@ -1,6 +1,6 @@
 #include "db37.h"
 #include "../myOPC/miniOPC.h"
-
+#include "memory.h"
 namespace cpu
 {
 namespace data
@@ -19,6 +19,8 @@ DB37::DB37():
     output_current_max( mFloatData[1] ),
     resistance( mFloatData[2] )
 {
+    memset( mBoolData, 0, sizeof(mBoolData) );
+    memset( mFloatData, 0, sizeof(mFloatData) );
     mGroupID = opc::miniOPC::Instance().AddGroup( L"DB37", mAdresses, BOOL_COUNT + FLOAT_COUNT );
 }
 

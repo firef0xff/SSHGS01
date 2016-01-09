@@ -1,6 +1,6 @@
 #include "db35.h"
 #include "../myOPC/miniOPC.h"
-
+#include "memory.h"
 namespace cpu
 {
 namespace data
@@ -27,6 +27,8 @@ DB35::DB35():
     press_control_min( mFloatData[11] ),
     press_control_max( mFloatData[12] )
 {
+    memset( mBoolData, 0, sizeof(mBoolData) );
+    memset( mFloatData, 0, sizeof(mFloatData) );
     mGroupID = opc::miniOPC::Instance().AddGroup( L"DB35", mAdresses, BOOL_COUNT + FLOAT_COUNT );
 }
 

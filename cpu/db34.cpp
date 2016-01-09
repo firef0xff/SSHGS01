@@ -1,6 +1,6 @@
 #include "db34.h"
 #include "../myOPC/miniOPC.h"
-
+#include "memory.h"
 namespace cpu
 {
 namespace data
@@ -29,6 +29,8 @@ DB34::DB34():
     op14_ready( mBoolData[18] ),
     op14_frequency( mFloatData[1] )
 {
+    memset( mBoolData, 0, sizeof(mBoolData) );
+    memset( mFloatData, 0, sizeof(mFloatData) );
     mGroupID = opc::miniOPC::Instance().AddGroup( L"DB34", mAdresses, BOOL_COUNT + FLOAT_COUNT );
 }
 

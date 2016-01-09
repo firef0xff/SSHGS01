@@ -1,6 +1,7 @@
 #include "db3.h"
 
 #include "../myOPC/miniOPC.h"
+#include "memory.h"
 
 namespace cpu
 {
@@ -8,6 +9,16 @@ namespace data
 {
 DB3::DB3()
 {
+    memset( open_ref, 0, sizeof(open_ref) );
+    memset( open_consumption, 0, sizeof(open_consumption) );
+    memset( open_bp3, 0, sizeof(open_bp3) );
+    memset( open_bp4, 0, sizeof(open_bp4) );
+    memset( open_bp5, 0, sizeof(open_bp5) );
+    memset( close_ref, 0, sizeof(close_ref) );
+    memset( close_consumption, 0, sizeof(close_consumption) );
+    memset( close_bp3, 0, sizeof(close_bp3) );
+    memset( close_bp4, 0, sizeof(close_bp4) );
+    memset( close_bp5, 0, sizeof(close_bp5) );
     mGroupID = opc::miniOPC::Instance().AddGroup( L"DB3", mAdresses, ARRAYS_COUNT );
 }
 

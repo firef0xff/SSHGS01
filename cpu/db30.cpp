@@ -1,6 +1,6 @@
 #include "db30.h"
 #include "../myOPC/miniOPC.h"
-
+#include "memory.h"
 namespace cpu
 {
 
@@ -51,6 +51,8 @@ DB30::DB30():
     DD3_close_b( mBoolData[17] ),      //ДД3 выключение б
     TypeD_close_b( mBoolData[18] )     //TуpeD 0 - падение 1 - увеличение
 {
+    memset( mBoolData, 0, sizeof(mBoolData) );
+    memset( mFloatData, 0, sizeof(mFloatData) );
     mGroupID = opc::miniOPC::Instance().AddGroup( L"DB30", mAdresses, BOOL_COUNT + FLOAT_COUNT );
 }
 

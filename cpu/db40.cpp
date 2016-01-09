@@ -1,6 +1,6 @@
 #include "db40.h"
 #include "../myOPC/miniOPC.h"
-
+#include "memory.h"
 namespace cpu
 {
 namespace data
@@ -46,6 +46,8 @@ DB40::DB40():
     fault_m12( mBoolData[37] ),
     fault_phasing( mBoolData[38] )
 {
+    memset( mBoolData, 0, sizeof(mBoolData) );
+//    memset( mFloatData, 0, sizeof(mFloatData) );
     mGroupID = opc::miniOPC::Instance().AddGroup( L"DB40", mAdresses, BOOL_COUNT + FLOAT_COUNT );
 }
 

@@ -18,7 +18,7 @@ public:
 
     void Read();
 
-    float coordinate[COORDINATE_COUNT] = {0.0};                  //DB11 REAL0   10000 положение цилиндра
+    float coordinate[COORDINATE_COUNT];                  //DB11 REAL0   10000 положение цилиндра
     
 private:
     friend class cpu::CpuMemory;

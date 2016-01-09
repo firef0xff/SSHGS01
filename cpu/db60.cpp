@@ -1,5 +1,6 @@
 #include "db60.h"
 #include "../myOPC/miniOPC.h"
+#include "memory.h"
 
 namespace cpu
 {
@@ -12,6 +13,8 @@ DB60::DB60():
     OP15_25_Opor_3(mBoolData[2]),    
     OP15_25_count ( mIntData[0])
 {
+    memset( mBoolData, 0, sizeof(mBoolData) );
+    memset( mIntData, 0, sizeof(mIntData) );
     mGroupID = opc::miniOPC::Instance().AddGroup( L"DB60", mAdresses, BOOL_COUNT + INT_COUNT );
 }
 

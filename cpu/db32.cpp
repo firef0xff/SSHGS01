@@ -1,6 +1,6 @@
 #include "db32.h"
 #include "../myOPC/miniOPC.h"
-
+#include "memory.h"
 namespace cpu
 {
 namespace data
@@ -149,6 +149,8 @@ DB32::DB32():
     op7_end( mBoolData[69] ),  //167.6 Конец операции 7
     op8_end( mBoolData[70] )  //167.7 Конец операции 8
 {
+    memset( mBoolData, 0, sizeof(mBoolData) );
+    memset( mFloatData, 0, sizeof(mFloatData) );
     mGroupID = opc::miniOPC::Instance().AddGroup( L"DB32", mAdresses, BOOL_COUNT + FLOAT_COUNT );
 
     {

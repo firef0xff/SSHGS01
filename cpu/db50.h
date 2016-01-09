@@ -13,8 +13,8 @@ class DB50 :public In
 public:
     void Read();
 
-    int& Osh_M;         //DB50,W66
-    int& Osh_DM;        //DB50,W128
+        int& Osh_M;         //DB50,W66
+        int& Osh_DM;        //DB50,W128
 
     float& BP1;         //DB50,REAL2    давление после М1/М2 (real)
     float& BP2;         //DB50,REAL6    давление на сливе испытуемого аппарата (real)
@@ -50,7 +50,9 @@ public:
     float& POS_1_REAL;  //DB50,REAL130    Позиция Г/Ц (1..10л/мин) 100мм
     float& POS_2_REAL;  //DB50,REAL134    Позиция Г/Ц (0..1л/мин) 100мм
 
-private:
+    void WriteTask();
+private:    
+
     friend class cpu::CpuMemory;
     DB50();
     DB50( const DB50& ) = delete;
@@ -62,8 +64,8 @@ private:
         FLOAT_COUNT = 33
     };
 
-    int mIntData[ INT_COUNT ] = {0};
-    float mFloatData[ FLOAT_COUNT ] = { 0.0 };
+    int mIntData[ INT_COUNT ];
+    float mFloatData[ FLOAT_COUNT ];
     uint64_t mGroupID = 0;
 
     wchar_t const* mAdresses[ INT_COUNT + FLOAT_COUNT ] = {

@@ -68,8 +68,8 @@ private:
         FLOAT_COUNT = 0
     };
 
-    bool mBoolData[ BOOL_COUNT ] = {false};
-//    float mFloatData[ FLOAT_COUNT ] = { 0.0 };
+    bool mBoolData[ BOOL_COUNT ];
+//    float mFloatData[ FLOAT_COUNT ];
     uint64_t mGroupID = 0;
 
     wchar_t const* mAdresses[ BOOL_COUNT + FLOAT_COUNT ] = {

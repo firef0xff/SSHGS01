@@ -1,13 +1,15 @@
 #include "db11.h"
 
 #include "../myOPC/miniOPC.h"
+#include "memory.h"
 
 namespace cpu
 {
 namespace data
 {
 DB11::DB11()
-{
+{    
+    memset( coordinate, 0, sizeof(coordinate) );
     mGroupID = opc::miniOPC::Instance().AddGroup( L"DB11", mAdresses, ARRAYS_COUNT );
 }
 
