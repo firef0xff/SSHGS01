@@ -24,8 +24,8 @@ FrequencyCharacteristics::Source Build()
         for ( int j = 0; j <= 360; ++j )
         {
             FrequencyCharacteristics::ArrData coord;
-            coord.signal = sin( j * i * PI / 180.0 ) * 100;
-            coord.position = sin( ( j + double( i )/100.0*20.0 ) * i * PI / 180.0  ) * 2.5;
+            coord.signal = sin( j * PI / 180.0 ) * 3;
+            coord.position = sin( ( j + double( sin(i) )*10 ) * PI / 180.0  ) * 2.5/(double( i*i )/100.0);
             data_item.push_back( coord );
         }
         data.insert( FrequencyCharacteristics::SourceItem( i, data_item ) );
@@ -369,9 +369,9 @@ ff0x::NoAxisGraphBuilder::LinePoints ProcessPFC( FrequencyCharacteristics::Sourc
 
         double Tsm = speed_max_time - signal_max_time;
         double T = 1/point.x();
-        double fi = -Tsm/T/**360*/;
+        double fi = -Tsm/(1000*T)*360;
         point.setY( fi );
-        point.setY( Tsm );
+//        point.setY( Tsm );
 //        point.setY( T );
 
 
@@ -395,6 +395,89 @@ ff0x::NoAxisGraphBuilder::LinePoints ProcessPFC( FrequencyCharacteristics::Sourc
                 y_range.setY( point.y() );
         }
         result.push_back( point );
+    }
+    return std::move( result );
+}
+
+ff0x::NoAxisGraphBuilder::LinePoints ProcessDebug1( FrequencyCharacteristics::Source const& src, int i , QPointF& x_range, QPointF& y_range )
+{
+    ff0x::NoAxisGraphBuilder::LinePoints result;
+    int k = 0;
+    for ( auto it = src.begin(), end = src.end(); it != end; ++it  )
+    {
+        if ( i == k )
+        {
+            FrequencyCharacteristics::DataSet const& lnk = it->second;
+            for ( size_t j = 0; j < lnk.size(); ++j )
+            {
+                QPointF point;
+                point.setX( j );
+                point.setY( lnk[j].signal );
+                if ( j == 0 )
+                {
+                    x_range.setX(point.x());
+                    x_range.setY(point.x());
+                    y_range.setX(point.y());
+                    y_range.setY(point.y());
+                }
+                else
+                {
+                    if ( x_range.x() < point.x() )
+                        x_range.setX( point.x() );
+                    if ( x_range.y() > point.x() )
+                        x_range.setY( point.x() );
+
+                    if ( y_range.x() < point.y() )
+                        y_range.setX( point.y() );
+                    if ( y_range.y() > point.y() )
+                        y_range.setY( point.y() );
+                }
+                result.push_back( point );
+            }
+            break;
+        }
+        ++k;
+    }
+    return std::move( result );
+}
+ff0x::NoAxisGraphBuilder::LinePoints ProcessDebug2( FrequencyCharacteristics::Source const& src, int i , QPointF& x_range, QPointF& y_range )
+{
+    ff0x::NoAxisGraphBuilder::LinePoints result;
+    int k = 0;
+    for ( auto it = src.begin(), end = src.end(); it != end; ++it  )
+    {
+        if ( i == k )
+        {
+            FrequencyCharacteristics::DataSet const& lnk = it->second;
+            for ( size_t j = 0; j < lnk.size(); ++j )
+            {
+                QPointF point;
+                point.setX( j );
+                point.setY( lnk[j].position );
+                if ( j == 0 )
+                {
+                    x_range.setX(point.x());
+                    x_range.setY(point.x());
+                    y_range.setX(point.y());
+                    y_range.setY(point.y());
+                }
+                else
+                {
+                    if ( x_range.x() < point.x() )
+                        x_range.setX( point.x() );
+                    if ( x_range.y() > point.x() )
+                        x_range.setY( point.x() );
+
+                    if ( y_range.x() < point.y() )
+                        y_range.setX( point.y() );
+                    if ( y_range.y() > point.y() )
+                        y_range.setY( point.y() );
+                }
+                result.push_back( point );
+            }
+            break;
+        }
+        ++k;
     }
     return std::move( result );
 }
@@ -527,6 +610,62 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
 
 
     QFontMetrics metrix( text_font );
+#ifdef DEBUG
+    int size = mSource1.size();
+
+    for ( int i = 0; i < size; ++i )
+    {
+        res = DrawLine( num, free_rect, text_font,
+        [ this, &painter, &text_font, &DrawRowCenter, &metrix, i ]( QRect const& rect )
+        {
+            painter.save();
+
+            ff0x::GraphBuilder::LinePoints data;
+            ff0x::GraphBuilder::LinePoints data2;
+
+            QPointF x_range_1;
+            QPointF y_range_1;
+
+            QPointF x_range_2;
+            QPointF y_range_2;
+
+            data = ProcessDebug1( mSource1, i, x_range_1, y_range_1 );
+            data2 = ProcessDebug2( mSource1, i, x_range_2, y_range_2 );
+
+            QFont f = text_font;
+            f.setPointSize( 6 );
+            int w = (rect.height() - metrix.height())*0.98;
+            int h = (rect.height() - metrix.height())*0.98;
+
+            ff0x::NoAxisGraphBuilder builder ( w, h, f );
+            ff0x::NoAxisGraphBuilder::GraphDataLine lines1;
+            lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data, ff0x::NoAxisGraphBuilder::LabelInfo( "", Qt::blue ) ) );
+            lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data2, ff0x::NoAxisGraphBuilder::LabelInfo( "", Qt::red ) ) );
+
+            QRect p1(rect.left(), rect.top(), w, h );
+            QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
+            DrawRowCenter( p1t, text_font, Qt::black, "результат " + QString::number( i + 1  ) );
+            {
+                QPointF x_range;
+                QPointF y_range;
+                x_range = QPointF( ceil ( std::max( x_range_1.x(), x_range_2.x() )/10 )*10,
+                                   floor( std::min( x_range_1.y(), x_range_2.y() )/10 )*10 );
+
+                y_range = QPointF ( ceil ( std::max( y_range_1.x(), y_range_2.x() )/10 )*10,
+                                    floor( std::min( y_range_1.y(), y_range_2.y() )/10 )*10 );
+                if ( y_range.x() - y_range.y() == 0 )
+                {
+                    y_range.setX( 1 );
+                    y_range.setY( -1 );
+                }
+                painter.drawPixmap( p1, builder.Draw( lines1, x_range, y_range, ceil( x_range.x() - x_range.y() )/10, ceil(y_range.x() - y_range.y())/10, "x", "y", true ) );
+            }
+
+            painter.restore();
+        }, 1, free_rect.width()/2 + metrix.height()  );
+    }
+#endif
+
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &text_font, &DrawRowCenter, &metrix ]( QRect const& rect )
     {
@@ -886,7 +1025,6 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
         }
         painter.restore();
     }, 1, free_rect.width()/2 + metrix.height()  );
-
 //    free_rect.setHeight( 0 );
     return res;
 }
