@@ -148,30 +148,33 @@ void ManualControl::onUpdateControls()
 
 void ManualControl::UpdateMarks()
 {
-    UpdateMark( ui->SQ1, mErrorBits.SQ1, Qt::red );     //IX0.0    кран насоса М1
-    UpdateMark( ui->SQ3, mErrorBits.SQ3, Qt::red );     //IX0.2    кран насоса М2
-    UpdateMark( ui->SQ5, mErrorBits.SQ5, Qt::red );     //IX0.4    кран насоса М3.2
-    UpdateMark( ui->SQ7, mErrorBits.SQ7, Qt::red );     //IX0.6    кран насоса М3.1
-    UpdateMark( ui->SQ9, mErrorBits.SQ9, Qt::red );     //IX1.0    кран насоса М4
-    UpdateMark( ui->SQ11, mErrorBits.SQ11, Qt::red );   //IX1.2    кран насоса М5
-    UpdateMark( ui->SQ13, mErrorBits.SQ13, Qt::red );   //IX1.4    кран дренажа М1
-    UpdateMark( ui->SQ14, mErrorBits.SQ14, Qt::red );   //IX1.5    кран дренажа М2
-    UpdateMark( ui->SQ15, mErrorBits.SQ15, Qt::red );   //IX1.6    кран дренажа М4
-    UpdateMark( ui->SP1, mErrorBits.SP1, Qt::red );     //IX2.0    фильтр всасывающий М1
-    UpdateMark( ui->SP2, mErrorBits.SP2, Qt::red );     //IX2.1    фильтр всасывающий М2
-    UpdateMark( ui->SP3, mErrorBits.SP3, Qt::red );     //IX2.2    фильтр всасывающий М3.2
-    UpdateMark( ui->SP4, mErrorBits.SP4, Qt::red );     //IX2.3    фильтр всасывающий М3.1
-    UpdateMark( ui->SP5, mErrorBits.SP5, Qt::red );     //IX2.4    фильтр всасывающий М4
-    UpdateMark( ui->SP6, mErrorBits.SP6, Qt::red );     //IX2.5    фильтр всасывающий М5
-    UpdateMark( ui->SP7, mErrorBits.SP7, Qt::red );     //IX2.6    фильтр тонкой очистки М1
-    UpdateMark( ui->SP8, mErrorBits.SP8, Qt::red );     //IX2.7    фильтр грубой очистки М1
-    UpdateMark( ui->SP9, mErrorBits.SP9, Qt::red );     //IX3.0    фильтр тонкой очистки М2
-    UpdateMark( ui->SP10, mErrorBits.SP10, Qt::red );   //IX3.1    фильтр грубой очистки М2
-    UpdateMark( ui->SP11, mErrorBits.SP11, Qt::red );   //IX3.2    фильтр тонкой очистки М4
-    UpdateMark( ui->SP12, mErrorBits.SP12, Qt::red );   //IX3.3    фильтр тонкой очистки М3.2
-    UpdateMark( ui->SP13, mErrorBits.SP13, Qt::red );   //IX3.4    фильтр тонкой очистки М3.1
-    UpdateMark( ui->SP14, mErrorBits.SP14, Qt::red );   //IX3.5    фильтр контура охлаждения
-    UpdateMark( ui->SP15, mErrorBits.SP15, Qt::red );   //IX3.6    фильтр тонкой очистки М12
+    //краны 0 - красный 1 - зеленый
+    UpdateMark( ui->SQ1,true , !mErrorBits.SQ1 ? Qt::red : Qt::green );     //IX0.0    кран насоса М1
+    UpdateMark( ui->SQ3,true , !mErrorBits.SQ3 ? Qt::red : Qt::green );     //IX0.2    кран насоса М2
+    UpdateMark( ui->SQ5,true , !mErrorBits.SQ5 ? Qt::red : Qt::green );     //IX0.4    кран насоса М3.2
+    UpdateMark( ui->SQ7,true , !mErrorBits.SQ7 ? Qt::red : Qt::green );     //IX0.6    кран насоса М3.1
+    UpdateMark( ui->SQ9,true , !mErrorBits.SQ9 ? Qt::red : Qt::green );     //IX1.0    кран насоса М4
+    UpdateMark( ui->SQ11,true , !mErrorBits.SQ11 ? Qt::red : Qt::green );   //IX1.2    кран насоса М5
+    UpdateMark( ui->SQ13,true , !mErrorBits.SQ13 ? Qt::red : Qt::green );   //IX1.4    кран дренажа М1
+    UpdateMark( ui->SQ14,true , !mErrorBits.SQ14 ? Qt::red : Qt::green );   //IX1.5    кран дренажа М2
+    UpdateMark( ui->SQ15,true , !mErrorBits.SQ15 ? Qt::red : Qt::green );   //IX1.6    кран дренажа М4
+
+    //фильтры 0 - красный 1 - зеленый
+    UpdateMark( ui->SP1,true , !mErrorBits.SP1 ? Qt::red : Qt::green );     //IX2.0    фильтр всасывающий М1
+    UpdateMark( ui->SP2,true , !mErrorBits.SP2 ? Qt::red : Qt::green );     //IX2.1    фильтр всасывающий М2
+    UpdateMark( ui->SP3,true , !mErrorBits.SP3 ? Qt::red : Qt::green );     //IX2.2    фильтр всасывающий М3.2
+    UpdateMark( ui->SP4,true , !mErrorBits.SP4 ? Qt::red : Qt::green );     //IX2.3    фильтр всасывающий М3.1
+    UpdateMark( ui->SP5,true , !mErrorBits.SP5 ? Qt::red : Qt::green );     //IX2.4    фильтр всасывающий М4
+    UpdateMark( ui->SP6,true , !mErrorBits.SP6 ? Qt::red : Qt::green );     //IX2.5    фильтр всасывающий М5
+    UpdateMark( ui->SP7,true , !mErrorBits.SP7 ? Qt::red : Qt::green );     //IX2.6    фильтр тонкой очистки М1
+    UpdateMark( ui->SP8,true , !mErrorBits.SP8 ? Qt::red : Qt::green );     //IX2.7    фильтр грубой очистки М1
+    UpdateMark( ui->SP9,true , !mErrorBits.SP9 ? Qt::red : Qt::green );     //IX3.0    фильтр тонкой очистки М2
+    UpdateMark( ui->SP10,true , !mErrorBits.SP10 ? Qt::red : Qt::green );   //IX3.1    фильтр грубой очистки М2
+    UpdateMark( ui->SP11,true , !mErrorBits.SP11 ? Qt::red : Qt::green );   //IX3.2    фильтр тонкой очистки М4
+    UpdateMark( ui->SP12,true , !mErrorBits.SP12 ? Qt::red : Qt::green );   //IX3.3    фильтр тонкой очистки М3.2
+    UpdateMark( ui->SP13,true , !mErrorBits.SP13 ? Qt::red : Qt::green );   //IX3.4    фильтр тонкой очистки М3.1
+    UpdateMark( ui->SP14,true , !mErrorBits.SP14 ? Qt::red : Qt::green );   //IX3.5    фильтр контура охлаждения
+    UpdateMark( ui->SP15,true , !mErrorBits.SP15 ? Qt::red : Qt::green );   //IX3.6    фильтр тонкой очистки М12
 
     QColor c;
     if ( mErrorBits.SL1 )

@@ -4,6 +4,7 @@
 #include "../../../../mylib/Widgets/GraphBuilder/graph_builder.h"
 #include "test_case/test_params.h"
 #include "test_case/implementation/test_params_servo.h"
+#include "cmath"
 namespace test
 {
 namespace servo
@@ -17,6 +18,10 @@ ExpeditureFromInput::ExpeditureFromInput():
 
 bool ExpeditureFromInput::Run()
 {
+    GraphA1.clear();
+    GraphB1.clear();
+    GraphA2.clear();
+    GraphB2.clear();
     Start();
     if ( ReelControl() )
         Wait( mControlReelBits.op22_ok, mControlReelBits.op22_end );
@@ -25,16 +30,32 @@ bool ExpeditureFromInput::Run()
     if ( IsStopped() )
         return false;
 
-    m12Results;
-
+    for ( int i = 0; i < m12Results.OPEN_REF_COUNT; ++i )
+    {
+        Data d;
+        d.Expenditure = m12Results.open_consumption[i];
+        d.Signal = m12Results.open_ref[i];
+        d.PressureBP3 = m12Results.open_bp3[i];
+        d.PressureBP4 = m12Results.open_bp4[i];
+        d.PressureBP5 = m12Results.open_bp5[i];
+        GraphA1.push_back( d );
+        d.Expenditure = m12Results.close_consumption[i];
+        d.Signal = m12Results.close_ref[i];
+        d.PressureBP3 = m12Results.close_bp3[i];
+        d.PressureBP4 = m12Results.close_bp4[i];
+        d.PressureBP5 = m12Results.close_bp5[i];
+    }
 
     OilTemp = mTemperature.T_oil;
+
+
+/*
     auto& params = Parameters::Instance();
     if ( ReelControl() )
     {
         ///     Коэффициент усиления по расходу
         ///     1. сигнал (x_p0) при котором расход равен 0 ( а, б )
-        ///     2. сигнал (x_max) при котором достигнут максимальны расход (q_max) ( максимальный расход см в параметрах ) ( а, б )
+        ///     2. сигнал (x_max) при котором достигнут максимальны расход (q_max) ( максимальный расход см из массива ) ( а, б )
         ///     3. коффициент = Q_max/( x_max - x_p0 )
         double x_p0 = 0;
         double x_max = params.EndSgnal();
@@ -66,6 +87,9 @@ bool ExpeditureFromInput::Run()
 
 ///     Гистерезис
 ///     1. max( q1[x] - q2[x] ) / q_max * 100;
+*/
+
+
     return Success();
 }
 void ExpeditureFromInput::UpdateData()
@@ -77,47 +101,123 @@ bool ExpeditureFromInput::Success() const
 {
     return true;
 }
+
+namespace
+{
+
+QJsonArray ToJson( ExpeditureFromInput::DataSet const& data )
+{
+    QJsonArray arr;
+    foreach (ExpeditureFromInput::Data const& d, data)
+    {
+        arr.insert( arr.end(), d.Serialise() );
+    }
+    return std::move( arr );
+}
+ExpeditureFromInput::DataSet FromJson( QJsonArray const& arr )
+{
+    ExpeditureFromInput::DataSet data;
+    foreach (QJsonValue const& v, arr)
+    {
+        ExpeditureFromInput::Data d;
+        if ( d.Deserialize( v.toObject() ) )
+            data.insert( data.end(), d );
+    }
+    return std::move( data );
+}
+
+double CalckGain( ExpeditureFromInput::DataSet const& data )
+{
+    int pos_max_exp = 0;
+    int pos_min_signal = 0;
+    for ( int i = 0; i < data.size(); ++i )
+    {
+        if ( data[i].Expenditure > data[pos_max_exp].Expenditure )
+            pos_max_exp = i;
+        if ( round( data[i].Expenditure ) == 0.0 )
+        {
+            if ( fabs( data[i].Signal ) > fabs( data[pos_min_signal].Signal ) )
+                pos_min_signal = i;
+        }
+    }
+/// Коэффициент усиления по расходу
+///     1. сигнал (x_p0) при котором расход равен 0 ( а, б )
+///     2. сигнал (x_max) при котором достигнут максимальны расход (q_max) ( максимальный расход см из массива ) ( а, б )
+///     3. коффициент = Q_max/( x_max - x_p0 )
+    double Q = data[pos_max_exp].Expenditure;
+    double x_max = data[pos_max_exp].Signal;
+    double x_p0 = data[pos_min_signal].Signal;
+    return Q/( x_max - x_p0 );
+}
+double CalckNonlinearity( ExpeditureFromInput::DataSet const& data )
+{
+    int pos_max_exp = 0;
+    int pos_min_signal = 0;
+    for ( int i = 0; i < data.size(); ++i )
+    {
+        if ( data[i].Expenditure > data[pos_max_exp].Expenditure )
+            pos_max_exp = i;
+        if ( round( data[i].Expenditure ) == 0.0 )
+        {
+            if ( fabs( data[i].Signal ) > fabs( data[pos_min_signal].Signal ) )
+                pos_min_signal = i;
+        }
+    }
+///     Нелинейность
+///     1. q_max - расход при максимальном управляющем сигнале x_max (максимально значение управляющего сигнала)
+///        q_0   - расход при при управляющем сигнале x_0 (соответствующем нулевому расположению распеделителя) ??????
+///     2. вычислить коэффициент k = (q_max - q_0) / ( x_max - x_0 )
+///     3. для каждого управляющего сигнала вычислить q_et[i] = k * x[i];
+///     4. вычислить массив r[i] = q_et[i] - q[i];
+///     5. результат равен max( r[i] ) / q_max * 100;
+
+    double q_max = data[pos_max_exp].Expenditure;
+    double q_0 = data[pos_min_signal].Expenditure;
+    double x_max = data[pos_max_exp].Signal;
+    double x_0 = data[pos_min_signal].Signal;
+
+    double k = (q_max - q_0) / ( x_max - x_0 );
+
+    double max_r;
+    for ( int i = 0; i < data.size(); ++i )
+    {
+        double const& x = data[i].Signal;
+        double const& q = data[i].Expenditure;
+
+        double r = k*x - q;
+        if ( !i )
+            max_r = r;
+        else if ( r > max_r )
+            max_r = r;
+    }
+    return max_r / q_max * 100;
+}
+double CalckHysteresis( ExpeditureFromInput::DataSet const& data )
+{
+///     Гистерезис
+///     1. max( q1[x] - q2[x] ) / q_max * 100;
+    return 0;
+}
+}//namespace
+
 QJsonObject ExpeditureFromInput::Serialise() const
 {
     QJsonObject obj = Test::Serialise();
-    QJsonArray a;
-    foreach (Data const& d, GraphA)
-    {
-        a.insert( a.end(), d.Serialise() );
-    }
-    QJsonArray b;
-    foreach (Data const& d, GraphB)
-    {
-        b.insert( a.end(), d.Serialise() );
-    }
-    obj.insert("GraphA", a );
-    obj.insert("GraphB", b );
-    obj.insert("Gain", Gain);
-    obj.insert("Hysteresis", Hysteresis);
-    obj.insert("Nonlinearity", Nonlinearity);
+
+    obj.insert("GraphA1", ToJson( GraphA1 ) );
+    obj.insert("GraphA2", ToJson( GraphA2 ) );
+
+    obj.insert("GraphB1", ToJson( GraphB1 ) );
+    obj.insert("GraphB2", ToJson( GraphB2 ) );
 
     return obj;
 }
 bool ExpeditureFromInput::Deserialize( QJsonObject const& obj )
 {
-    QJsonArray a = obj.value("GraphA").toArray();
-    foreach (QJsonValue const& v, a)
-    {
-        Data d;
-        if ( d.Deserialize( v.toObject() ) )
-            GraphA.insert( GraphA.end(), d );
-    }
-    QJsonArray b = obj.value("GraphB").toArray();
-    foreach (QJsonValue const& v, b)
-    {
-        Data d;
-        if ( d.Deserialize( v.toObject() ) )
-            GraphB.insert( GraphB.end(), d );
-    }
-
-    Gain = obj.value("Gain").toDouble();
-    Hysteresis = obj.value("Hysteresis").toDouble();
-    Nonlinearity = obj.value("Nonlinearity").toDouble();
+    GraphA1 = FromJson( obj.value("GraphA1").toArray() );
+    GraphA2 = FromJson( obj.value("GraphA2").toArray() );
+    GraphB1 = FromJson( obj.value("GraphB1").toArray() );
+    GraphB2 = FromJson( obj.value("GraphB2").toArray() );
 
     Test::Deserialize( obj );
     return true;
@@ -274,7 +374,7 @@ bool ExpeditureFromInput::Draw( QPainter& painter, QRect &free_rect ) const
             }
         }
 
-        foreach ( Data const& item, GraphA )
+        foreach ( Data const& item, GraphA1 )
         {
             double abs_sig = std::abs( item.Signal );
             double abs_leak = std::abs( item.Expenditure );
@@ -287,7 +387,7 @@ bool ExpeditureFromInput::Draw( QPainter& painter, QRect &free_rect ) const
 
             dataA.push_back( QPointF( item.Signal, item.Expenditure ) );
         }
-        foreach ( Data const& item, GraphB )
+        foreach ( Data const& item, GraphB1 )
         {
             double abs_sig = std::abs( item.Signal );
             double abs_leak = std::abs( item.Expenditure );
@@ -356,12 +456,21 @@ QJsonObject ExpeditureFromInput::Data::Serialise() const
     obj.insert("Signal", Signal );
     obj.insert("Expenditure", Expenditure );
 
+    obj.insert("PressureBP3", PressureBP3 );
+    obj.insert("PressureBP4", PressureBP4 );
+    obj.insert("PressureBP5", PressureBP5 );
+
     return obj;
 }
 bool ExpeditureFromInput::Data::Deserialize( QJsonObject const& obj )
 {
     Signal = obj.value("Signal").toDouble();
     Expenditure = obj.value("Expenditure").toDouble();
+
+    PressureBP3 = obj.value("PressureBP3").toDouble();
+    PressureBP4 = obj.value("PressureBP4").toDouble();
+    PressureBP5 = obj.value("PressureBP5").toDouble();
+
     return true;
 }
 

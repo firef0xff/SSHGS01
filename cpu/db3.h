@@ -34,6 +34,7 @@ public:
     float open_bp3[OPEN_BP3_COUNT];                     //DB3,REAL800,100 давление ВР3 на открытие
     float open_bp4[OPEN_BP4_COUNT];                     //DB3,REAL1200,100 давление ВР4 на открытие
     float open_bp5[OPEN_BP5_COUNT];                     //DB3,REAL1600,100 давление ВР5 на открытие
+
     float close_ref[CLOSE_REF_COUNT];                   //DB3,REAL2000,100 опорный сигнал назакрытие
     float close_consumption[CLOSE_CONSUMPTION_COUNT];   //DB3,REAL2400,100 расход на закрытие
     float close_bp3[CLOSE_BP3_COUNT];                   //DB3,REAL2800,100 давление ВР3 на закрытие
