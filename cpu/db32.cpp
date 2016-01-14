@@ -97,6 +97,23 @@ DB32::DB32():
     op6_max_max_ok_b( mBoolData[33] ),    //142.2 "б" перекл. при макс. давл. (макс упр.)
     op6_max_max_no_b( mBoolData[34] ),     //142.3 "б" перекл. при макс. давл. (макс упр.)
 
+    OP6_MinD_MinUpr_YESa_off( mBoolData[71] ),  //X182.0;RW;TST=;CMT=а перекл.при мин.давлении (мин.упр)
+    OP6_MinD_MinUpr_NOa_off ( mBoolData[72] ),  //X182.1;RW;TST=;CMT=а НЕ перекл.при мин.давлении (мин.упр)
+    OP6_MinD_MaxUpr_YESa_off( mBoolData[73] ),  //X182.2;RW;TST=;CMT=а перекл.при мин.давлении (макс.упр)
+    OP6_MinD_MaxUpr_NOa_off ( mBoolData[74] ),  //X182.3;RW;TST=;CMT=а НЕ перекл.при мин.давлении (макс.упр)
+    OP6_MaxD_MinUpr_YESa_off( mBoolData[75] ),  //X182.4;RW;TST=;CMT=а перекл.при макс.давлении (мин.упр)
+    OP6_MaxD_MinUpr_NOa_off ( mBoolData[76] ),  //X182.5;RW;TST=;CMT=а НЕ перекл.при макс.давлении (мин.упр)
+    OP6_MaxD_MaxUpr_YESa_off( mBoolData[77] ),  //X182.6;RW;TST=;CMT=а перекл.при макс.давлении (макс.упр)
+    OP6_MaxD_MaxUpr_NOa_off ( mBoolData[78] ),  //X182.7;RW;TST=;CMT=а НЕ перекл.при макс.давлении (макс.упр)
+    OP6_MinD_MinUpr_YESb_off( mBoolData[79] ),  //X183.0;RW;TST=;CMT=b перекл.при мин.давлении (мин.упр)
+    OP6_MinD_MinUpr_NOb_off ( mBoolData[80] ),  //X183.1;RW;TST=;CMT=b НЕ перекл.при мин.давлении (мин.упр)
+    OP6_MinD_MaxUpr_YESb_off( mBoolData[81] ),  //X183.2;RW;TST=;CMT=b перекл.при мин.давлении (макс.упр)
+    OP6_MinD_MaxUpr_NOb_off ( mBoolData[82] ),  //X183.3;RW;TST=;CMT=b НЕ перекл.при мин.давлении (макс.упр)
+    OP6_MaxD_MinUpr_YESb_off( mBoolData[83] ),  //X183.4;RW;TST=;CMT=b перекл.при макс.давлении (мин.упр)
+    OP6_MaxD_MinUpr_NOb_off ( mBoolData[84] ),  //X183.5;RW;TST=;CMT=b НЕ перекл.при макс.давлении (мин.упр)
+    OP6_MaxD_MaxUpr_YESb_off( mBoolData[85] ),  //X183.6;RW;TST=;CMT=b перекл.при макс.давлении (макс.упр)
+    OP6_MaxD_MaxUpr_NOb_off ( mBoolData[86] ),  //X183.7;RW;TST=;CMT=b НЕ перекл.при макс.давлении (макс.упр)
+
 
     //test7
     op7_min_ok_a( mBoolData[35] ),  //142.4 "а" перекл. при мин. давлении (Vmin)
@@ -107,6 +124,14 @@ DB32::DB32():
     op7_max_no_a( mBoolData[40] ),   //143.1 "а" не перекл. при макс. давлении (Vmin)
     op7_max_ok_b( mBoolData[41] ),  //143.2 "б" перекл. при макс. давлении (Vmin)
     op7_max_no_b( mBoolData[42] ),   //143.3 "б" не перекл. при макс. давлении (Vmin)
+    OP7_Min_D_YESa_off  ( mBoolData[87] ),      //X184.0;RW;TST=;CMT=а перекл.при мин.давлении (Vmin)
+    OP7_Min_D_NOa_off   ( mBoolData[88] ),      //X184.1;RW;TST=;CMT=а НЕ перекл.при мин.давлении (Vmin)
+    OP7_Min_D_YESb_off  ( mBoolData[89] ),      //X184.2;RW;TST=;CMT=b перекл.при мин.давлении (Vmin)
+    OP7_Min_D_NOb_off   ( mBoolData[90] ),      //X184.3;RW;TST=;CMT=b НЕ перекл.при мин.давлении (Vmin)
+    OP7_Max_D_YESa_off  ( mBoolData[91] ),      //X184.4;RW;TST=;CMT=а перекл.при макс.давлении (Vmin)
+    OP7_Max_D_NOa_off   ( mBoolData[92] ),      //X184.5;RW;TST=;CMT=а НЕ перекл.при макс.давлении (Vmin)
+    OP7_Max_D_YESb_off  ( mBoolData[93] ),      //X184.6;RW;TST=;CMT=b перекл.при макс.давлении (Vmin)
+    OP7_Max_D_NOb_off   ( mBoolData[94] ),      //X184.7;RW;TST=;CMT=b НЕ перекл.при макс.давлении (Vmin)
 
     //test8
     op8_time_on_a( mFloatData[33] ),       //144.0 время включения катуки "а"
@@ -147,33 +172,7 @@ DB32::DB32():
     op5_end( mBoolData[67] ),  //167.4 Конец операции 5
     op6_end( mBoolData[68] ),  //167.5 Конец операции 6
     op7_end( mBoolData[69] ),  //167.6 Конец операции 7
-    op8_end( mBoolData[70] ),  //167.7 Конец операции 8
-
-    OP6_MinD_MinUpr_YESa_off( mBoolData[71] ),  //X182.0;RW;TST=;CMT=а перекл.при мин.давлении (мин.упр)
-    OP6_MinD_MinUpr_NOa_off ( mBoolData[72] ),  //X182.1;RW;TST=;CMT=а НЕ перекл.при мин.давлении (мин.упр)
-    OP6_MinD_MaxUpr_YESa_off( mBoolData[73] ),  //X182.2;RW;TST=;CMT=а перекл.при мин.давлении (макс.упр)
-    OP6_MinD_MaxUpr_NOa_off ( mBoolData[74] ),  //X182.3;RW;TST=;CMT=а НЕ перекл.при мин.давлении (макс.упр)
-    OP6_MaxD_MinUpr_YESa_off( mBoolData[75] ),  //X182.4;RW;TST=;CMT=а перекл.при макс.давлении (мин.упр)
-    OP6_MaxD_MinUpr_NOa_off ( mBoolData[76] ),  //X182.5;RW;TST=;CMT=а НЕ перекл.при макс.давлении (мин.упр)
-    OP6_MaxD_MaxUpr_YESa_off( mBoolData[77] ),  //X182.6;RW;TST=;CMT=а перекл.при макс.давлении (макс.упр)
-    OP6_MaxD_MaxUpr_NOa_off ( mBoolData[78] ),  //X182.7;RW;TST=;CMT=а НЕ перекл.при макс.давлении (макс.упр)
-    OP6_MinD_MinUpr_YESb_off( mBoolData[79] ),  //X183.0;RW;TST=;CMT=b перекл.при мин.давлении (мин.упр)
-    OP6_MinD_MinUpr_NOb_off ( mBoolData[80] ),  //X183.1;RW;TST=;CMT=b НЕ перекл.при мин.давлении (мин.упр)
-    OP6_MinD_MaxUpr_YESb_off( mBoolData[81] ),  //X183.2;RW;TST=;CMT=b перекл.при мин.давлении (макс.упр)
-    OP6_MinD_MaxUpr_NOb_off ( mBoolData[82] ),  //X183.3;RW;TST=;CMT=b НЕ перекл.при мин.давлении (макс.упр)
-    OP6_MaxD_MinUpr_YESb_off( mBoolData[83] ),  //X183.4;RW;TST=;CMT=b перекл.при макс.давлении (мин.упр)
-    OP6_MaxD_MinUpr_NOb_off ( mBoolData[84] ),  //X183.5;RW;TST=;CMT=b НЕ перекл.при макс.давлении (мин.упр)
-    OP6_MaxD_MaxUpr_YESb_off( mBoolData[85] ),  //X183.6;RW;TST=;CMT=b перекл.при макс.давлении (макс.упр)
-    OP6_MaxD_MaxUpr_NOb_off ( mBoolData[86] ),  //X183.7;RW;TST=;CMT=b НЕ перекл.при макс.давлении (макс.упр)
-
-    OP7_Min_D_YESa_off  ( mBoolData[87] ),      //X184.0;RW;TST=;CMT=а перекл.при мин.давлении (Vmin)
-    OP7_Min_D_NOa_off   ( mBoolData[88] ),      //X184.1;RW;TST=;CMT=а НЕ перекл.при мин.давлении (Vmin)
-    OP7_Min_D_YESb_off  ( mBoolData[89] ),      //X184.2;RW;TST=;CMT=b перекл.при мин.давлении (Vmin)
-    OP7_Min_D_NOb_off   ( mBoolData[90] ),      //X184.3;RW;TST=;CMT=b НЕ перекл.при мин.давлении (Vmin)
-    OP7_Max_D_YESa_off  ( mBoolData[91] ),      //X184.4;RW;TST=;CMT=а перекл.при макс.давлении (Vmin)
-    OP7_Max_D_NOa_off   ( mBoolData[92] ),      //X184.5;RW;TST=;CMT=а НЕ перекл.при макс.давлении (Vmin)
-    OP7_Max_D_YESb_off  ( mBoolData[93] ),      //X184.6;RW;TST=;CMT=b перекл.при макс.давлении (Vmin)
-    OP7_Max_D_NOb_off   ( mBoolData[94] )       //X184.7;RW;TST=;CMT=b НЕ перекл.при макс.давлении (Vmin)
+    op8_end( mBoolData[70] )  //167.7 Конец операции 8
 {
     memset( mBoolData, 0, sizeof(mBoolData) );
     memset( mFloatData, 0, sizeof(mFloatData) );

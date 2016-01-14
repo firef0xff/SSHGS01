@@ -216,7 +216,7 @@ double CalckHysteresis( ExpeditureFromInput::DataSet const& data1, ExpeditureFro
     }
 ///     Гистерезис
 ///     1. max( q1[x] - q2[x] ) / q_max * 100;
-    return delta / data1[q_max_pos].Expenditure * 100;
+    return delta / data1[q_max_pos].Expenditure * 100.0;
 }
 
 ff0x::NoAxisGraphBuilder::LinePoints Process ( ExpeditureFromInput::DataSet const& src, QPointF& x_range, QPointF& y_range )

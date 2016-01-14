@@ -16,11 +16,14 @@ public:
 
     void Write();
     void SendContinue();
+    void SendNextAmp();
 
     bool& Start_Oper;       //2.0 старт операции
     bool& Stop_Oper;        //2.1 стоп операции
     bool& Nasos_M2;         //2.2 основной насос М2
     bool& OP15_25_Continum; //DB60,120.3
+    bool& Next_Amp; //DB31,16.0
+
     float& N_Operation;     //4.0 номер операции
     float& Q_5_5ma;         //8.0 расход по умолчанию
 
@@ -32,7 +35,7 @@ private:
 
     enum
     {
-        BOOL_COUNT = 4,
+        BOOL_COUNT = 5,
         FLOAT_COUNT = 2
     };
 
@@ -46,6 +49,7 @@ private:
         L"CPU/DB31.Stop_Oper",
         L"CPU/DB31.Nasos_M2",
         L"CPU/DB60.OP15_25_Continum",
+        L"CPU/DB31.Next_Amp",
 
         L"CPU/DB31.N_Operation",
         L"CPU/DB31.Q_5_5ma"

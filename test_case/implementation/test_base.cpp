@@ -38,6 +38,7 @@ void TestCommonData::Start()
     mCommand.Stop_Oper = false;
     mCommand.Nasos_M2 = app::Settings::Instance().MainPupm() == "M2";
     mCommand.OP15_25_Continum = false;
+    mCommand.Next_Amp = false;
     mCommand.Write();
     StartTime.start();
 }
@@ -57,6 +58,7 @@ void TestCommonData::Wait( bool& work, bool& done)
             mCommand.Stop_Oper = true;
             mCommand.Nasos_M2 = app::Settings::Instance().MainPupm() == "M2";
             mCommand.OP15_25_Continum = false;
+            mCommand.Next_Amp = false;
             mCommand.Write();
             Log( "Испытание прервано" );
             return;

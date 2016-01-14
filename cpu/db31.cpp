@@ -12,6 +12,7 @@ DB31::DB31():
     Stop_Oper( mBoolData[1] ),
     Nasos_M2( mBoolData[2] ),
     OP15_25_Continum(mBoolData[3]),
+    Next_Amp( mBoolData[4] ),
     N_Operation( mFloatData[0] ),
     Q_5_5ma ( mFloatData[1] )
 {
@@ -32,6 +33,14 @@ void DB31::SendContinue()
     auto res = opc::miniOPC::Instance().WriteValue( mGroupID, 3, static_cast<void*>( &OP15_25_Continum ), opc::tBOOL );
     while ( res == E_FAIL )
         res = opc::miniOPC::Instance().WriteValue( mGroupID, 3, static_cast<void*>( &OP15_25_Continum ), opc::tBOOL );
+}
+
+void DB31::SendNextAmp()
+{
+    Next_Amp = true;
+    auto res = opc::miniOPC::Instance().WriteValue( mGroupID, 4, static_cast<void*>( &Next_Amp ), opc::tBOOL );
+    while ( res == E_FAIL )
+        res = opc::miniOPC::Instance().WriteValue( mGroupID, 4, static_cast<void*>( &Next_Amp ), opc::tBOOL );
 }
 
 }//namespace data

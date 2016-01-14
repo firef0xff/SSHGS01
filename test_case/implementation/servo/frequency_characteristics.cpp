@@ -35,89 +35,6 @@ FrequencyCharacteristics::Source Build()
 
 }
 
-FrequencyCharacteristics::FrequencyCharacteristics():
-    test::servo::Test( "Проверка частотных характеристик", 14, 24 )
-{
-#ifdef DEMO
-    mSource1 = Build();
-#endif
-}
-
-bool FrequencyCharacteristics::Run()
-{
-    mSource1.clear();
-    mSource2.clear();
-    mSource3.clear();
-    Start();
-    if ( ReelControl() )
-        Wait( mControlReelBits.op24_ok, mControlReelBits.op24_end );
-    else
-        Wait( mControlBoardBits.op14_ok, mControlBoardBits.op14_end );
-    if ( IsStopped() )
-        return false;
-
-    OilTemp = mTemperature.T_oil;
-    return Success();
-}
-void FrequencyCharacteristics::UpdateData()
-{
-    Test::UpdateData();
-
-#warning    db31,16.0 Next_Amp
-
-    std::this_thread::sleep_for(std::chrono::seconds(5));
-    bool *ready = 0;
-    float *frequency = 0;
-
-
-    if ( ReelControl() )
-    {
-        ready = &mControlReelBits.op24_ready;
-        frequency = &mControlReelBits.op24_frequency;
-    }
-    else
-    {
-        ready = &mControlBoardBits.op14_ready;
-        frequency = &mControlBoardBits.op14_frequency;
-    }
-
-
-    if (!*ready )
-        return;
-    m14Result1.Read();
-    m14Result2.Read();
-    m1525Counts.Read();
-
-    Source *src = nullptr;
-    if ( m1525Counts.OP15_25_Opor_1 )
-        src = &mSource1;
-    if ( m1525Counts.OP15_25_Opor_2 )
-        src = &mSource2;
-    if ( m1525Counts.OP15_25_Opor_3 )
-        src = &mSource3;
-    if ( !src )
-        return;
-
-    if ( src->find( *frequency ) != src->end() )
-        return;
-
-    DataSet data;
-    for ( int i = 0; i < m1525Counts.OP15_25_count && i < m14Result1.SIGNAL_COUNT; ++i )
-    {
-        ArrData item;
-        item.position = m14Result2.coordinate[i];
-        item.signal = m14Result1.signal[i];
-        data.push_back( item );
-    }
-    src->insert( SourceItem( *frequency, data ) );
-    cpu::CpuMemory::Instance().DB31.SendContinue();
-
-}
-bool FrequencyCharacteristics::Success() const
-{
-    return true;
-}
-
 namespace
 {
 
@@ -324,6 +241,55 @@ private:
     Data Info;
 };
 
+double CalckFi( FrequencyCharacteristics::DataSet const& data, double frequency )
+{
+    QVector< QPointF > speed;
+    QVector< QPointF > signal;
+    for ( size_t i = 0; i < data.size(); ++i )
+    {
+        signal.push_back( QPointF( i, data[i].signal ) );
+        if ( !i )
+            speed.push_back( QPointF( i, data[i + 1].position - data[i].position ) );
+        else
+            speed.push_back( QPointF( i, data[i].position - data[i-1].position ) );
+    }
+
+    GrapfInfo info_speed( speed );
+    GrapfInfo info_signal( signal );
+
+//        ищем координату первого максимума сигнала
+    GrapfInfo::Data const& inf = info_signal.GetInfo();
+    double signal_max_time = 0;
+    for ( int i = 0; i < inf.size(); ++i )
+    {
+        GrapfInfo::PointInfo const& point = inf[i];
+        if ( point.type == GrapfInfo::PointInfo::Max )
+        {
+            signal_max_time = point.point.x();
+            break;
+        }
+    }
+
+//        ищем координату первого максимума сигнала
+    GrapfInfo::Data const& inf_sg = info_speed.GetInfo();
+    double speed_max_time = 0;
+    for ( int i = 0; i < inf_sg.size(); ++i )
+    {
+        GrapfInfo::PointInfo const& point = inf_sg[i];
+        if ( point.type == GrapfInfo::PointInfo::Max && point.point.x() >= signal_max_time )
+        {
+            speed_max_time = point.point.x();
+            break;
+        }
+    }
+
+    double Tsm = speed_max_time - signal_max_time;
+    double T = 1/frequency;
+    double fi = -Tsm/(1000*T)*360;
+
+    return fi;
+}
+
 ff0x::NoAxisGraphBuilder::LinePoints ProcessPFC( FrequencyCharacteristics::Source const& src, QPointF& x_range, QPointF& y_range )
 {
     ff0x::NoAxisGraphBuilder::LinePoints result;
@@ -331,73 +297,7 @@ ff0x::NoAxisGraphBuilder::LinePoints ProcessPFC( FrequencyCharacteristics::Sourc
     {
         QPointF point;
         point.setX( it->first );
-        FrequencyCharacteristics::DataSet const& data = it->second;
-
-//        int s_min = 0;
-//        int s_max = 0;
-        QVector< QPointF > speed;
-        QVector< QPointF > signal;
-        for ( size_t i = 0; i < data.size(); ++i )
-        {
-            signal.push_back( QPointF( i, data[i].signal ) );
-            if ( !i )
-                speed.push_back( QPointF( i, data[i + 1].position - data[i].position ) );
-            else
-                speed.push_back( QPointF( i, data[i].position - data[i-1].position ) );
-
-//            if ( data[ s_max ].signal < data[i].signal )
-//                s_max = i;
-//            if ( data[ s_min ].signal > data[i].signal )
-//                s_min = i;
-        }
-
-//        int sp_max = 0;
-//        int sp_min = 0;
-//        for ( size_t i = 0; i < speed.size(); ++i )
-//        {
-//            if ( speed[ sp_max ].y() < speed[i].y() )
-//                sp_max = i;
-//            if ( speed[ sp_min ].y() > speed[i].y() )
-//                sp_min = i;
-//        }
-
-//        double Tsm = sp_max - s_max;
-        GrapfInfo info_speed( speed );
-        GrapfInfo info_signal( signal );
-
-//        ищем координату первого максимума сигнала
-        GrapfInfo::Data const& inf = info_signal.GetInfo();
-        double signal_max_time = 0;
-        for ( int i = 0; i < inf.size(); ++i )
-        {
-            GrapfInfo::PointInfo const& point = inf[i];
-            if ( point.type == GrapfInfo::PointInfo::Max )
-            {
-                signal_max_time = point.point.x();
-                break;
-            }
-        }
-
-//        ищем координату первого максимума сигнала
-        GrapfInfo::Data const& inf_sg = info_speed.GetInfo();
-        double speed_max_time = 0;
-        for ( int i = 0; i < inf_sg.size(); ++i )
-        {
-            GrapfInfo::PointInfo const& point = inf_sg[i];
-            if ( point.type == GrapfInfo::PointInfo::Max && point.point.x() >= signal_max_time )
-            {
-                speed_max_time = point.point.x();
-                break;
-            }
-        }
-
-        double Tsm = speed_max_time - signal_max_time;
-        double T = 1/point.x();
-        double fi = -Tsm/(1000*T)*360;
-        point.setY( fi );
-//        point.setY( Tsm );
-//        point.setY( T );
-
+        point.setY( CalckFi( it->second, it->first ) );
 
         if ( it == src.begin() )
         {
@@ -511,6 +411,93 @@ ff0x::NoAxisGraphBuilder::LinePoints ProcessDebug2( FrequencyCharacteristics::So
 }
 
 }//namespace
+
+
+FrequencyCharacteristics::FrequencyCharacteristics():
+    test::servo::Test( "Проверка частотных характеристик", 14, 24 )
+{
+#ifdef DEMO
+    mSource1 = Build();
+#endif
+}
+
+bool FrequencyCharacteristics::Run()
+{
+    mSource1.clear();
+    mSource2.clear();
+    mSource3.clear();
+    Start();
+    if ( ReelControl() )
+        Wait( mControlReelBits.op24_ok, mControlReelBits.op24_end );
+    else
+        Wait( mControlBoardBits.op14_ok, mControlBoardBits.op14_end );
+    if ( IsStopped() )
+        return false;
+
+    OilTemp = mTemperature.T_oil;
+    return Success();
+}
+void FrequencyCharacteristics::UpdateData()
+{
+    Test::UpdateData();
+
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+    bool *ready = 0;
+    float *frequency = 0;
+
+
+    if ( ReelControl() )
+    {
+        ready = &mControlReelBits.op24_ready;
+        frequency = &mControlReelBits.op24_frequency;
+    }
+    else
+    {
+        ready = &mControlBoardBits.op14_ready;
+        frequency = &mControlBoardBits.op14_frequency;
+    }
+
+
+    if (!*ready )
+        return;
+    m14Result1.Read();
+    m14Result2.Read();
+    m1525Counts.Read();
+
+    Source *src = nullptr;
+    if ( m1525Counts.OP15_25_Opor_1 )
+        src = &mSource1;
+    if ( m1525Counts.OP15_25_Opor_2 )
+        src = &mSource2;
+    if ( m1525Counts.OP15_25_Opor_3 )
+        src = &mSource3;
+    if ( !src )
+        return;
+
+    if ( src->find( *frequency ) != src->end() )
+        return;
+
+    DataSet data;
+    for ( int i = 0; i < m1525Counts.OP15_25_count && i < m14Result1.SIGNAL_COUNT; ++i )
+    {
+        ArrData item;
+        item.position = m14Result2.coordinate[i];
+        item.signal = m14Result1.signal[i];
+        data.push_back( item );
+    }
+
+    if ( CalckFi( data, *frequency ) > 90.0 )
+        cpu::CpuMemory::Instance().DB31.SendNextAmp();
+    else
+        src->insert( SourceItem( *frequency, data ) );
+    cpu::CpuMemory::Instance().DB31.SendContinue();
+
+}
+bool FrequencyCharacteristics::Success() const
+{
+    return true;
+}
+
 
 QJsonObject FrequencyCharacteristics::Serialise() const
 {
