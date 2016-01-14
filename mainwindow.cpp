@@ -362,7 +362,7 @@ void MainWindow::on_Open_results_triggered()
 void MainWindow::onUpdateControls()
 {
     auto& table = cpu::CpuMemory::Instance().DB50;
-    table.Read();
+    auto& table2 = cpu::CpuMemory::Instance().DB40;
 
     DD1->update_value( table.BP3 );
     DD2->update_value( table.BP4 );
@@ -390,10 +390,22 @@ void MainWindow::onUpdateControls()
     float amperage_dc = table.A1;  //постоянный ток
     ui->Amperage->display(amperage_dc);
 
-    float amperage_ac = table.A1;  //переменный ток
+    float amperage_ac = table.A2;  //переменный ток
 //    ui->Amperage->display(amperage_dc);
 
+    //температура масла
+    ui->OilTemp->display( table.BT1 );
+
     //уровень масла
+    int lvl = 0;
+    if ( table2.sl2 )
+        lvl += 1;
+    if ( table2.sl3 )
+        lvl += 1;
+    if ( table2.sl4 )
+        lvl += 1;
+    ui->OilLavel->setRange( 0, 3 );
+    ui->OilLavel->setValue( lvl );
     //см DB40
 }
 
@@ -402,14 +414,14 @@ ControlsUpdater::ControlsUpdater():
     mStopSignal(false)
 {}
 void ControlsUpdater::run()
-{
-    auto& table = cpu::CpuMemory::Instance().DB50;
+{    
     mStopSignal = false;
     while ( !mStopSignal )
     {
-        table.Read();
+        cpu::CpuMemory::Instance().DB50.Read();
+        cpu::CpuMemory::Instance().DB40.Read();
         emit update();
-        msleep(1000);
+        msleep(500);
     }
 }
 void ControlsUpdater::stop()

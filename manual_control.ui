@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>977</width>
-    <height>743</height>
+    <width>790</width>
+    <height>576</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -1084,7 +1084,7 @@
              <number>500</number>
             </property>
             <property name="text">
-             <string>Открыть</string>
+             <string>Закрыть</string>
             </property>
             <property name="checkable">
              <bool>true</bool>
@@ -1100,7 +1100,7 @@
              <number>500</number>
             </property>
             <property name="text">
-             <string>Открыть</string>
+             <string>Закрыть</string>
             </property>
             <property name="checkable">
              <bool>true</bool>
@@ -1368,7 +1368,7 @@
              <number>500</number>
             </property>
             <property name="text">
-             <string>Открыть</string>
+             <string>Закрыть</string>
             </property>
             <property name="checkable">
              <bool>true</bool>
@@ -1834,7 +1834,7 @@
                <number>500</number>
               </property>
               <property name="text">
-               <string>Малый расход. T</string>
+               <string>Малый расход. P</string>
               </property>
               <property name="checkable">
                <bool>true</bool>

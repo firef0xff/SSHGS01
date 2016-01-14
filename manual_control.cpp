@@ -110,9 +110,9 @@ void ManualControl::SynkControls()
     UpdateButton( ui->YA5, mControlBits.YA5 );          //MX40.4 Разгрузка основных насосов м1м2
     UpdateButton( ui->YA6, mControlBits.YA6 );          //MX40.5 Подача расхода к испытательному модулю
     UpdateButton( ui->YA7, mControlBits.YA7 );          //MX40.6 Включ малый расходомер (до 60л/мин)
-    UpdateButton( ui->YA8, !mControlBits.YA8 );          //MX40.7 Закрытие канала А
-    UpdateButton( ui->YA9, !mControlBits.YA9 );          //MX41.0 Закрытие канала В
-    UpdateButton( ui->YA10, !mControlBits.YA10 );         //MX41.1 Закрытие канала Т
+    UpdateButton( ui->YA8, mControlBits.YA8 );          //MX40.7 Закрытие канала А
+    UpdateButton( ui->YA9, mControlBits.YA9 );          //MX41.0 Закрытие канала В
+    UpdateButton( ui->YA10, mControlBits.YA10 );         //MX41.1 Закрытие канала Т
     UpdateButton( ui->YA11, mControlBits.YA11 );         //MX41.2 Подача масла к расходомерам из канала Т
     UpdateButton( ui->YA12, mControlBits.YA12 );         //MX41.3 Подача масла к расходомерам из канала У
     UpdateButton( ui->YA13, mControlBits.YA13 );         //MX41.4 Декомпрессия канала Р
@@ -275,7 +275,7 @@ void ManualControl::on_YA13_clicked()
 }
 void ManualControl::on_YA10_clicked()
 {
-    mControlBits.SetYA10( !ui->YA10->isChecked() );
+    mControlBits.SetYA10( ui->YA10->isChecked() );
 }
 void ManualControl::on_YA14_clicked()
 {
@@ -283,7 +283,7 @@ void ManualControl::on_YA14_clicked()
 }
 void ManualControl::on_YA8_clicked()
 {
-    mControlBits.SetYA8( !ui->YA8->isChecked() );
+    mControlBits.SetYA8( ui->YA8->isChecked() );
 }
 void ManualControl::on_YA15_clicked()
 {
@@ -291,7 +291,7 @@ void ManualControl::on_YA15_clicked()
 }
 void ManualControl::on_YA9_clicked()
 {
-    mControlBits.SetYA9( !ui->YA9->isChecked() );
+    mControlBits.SetYA9( ui->YA9->isChecked() );
 }
 void ManualControl::on_YA16_clicked()
 {

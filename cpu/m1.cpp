@@ -247,12 +247,12 @@ void M1::SetKM7( bool v )          //MX44.0 Вентилятор М8,М9
 void M1::SetKM8( bool v )          //MX44.1 Вентилятор М10,М11
 {
     KM8 = v;
-    SendBit( KM7, 33 );
+    SendBit( KM8, 33 );
 }
 void M1::SetKM10( bool v )         //MX44.2 ТЭНы
 {
     KM10 = v;
-    SendBit( KM7, 34 );
+    SendBit( KM10, 34 );
 }
 void M1::SetErr_clear()    //MX44.7 сброс не правильной комбинации...
 {

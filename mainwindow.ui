@@ -151,15 +151,18 @@
        </widget>
       </item>
       <item>
-       <widget class="QProgressBar" name="progressBar">
+       <widget class="QProgressBar" name="OilLavel">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="maximum">
+         <number>3</number>
+        </property>
         <property name="value">
-         <number>24</number>
+         <number>-1</number>
         </property>
        </widget>
       </item>
@@ -171,7 +174,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLCDNumber" name="lcdNumber_3"/>
+       <widget class="QLCDNumber" name="OilTemp"/>
       </item>
       <item>
        <spacer name="horizontalSpacer">
@@ -425,7 +428,7 @@ X</string>
      <x>0</x>
      <y>0</y>
      <width>874</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
