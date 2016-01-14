@@ -250,6 +250,10 @@ ff0x::NoAxisGraphBuilder::LinePoints ProcessAFC( FrequencyCharacteristics::Sourc
             if ( y_range.y() > point.y() )
                 y_range.setY( point.y() );
         }
+
+        if ( fabs( point.y() ) > 15 )
+            break;
+
         result.push_back( point );
     }
     return std::move( result );
@@ -415,6 +419,10 @@ ff0x::NoAxisGraphBuilder::LinePoints ProcessPFC( FrequencyCharacteristics::Sourc
             if ( y_range.y() > point.y() )
                 y_range.setY( point.y() );
         }
+
+        if ( fabs( point.y() ) > 90 )
+            break;
+
         result.push_back( point );
     }
     return std::move( result );
