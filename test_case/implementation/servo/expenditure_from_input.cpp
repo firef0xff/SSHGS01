@@ -5,19 +5,20 @@
 #include "test_case/test_params.h"
 #include "test_case/implementation/test_params_servo.h"
 #include "cmath"
+#include <thread>
+
 namespace test
 {
 namespace servo
 {
 
 ExpeditureFromInput::ExpeditureFromInput():
-    test::servo::Test( "Зависимость расхода «к потребителю» от входного тока без нагрузки", 12, 22 ),
-    Gain(0),
-    Hysteresis(0)
+    test::servo::Test( "Зависимость расхода «к потребителю» от входного тока без нагрузки", 12, 22 )
 {}
 
 bool ExpeditureFromInput::Run()
 {
+    level = 0;
     GraphA1.clear();
     GraphB1.clear();
     GraphA2.clear();
@@ -30,72 +31,77 @@ bool ExpeditureFromInput::Run()
     if ( IsStopped() )
         return false;
 
-    for ( int i = 0; i < m12Results.OPEN_REF_COUNT; ++i )
-    {
-        Data d;
-        d.Expenditure = m12Results.open_consumption[i];
-        d.Signal = m12Results.open_ref[i];
-        d.PressureBP3 = m12Results.open_bp3[i];
-        d.PressureBP4 = m12Results.open_bp4[i];
-        d.PressureBP5 = m12Results.open_bp5[i];
-        GraphA1.push_back( d );
-        d.Expenditure = m12Results.close_consumption[i];
-        d.Signal = m12Results.close_ref[i];
-        d.PressureBP3 = m12Results.close_bp3[i];
-        d.PressureBP4 = m12Results.close_bp4[i];
-        d.PressureBP5 = m12Results.close_bp5[i];
-    }
-
     OilTemp = mTemperature.T_oil;
-
-
-/*
-    auto& params = Parameters::Instance();
-    if ( ReelControl() )
-    {
-        ///     Коэффициент усиления по расходу
-        ///     1. сигнал (x_p0) при котором расход равен 0 ( а, б )
-        ///     2. сигнал (x_max) при котором достигнут максимальны расход (q_max) ( максимальный расход см из массива ) ( а, б )
-        ///     3. коффициент = Q_max/( x_max - x_p0 )
-        double x_p0 = 0;
-        double x_max = params.EndSgnal();
-        Gain = params.MaxExpenditureA()/( x_max - x_p0 );
-        Gain = params.MaxExpenditureB()/( x_max - x_p0 );
-    }
-    else
-    {
-        ///     Коэффициент усиления по расходу
-        ///     1. сигнал (x_p0) при котором расход равен 0 ( а, б )
-        ///     2. сигнал (x_max) при котором достигнут максимальны расход (q_max) ( максимальный расход см в параметрах ) ( а, б )
-        ///     3. коффициент = Q_max/( x_max - x_p0 )
-        double x_p0 = params.SignalState0();
-        double x_max_a = params.SignalStateA();
-        double x_max_b = -params.SignalStateB();
-        Gain = params.MaxExpenditureA()/( x_max_a - x_p0 );
-        Gain = params.MaxExpenditureB()/( x_max_b - x_p0 );
-    }
-#warning нет получения данных
-
-
-///     Нелинейность
-///     1. q_max - расход при максимальном управляющем сигнале x_max //из параметра
-///        q_0   - расход при при нулевом управляющем сигнале x_0    // 0
-///     2. вычислить коэффициент k = (q_max - q_0) / ( x_max - x_0 )
-///     3. для каждого управляющего сигнала вычислить q_et[i] = k * x[i];
-///     4. вычислить массив r[i] = q_et[i] - q[i];
-///     5. результат равен max( r[i] ) / q_max * 100;
-
-///     Гистерезис
-///     1. max( q1[x] - q2[x] ) / q_max * 100;
-*/
-
 
     return Success();
 }
 void ExpeditureFromInput::UpdateData()
 {
+    servo::Parameters &params = test::servo::Parameters::Instance();
     Test::UpdateData();
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+
+    bool *ready = 0;
+    if ( ReelControl() )
+    {
+        ready = &mControlReelBits.op24_ready;
+    }
+    else
+    {
+        ready = &mControlBoardBits.op14_ready;
+    }
     m12Results.Read();
+
+    auto ConvertData = [this]( DataSet *first, DataSet *second  )
+    {
+        for ( int i = 0; i < m12Results.OPEN_REF_COUNT; ++i )
+        {
+            Data d;
+            d.Expenditure = m12Results.open_consumption[i];
+            d.Signal = m12Results.open_ref[i];
+            d.PressureBP3 = m12Results.open_bp3[i];
+            d.PressureBP4 = m12Results.open_bp4[i];
+            d.PressureBP5 = m12Results.open_bp5[i];
+            first->push_back( d );
+            d.Expenditure = m12Results.close_consumption[i];
+            d.Signal = m12Results.close_ref[i];
+            d.PressureBP3 = m12Results.close_bp3[i];
+            d.PressureBP4 = m12Results.close_bp4[i];
+            d.PressureBP5 = m12Results.close_bp5[i];
+            second->push_front( d );
+        }
+    };
+
+    if ( ready )
+    {
+        switch ( level )
+        {
+        case 0:
+            if ( params.TestChannelA() && params.SignalOnChannelA() == CS_REEL_A )
+            {// P -> A
+                ConvertData( &GraphA1, &GraphA2 );
+            }
+            if ( params.TestChannelB() && params.SignalOnChannelA() == CS_REEL_B )
+            {// P -> B
+                ConvertData( &GraphB1, &GraphB2 );
+            }
+            break;
+        case 1:
+            if ( params.TestChannelA() && params.SignalOnChannelB() == CS_REEL_A )
+            {// P -> A
+                ConvertData( &GraphA1, &GraphA2 );
+            }
+            if ( params.TestChannelB()  && params.SignalOnChannelB() == CS_REEL_B )
+            {// P -> B
+                ConvertData( &GraphB1, &GraphB2 );
+            }
+            break;
+        default:
+            return;
+        }
+
+        cpu::CpuMemory::Instance().DB31.SendContinue();
+    }
 }
 bool ExpeditureFromInput::Success() const
 {
@@ -192,12 +198,61 @@ double CalckNonlinearity( ExpeditureFromInput::DataSet const& data )
     }
     return max_r / q_max * 100;
 }
-double CalckHysteresis( ExpeditureFromInput::DataSet const& data )
-{
+double CalckHysteresis( ExpeditureFromInput::DataSet const& data1, ExpeditureFromInput::DataSet const& data2 )
+{        
+    double delta = 0;
+    int q_max_pos = 0;
+    for ( int i = 0; i < data1.size(); ++i )
+    {
+        double q1 = data1[ i ].Expenditure;
+        double q2 = data2[ i ].Expenditure;
+
+        double d = q1 - q2;
+
+        if ( delta < d )
+            delta = d;
+        if ( q1 > data1[q_max_pos].Expenditure )
+            q_max_pos = i;
+    }
 ///     Гистерезис
 ///     1. max( q1[x] - q2[x] ) / q_max * 100;
-    return 0;
+    return delta / data1[q_max_pos].Expenditure * 100;
 }
+
+ff0x::NoAxisGraphBuilder::LinePoints Process ( ExpeditureFromInput::DataSet const& src, QPointF& x_range, QPointF& y_range )
+{
+    ff0x::NoAxisGraphBuilder::LinePoints result;
+
+    for ( int i = 0; i < src.size(); ++i )
+    {
+        double const& x = src[i].Signal;
+        double const& y = src[i].Expenditure;
+
+        if ( !i )
+        {
+            x_range.setX( x );
+            x_range.setY( x );
+            y_range.setX( y );
+            y_range.setY( y );
+        }
+        else
+        {
+            if ( x > x_range.x() )
+                x_range.setX( x );
+            if ( x < x_range.y() )
+                x_range.setY( x );
+
+            if ( y > y_range.x() )
+                y_range.setX( y );
+            if ( y < y_range.y() )
+                y_range.setY( y );
+        }
+
+        result.push_back( QPointF( x, y ) );
+    }
+    return std::move( result );
+}
+
 }//namespace
 
 QJsonObject ExpeditureFromInput::Serialise() const
@@ -341,17 +396,35 @@ bool ExpeditureFromInput::Draw( QPainter& painter, QRect &free_rect ) const
     {
         painter.save();
 
-        ff0x::GraphBuilder::LinePoints dataA;
-        ff0x::GraphBuilder::LinePoints dataA_e;
+        ff0x::NoAxisGraphBuilder::LinePoints dataA1;
+        ff0x::NoAxisGraphBuilder::LinePoints dataA1_e;
+        ff0x::NoAxisGraphBuilder::LinePoints dataA2;
+        ff0x::NoAxisGraphBuilder::LinePoints dataA2_e;
 
-        ff0x::GraphBuilder::LinePoints dataB;
-        ff0x::GraphBuilder::LinePoints dataB_e;
+        ff0x::NoAxisGraphBuilder::LinePoints dataB1;
+        ff0x::NoAxisGraphBuilder::LinePoints dataB1_e;
+        ff0x::NoAxisGraphBuilder::LinePoints dataB2;
+        ff0x::NoAxisGraphBuilder::LinePoints dataB2_e;
 
-        double max_signal_a = 0;
-        double max_Leak_a = 0;
+        QPointF x_range_a1;
+        QPointF y_range_a1;
+        QPointF x_range_a1e;
+        QPointF y_range_a1e;
 
-        double max_signal_b = 0;
-        double max_Leak_b = 0;
+        QPointF x_range_a2;
+        QPointF y_range_a2;
+        QPointF x_range_a2e;
+        QPointF y_range_a2e;
+
+        QPointF x_range_b1;
+        QPointF y_range_b1;
+        QPointF x_range_b1e;
+        QPointF y_range_b1e;
+
+        QPointF x_range_b2;
+        QPointF y_range_b2;
+        QPointF x_range_b2e;
+        QPointF y_range_b2e;
 
         //поиск данных теста
         foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
@@ -359,63 +432,39 @@ bool ExpeditureFromInput::Draw( QPainter& painter, QRect &free_rect ) const
             auto obj = val.toObject();
             if ( obj.value("id").toInt() == mId )
             {
-                QJsonArray a = obj.value("data").toObject().value("GraphA").toArray();
-                foreach ( QJsonValue const& v, a )
-                {
-                    QJsonObject o = v.toObject();
-                    dataA_e.push_back( QPointF( o.value("Signal").toDouble(), o.value("Expenditure").toDouble() ) );
-                }
-                QJsonArray b = obj.value("data").toObject().value("GraphB").toArray();
-                foreach ( QJsonValue const& v, b )
-                {
-                    QJsonObject o = v.toObject();
-                    dataB_e.push_back( QPointF( o.value("Signal").toDouble(), o.value("Expenditure").toDouble() ) );
-                }
+                dataA1_e = Process( FromJson( obj.value("GraphA1").toArray() ), x_range_a1e, y_range_a1e );
+                dataA2_e = Process( FromJson( obj.value("GraphA2").toArray() ), x_range_a2e, y_range_a2e );
+                dataB1_e = Process( FromJson( obj.value("GraphB1").toArray() ), x_range_b1e, y_range_b1e );
+                dataB2_e = Process( FromJson( obj.value("GraphB2").toArray() ), x_range_b2e, y_range_b2e );
             }
         }
 
-        foreach ( Data const& item, GraphA1 )
-        {
-            double abs_sig = std::abs( item.Signal );
-            double abs_leak = std::abs( item.Expenditure );
-
-            if ( max_signal_a < abs_sig )
-                max_signal_a = abs_sig;
-
-            if ( max_Leak_a < abs_leak )
-                max_Leak_a = abs_leak;
-
-            dataA.push_back( QPointF( item.Signal, item.Expenditure ) );
-        }
-        foreach ( Data const& item, GraphB1 )
-        {
-            double abs_sig = std::abs( item.Signal );
-            double abs_leak = std::abs( item.Expenditure );
-
-            if ( max_signal_b < abs_sig )
-                max_signal_b = abs_sig;
-
-            if ( max_Leak_b < abs_leak )
-                max_Leak_b = abs_leak;
-
-            dataB.push_back( QPointF( item.Signal, item.Expenditure ) );
-        }
+        dataA1_e = Process( GraphA1, x_range_a1, y_range_a1 );
+        dataA2_e = Process( GraphA2, x_range_a2, y_range_a2 );
+        dataB1_e = Process( GraphB1, x_range_b1, y_range_b1 );
+        dataB2_e = Process( GraphB2, x_range_b2, y_range_b2 );
 
         QFont f = text_font;
         f.setPointSize( 6 );
         int w = (rect.height() - metrix.height())*0.98;
         int h = (rect.height() - metrix.height())*0.98;
 
-        ff0x::GraphBuilder builder ( w, h, ff0x::GraphBuilder::PlusPlus, f );
-        ff0x::GraphBuilder::GraphDataLine lines_a;
-        lines_a.push_back( ff0x::GraphBuilder::Line(dataA, ff0x::GraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
-        if ( !dataA_e.empty() )
-            lines_a.push_back( ff0x::GraphBuilder::Line(dataA_e, ff0x::GraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
+        ff0x::NoAxisGraphBuilder builder ( w, h, f );
+        ff0x::NoAxisGraphBuilder::GraphDataLine lines_a;
+        lines_a.push_back( ff0x::NoAxisGraphBuilder::Line(dataA1, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат. Прямой ход", Qt::blue ) ) );
+        if ( !dataA1_e.empty() )
+            lines_a.push_back( ff0x::NoAxisGraphBuilder::Line(dataA1_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон. Прямой ход", Qt::red ) ) );
+        lines_a.push_back( ff0x::NoAxisGraphBuilder::Line(dataA2, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат. Обратный ход", Qt::darkBlue ) ) );
+        if ( !dataA2_e.empty() )
+            lines_a.push_back( ff0x::NoAxisGraphBuilder::Line(dataA2_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон. Обратный ход", Qt::darkRed ) ) );
 
-        ff0x::GraphBuilder::GraphDataLine lines_b;
-        lines_b.push_back( ff0x::GraphBuilder::Line(dataB, ff0x::GraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
-        if ( !dataB_e.empty() )
-            lines_b.push_back( ff0x::GraphBuilder::Line(dataB_e, ff0x::GraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
+        ff0x::NoAxisGraphBuilder::GraphDataLine lines_b;
+        lines_b.push_back( ff0x::NoAxisGraphBuilder::Line(dataB1, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат. Прямой ход", Qt::blue ) ) );
+        if ( !dataB1_e.empty() )
+            lines_b.push_back( ff0x::NoAxisGraphBuilder::Line(dataB1_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон. Прямой ход", Qt::red ) ) );
+        lines_b.push_back( ff0x::NoAxisGraphBuilder::Line(dataB2, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат. Обратный ход", Qt::darkBlue ) ) );
+        if ( !dataB2_e.empty() )
+            lines_b.push_back( ff0x::NoAxisGraphBuilder::Line(dataB2_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон. Обратный ход", Qt::darkRed ) ) );
 
 
         QRect p1(rect.left(), rect.top(), w, h );
@@ -423,9 +472,81 @@ bool ExpeditureFromInput::Draw( QPainter& painter, QRect &free_rect ) const
         QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
         QRect p2t(p2.left(), p2.bottom(), p2.width(), metrix.height());
         DrawRowCenter( p1t, text_font, Qt::black, "P->A" );
+        {
+            QPointF x_test_range;
+            QPointF y_test_range;
+
+            x_test_range.setX( std::max( x_range_a1.x(), x_range_a2.x() ) );
+            x_test_range.setY( std::min( x_range_a1.y(), x_range_a2.y() ) );
+
+            y_test_range.setX( std::max( y_range_a1.x(), y_range_a2.x() ) );
+            y_test_range.setY( std::min( y_range_a1.y(), y_range_a2.y() ) );
+
+            if ( !dataA1_e.empty() )
+            {
+                x_test_range.setX( std::max( x_range_a1e.x(), x_test_range.x() ) );
+                x_test_range.setY( std::min( x_range_a1e.y(), x_test_range.y() ) );
+
+                y_test_range.setX( std::max( y_range_a1e.x(), x_test_range.x() ) );
+                y_test_range.setY( std::min( y_range_a1e.y(), x_test_range.y() ) );
+            }
+            if ( !dataA2_e.empty() )
+            {
+                x_test_range.setX( std::max( x_range_a2e.x(), x_test_range.x() ) );
+                x_test_range.setY( std::min( x_range_a2e.y(), x_test_range.y() ) );
+
+                y_test_range.setX( std::max( y_range_a2e.x(), x_test_range.x() ) );
+                y_test_range.setY( std::min( y_range_a2e.y(), x_test_range.y() ) );
+            }
+
+            QPointF x_range;
+            QPointF y_range;
+            double x_step = 0;
+            double y_step = 0;
+
+            ff0x::DataLength( x_test_range, x_range, x_step );
+            ff0x::DataLength( y_test_range, y_range, y_step );
+
+            painter.drawPixmap( p1, builder.Draw( lines_a, x_range, y_range, x_step, y_step, "Опорный сигнал", "Расход (л/мин)", true ) );
+        }
         DrawRowCenter( p2t, text_font, Qt::black, "P->B" );
-        painter.drawPixmap( p1, builder.Draw( lines_a, max_signal_a * 1.25, max_Leak_a * 1.25, ceil(max_signal_a)/10, ceil(max_Leak_a)/10, "Опорный сигнал", "Расход (л/мин)", true ) );
-        painter.drawPixmap( p2, builder.Draw( lines_b, max_signal_b * 1.25, max_Leak_b * 1.25, ceil(max_signal_b)/10, ceil(max_Leak_b)/10, "Опорный сигнал", "Расход (л/мин)", true ) );
+        {
+            QPointF x_test_range;
+            QPointF y_test_range;
+
+            x_test_range.setX( std::max( x_range_b1.x(), x_range_b2.x() ) );
+            x_test_range.setY( std::min( x_range_b1.y(), x_range_b2.y() ) );
+
+            y_test_range.setX( std::max( y_range_b1.x(), y_range_b2.x() ) );
+            y_test_range.setY( std::min( y_range_b1.y(), y_range_b2.y() ) );
+
+            if ( !dataA1_e.empty() )
+            {
+                x_test_range.setX( std::max( x_range_b1e.x(), x_test_range.x() ) );
+                x_test_range.setY( std::min( x_range_b1e.y(), x_test_range.y() ) );
+
+                y_test_range.setX( std::max( y_range_b1e.x(), x_test_range.x() ) );
+                y_test_range.setY( std::min( y_range_b1e.y(), x_test_range.y() ) );
+            }
+            if ( !dataA2_e.empty() )
+            {
+                x_test_range.setX( std::max( x_range_b2e.x(), x_test_range.x() ) );
+                x_test_range.setY( std::min( x_range_b2e.y(), x_test_range.y() ) );
+
+                y_test_range.setX( std::max( y_range_b2e.x(), x_test_range.x() ) );
+                y_test_range.setY( std::min( y_range_b2e.y(), x_test_range.y() ) );
+            }
+
+            QPointF x_range;
+            QPointF y_range;
+            double x_step = 0;
+            double y_step = 0;
+
+            ff0x::DataLength( x_test_range, x_range, x_step );
+            ff0x::DataLength( y_test_range, y_range, y_step );
+
+            painter.drawPixmap( p2, builder.Draw( lines_b, x_range, y_range, x_step, y_step, "Опорный сигнал", "Расход (л/мин)", true ) );
+        }
 
         painter.restore();
     }, 1, free_rect.width()/2 + metrix.height()  );
@@ -434,19 +555,44 @@ bool ExpeditureFromInput::Draw( QPainter& painter, QRect &free_rect ) const
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Коэффициент усиления по расходу"), Qt::red, test::ToString( Gain ) );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Канал А:") );
     }, 2 );
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Нелинейность, %"), Qt::red, test::ToString( Nonlinearity ) );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Коэффициент усиления по расходу"), Qt::red, test::ToString( CalckGain( GraphA1 ) ) );
     }, 2 );
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Гистерезис, %"), Qt::red, test::ToString( Hysteresis ) );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Нелинейность, %"), Qt::red, test::ToString( CalckNonlinearity( GraphA1 ) ) );
+    }, 2 );
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
+    {
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Гистерезис, %"), Qt::red, test::ToString( CalckHysteresis( GraphA1, GraphA2 ) ) );
     }, 2 );
 
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
+    {
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Канал B:") );
+    }, 2 );
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
+    {
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Коэффициент усиления по расходу"), Qt::red, test::ToString( CalckGain( GraphB1 ) ) );
+    }, 2 );
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
+    {
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Нелинейность, %"), Qt::red, test::ToString( CalckNonlinearity( GraphB1 ) ) );
+    }, 2 );
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
+    {
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Гистерезис, %"), Qt::red, test::ToString( CalckHysteresis( GraphB1, GraphB2 ) ) );
+    }, 2 );
     return res;
 }
 

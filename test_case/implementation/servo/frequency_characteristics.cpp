@@ -63,6 +63,7 @@ void FrequencyCharacteristics::UpdateData()
 {
     Test::UpdateData();
 
+#warning    db31,16.0 Next_Amp
 
     std::this_thread::sleep_for(std::chrono::seconds(5));
     bool *ready = 0;
@@ -71,13 +72,11 @@ void FrequencyCharacteristics::UpdateData()
 
     if ( ReelControl() )
     {
-        mControlReelBits.Read();
         ready = &mControlReelBits.op24_ready;
         frequency = &mControlReelBits.op24_frequency;
     }
     else
     {
-        mControlBoardBits.Read();
         ready = &mControlBoardBits.op14_ready;
         frequency = &mControlBoardBits.op14_frequency;
     }

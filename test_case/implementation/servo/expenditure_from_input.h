@@ -49,9 +49,7 @@ private:
     DataSet GraphB1;
     DataSet GraphB2;
 
-    double Gain;            /// коэффициент усиления по расходу
-    double Hysteresis;      /// гистерезис
-    double Nonlinearity;    /// нелинейность
+    int level;
 };
 
 }//namespace servo
