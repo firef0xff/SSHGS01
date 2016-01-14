@@ -648,17 +648,18 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
             {
                 QPointF x_range;
                 QPointF y_range;
-                x_range = QPointF( ceil ( std::max( x_range_1.x(), x_range_2.x() )/10 )*10,
-                                   floor( std::min( x_range_1.y(), x_range_2.y() )/10 )*10 );
+                double x_step = 0;
+                double y_step = 0;
 
-                y_range = QPointF ( ceil ( std::max( y_range_1.x(), y_range_2.x() )/10 )*10,
-                                    floor( std::min( y_range_1.y(), y_range_2.y() )/10 )*10 );
+                ff0x::DataLength( x_range_1, x_range_2, x_range, x_step );
+                ff0x::DataLength( y_range_1, y_range_2, y_range, y_step );
+
                 if ( y_range.x() - y_range.y() == 0 )
                 {
                     y_range.setX( 1 );
                     y_range.setY( -1 );
                 }
-                painter.drawPixmap( p1, builder.Draw( lines1, x_range, y_range, ceil( x_range.x() - x_range.y() )/10, ceil(y_range.x() - y_range.y())/10, "x", "y", true ) );
+                painter.drawPixmap( p1, builder.Draw( lines1, x_range, y_range, x_step, y_step, "x", "y", true ) );
             }
 
             painter.restore();
@@ -732,56 +733,48 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
         {
             QPointF x_range;
             QPointF y_range;
+            double x_step = 0;
+            double y_step = 0;
             if ( !data1_e.empty() )
             {
-                x_range = QPointF( ceil ( std::max( x_range_1.x(), x_range_1e.x() )/10 )*10,
-                                   floor( std::min( x_range_1.y(), x_range_1e.y() )/10 )*10 );
-
-                y_range = QPointF ( ceil ( std::max( y_range_1.x(), y_range_1e.x() )/10 )*10,
-                                    floor( std::min( y_range_1.y(), y_range_1e.y() )/10 )*10 );
+                ff0x::DataLength( x_range_1, x_range_1e, x_range, x_step );
+                ff0x::DataLength( y_range_1, y_range_1e, y_range, y_step );
             }
             else
             {
-                x_range = QPointF( ceil ( x_range_1.x()/10 )*10,
-                                   floor( x_range_1.y()/10 )*10 );
-
-                y_range = QPointF ( ceil ( y_range_1.x()/10 )*10,
-                                    floor( y_range_1.y()/10 )*10 );
+                ff0x::DataLength( x_range_1, x_range, x_step );
+                ff0x::DataLength( y_range_1, y_range, y_step );
             }
             if ( y_range.x() - y_range.y() == 0 )
             {
                 y_range.setX( 1 );
                 y_range.setY( -1 );
             }
-            painter.drawPixmap( p1, builder.Draw( lines1, x_range, y_range, ceil( x_range.x() - x_range.y() )/10, ceil(y_range.x() - y_range.y())/10, "Частота (Гц)", "Дб", true ) );
+            painter.drawPixmap( p1, builder.Draw( lines1, x_range, y_range, x_step, y_step, "Частота (Гц)", "Дб", true ) );
         }
 
         DrawRowCenter( p2t, text_font, Qt::black, "ФЧХ. Амплитуда 1" );
         {
             QPointF x_range;
             QPointF y_range;
+            double x_step = 0;
+            double y_step = 0;
             if ( !data2_e.empty() )
             {
-                x_range = QPointF( ceil ( std::max( x_range_2.x(), x_range_2e.x() )/10 )*10,
-                                   floor( std::min( x_range_2.y(), x_range_2e.y() )/10 )*10 );
-
-                y_range = QPointF ( ceil ( std::max( y_range_2.x(), y_range_2e.x() )/10 )*10,
-                                    floor( std::min( y_range_2.y(), y_range_2e.y() )/10 )*10 );
+                ff0x::DataLength( x_range_2, x_range_2e, x_range, x_step );
+                ff0x::DataLength( y_range_2, y_range_2e, y_range, y_step );
             }
             else
             {
-                x_range = QPointF( ceil ( x_range_2.x()/10 )*10,
-                                   floor( x_range_2.y()/10 )*10 );
-
-                y_range = QPointF ( ceil ( y_range_2.x()/10 )*10,
-                                    floor( y_range_2.y()/10 )*10 );
+                ff0x::DataLength( x_range_2, x_range, x_step );
+                ff0x::DataLength( y_range_2, y_range, y_step );
             }
             if ( y_range.x() - y_range.y() == 0 )
             {
                 y_range.setX( 1 );
                 y_range.setY( -1 );
             }
-            painter.drawPixmap( p2, builder.Draw( lines2, x_range, y_range, ceil( x_range.x() - x_range.y() )/10, ceil(y_range.x() - y_range.y())/10, "Частота (Гц)", "φ (гр.)", true ) );
+            painter.drawPixmap( p2, builder.Draw( lines2, x_range, y_range, x_step, y_step, "Частота (Гц)", "φ (гр.)", true ) );
         }
         painter.restore();
     }, 1, free_rect.width()/2 + metrix.height()  );
@@ -852,56 +845,48 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
         {
             QPointF x_range;
             QPointF y_range;
+            double x_step = 0;
+            double y_step = 0;
             if ( !data1_e.empty() )
             {
-                x_range = QPointF( ceil ( std::max( x_range_1.x(), x_range_1e.x() )/10 )*10,
-                                   floor( std::min( x_range_1.y(), x_range_1e.y() )/10 )*10 );
-
-                y_range = QPointF ( ceil ( std::max( y_range_1.x(), y_range_1e.x() )/10 )*10,
-                                    floor( std::min( y_range_1.y(), y_range_1e.y() )/10 )*10 );
+                ff0x::DataLength( x_range_1, x_range_1e, x_range, x_step );
+                ff0x::DataLength( y_range_1, y_range_1e, y_range, y_step );
             }
             else
             {
-                x_range = QPointF( ceil ( x_range_1.x()/10 )*10,
-                                   floor( x_range_1.y()/10 )*10 );
-
-                y_range = QPointF ( ceil ( y_range_1.x()/10 )*10,
-                                    floor( y_range_1.y()/10 )*10 );
+                ff0x::DataLength( x_range_1, x_range, x_step );
+                ff0x::DataLength( y_range_1, y_range, y_step );
             }
             if ( y_range.x() - y_range.y() == 0 )
             {
                 y_range.setX( 1 );
                 y_range.setY( -1 );
             }
-            painter.drawPixmap( p1, builder.Draw( lines1, x_range, y_range, ceil( x_range.x() - x_range.y() )/10, ceil(y_range.x() - y_range.y())/10, "Частота (Гц)", "Дб", true ) );
+            painter.drawPixmap( p1, builder.Draw( lines1, x_range, y_range, x_step, y_step, "Частота (Гц)", "Дб", true ) );
         }
 
         DrawRowCenter( p2t, text_font, Qt::black, "ФЧХ. Амплитуда 2" );
         {
             QPointF x_range;
             QPointF y_range;
+            double x_step = 0;
+            double y_step = 0;
             if ( !data2_e.empty() )
             {
-                x_range = QPointF( ceil ( std::max( x_range_2.x(), x_range_2e.x() )/10 )*10,
-                                   floor( std::min( x_range_2.y(), x_range_2e.y() )/10 )*10 );
-
-                y_range = QPointF ( ceil ( std::max( y_range_2.x(), y_range_2e.x() )/10 )*10,
-                                    floor( std::min( y_range_2.y(), y_range_2e.y() )/10 )*10 );
+                ff0x::DataLength( x_range_2, x_range_2e, x_range, x_step );
+                ff0x::DataLength( y_range_2, y_range_2e, y_range, y_step );
             }
             else
             {
-                x_range = QPointF( ceil ( x_range_2.x()/10 )*10,
-                                   floor( x_range_2.y()/10 )*10 );
-
-                y_range = QPointF ( ceil ( y_range_2.x()/10 )*10,
-                                    floor( y_range_2.y()/10 )*10 );
+                ff0x::DataLength( x_range_2, x_range, x_step );
+                ff0x::DataLength( y_range_2, y_range, y_step );
             }
             if ( y_range.x() - y_range.y() == 0 )
             {
                 y_range.setX( 1 );
                 y_range.setY( -1 );
             }
-            painter.drawPixmap( p2, builder.Draw( lines2, x_range, y_range, ceil( x_range.x() - x_range.y() )/10, ceil(y_range.x() - y_range.y())/10, "Частота (Гц)", "φ (гр.)", true ) );
+            painter.drawPixmap( p2, builder.Draw( lines2, x_range, y_range, x_step, y_step, "Частота (Гц)", "φ (гр.)", true ) );
         }
         painter.restore();
     }, 1, free_rect.width()/2 + metrix.height()  );
@@ -972,56 +957,48 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
         {
             QPointF x_range;
             QPointF y_range;
+            double x_step = 0;
+            double y_step = 0;
             if ( !data1_e.empty() )
             {
-                x_range = QPointF( ceil ( std::max( x_range_1.x(), x_range_1e.x() )/10 )*10,
-                                   floor( std::min( x_range_1.y(), x_range_1e.y() )/10 )*10 );
-
-                y_range = QPointF ( ceil ( std::max( y_range_1.x(), y_range_1e.x() )/10 )*10,
-                                    floor( std::min( y_range_1.y(), y_range_1e.y() )/10 )*10 );
+                ff0x::DataLength( x_range_1, x_range_1e, x_range, x_step );
+                ff0x::DataLength( y_range_1, y_range_1e, y_range, y_step );
             }
             else
             {
-                x_range = QPointF( ceil ( x_range_1.x()/10 )*10,
-                                   floor( x_range_1.y()/10 )*10 );
-
-                y_range = QPointF ( ceil ( y_range_1.x()/10 )*10,
-                                    floor( y_range_1.y()/10 )*10 );
+                ff0x::DataLength( x_range_1, x_range, x_step );
+                ff0x::DataLength( y_range_1, y_range, y_step );
             }
             if ( y_range.x() - y_range.y() == 0 )
             {
                 y_range.setX( 1 );
                 y_range.setY( -1 );
             }
-            painter.drawPixmap( p1, builder.Draw( lines1, x_range, y_range, ceil( x_range.x() - x_range.y() )/10, ceil(y_range.x() - y_range.y())/10, "Частота (Гц)", "Дб", true ) );
+            painter.drawPixmap( p1, builder.Draw( lines1, x_range, y_range, x_step, y_step, "Частота (Гц)", "Дб", true ) );
         }
 
         DrawRowCenter( p2t, text_font, Qt::black, "ФЧХ. Амплитуда 3" );
         {
             QPointF x_range;
             QPointF y_range;
+            double x_step = 0;
+            double y_step = 0;
             if ( !data2_e.empty() )
             {
-                x_range = QPointF( ceil ( std::max( x_range_2.x(), x_range_2e.x() )/10 )*10,
-                                   floor( std::min( x_range_2.y(), x_range_2e.y() )/10 )*10 );
-
-                y_range = QPointF ( ceil ( std::max( y_range_2.x(), y_range_2e.x() )/10 )*10,
-                                    floor( std::min( y_range_2.y(), y_range_2e.y() )/10 )*10 );
+                ff0x::DataLength( x_range_2, x_range_2e, x_range, x_step );
+                ff0x::DataLength( y_range_2, y_range_2e, y_range, y_step );
             }
             else
             {
-                x_range = QPointF( ceil ( x_range_2.x()/10 )*10,
-                                   floor( x_range_2.y()/10 )*10 );
-
-                y_range = QPointF ( ceil ( y_range_2.x()/10 )*10,
-                                    floor( y_range_2.y()/10 )*10 );
+                ff0x::DataLength( x_range_2, x_range, x_step );
+                ff0x::DataLength( y_range_2, y_range, y_step );
             }
             if ( y_range.x() - y_range.y() == 0 )
             {
                 y_range.setX( 1 );
                 y_range.setY( -1 );
             }
-            painter.drawPixmap( p2, builder.Draw( lines2, x_range, y_range, ceil( x_range.x() - x_range.y() )/10, ceil(y_range.x() - y_range.y())/10, "Частота (Гц)", "φ (гр.)", true ) );
+            painter.drawPixmap( p2, builder.Draw( lines2, x_range, y_range, x_step, y_step, "Частота (Гц)", "φ (гр.)", true ) );
         }
         painter.restore();
     }, 1, free_rect.width()/2 + metrix.height()  );

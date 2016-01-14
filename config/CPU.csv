@@ -99,6 +99,22 @@ DB32.op6_max_min_ok_b;DB32,X142.0;RW;TST=;"CMT=""б"" перекл. при макс. давл. (ми
 DB32.op6_max_min_no_b;DB32,X142.1;RW;TST=;"CMT=""б"" перекл. при макс. давл. (мин упр.)"
 DB32.op6_max_max_ok_b;DB32,X142.2;RW;TST=;"CMT=""б"" перекл. при макс. давл. (макс упр.)"
 DB32.op6_max_max_no_b;DB32,X142.3;RW;TST=;"CMT=""б"" перекл. при макс. давл. (макс упр.)"
+DB32.OP6_MinD_MinUpr_YESa_off;DB32,X182.0;RW;TST=;CMT=а перекл.при мин.давлении (мин.упр)
+DB32.OP6_MinD_MinUpr_NOa_off;DB32,X182.1;RW;TST=;CMT=а Ќ≈ перекл.при мин.давлении (мин.упр)
+DB32.OP6_MinD_MaxUpr_YESa_off;DB32,X182.2;RW;TST=;CMT=а перекл.при мин.давлении (макс.упр)
+DB32.OP6_MinD_MaxUpr_NOa_off;DB32,X182.3;RW;TST=;CMT=а Ќ≈ перекл.при мин.давлении (макс.упр)
+DB32.OP6_MaxD_MinUpr_YESa_off;DB32,X182.4;RW;TST=;CMT=а перекл.при макс.давлении (мин.упр)
+DB32.OP6_MaxD_MinUpr_NOa_off;DB32,X182.5;RW;TST=;CMT=а Ќ≈ перекл.при макс.давлении (мин.упр)
+DB32.OP6_MaxD_MaxUpr_YESa_off;DB32,X182.6;RW;TST=;CMT=а перекл.при макс.давлении (макс.упр)
+DB32.OP6_MaxD_MaxUpr_NOa_off;DB32,X182.7;RW;TST=;CMT=а Ќ≈ перекл.при макс.давлении (макс.упр)
+DB32.OP6_MinD_MinUpr_YESb_off;DB32,X183.0;RW;TST=;CMT=b перекл.при мин.давлении (мин.упр)
+DB32.OP6_MinD_MinUpr_NOb_off;DB32,X183.1;RW;TST=;CMT=b Ќ≈ перекл.при мин.давлении (мин.упр)
+DB32.OP6_MinD_MaxUpr_YESb_off;DB32,X183.2;RW;TST=;CMT=b перекл.при мин.давлении (макс.упр)
+DB32.OP6_MinD_MaxUpr_NOb_off;DB32,X183.3;RW;TST=;CMT=b Ќ≈ перекл.при мин.давлении (макс.упр)
+DB32.OP6_MaxD_MinUpr_YESb_off;DB32,X183.4;RW;TST=;CMT=b перекл.при макс.давлении (мин.упр)
+DB32.OP6_MaxD_MinUpr_NOb_off;DB32,X183.5;RW;TST=;CMT=b Ќ≈ перекл.при макс.давлении (мин.упр)
+DB32.OP6_MaxD_MaxUpr_YESb_off;DB32,X183.6;RW;TST=;CMT=b перекл.при макс.давлении (макс.упр)
+DB32.OP6_MaxD_MaxUpr_NOb_off;DB32,X183.7;RW;TST=;CMT=b Ќ≈ перекл.при макс.давлении (макс.упр)
 DB32.op7_min_ok_a;DB32,X142.4;RW;TST=;"CMT=""а"" перекл. при мин. давлении (Vmin)"
 DB32.op7_min_no_a;DB32,X142.5;RW;TST=;"CMT=""а"" не перекл. при мин. давлении (Vmin)"
 DB32.op7_min_ok_b;DB32,X142.6;RW;TST=;"CMT=""б"" перекл. при мин. давлении (Vmin)"
@@ -107,6 +123,14 @@ DB32.op7_max_ok_a;DB32,X143.0;RW;TST=;"CMT=""а"" перекл. при макс. давлении (Vmi
 DB32.op7_max_no_a;DB32,X143.1;RW;TST=;"CMT=""а"" не перекл. при макс. давлении (Vmin)"
 DB32.op7_max_ok_b;DB32,X143.2;RW;TST=;"CMT=""б"" перекл. при макс. давлении (Vmin)"
 DB32.op7_max_no_b;DB32,X143.3;RW;TST=;"CMT=""б"" не перекл. при макс. давлении (Vmin)"
+DB32.OP7_Min_D_YESa_off;DB32,X184.0;RW;TST=;CMT=а перекл.при мин.давлении (Vmin)
+DB32.OP7_Min_D_NOa_off;DB32,X184.1;RW;TST=;CMT=а Ќ≈ перекл.при мин.давлении (Vmin)
+DB32.OP7_Min_D_YESb_off;DB32,X184.2;RW;TST=;CMT=b перекл.при мин.давлении (Vmin)
+DB32.OP7_Min_D_NOb_off;DB32,X184.3;RW;TST=;CMT=b Ќ≈ перекл.при мин.давлении (Vmin)
+DB32.OP7_Max_D_YESa_off;DB32,X184.4;RW;TST=;CMT=а перекл.при макс.давлении (Vmin)
+DB32.OP7_Max_D_NOa_off;DB32,X184.5;RW;TST=;CMT=а Ќ≈ перекл.при макс.давлении (Vmin)
+DB32.OP7_Max_D_YESb_off;DB32,X184.6;RW;TST=;CMT=b перекл.при макс.давлении (Vmin)
+DB32.OP7_Max_D_NOb_off;DB32,X184.7;RW;TST=;CMT=b Ќ≈ перекл.при макс.давлении (Vmin)
 DB32.op8_open_ok_a;DB32,X160.0;RW;TST=;"CMT=""а"" врем€ включени€ соответствует"
 DB32.op8_open_no_a;DB32,X160.1;RW;TST=;"CMT=""а"" врем€ включени€ не соответствует"
 DB32.op8_close_ok_a;DB32,X160.2;RW;TST=;"CMT=""а"" врем€ отключени€ соответствует"

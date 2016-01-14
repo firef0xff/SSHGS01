@@ -107,6 +107,24 @@ public:
     bool& op6_max_max_ok_b;    //142.2 "б" перекл. при макс. давл. (макс упр.)
     bool& op6_max_max_no_b;    //142.3 "б" перекл. при макс. давл. (макс упр.)
 
+    bool& OP6_MinD_MinUpr_YESa_off;//X182.0;RW;TST=;CMT=а перекл.при мин.давлении (мин.упр)
+    bool& OP6_MinD_MinUpr_NOa_off;//X182.1;RW;TST=;CMT=а НЕ перекл.при мин.давлении (мин.упр)
+    bool& OP6_MinD_MaxUpr_YESa_off;//X182.2;RW;TST=;CMT=а перекл.при мин.давлении (макс.упр)
+    bool& OP6_MinD_MaxUpr_NOa_off;//X182.3;RW;TST=;CMT=а НЕ перекл.при мин.давлении (макс.упр)
+    bool& OP6_MaxD_MinUpr_YESa_off;//X182.4;RW;TST=;CMT=а перекл.при макс.давлении (мин.упр)
+    bool& OP6_MaxD_MinUpr_NOa_off;//X182.5;RW;TST=;CMT=а НЕ перекл.при макс.давлении (мин.упр)
+    bool& OP6_MaxD_MaxUpr_YESa_off;//X182.6;RW;TST=;CMT=а перекл.при макс.давлении (макс.упр)
+    bool& OP6_MaxD_MaxUpr_NOa_off;//X182.7;RW;TST=;CMT=а НЕ перекл.при макс.давлении (макс.упр)
+
+    bool& OP6_MinD_MinUpr_YESb_off;//X183.0;RW;TST=;CMT=b перекл.при мин.давлении (мин.упр)
+    bool& OP6_MinD_MinUpr_NOb_off;//X183.1;RW;TST=;CMT=b НЕ перекл.при мин.давлении (мин.упр)
+    bool& OP6_MinD_MaxUpr_YESb_off;//X183.2;RW;TST=;CMT=b перекл.при мин.давлении (макс.упр)
+    bool& OP6_MinD_MaxUpr_NOb_off;//X183.3;RW;TST=;CMT=b НЕ перекл.при мин.давлении (макс.упр)
+    bool& OP6_MaxD_MinUpr_YESb_off;//X183.4;RW;TST=;CMT=b перекл.при макс.давлении (мин.упр)
+    bool& OP6_MaxD_MinUpr_NOb_off;//X183.5;RW;TST=;CMT=b НЕ перекл.при макс.давлении (мин.упр)
+    bool& OP6_MaxD_MaxUpr_YESb_off;//X183.6;RW;TST=;CMT=b перекл.при макс.давлении (макс.упр)
+    bool& OP6_MaxD_MaxUpr_NOb_off;//X183.7;RW;TST=;CMT=b НЕ перекл.при макс.давлении (макс.упр)
+
 
     //test7
     bool& op7_min_ok_a;  //142.4 "а" перекл. при мин. давлении (Vmin)
@@ -117,6 +135,15 @@ public:
     bool& op7_max_no_a;   //143.1 "а" не перекл. при макс. давлении (Vmin)
     bool& op7_max_ok_b;  //143.2 "б" перекл. при макс. давлении (Vmin)
     bool& op7_max_no_b;   //143.3 "б" не перекл. при макс. давлении (Vmin)
+
+    bool& OP7_Min_D_YESa_off;//X184.0;RW;TST=;CMT=а перекл.при мин.давлении (Vmin)
+    bool& OP7_Min_D_NOa_off;//X184.1;RW;TST=;CMT=а НЕ перекл.при мин.давлении (Vmin)
+    bool& OP7_Min_D_YESb_off;//X184.2;RW;TST=;CMT=b перекл.при мин.давлении (Vmin)
+    bool& OP7_Min_D_NOb_off;//X184.3;RW;TST=;CMT=b НЕ перекл.при мин.давлении (Vmin)
+    bool& OP7_Max_D_YESa_off;//X184.4;RW;TST=;CMT=а перекл.при макс.давлении (Vmin)
+    bool& OP7_Max_D_NOa_off;//X184.5;RW;TST=;CMT=а НЕ перекл.при макс.давлении (Vmin)
+    bool& OP7_Max_D_YESb_off;//X184.6;RW;TST=;CMT=b перекл.при макс.давлении (Vmin)
+    bool& OP7_Max_D_NOb_off;//X184.7;RW;TST=;CMT=b НЕ перекл.при макс.давлении (Vmin)
 
     //test8
     float& op8_time_on_a;       //144.0 время включения катуки "а"
@@ -168,7 +195,7 @@ private:
 
     enum
     {
-        BOOL_COUNT = 71,
+        BOOL_COUNT = 95,
         FLOAT_COUNT = 40
     };
 
@@ -310,7 +337,33 @@ private:
         L"CPU/DB32.T_oil",
 
         L"CPU/DB32.op5_pa",
-        L"CPU/DB32.op5_pb"
+        L"CPU/DB32.op5_pb",
+
+        L"CPU/DB32.OP6_MinD_MinUpr_YESa_off",//X182.0;RW;TST=;CMT=а перекл.при мин.давлении (мин.упр)
+        L"CPU/DB32.OP6_MinD_MinUpr_NOa_off",//X182.1;RW;TST=;CMT=а НЕ перекл.при мин.давлении (мин.упр)
+        L"CPU/DB32.OP6_MinD_MaxUpr_YESa_off",//X182.2;RW;TST=;CMT=а перекл.при мин.давлении (макс.упр)
+        L"CPU/DB32.OP6_MinD_MaxUpr_NOa_off",//X182.3;RW;TST=;CMT=а НЕ перекл.при мин.давлении (макс.упр)
+        L"CPU/DB32.OP6_MaxD_MinUpr_YESa_off",//X182.4;RW;TST=;CMT=а перекл.при макс.давлении (мин.упр)
+        L"CPU/DB32.OP6_MaxD_MinUpr_NOa_off",//X182.5;RW;TST=;CMT=а НЕ перекл.при макс.давлении (мин.упр)
+        L"CPU/DB32.OP6_MaxD_MaxUpr_YESa_off",//X182.6;RW;TST=;CMT=а перекл.при макс.давлении (макс.упр)
+        L"CPU/DB32.OP6_MaxD_MaxUpr_NOa_off",//X182.7;RW;TST=;CMT=а НЕ перекл.при макс.давлении (макс.упр)
+        L"CPU/DB32.OP6_MinD_MinUpr_YESb_off",//X183.0;RW;TST=;CMT=b перекл.при мин.давлении (мин.упр)
+        L"CPU/DB32.OP6_MinD_MinUpr_NOb_off",//X183.1;RW;TST=;CMT=b НЕ перекл.при мин.давлении (мин.упр)
+        L"CPU/DB32.OP6_MinD_MaxUpr_YESb_off",//X183.2;RW;TST=;CMT=b перекл.при мин.давлении (макс.упр)
+        L"CPU/DB32.OP6_MinD_MaxUpr_NOb_off",//X183.3;RW;TST=;CMT=b НЕ перекл.при мин.давлении (макс.упр)
+        L"CPU/DB32.OP6_MaxD_MinUpr_YESb_off",//X183.4;RW;TST=;CMT=b перекл.при макс.давлении (мин.упр)
+        L"CPU/DB32.OP6_MaxD_MinUpr_NOb_off",//X183.5;RW;TST=;CMT=b НЕ перекл.при макс.давлении (мин.упр)
+        L"CPU/DB32.OP6_MaxD_MaxUpr_YESb_off",//X183.6;RW;TST=;CMT=b перекл.при макс.давлении (макс.упр)
+        L"CPU/DB32.OP6_MaxD_MaxUpr_NOb_off",//X183.7;RW;TST=;CMT=b НЕ перекл.при макс.давлении (макс.упр)
+
+        L"CPU/DB32.OP7_Min_D_YESa_off",//X184.0;RW;TST=;CMT=а перекл.при мин.давлении (Vmin)
+        L"CPU/DB32.OP7_Min_D_NOa_off",//X184.1;RW;TST=;CMT=а НЕ перекл.при мин.давлении (Vmin)
+        L"CPU/DB32.OP7_Min_D_YESb_off",//X184.2;RW;TST=;CMT=b перекл.при мин.давлении (Vmin)
+        L"CPU/DB32.OP7_Min_D_NOb_off",//X184.3;RW;TST=;CMT=b НЕ перекл.при мин.давлении (Vmin)
+        L"CPU/DB32.OP7_Max_D_YESa_off",//X184.4;RW;TST=;CMT=а перекл.при макс.давлении (Vmin)
+        L"CPU/DB32.OP7_Max_D_NOa_off",//X184.5;RW;TST=;CMT=а НЕ перекл.при макс.давлении (Vmin)
+        L"CPU/DB32.OP7_Max_D_YESb_off",//X184.6;RW;TST=;CMT=b перекл.при макс.давлении (Vmin)
+        L"CPU/DB32.OP7_Max_D_NOb_off"//X184.7;RW;TST=;CMT=b НЕ перекл.при макс.давлении (Vmin)
     };
 };
 
