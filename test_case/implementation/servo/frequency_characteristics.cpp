@@ -221,8 +221,12 @@ ff0x::NoAxisGraphBuilder::LinePoints ProcessAFC( FrequencyCharacteristics::Sourc
             if ( it == src.begin() )
                 min_ampl = ampl;
 
-           point.setY( 10.0*log10( ampl / min_ampl) );
-
+            if ( min_ampl != 0 && ampl/min_ampl != 0 )
+            {
+                point.setY( 10.0*log10( ampl / min_ampl) );
+            }
+            else
+                point.setY(0);
         }
         else
             point.setY(0);
@@ -656,11 +660,16 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
 
             ff0x::NoAxisGraphBuilder builder ( w, h, f );
             ff0x::NoAxisGraphBuilder::GraphDataLine lines1;
+            ff0x::NoAxisGraphBuilder::GraphDataLine lines2;
             lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data, ff0x::NoAxisGraphBuilder::LabelInfo( "", Qt::blue ) ) );
             lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data2, ff0x::NoAxisGraphBuilder::LabelInfo( "", Qt::red ) ) );
+            lines2.push_back( ff0x::NoAxisGraphBuilder::Line(data2, ff0x::NoAxisGraphBuilder::LabelInfo( "", Qt::red ) ) );
 
             QRect p1(rect.left(), rect.top(), w, h );
+            QRect p2(rect.right() - w, rect.top(), w, h );
             QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
+            QRect p2t(p2.left(), p2.bottom(), p2.width(), metrix.height());
+
             DrawRowCenter( p1t, text_font, Qt::black, "результат " + QString::number( i + 1  ) );
             {
                 QPointF x_range;
@@ -677,6 +686,175 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
                     y_range.setY( -1 );
                 }
                 painter.drawPixmap( p1, builder.Draw( lines1, x_range, y_range, x_step, y_step, "x", "y", true ) );
+            }
+            DrawRowCenter( p2t, text_font, Qt::black, "результат " + QString::number( i + 1  ) );
+            {
+                QPointF x_range;
+                QPointF y_range;
+                double x_step = 0;
+                double y_step = 0;
+
+                ff0x::DataLength( x_range_2, x_range, x_step );
+                ff0x::DataLength( y_range_2, y_range, y_step );
+
+                if ( y_range.x() - y_range.y() == 0 )
+                {
+                    y_range.setX( 1 );
+                    y_range.setY( -1 );
+                }
+                painter.drawPixmap( p2, builder.Draw( lines2, x_range, y_range, x_step, y_step, "x", "y", true ) );
+            }
+
+            painter.restore();
+        }, 1, free_rect.width()/2 + metrix.height()  );
+    }
+
+    size = mSource2.size();
+    for ( int i = 0; i < size; ++i )
+    {
+        res = DrawLine( num, free_rect, text_font,
+        [ this, &painter, &text_font, &DrawRowCenter, &metrix, i ]( QRect const& rect )
+        {
+            painter.save();
+
+            ff0x::GraphBuilder::LinePoints data;
+            ff0x::GraphBuilder::LinePoints data2;
+
+            QPointF x_range_1;
+            QPointF y_range_1;
+
+            QPointF x_range_2;
+            QPointF y_range_2;
+
+            data = ProcessDebug1( mSource2, i, x_range_1, y_range_1 );
+            data2 = ProcessDebug2( mSource2, i, x_range_2, y_range_2 );
+
+            QFont f = text_font;
+            f.setPointSize( 6 );
+            int w = (rect.height() - metrix.height())*0.98;
+            int h = (rect.height() - metrix.height())*0.98;
+
+            ff0x::NoAxisGraphBuilder builder ( w, h, f );
+            ff0x::NoAxisGraphBuilder::GraphDataLine lines1;
+            ff0x::NoAxisGraphBuilder::GraphDataLine lines2;
+            lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data, ff0x::NoAxisGraphBuilder::LabelInfo( "", Qt::blue ) ) );
+            lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data2, ff0x::NoAxisGraphBuilder::LabelInfo( "", Qt::red ) ) );
+            lines2.push_back( ff0x::NoAxisGraphBuilder::Line(data2, ff0x::NoAxisGraphBuilder::LabelInfo( "", Qt::red ) ) );
+
+            QRect p1(rect.left(), rect.top(), w, h );
+            QRect p2(rect.right() - w, rect.top(), w, h );
+            QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
+            QRect p2t(p2.left(), p2.bottom(), p2.width(), metrix.height());
+
+            DrawRowCenter( p1t, text_font, Qt::black, "результат " + QString::number( i + 1  ) );
+            {
+                QPointF x_range;
+                QPointF y_range;
+                double x_step = 0;
+                double y_step = 0;
+
+                ff0x::DataLength( x_range_1, x_range_2, x_range, x_step );
+                ff0x::DataLength( y_range_1, y_range_2, y_range, y_step );
+
+                if ( y_range.x() - y_range.y() == 0 )
+                {
+                    y_range.setX( 1 );
+                    y_range.setY( -1 );
+                }
+                painter.drawPixmap( p1, builder.Draw( lines1, x_range, y_range, x_step, y_step, "x", "y", true ) );
+            }
+            DrawRowCenter( p2t, text_font, Qt::black, "результат " + QString::number( i + 1  ) );
+            {
+                QPointF x_range;
+                QPointF y_range;
+                double x_step = 0;
+                double y_step = 0;
+
+                ff0x::DataLength( x_range_2, x_range, x_step );
+                ff0x::DataLength( y_range_2, y_range, y_step );
+
+                if ( y_range.x() - y_range.y() == 0 )
+                {
+                    y_range.setX( 1 );
+                    y_range.setY( -1 );
+                }
+                painter.drawPixmap( p2, builder.Draw( lines2, x_range, y_range, x_step, y_step, "x", "y", true ) );
+            }
+
+            painter.restore();
+        }, 1, free_rect.width()/2 + metrix.height()  );
+    }
+
+    size = mSource3.size();
+    for ( int i = 0; i < size; ++i )
+    {
+        res = DrawLine( num, free_rect, text_font,
+        [ this, &painter, &text_font, &DrawRowCenter, &metrix, i ]( QRect const& rect )
+        {
+            painter.save();
+
+            ff0x::GraphBuilder::LinePoints data;
+            ff0x::GraphBuilder::LinePoints data2;
+
+            QPointF x_range_1;
+            QPointF y_range_1;
+
+            QPointF x_range_2;
+            QPointF y_range_2;
+
+            data = ProcessDebug1( mSource3, i, x_range_1, y_range_1 );
+            data2 = ProcessDebug2( mSource3, i, x_range_2, y_range_2 );
+
+            QFont f = text_font;
+            f.setPointSize( 6 );
+            int w = (rect.height() - metrix.height())*0.98;
+            int h = (rect.height() - metrix.height())*0.98;
+
+            ff0x::NoAxisGraphBuilder builder ( w, h, f );
+            ff0x::NoAxisGraphBuilder::GraphDataLine lines1;
+            ff0x::NoAxisGraphBuilder::GraphDataLine lines2;
+            lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data, ff0x::NoAxisGraphBuilder::LabelInfo( "", Qt::blue ) ) );
+            lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data2, ff0x::NoAxisGraphBuilder::LabelInfo( "", Qt::red ) ) );
+            lines2.push_back( ff0x::NoAxisGraphBuilder::Line(data2, ff0x::NoAxisGraphBuilder::LabelInfo( "", Qt::red ) ) );
+
+            QRect p1(rect.left(), rect.top(), w, h );
+            QRect p2(rect.right() - w, rect.top(), w, h );
+            QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
+            QRect p2t(p2.left(), p2.bottom(), p2.width(), metrix.height());
+
+            DrawRowCenter( p1t, text_font, Qt::black, "результат " + QString::number( i + 1  ) );
+            {
+                QPointF x_range;
+                QPointF y_range;
+                double x_step = 0;
+                double y_step = 0;
+
+                ff0x::DataLength( x_range_1, x_range_2, x_range, x_step );
+                ff0x::DataLength( y_range_1, y_range_2, y_range, y_step );
+
+                if ( y_range.x() - y_range.y() == 0 )
+                {
+                    y_range.setX( 1 );
+                    y_range.setY( -1 );
+                }
+                painter.drawPixmap( p1, builder.Draw( lines1, x_range, y_range, x_step, y_step, "x", "y", true ) );
+            }
+            DrawRowCenter( p2t, text_font, Qt::black, "результат " + QString::number( i + 1  ) );
+            {
+                QPointF x_range;
+                QPointF y_range;
+                double x_step = 0;
+                double y_step = 0;
+
+                ff0x::DataLength( x_range_2, x_range, x_step );
+                ff0x::DataLength( y_range_2, y_range, y_step );
+
+                if ( y_range.x() - y_range.y() == 0 )
+                {
+                    y_range.setX( 1 );
+                    y_range.setY( -1 );
+                }
+                painter.drawPixmap( p2, builder.Draw( lines2, x_range, y_range, x_step, y_step, "x", "y", true ) );
             }
 
             painter.restore();
