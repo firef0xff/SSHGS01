@@ -65,8 +65,25 @@ void FrequencyCharacteristics::UpdateData()
 
 
     std::this_thread::sleep_for(std::chrono::seconds(5));
-    mControlBoardBits.Read();
-    if (!mControlBoardBits.op14_ready )
+    bool *ready = 0;
+    float *frequency = 0;
+
+
+    if ( ReelControl() )
+    {
+        mControlReelBits.Read();
+        ready = &mControlReelBits.op24_ready;
+        frequency = &mControlReelBits.op24_frequency;
+    }
+    else
+    {
+        mControlBoardBits.Read();
+        ready = &mControlBoardBits.op14_ready;
+        frequency = &mControlBoardBits.op14_frequency;
+    }
+
+
+    if (!*ready )
         return;
     m14Result1.Read();
     m14Result2.Read();
@@ -82,7 +99,7 @@ void FrequencyCharacteristics::UpdateData()
     if ( !src )
         return;
 
-    if ( src->find( mControlBoardBits.op14_frequency ) != src->end() )
+    if ( src->find( *frequency ) != src->end() )
         return;
 
     DataSet data;
@@ -93,7 +110,7 @@ void FrequencyCharacteristics::UpdateData()
         item.signal = m14Result1.signal[i];
         data.push_back( item );
     }
-    src->insert( SourceItem( mControlBoardBits.op14_frequency, data ) );
+    src->insert( SourceItem( *frequency, data ) );
     cpu::CpuMemory::Instance().DB31.SendContinue();
 
 }
