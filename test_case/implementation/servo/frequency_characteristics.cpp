@@ -63,11 +63,11 @@ void FrequencyCharacteristics::UpdateData()
 {
     Test::UpdateData();
 
-    if (!mControlBoardBits.op14_ready )
-        return;
 
     std::this_thread::sleep_for(std::chrono::seconds(5));
     mControlBoardBits.Read();
+    if (!mControlBoardBits.op14_ready )
+        return;
     m14Result1.Read();
     m14Result2.Read();
     m1525Counts.Read();
