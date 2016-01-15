@@ -152,10 +152,12 @@ double CalckGain( ExpeditureFromInput::DataSet const& data )
     {
         if ( data[i].Expenditure > data[pos_max_exp].Expenditure )
             pos_max_exp = i;
-        if ( floor( data[i].Expenditure ) == 0.0 )
+        if ( i &&
+             data[i].Expenditure - data[i - 1 ].Expenditure > 0.5 &&
+             i < data.size() / 2 &&
+             !pos_min_signal)
         {
-            if ( fabs( data[i].Signal ) > fabs( data[pos_min_signal].Signal ) )
-                pos_min_signal = i;
+            pos_min_signal = i;
         }
     }
 /// Коэффициент усиления по расходу
@@ -165,7 +167,7 @@ double CalckGain( ExpeditureFromInput::DataSet const& data )
     double Q = data[pos_max_exp].Expenditure;
     double x_max = data[pos_max_exp].Signal;
     double x_p0 = data[pos_min_signal].Signal;
-    return Q/( x_max - x_p0 );
+    return Q/fabs( x_max - x_p0 );
 }
 double CalckNonlinearity( ExpeditureFromInput::DataSet const& data )
 {
@@ -178,10 +180,12 @@ double CalckNonlinearity( ExpeditureFromInput::DataSet const& data )
     {
         if ( data[i].Expenditure > data[pos_max_exp].Expenditure )
             pos_max_exp = i;
-        if ( floor( data[i].Expenditure ) == 0.0 )
+        if ( i &&
+             data[i].Expenditure - data[i - 1 ].Expenditure > 0.5 &&
+             i < data.size() / 2 &&
+             !pos_min_signal)
         {
-            if ( fabs( data[i].Signal ) > fabs( data[pos_min_signal].Signal ) )
-                pos_min_signal = i;
+            pos_min_signal = i;
         }
     }
 ///     Нелинейность
