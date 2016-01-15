@@ -57,9 +57,9 @@ M1::M1():
 void M1::Reset()
 {
     memset( mBoolData, 0, sizeof(mBoolData) );
-    auto res = opc::miniOPC::Instance().WriteMass( mGroupID, 0, BOOL_COUNT, static_cast<void*>( mBoolData ), opc::tBOOL );
+    HRESULT res = E_FAIL;
     while ( res == E_FAIL )
-        opc::miniOPC::Instance().WriteMass( mGroupID, 0, BOOL_COUNT, static_cast<void*>( mBoolData ), opc::tBOOL );
+        res = opc::miniOPC::Instance().WriteMass( mGroupID, 0, BOOL_COUNT, static_cast<void*>( mBoolData ), opc::tBOOL );
 }
 
 void M1::Read()
@@ -80,7 +80,7 @@ void M1::Read()
 
 void M1::SendBit( bool& val, int pos )
 {
-    auto res = opc::miniOPC::Instance().WriteValue( mGroupID, pos, static_cast<void*>( &val ), opc::tBOOL );
+    HRESULT res = E_FAIL;
     while ( res == E_FAIL )
         res = opc::miniOPC::Instance().WriteValue( mGroupID, pos, static_cast<void*>( &val ), opc::tBOOL );
 }

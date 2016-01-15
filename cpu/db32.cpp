@@ -322,12 +322,15 @@ DB32::DB32():
         op7_end = true;  //167.6 Конец операции 7
         op8_end = true;  //167.7 Конец операции 8
 
-        opc::miniOPC::Instance().WriteMass( mGroupID, BOOL_COUNT, FLOAT_COUNT, static_cast<void*>( mFloatData ), opc::tFLOAT );
-        opc::miniOPC::Instance().WriteMass( mGroupID, 0, BOOL_COUNT, static_cast<void*>( mBoolData ), opc::tBOOL );
+        HRESULT res = E_FAIL;
+        while ( res == E_FAIL )
+            res = opc::miniOPC::Instance().WriteMass( mGroupID, BOOL_COUNT, FLOAT_COUNT, static_cast<void*>( mFloatData ), opc::tFLOAT );
+        res = E_FAIL;
+        while ( res == E_FAIL )
+            res = opc::miniOPC::Instance().WriteMass( mGroupID, 0, BOOL_COUNT, static_cast<void*>( mBoolData ), opc::tBOOL );
 #endif
     }
 }
-
 void DB32::Read()
 {
     OPCITEMSTATE* rez = opc::miniOPC::Instance().Read( mGroupID );

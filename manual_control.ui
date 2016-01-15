@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>790</width>
-    <height>665</height>
+    <height>673</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -1511,7 +1511,7 @@
          <number>0</number>
         </property>
         <property name="spacing">
-         <number>2</number>
+         <number>6</number>
         </property>
         <item row="0" column="0">
          <widget class="QPushButton" name="CB">
@@ -2851,13 +2851,6 @@
       </layout>
      </item>
      <item>
-      <widget class="QLabel" name="label_25">
-       <property name="text">
-        <string>Управляющий сигнал</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <layout class="QHBoxLayout" name="horizontalLayout_6">
        <property name="topMargin">
         <number>0</number>
@@ -2865,58 +2858,22 @@
        <item>
         <widget class="QLabel" name="label_20">
          <property name="text">
-          <string>Диапазон</string>
+          <string>Диапазон управляющего сигнала</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>43</width>
-           <height>16777215</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_21">
-         <property name="text">
-          <string>-</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="lineEdit_2">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>43</width>
-           <height>16777215</height>
-          </size>
-         </property>
-        </widget>
+        <widget class="QComboBox" name="SigLevel"/>
        </item>
        <item>
         <widget class="QLabel" name="label_24">
          <property name="text">
-          <string>Значение, %</string>
+          <string>Смещение, %</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QDoubleSpinBox" name="doubleSpinBox">
+        <widget class="QDoubleSpinBox" name="SignalPersent">
          <property name="decimals">
           <number>1</number>
          </property>
@@ -2927,6 +2884,121 @@
        </item>
        <item>
         <spacer name="horizontalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="signal_layers">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="l_sig_a">
+         <property name="text">
+          <string>Поз. А</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="SigA">
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="l_sig_0">
+         <property name="text">
+          <string>Поз. 0</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="Sig0">
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="l_sig_b">
+         <property name="text">
+          <string>Поз. Б</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="SigB">
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="l_sig_max">
+         <property name="text">
+          <string>Уровень</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="SigMax">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_7">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>

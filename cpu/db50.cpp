@@ -70,7 +70,9 @@ void DB50::Read()
 
 void DB50::WriteTask()
 {
-    opc::miniOPC::Instance().WriteMass( mGroupID, INT_COUNT + 16, 8, static_cast<void*>( &YB1 ), opc::tFLOAT );
+    HRESULT res = E_FAIL;
+    while ( res == E_FAIL )
+        res = opc::miniOPC::Instance().WriteMass( mGroupID, INT_COUNT + 16, 8, static_cast<void*>( &YB1 ), opc::tFLOAT );
 }
 
 }

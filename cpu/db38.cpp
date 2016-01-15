@@ -19,7 +19,9 @@ DB38::DB38():
 
 void DB38::Write()
 {
-    opc::miniOPC::Instance().WriteMass( mGroupID, BOOL_COUNT, FLOAT_COUNT, static_cast<void*>( mFloatData ), opc::tFLOAT );
+    HRESULT res = E_FAIL;
+    while ( res == E_FAIL )
+        res = opc::miniOPC::Instance().WriteMass( mGroupID, BOOL_COUNT, FLOAT_COUNT, static_cast<void*>( mFloatData ), opc::tFLOAT );
 }
 
 }//namespace data

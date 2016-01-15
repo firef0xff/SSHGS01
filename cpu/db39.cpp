@@ -24,7 +24,9 @@ DB39::DB39():
     op30_end = true;
     op31_end = true;
     op32_end = true;
-    opc::miniOPC::Instance().WriteMass( mGroupID, 0, BOOL_COUNT, static_cast<void*>( mBoolData ), opc::tBOOL );
+    HRESULT res = E_FAIL;
+    while ( res == E_FAIL )
+        res = opc::miniOPC::Instance().WriteMass( mGroupID, 0, BOOL_COUNT, static_cast<void*>( mBoolData ), opc::tBOOL );
 #endif
 }
 

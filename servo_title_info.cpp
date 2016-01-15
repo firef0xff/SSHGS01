@@ -12,6 +12,7 @@ ServoTitleInfo::ServoTitleInfo(bool new_mode, QWidget *parent) :
 {
     ui->setupUi(this);
 
+
     ui->PressureNominal->setValidator( new QIntValidator( 10, 315, this ) );
     ui->MaxExpenditure->setValidator( new QIntValidator( 1, 660, this ) );
     ui->MaxExpenditureA->setValidator( new QIntValidator( 1, 660, this ) );

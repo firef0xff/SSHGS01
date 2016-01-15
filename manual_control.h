@@ -98,4 +98,5 @@ private slots:
     void on_RC2_clicked();
     void on_ONRA_clicked();
     void on_ONRB_clicked();
+    void on_SigLevel_currentIndexChanged(const QString &arg1);
 };

@@ -17,6 +17,7 @@ public:
     void Write();
     void SendContinue();
     void SendNextAmp();
+    void SetManualSignal( double persent );
 
     bool& Start_Oper;       //2.0 старт операции
     bool& Stop_Oper;        //2.1 стоп операции
@@ -26,8 +27,10 @@ public:
 
     float& N_Operation;     //4.0 номер операции
     float& Q_5_5ma;         //8.0 расход по умолчанию
+    float& Manual_set;      //31 сигнал на ручном режиме
 
-private:
+private:    
+
     friend class cpu::CpuMemory;
     DB31();
     DB31( const DB31& ) = delete;
@@ -36,7 +39,7 @@ private:
     enum
     {
         BOOL_COUNT = 5,
-        FLOAT_COUNT = 2
+        FLOAT_COUNT = 3
     };
 
     bool mBoolData[ BOOL_COUNT ];
@@ -52,7 +55,8 @@ private:
         L"CPU/DB31.Next_Amp",
 
         L"CPU/DB31.N_Operation",
-        L"CPU/DB31.Q_5_5ma"
+        L"CPU/DB31.Q_5_5ma",
+        L"CPU/DB31.Manual_set",
     };
 };
 

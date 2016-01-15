@@ -57,6 +57,7 @@ DB31.Nasos_M2;DB31,X2.2;RW;TST=;CMT=
 DB31.N_Operation;DB31,REAL4;RW;TST=;CMT=
 DB31.Next_Amp;DB31,X16.0;RW;TST=;CMT=Указание переключиться на следующую амплитуду
 DB31.Q_5_5ma;DB31,REAL8;RW;TST=;CMT=расход по умолчанию
+DB31.Manual_set;DB31,REAL18;RW;TST=;CMT=текущий сигнал на катушку
 DB32.p_e_ok;DB32,X2.4;RW;TST=;CMT=давление в системе установлено (электро)
 DB32.p_eg_ok;DB32,X2.5;RW;TST=;CMT=давление в системе установлено (электрогидрав)
 DB32.op1_min_ok_a;DB32,X2.0;RW;TST=;CMT=переключение при мин давлении А
