@@ -209,7 +209,7 @@ double CalckNonlinearity( ExpeditureFromInput::DataSet const& data )
         double const& x = data[i].Signal;
         double const& q = data[i].Expenditure;
 
-        double r = k*x - q;
+        double r = k * fabs( x ) - q;
         if ( !i )
             max_r = r;
         else if ( r > max_r )
@@ -249,6 +249,41 @@ ff0x::NoAxisGraphBuilder::LinePoints Process ( ExpeditureFromInput::DataSet cons
     {
         double const& x = src[i].Signal;
         double const& y = src[i].Expenditure;
+
+        if ( !i )
+        {
+            x_range.setX( x );
+            x_range.setY( x );
+            y_range.setX( y );
+            y_range.setY( y );
+        }
+        else
+        {
+            if ( x > x_range.x() )
+                x_range.setX( x );
+            if ( x < x_range.y() )
+                x_range.setY( x );
+
+            if ( y > y_range.x() )
+                y_range.setX( y );
+            if ( y < y_range.y() )
+                y_range.setY( y );
+        }
+
+        result.push_back( QPointF( x, y ) );
+    }
+    return std::move( result );
+}
+
+ff0x::NoAxisGraphBuilder::LinePoints ProcessET ( ExpeditureFromInput::DataSet const& src, QPointF& x_range, QPointF& y_range )
+{
+    ff0x::NoAxisGraphBuilder::LinePoints result;
+
+    double k = CalckGain( src );
+    for ( int i = 0; i < src.size(); ++i )
+    {
+        double const& x = src[i].Signal;
+        double const& y = src[i].Signal * k;
 
         if ( !i )
         {
@@ -461,6 +496,8 @@ bool ExpeditureFromInput::Draw( QPainter& painter, QRect &free_rect ) const
             }
         }
 
+        dataA1_e = ProcessET( GraphA1, x_range_a1, y_range_a1 );
+        dataB1_e = ProcessET( GraphA1, x_range_a1, y_range_a1 );
         dataA1 = Process( GraphA1, x_range_a1, y_range_a1 );
         dataA2 = Process( GraphA2, x_range_a2, y_range_a2 );
         dataB1 = Process( GraphB1, x_range_b1, y_range_b1 );
