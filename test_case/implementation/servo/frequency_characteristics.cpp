@@ -167,9 +167,10 @@ ff0x::NoAxisGraphBuilder::LinePoints ProcessAFC( FrequencyCharacteristics::Sourc
                 y_range.setY( point.y() );
         }
 
+#ifndef DEBUG
         if ( fabs( point.y() ) > 15 )
             break;
-
+#endif
         result.push_back( point );
     }
     return std::move( result );
@@ -318,10 +319,10 @@ ff0x::NoAxisGraphBuilder::LinePoints ProcessPFC( FrequencyCharacteristics::Sourc
             if ( y_range.y() > point.y() )
                 y_range.setY( point.y() );
         }
-
+#ifndef DEBUG
         if ( fabs( point.y() ) > 90 )
             break;
-
+#endif
         result.push_back( point );
     }
     return std::move( result );
@@ -486,9 +487,11 @@ void FrequencyCharacteristics::UpdateData()
         data.push_back( item );
     }
 
-    if ( CalckFi( data, *frequency ) > 90.0 )
+#ifndef DEBUG
+    if ( fabs( CalckFi( data, *frequency ) ) > 90.0 )
         cpu::CpuMemory::Instance().DB31.SendNextAmp();
     else
+#endif
         src->insert( SourceItem( *frequency, data ) );
     cpu::CpuMemory::Instance().DB31.SendContinue();
 
