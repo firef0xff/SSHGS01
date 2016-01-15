@@ -27,8 +27,8 @@ void DB3::Read()
 
     opc::ReadToArray( rez[0].vDataValue, open_ref,          OPEN_REF_COUNT );
     opc::ReadToArray( rez[1].vDataValue, open_consumption,  OPEN_CONSUMPTION_COUNT );
-    opc::ReadToArray( rez[5].vDataValue, close_ref,         CLOSE_REF_COUNT );
-    opc::ReadToArray( rez[6].vDataValue, close_consumption, CLOSE_CONSUMPTION_COUNT );
+    opc::ReadToArray( rez[2].vDataValue, close_ref,         CLOSE_REF_COUNT );
+    opc::ReadToArray( rez[3].vDataValue, close_consumption, CLOSE_CONSUMPTION_COUNT );
 
     opc::miniOPC::Instance().OpcMassFree( mGroupID, rez );
 
