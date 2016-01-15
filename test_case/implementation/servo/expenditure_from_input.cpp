@@ -50,7 +50,6 @@ void ExpeditureFromInput::UpdateData()
     {
         ready = &mControlBoardBits.op14_ready;
     }
-    m12Results.Read();
 
     auto ConvertData = [this]( DataSet *first, DataSet *second  )
     {
@@ -72,8 +71,9 @@ void ExpeditureFromInput::UpdateData()
         }
     };
 
-    if ( ready )
+    if ( *ready )
     {
+        m12Results.Read();
         switch ( level )
         {
         case 0:
@@ -85,6 +85,7 @@ void ExpeditureFromInput::UpdateData()
             {// P -> B
                 ConvertData( &GraphB1, &GraphB2 );
             }
+            ++level;
             break;
         case 1:
             if ( params.TestChannelA() && params.SignalOnChannelB() == CS_REEL_A )
@@ -95,9 +96,11 @@ void ExpeditureFromInput::UpdateData()
             {// P -> B
                 ConvertData( &GraphB1, &GraphB2 );
             }
+            ++level;
             break;
         default:
-            return;
+            ++level;
+            break;
         }
 
         cpu::CpuMemory::Instance().DB31.SendContinue();
