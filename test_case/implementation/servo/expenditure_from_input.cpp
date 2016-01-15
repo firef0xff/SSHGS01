@@ -58,15 +58,9 @@ void ExpeditureFromInput::UpdateData()
             Data d;
             d.Expenditure = m12Results.open_consumption[i];
             d.Signal = m12Results.open_ref[i];
-            d.PressureBP3 = m12Results.open_bp3[i];
-            d.PressureBP4 = m12Results.open_bp4[i];
-            d.PressureBP5 = m12Results.open_bp5[i];
             first->push_back( d );
             d.Expenditure = m12Results.close_consumption[i];
             d.Signal = m12Results.close_ref[i];
-            d.PressureBP3 = m12Results.close_bp3[i];
-            d.PressureBP4 = m12Results.close_bp4[i];
-            d.PressureBP5 = m12Results.close_bp5[i];
             second->push_front( d );
         }
     };
@@ -203,14 +197,14 @@ double CalckNonlinearity( ExpeditureFromInput::DataSet const& data )
 
     double k = fabs( (q_max - q_0) / ( x_max - x_0 ) );
 
-    double max_r;
-    for ( int i = 0; i < data.size(); ++i )
+    double max_r = 0 ;
+    for ( int i = pos_min_signal; i < pos_max_exp; ++i )
     {
         double const& x = data[i].Signal;
         double const& q = data[i].Expenditure;
 
-        double r = k * fabs( x ) - q;
-        if ( !i )
+        double r = k * fabs( x - data[ pos_min_signal ].Signal ) - q;
+        if ( i == pos_min_signal )
             max_r = r;
         else if ( r > max_r )
             max_r = r;
@@ -229,9 +223,9 @@ double CalckHysteresis( ExpeditureFromInput::DataSet const& data1, ExpeditureFro
         double q1 = data1[ i ].Expenditure;
         double q2 = data2[ i ].Expenditure;
 
-        double d = q1 - q2;
+        double d = fabs( q1 - q2 );
 
-        if ( delta < d )
+        if ( delta < d  )
             delta = d;
         if ( q1 > data1[q_max_pos].Expenditure )
             q_max_pos = i;
@@ -275,17 +269,49 @@ ff0x::NoAxisGraphBuilder::LinePoints Process ( ExpeditureFromInput::DataSet cons
     return std::move( result );
 }
 
-ff0x::NoAxisGraphBuilder::LinePoints ProcessET ( ExpeditureFromInput::DataSet const& src, QPointF& x_range, QPointF& y_range )
+ff0x::NoAxisGraphBuilder::LinePoints ProcessET ( ExpeditureFromInput::DataSet const& data, QPointF& x_range, QPointF& y_range )
 {
     ff0x::NoAxisGraphBuilder::LinePoints result;
 
-    double k = CalckGain( src );
-    for ( int i = 0; i < src.size(); ++i )
-    {
-        double const& x = src[i].Signal;
-        double const& y = src[i].Signal * k;
+    if ( !data.size() )
+        return std::move( result );;
 
-        if ( !i )
+    int pos_max_exp = 0;
+    int pos_min_signal = 0;
+    for ( int i = 0; i < data.size(); ++i )
+    {
+        if ( data[i].Expenditure > data[pos_max_exp].Expenditure )
+            pos_max_exp = i;
+        if ( i &&
+             data[i].Expenditure - data[i - 1 ].Expenditure > 0.5 &&
+             i < data.size() / 2 &&
+             !pos_min_signal)
+        {
+            pos_min_signal = i;
+        }
+    }
+///     Нелинейность
+///     1. q_max - расход при максимальном управляющем сигнале x_max (максимально значение управляющего сигнала)
+///        q_0   - расход при при управляющем сигнале x_0 (соответствующем нулевому расположению распеделителя) ??????
+///     2. вычислить коэффициент k = (q_max - q_0) / ( x_max - x_0 )
+///     3. для каждого управляющего сигнала вычислить q_et[i] = k * x[i];
+///     4. вычислить массив r[i] = q_et[i] - q[i];
+///     5. результат равен max( r[i] ) / q_max * 100;
+
+    double q_max = data[pos_max_exp].Expenditure;
+    double q_0 = data[pos_min_signal].Expenditure;
+    double x_max = data[pos_max_exp].Signal;
+    double x_0 = data[pos_min_signal].Signal;
+
+    double k = fabs( (q_max - q_0) / ( x_max - x_0 ) );
+
+
+    for ( int i = pos_min_signal; i < pos_max_exp; ++i )
+    {
+        double const& x = data[i].Signal;
+        double y = k * fabs( x - data[ pos_min_signal ].Signal );
+
+        if ( i == pos_min_signal )
         {
             x_range.setX( x );
             x_range.setY( x );
@@ -496,8 +522,8 @@ bool ExpeditureFromInput::Draw( QPainter& painter, QRect &free_rect ) const
             }
         }
 
-        dataA1_e = ProcessET( GraphA1, x_range_a1, y_range_a1 );
-        dataB1_e = ProcessET( GraphA1, x_range_a1, y_range_a1 );
+//        dataA1_e = ProcessET( GraphA1, x_range_a1e, y_range_a1e );
+//        dataB1_e = ProcessET( GraphB1, x_range_b1e, y_range_b1e );
         dataA1 = Process( GraphA1, x_range_a1, y_range_a1 );
         dataA2 = Process( GraphA2, x_range_a2, y_range_a2 );
         dataB1 = Process( GraphB1, x_range_b1, y_range_b1 );
@@ -513,7 +539,7 @@ bool ExpeditureFromInput::Draw( QPainter& painter, QRect &free_rect ) const
         lines_a.push_back( ff0x::NoAxisGraphBuilder::Line(dataA1, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат. Прямой ход", Qt::blue ) ) );
         if ( !dataA1_e.empty() )
             lines_a.push_back( ff0x::NoAxisGraphBuilder::Line(dataA1_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон. Прямой ход", Qt::red ) ) );
-        lines_a.push_back( ff0x::NoAxisGraphBuilder::Line(dataA2, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат. Обратный ход", Qt::darkBlue ) ) );
+        lines_a.push_back( ff0x::NoAxisGraphBuilder::Line(dataA2, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат. Обратный ход", Qt::green ) ) );
         if ( !dataA2_e.empty() )
             lines_a.push_back( ff0x::NoAxisGraphBuilder::Line(dataA2_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон. Обратный ход", Qt::darkRed ) ) );
 
@@ -521,7 +547,7 @@ bool ExpeditureFromInput::Draw( QPainter& painter, QRect &free_rect ) const
         lines_b.push_back( ff0x::NoAxisGraphBuilder::Line(dataB1, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат. Прямой ход", Qt::blue ) ) );
         if ( !dataB1_e.empty() )
             lines_b.push_back( ff0x::NoAxisGraphBuilder::Line(dataB1_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон. Прямой ход", Qt::red ) ) );
-        lines_b.push_back( ff0x::NoAxisGraphBuilder::Line(dataB2, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат. Обратный ход", Qt::darkBlue ) ) );
+        lines_b.push_back( ff0x::NoAxisGraphBuilder::Line(dataB2, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат. Обратный ход", Qt::green ) ) );
         if ( !dataB2_e.empty() )
             lines_b.push_back( ff0x::NoAxisGraphBuilder::Line(dataB2_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон. Обратный ход", Qt::darkRed ) ) );
 
@@ -546,16 +572,16 @@ bool ExpeditureFromInput::Draw( QPainter& painter, QRect &free_rect ) const
                 x_test_range.setX( std::max( x_range_a1e.x(), x_test_range.x() ) );
                 x_test_range.setY( std::min( x_range_a1e.y(), x_test_range.y() ) );
 
-                y_test_range.setX( std::max( y_range_a1e.x(), x_test_range.x() ) );
-                y_test_range.setY( std::min( y_range_a1e.y(), x_test_range.y() ) );
+                y_test_range.setX( std::max( y_range_a1e.x(), y_test_range.x() ) );
+                y_test_range.setY( std::min( y_range_a1e.y(), y_test_range.y() ) );
             }
             if ( !dataA2_e.empty() )
             {
                 x_test_range.setX( std::max( x_range_a2e.x(), x_test_range.x() ) );
                 x_test_range.setY( std::min( x_range_a2e.y(), x_test_range.y() ) );
 
-                y_test_range.setX( std::max( y_range_a2e.x(), x_test_range.x() ) );
-                y_test_range.setY( std::min( y_range_a2e.y(), x_test_range.y() ) );
+                y_test_range.setX( std::max( y_range_a2e.x(), y_test_range.x() ) );
+                y_test_range.setY( std::min( y_range_a2e.y(), y_test_range.y() ) );
             }
 
             QPointF x_range;
@@ -584,16 +610,16 @@ bool ExpeditureFromInput::Draw( QPainter& painter, QRect &free_rect ) const
                 x_test_range.setX( std::max( x_range_b1e.x(), x_test_range.x() ) );
                 x_test_range.setY( std::min( x_range_b1e.y(), x_test_range.y() ) );
 
-                y_test_range.setX( std::max( y_range_b1e.x(), x_test_range.x() ) );
-                y_test_range.setY( std::min( y_range_b1e.y(), x_test_range.y() ) );
+                y_test_range.setX( std::max( y_range_b1e.x(), y_test_range.x() ) );
+                y_test_range.setY( std::min( y_range_b1e.y(), y_test_range.y() ) );
             }
             if ( !dataA2_e.empty() )
             {
                 x_test_range.setX( std::max( x_range_b2e.x(), x_test_range.x() ) );
                 x_test_range.setY( std::min( x_range_b2e.y(), x_test_range.y() ) );
 
-                y_test_range.setX( std::max( y_range_b2e.x(), x_test_range.x() ) );
-                y_test_range.setY( std::min( y_range_b2e.y(), x_test_range.y() ) );
+                y_test_range.setX( std::max( y_range_b2e.x(), y_test_range.x() ) );
+                y_test_range.setY( std::min( y_range_b2e.y(), y_test_range.y() ) );
             }
 
             QPointF x_range;
@@ -614,7 +640,7 @@ bool ExpeditureFromInput::Draw( QPainter& painter, QRect &free_rect ) const
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Канал А:") );
+        DrawRowLeft( rect, text_font, Qt::black, "Канал А:" );
     }, 2 );
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
@@ -635,7 +661,7 @@ bool ExpeditureFromInput::Draw( QPainter& painter, QRect &free_rect ) const
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Канал B:") );
+        DrawRowLeft( rect, text_font, Qt::black, "Канал B:" );
     }, 2 );
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
@@ -660,22 +686,12 @@ QJsonObject ExpeditureFromInput::Data::Serialise() const
     QJsonObject obj;
     obj.insert("Signal", Signal );
     obj.insert("Expenditure", Expenditure );
-
-    obj.insert("PressureBP3", PressureBP3 );
-    obj.insert("PressureBP4", PressureBP4 );
-    obj.insert("PressureBP5", PressureBP5 );
-
     return obj;
 }
 bool ExpeditureFromInput::Data::Deserialize( QJsonObject const& obj )
 {
     Signal = obj.value("Signal").toDouble();
     Expenditure = obj.value("Expenditure").toDouble();
-
-    PressureBP3 = obj.value("PressureBP3").toDouble();
-    PressureBP4 = obj.value("PressureBP4").toDouble();
-    PressureBP5 = obj.value("PressureBP5").toDouble();
-
     return true;
 }
 

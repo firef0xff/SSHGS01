@@ -4,14 +4,8 @@ DB2.ref_b;DB2,REAL800,100;RW;TST=;CMT=опорный сигнал катушки b
 DB2.consumption_b;DB2,REAL1200,100;RW;TST=;CMT=расход катушки b
 DB3.open_ref;DB3,REAL0,100;RW;TST=;CMT=опорный сигнал на открытие
 DB3.open_consumption;DB3,REAL400,100;RW;TST=;CMT=расход на открытие
-DB3.open_bp3;DB3,REAL800,100;RW;TST=;CMT=давление ВР3 на открытие
-DB3.open_bp4;DB3,REAL1200,100;RW;TST=;CMT=давление ВР4 на открытие
-DB3.open_bp5;DB3,REAL1600,100;RW;TST=;CMT=давление ВР5 на открытие
 DB3.close_ref;DB3,REAL2000,100;RW;TST=;CMT=опорный сигнал назакрытие
 DB3.close_consumption;DB3,REAL2400,100;RW;TST=;CMT=расход на закрытие
-DB3.close_bp3;DB3,REAL2800,100;RW;TST=;CMT=давление ВР3 на закрытие
-DB3.close_bp4;DB3,REAL3200,100;RW;TST=;CMT=давление ВР4 на закрытие
-DB3.close_bp5;DB3,REAL3600,100;RW;TST=;CMT=давление ВР5 на закрытие
 DB9.consumption_a;DB9,REAL0,50;RW;TST=;CMT=расход канал А
 DB9.bp3_a;DB9,REAL200,50;RW;TST=;CMT=давление ВР3 канал А
 DB9.bp5_a;DB9,REAL400,50;RW;TST=;CMT=давление ВР5 канал В

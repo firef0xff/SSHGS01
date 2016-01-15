@@ -21,9 +21,6 @@ public:
         bool Deserialize( QJsonObject const& obj );
         double Signal;
         double Expenditure;
-        double PressureBP3;
-        double PressureBP4;
-        double PressureBP5;
     };
     typedef QVector<Data> DataSet;
 

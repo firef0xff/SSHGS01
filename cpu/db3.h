@@ -15,14 +15,8 @@ public:
     {
         OPEN_REF_COUNT = 100,
         OPEN_CONSUMPTION_COUNT = 100,
-        OPEN_BP3_COUNT = 100,
-        OPEN_BP4_COUNT = 100,
-        OPEN_BP5_COUNT = 100,
         CLOSE_REF_COUNT = 100,
-        CLOSE_CONSUMPTION_COUNT = 100,
-        CLOSE_BP3_COUNT = 100,
-        CLOSE_BP4_COUNT = 100,
-        CLOSE_BP5_COUNT = 100
+        CLOSE_CONSUMPTION_COUNT = 100
     };
 
     
@@ -31,15 +25,8 @@ public:
 
     float open_ref[OPEN_REF_COUNT];                     //DB3,REAL0,100 опорный сигнал на открытие
     float open_consumption[OPEN_CONSUMPTION_COUNT];     //DB3,REAL400,100 расход на открытие
-    float open_bp3[OPEN_BP3_COUNT];                     //DB3,REAL800,100 давление ВР3 на открытие
-    float open_bp4[OPEN_BP4_COUNT];                     //DB3,REAL1200,100 давление ВР4 на открытие
-    float open_bp5[OPEN_BP5_COUNT];                     //DB3,REAL1600,100 давление ВР5 на открытие
-
     float close_ref[CLOSE_REF_COUNT];                   //DB3,REAL2000,100 опорный сигнал назакрытие
     float close_consumption[CLOSE_CONSUMPTION_COUNT];   //DB3,REAL2400,100 расход на закрытие
-    float close_bp3[CLOSE_BP3_COUNT];                   //DB3,REAL2800,100 давление ВР3 на закрытие
-    float close_bp4[CLOSE_BP4_COUNT];                   //DB3,REAL3200,100 давление ВР4 на закрытие
-    float close_bp5[CLOSE_BP5_COUNT];                   //DB3,REAL3600,100 давление ВР5 на закрытие
 private:
     friend class cpu::CpuMemory;
     DB3();
@@ -48,7 +35,7 @@ private:
 
     enum
     {
-        ARRAYS_COUNT = 10
+        ARRAYS_COUNT = 4
     };
 
     uint64_t mGroupID = 0;
@@ -56,14 +43,8 @@ private:
     wchar_t const* mAdresses[ ARRAYS_COUNT ] = {
         L"CPU/DB3.open_ref",
         L"CPU/DB3.open_consumption",
-        L"CPU/DB3.open_bp3",
-        L"CPU/DB3.open_bp4",
-        L"CPU/DB3.open_bp5",
         L"CPU/DB3.close_ref",
         L"CPU/DB3.close_consumption",
-        L"CPU/DB3.close_bp3",
-        L"CPU/DB3.close_bp4",
-        L"CPU/DB3.close_bp5"
     };
 
 };
