@@ -89,7 +89,8 @@ void ExpeditureFromInput::UpdateData()
                     ConvertData( &GraphB1, &GraphB2 );
                 }
                 ++level;
-            }
+                cpu::CpuMemory::Instance().DB31.SendContinue();
+            }            
             break;
         case 1:
             if ( m1525Counts.OP15_25_Opor_2 )
@@ -103,14 +104,13 @@ void ExpeditureFromInput::UpdateData()
                     ConvertData( &GraphB1, &GraphB2 );
                 }
                 ++level;
+                cpu::CpuMemory::Instance().DB31.SendContinue();
             }
             break;
         default:
             ++level;
             break;
         }
-
-        cpu::CpuMemory::Instance().DB31.SendContinue();
     }
 }
 bool ExpeditureFromInput::Success() const
