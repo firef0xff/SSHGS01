@@ -48,7 +48,12 @@ public:
     bool& KM7;          //MX44.0 Вентилятор М8,М9
     bool& KM8;          //MX44.1 Вентилятор М10,М11
     bool& KM10;         //MX44.2 ТЭНы
-
+    bool& ONRA;         //MX45.2 ВКЛ катушку А
+    bool& ONRB;         //MX45.3 ВКЛ катушку В
+    bool& CB;           //MX45.4 Управление от карты
+    bool& CR;           //MX45.5 управление без карты
+    bool& RC1;          //MX45.6 1 катушка
+    bool& RC2;          //MX45.7 2 катушки
 
     void SetYA1( bool v );          //MX40.0 Разгрузка управл.насоса для М1 м3
     void SetYA2( bool v );          //MX40.1 Разгрузка управл.насоса для М2 м3
@@ -87,6 +92,13 @@ public:
     void SetKM10( bool v );         //MX44.2 ТЭНы
     void SetErr_clear();            //MX44.7 сброс не правильной комбинации...
 
+    void SetONRA( bool v );         //MX45.2 ВКЛ катушку А
+    void SetONRB( bool v );         //MX45.3 ВКЛ катушку В
+    void SetCB( bool v );           //MX45.4 Управление от карты
+    void SetCR( bool v );           //MX45.5 управление без карты
+    void SetRC1( bool v );          //MX45.6 1 катушка
+    void SetRC2( bool v );          //MX45.7 2 катушки
+
     void Reset();                   // сброс всех битов в контроллере
 
 private:
@@ -101,7 +113,7 @@ private:
 
     enum
     {
-        BOOL_COUNT = 36
+        BOOL_COUNT = 42
     };
 
     bool mBoolData[ BOOL_COUNT ];
@@ -144,7 +156,14 @@ private:
         L"CPU/M1.KM7", //MX44.0 Вентилятор М8,М9
         L"CPU/M1.KM8", //MX44.1 Вентилятор М10,М11
         L"CPU/M1.KM10", //MX44.2 ТЭНы
-        L"CPU/M1.Err_clear" //MX44.7 сброс не правильной комбинации...
+        L"CPU/M1.Err_clear", //MX44.7 сброс не правильной комбинации...
+        L"CPU/M1.ONRA",    //MX45.2    ВКЛ катушку А
+        L"CPU/M1.ONRB",    //MX45.3    ВКЛ катушку В
+        L"CPU/M1.CB",    //MX45.4    Управление от карты
+        L"CPU/M1.CR",    //MX45.5    управление без карты
+        L"CPU/M1.RC1",    //MX45.6    1 катушка
+        L"CPU/M1.RC2",    //MX45.7    2 катушки
+
     };
 };
 

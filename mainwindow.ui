@@ -177,6 +177,13 @@
        <widget class="QLCDNumber" name="OilTemp"/>
       </item>
       <item>
+       <widget class="QLabel" name="l_Ready_To_Work">
+        <property name="text">
+         <string>Готов к работе</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>

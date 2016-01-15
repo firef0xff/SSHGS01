@@ -23,6 +23,8 @@ signals:
     void update();
 };
 
+void UpdateMark  ( QLabel *btn, bool draw, QColor color );
+
 class ManualControl : public QWidget
 {
     Q_OBJECT
@@ -45,8 +47,7 @@ private:
 
     void SynkControls();
 
-    void UpdateButton( QAbstractButton *btn, bool checked );
-    void UpdateMark  ( QLabel *btn, bool draw, QColor color );
+    void UpdateButton( QAbstractButton *btn, bool checked );    
     void UpdateValue  ( QLCDNumber *ctrl, float const& value );
 
     void UpdateMarks(); //обновление индикации
@@ -91,4 +92,10 @@ private slots:
     void on_YA25_clicked();
     void on_YA4_clicked();
     void on_Accept_clicked(); // передача задания в контроллер
+    void on_CB_clicked();
+    void on_CR_clicked();
+    void on_RC1_clicked();
+    void on_RC2_clicked();
+    void on_ONRA_clicked();
+    void on_ONRB_clicked();
 };

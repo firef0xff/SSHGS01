@@ -85,7 +85,7 @@ void ManualControl::UpdateButton( QAbstractButton *btn, bool checked )
 {
     btn->setChecked( checked );
 }
-void ManualControl::UpdateMark  ( QLabel *btn, bool draw, QColor color )
+void UpdateMark  ( QLabel *btn, bool draw, QColor color )
 {
     QPalette palette = btn->palette();
 
@@ -138,6 +138,13 @@ void ManualControl::SynkControls()
     UpdateButton( ui->KM7, mControlBits.KM7 );          //MX44.0 Вентилятор М8,М9
     UpdateButton( ui->KM8, mControlBits.KM8 );          //MX44.1 Вентилятор М10,М11
     UpdateButton( ui->KM10, mControlBits.KM10 );         //MX44.2 ТЭНы
+
+    UpdateButton( ui->ONRA, mControlBits.ONRA );         //MX45.2 ВКЛ катушку А
+    UpdateButton( ui->ONRB, mControlBits.ONRB );         //MX45.3 ВКЛ катушку В
+    UpdateButton( ui->CB, mControlBits.CB     );         //MX45.4 Управление от карты
+    UpdateButton( ui->CR, mControlBits.CR     );         //MX45.5 управление без карты
+    UpdateButton( ui->RC1, mControlBits.RC1   );         //MX45.6 1 катушка
+    UpdateButton( ui->RC2, mControlBits.RC2   );         //MX45.7 2 катушки
 }
 
 void ManualControl::onUpdateControls()
@@ -226,6 +233,7 @@ void ManualControl::UpdateData()
     UpdateValue( ui->I_AC, mParams.A2 );
     UpdateValue( ui->POS1, mParams.POS_1_REAL );
     UpdateValue( ui->POS2, mParams.POS_2_REAL );
+    UpdateValue( ui->POS3, mParams.POS_3_REAL );
 }
 
 void ManualControl::on_KM1_clicked()
@@ -399,4 +407,62 @@ void ManualControl::on_Accept_clicked()
     }
 
     mParams.WriteTask();
+}
+
+void ManualControl::on_CB_clicked()
+{
+    if ( ui->CB->isChecked() )
+    {
+        mControlBits.SetCR( false );
+        UpdateButton( ui->CR, mControlBits.CR );         //MX45.5 управление без карты
+    }
+
+    mControlBits.SetCB( ui->CB->isChecked() );
+}
+void ManualControl::on_CR_clicked()
+{
+    if ( ui->CB->isChecked() )
+    {
+        mControlBits.SetCB( false );
+        UpdateButton( ui->CB, mControlBits.CB     );         //MX45.4 Управление от карты
+    }
+    mControlBits.SetCR( ui->CR->isChecked() );
+}
+
+void ManualControl::on_RC1_clicked()
+{
+    if ( ui->RC1->isChecked() )
+    {
+        mControlBits.SetRC2( false );
+        UpdateButton( ui->RC2, mControlBits.RC2   );         //MX45.7 2 катушки
+    }
+    mControlBits.SetRC1( ui->RC1->isChecked() );
+}
+void ManualControl::on_RC2_clicked()
+{
+    if ( ui->RC2->isChecked() )
+    {
+        mControlBits.SetRC1( false );
+        UpdateButton( ui->RC1, mControlBits.RC1   );         //MX45.6 1 катушка
+    }
+    mControlBits.SetRC2( ui->RC2->isChecked() );
+}
+
+void ManualControl::on_ONRA_clicked()
+{
+    if ( ui->ONRA->isChecked() )
+    {
+        mControlBits.SetONRB( false );
+        UpdateButton( ui->ONRB, mControlBits.ONRB );         //MX45.3 ВКЛ катушку В
+    }
+    mControlBits.SetONRA( ui->ONRA->isChecked() );
+}
+void ManualControl::on_ONRB_clicked()
+{
+    if ( ui->ONRB->isChecked() )
+    {
+        mControlBits.SetONRA( false );
+        UpdateButton( ui->ONRA, mControlBits.ONRA );         //MX45.2 ВКЛ катушку А
+    }
+    mControlBits.SetONRB( ui->ONRB->isChecked() );
 }

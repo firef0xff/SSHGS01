@@ -42,7 +42,8 @@ DB50::DB50():
     Plata_8(mFloatData[29]),
     Plata_860mA(mFloatData[30]),
     POS_1_REAL(mFloatData[31]),
-    POS_2_REAL(mFloatData[32])
+    POS_2_REAL(mFloatData[32]),
+    POS_3_REAL(mFloatData[33])
 {
     memset( mIntData, 0, sizeof(mIntData) );
     memset( mFloatData, 0, sizeof(mFloatData) );

@@ -49,7 +49,7 @@ public:
     float& Plata_860mA; //DB50,REAL124    Задание на плату 0..20мА (860мА)
     float& POS_1_REAL;  //DB50,REAL130    Позиция Г/Ц (1..10л/мин) 100мм
     float& POS_2_REAL;  //DB50,REAL134    Позиция Г/Ц (0..1л/мин) 100мм
-
+    float& POS_3_REAL;  //DB50,REAL138    Положение золотника
     void WriteTask();
 private:    
 
@@ -61,7 +61,7 @@ private:
     enum
     {
         INT_COUNT = 2,
-        FLOAT_COUNT = 33
+        FLOAT_COUNT = 34
     };
 
     int mIntData[ INT_COUNT ];
@@ -107,6 +107,7 @@ private:
         L"CPU/DB50.Plata_860mA",
         L"CPU/DB50.POS_1_REAL",
         L"CPU/DB50.POS_2_REAL",
+        L"CPU/DB50.POS_3_REAL"
     };
 };
 

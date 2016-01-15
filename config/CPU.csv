@@ -372,6 +372,7 @@ DB50.Plata_860mA;DB50,REAL124;RW;TST=;CMT=Задание на плату 0..20мА (860мА)
 DB50.Osh_DM;DB50,W128;RW;TST=;CMT=
 DB50.POS_1_REAL;DB50,REAL130;RW;TST=;CMT=Позиция Г/Ц (1..10л/мин) 100мм
 DB50.POS_2_REAL;DB50,REAL134;RW;TST=;CMT=Позиция Г/Ц (0..1л/мин) 100мм
+DB50.POS_3_REAL;DB50,REAL138;RW;TST=;CMT=Положение золотника
 DB60.OP15_25_count;DB60,INT136;RW;TST=;CMT=количестви измерений для заданий 15 и 25
 DB60.OP15_25_Opor_1;DB60,X210.0;RW;TST=;CMT=
 DB60.OP15_25_Opor_2;DB60,X210.1;RW;TST=;CMT=
@@ -413,6 +414,12 @@ M1.KM7;MX44.0;RW;TST=;CMT=Вентилятор М8,М9
 M1.KM8;MX44.1;RW;TST=;CMT=Вентилятор М10,М11
 M1.KM10;MX44.2;RW;TST=;CMT=ТЭНы
 M1.Err_clear;MX44.7;RW;TST=;CMT=сброс не правильной комбинации...
+M1.ONRA;MX45.2;RW;TST=;CMT=ВКЛ катушку А
+M1.ONRB;MX45.3;RW;TST=;CMT=ВКЛ катушку В
+M1.CB;MX45.4;RW;TST=;CMT=Управление от карты
+M1.CR;MX45.5;RW;TST=;CMT=управление без карты
+M1.RC1;MX45.6;RW;TST=;CMT=1 катушка
+M1.RC2;MX45.7;RW;TST=;CMT=2 катушки
 I1.SQ1;IX0.0;RW;TST=;CMT=кран насоса М1
 I1.SQ3;IX0.2;RW;TST=;CMT=кран насоса М2
 I1.SQ5;IX0.4;RW;TST=;CMT=кран насоса М3.2
