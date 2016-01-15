@@ -64,7 +64,7 @@ bool PressureDurationFromExpenditure::Run()
     mData.push_back( Channels( a2, b2 ) );
     mData.push_back( Channels( a3, b3 ) );
 
-    OilTemp = mResults.T_oil;
+    OilTemp = round(mResults.T_oil*100)/100;
 
     return Success();
 }

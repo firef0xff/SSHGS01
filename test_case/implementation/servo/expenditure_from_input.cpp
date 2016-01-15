@@ -74,29 +74,36 @@ void ExpeditureFromInput::UpdateData()
     if ( *ready )
     {
         m12Results.Read();
+        m1525Counts.Read();
         switch ( level )
         {
         case 0:
-            if ( params.TestChannelA() && params.SignalOnChannelA() == CS_REEL_A )
-            {// P -> A
-                ConvertData( &GraphA1, &GraphA2 );
+            if ( m1525Counts.OP15_25_Opor_1 )
+            {
+                if ( params.TestChannelA() && params.SignalOnChannelA() == CS_REEL_A )
+                {// P -> A
+                    ConvertData( &GraphA1, &GraphA2 );
+                }
+                if ( params.TestChannelB() && params.SignalOnChannelA() == CS_REEL_B )
+                {// P -> B
+                    ConvertData( &GraphB1, &GraphB2 );
+                }
+                ++level;
             }
-            if ( params.TestChannelB() && params.SignalOnChannelA() == CS_REEL_B )
-            {// P -> B
-                ConvertData( &GraphB1, &GraphB2 );
-            }
-            ++level;
             break;
         case 1:
-            if ( params.TestChannelA() && params.SignalOnChannelB() == CS_REEL_A )
-            {// P -> A
-                ConvertData( &GraphA1, &GraphA2 );
+            if ( m1525Counts.OP15_25_Opor_2 )
+            {
+                if ( params.TestChannelA() && params.SignalOnChannelB() == CS_REEL_A )
+                {// P -> A
+                    ConvertData( &GraphA1, &GraphA2 );
+                }
+                if ( params.TestChannelB()  && params.SignalOnChannelB() == CS_REEL_B )
+                {// P -> B
+                    ConvertData( &GraphB1, &GraphB2 );
+                }
+                ++level;
             }
-            if ( params.TestChannelB()  && params.SignalOnChannelB() == CS_REEL_B )
-            {// P -> B
-                ConvertData( &GraphB1, &GraphB2 );
-            }
-            ++level;
             break;
         default:
             ++level;
