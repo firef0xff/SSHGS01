@@ -14,7 +14,7 @@ struct VARIANT
     long lVal    = 0;
     std::shared_ptr< void > parray;
 };
-enum RESULTS
+enum RESULTS : int
 {
     S_OK,
     S_FALSE,

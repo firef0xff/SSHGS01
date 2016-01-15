@@ -84,6 +84,36 @@ FrequencyCharacteristics::Source FromJson( QJsonArray arr )
     return std::move( res );
 }
 
+double CalckAmpl( FrequencyCharacteristics::DataSet const& data )
+{
+    double ampl = 0;
+    std::vector< double > expenditure;
+    for ( size_t i = 0; i < data.size(); ++i )
+    {
+        if ( !i )
+            expenditure.push_back(0);
+        else
+            expenditure.push_back( (data[i].position - data[i-1].position) );
+    }
+
+    if ( !expenditure.empty() )
+    {
+        int max = 0;
+        int min = 0;
+        for ( size_t i = 0; i < expenditure.size(); ++i )
+        {
+            if ( expenditure[ max ] < expenditure[i] )
+                max = i;
+            if ( expenditure[ min ] > expenditure[i] )
+                min = i;
+        }
+
+        ampl = expenditure[ max ] - expenditure[ min ];
+    }
+
+    return ampl;
+}
+
 ff0x::NoAxisGraphBuilder::LinePoints ProcessAFC( FrequencyCharacteristics::Source const& src, QPointF& x_range, QPointF& y_range )
 {
     auto f_S = []( double expenditure )
@@ -110,39 +140,15 @@ ff0x::NoAxisGraphBuilder::LinePoints ProcessAFC( FrequencyCharacteristics::Sourc
     {
         QPointF point;
         point.setX( it->first );
-        FrequencyCharacteristics::DataSet const& data = it->second;
 
-        std::vector< double > expenditure;
-        for ( size_t i = 0; i < data.size(); ++i )
+        double ampl = CalckAmpl( it->second ) *K / time_period;
+
+        if ( it == src.begin() )
+            min_ampl = ampl;
+
+        if ( min_ampl != 0 && ampl/min_ampl != 0 )
         {
-            if ( !i )
-                expenditure.push_back(0);
-            else
-                expenditure.push_back( (data[i].position - data[i-1].position)*K / time_period );
-        }
-
-        if ( !expenditure.empty() )
-        {
-            int max = 0;
-            int min = 0;
-            for ( size_t i = 0; i < expenditure.size(); ++i )
-            {
-                if ( expenditure[ max ] < expenditure[i] )
-                    max = i;
-                if ( expenditure[ min ] > expenditure[i] )
-                    min = i;
-            }
-
-            double ampl = expenditure[ max ] - expenditure[ min ];
-            if ( it == src.begin() )
-                min_ampl = ampl;
-
-            if ( min_ampl != 0 && ampl/min_ampl != 0 )
-            {
-                point.setY( 10.0*log10( ampl / min_ampl) );
-            }
-            else
-                point.setY(0);
+            point.setY( 10.0*log10( ampl / min_ampl) );
         }
         else
             point.setY(0);
@@ -488,7 +494,7 @@ void FrequencyCharacteristics::UpdateData()
     }
 
 #ifndef DEBUG
-    if ( fabs( CalckFi( data, *frequency ) ) > 90.0 )
+    if ( fabs( CalckFi( data, *frequency ) ) > 90.0 || fabs( CalckAmpl( data ) ) < 0.001 )
         cpu::CpuMemory::Instance().DB31.SendNextAmp();
     else
 #endif

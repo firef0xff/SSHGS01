@@ -1,5 +1,6 @@
 #include "manual_control.h"
 #include "ui_manual_control.h"
+#include "test_case/test_params.h"
 
 ManualControlUpdater::ManualControlUpdater():
     mStopSignal(false)
@@ -31,6 +32,16 @@ ManualControl::ManualControl(QWidget *parent) :
     mErrorBits( cpu::CpuMemory::Instance().I1 )
 {
     ui->setupUi(this);
+
+    ui->l_sig_a->setVisible( false );
+    ui->l_sig_0->setVisible( false );
+    ui->l_sig_b->setVisible( false );
+    ui->l_sig_max->setVisible( false );
+
+    ui->SigA->setVisible( false );
+    ui->Sig0->setVisible( false );
+    ui->SigB->setVisible( false );
+    ui->SigMax->setVisible( false );
 
     ui->YB1->setValidator( new QIntValidator( 10, 660, this ) );
     ui->YB2->setValidator( new QIntValidator( 10, 660, this ) );
@@ -407,26 +418,113 @@ void ManualControl::on_Accept_clicked()
     }
 
     mParams.WriteTask();
+
+    test::SIGNAL_TYPE s_type = test::ST_UNKNOWN;
+    test::ParseValue( s_type, ui->SigLevel->currentText() );
+
+    if ( mControlBits.CR )//управление без карты
+    {
+        auto& mem = cpu::CpuMemory::Instance().DB35;
+        switch (s_type)                   //2 управляющий сигнал
+        {
+            case test::ST_100_mA:
+                mem.s860ma = 100;
+                break;
+            case test::ST_300_mA:
+                mem.s860ma = 300;
+                break;
+            case test::ST_600_mA:
+                mem.s860ma = 600;
+                break;
+            case test::ST_860_mA:
+                mem.s860ma = 860;
+                break;
+            default:
+                mem.s860ma = 0;
+                break;
+        }
+        double val = 0;
+        test::ParseValue( val, ui->SigMax->text() );
+        mem.x_max_a = val;
+        mem.Write();
+    }
+    if ( mControlBits.CB )//Управление от карты
+    {
+        auto& mem = cpu::CpuMemory::Instance().DB33;
+        mem.s4_20ma = s_type == test::ST_4_20_mA; //2.0 сигнал 4-20 мА
+        mem.s0_20ma = s_type == test::ST_0_20_mA; //2.1 сигнал 0-20 мА
+        mem.s10v = s_type == test::ST_10_10_V; //2.2 сигнал +/- 10В
+        mem.s10ma = s_type == test::ST_10_10_mA; //2.3 сигнал +/- 10 мА
+        mem.s15ma = s_type == test::ST_15_15_mA; //2.4 сигнал +/- 15мА
+        mem.s20ma = s_type == test::ST_20_20_mA; //2.5 сиганл +/- 20 мА
+        mem.s40ma = s_type == test::ST_40_40_mA; //2.6 сигнал +/- 40 мА
+
+        double val = 0;
+        test::ParseValue( val, ui->SigA->text() );
+        mem.x_max_a = val;             //4 сигнал переключение в А
+        test::ParseValue( val, ui->SigB->text() );
+        mem.x_max_b = val;             //8 сигнал переключение в В
+        test::ParseValue( val, ui->Sig0->text() );
+        mem.x_pos_0 = val;             //12 сигнал переключение в 0
+        mem.Write();
+    }
+
+    cpu::CpuMemory::Instance().DB31.SetManualSignal( ui->SignalPersent->value() );
 }
 
 void ManualControl::on_CB_clicked()
 {
+    ui->SigLevel->clear();
     if ( ui->CB->isChecked() )
     {
         mControlBits.SetCR( false );
         UpdateButton( ui->CR, mControlBits.CR );         //MX45.5 управление без карты
+        ui->SigLevel->addItem( test::ToString( test::ST_0_20_mA ) );
+        ui->SigLevel->addItem( test::ToString( test::ST_4_20_mA ) );
+        ui->SigLevel->addItem( test::ToString( test::ST_10_10_mA ) );
+        ui->SigLevel->addItem( test::ToString( test::ST_40_40_mA ) );
+        ui->SigLevel->addItem( test::ToString( test::ST_10_10_V ) );
+        ui->SigLevel->setCurrentIndex( -1 );
+
+        ui->l_sig_a->setVisible( true );
+        ui->l_sig_0->setVisible( true );
+        ui->l_sig_b->setVisible( true );
+        ui->l_sig_max->setVisible( false );
+
+        ui->SigA->setVisible( true );
+        ui->Sig0->setVisible( true );
+        ui->SigB->setVisible( true );
+        ui->SigMax->setVisible( false );
     }
 
     mControlBits.SetCB( ui->CB->isChecked() );
 }
 void ManualControl::on_CR_clicked()
 {
+    ui->SigLevel->clear();
     if ( ui->CB->isChecked() )
     {
         mControlBits.SetCB( false );
-        UpdateButton( ui->CB, mControlBits.CB     );         //MX45.4 Управление от карты
+        UpdateButton( ui->CB, mControlBits.CB );         //MX45.4 Управление от карты
+        ui->SigLevel->addItem( test::ToString( test::ST_100_mA ) );
+        ui->SigLevel->addItem( test::ToString( test::ST_300_mA ) );
+        ui->SigLevel->addItem( test::ToString( test::ST_600_mA ) );
+        ui->SigLevel->addItem( test::ToString( test::ST_860_mA ) );
+        ui->SigLevel->setCurrentIndex( -1 );
+
+        ui->l_sig_a->setVisible( false );
+        ui->l_sig_0->setVisible( false );
+        ui->l_sig_b->setVisible( false );
+        ui->l_sig_max->setVisible( true );
+
+        ui->SigA->setVisible( false );
+        ui->Sig0->setVisible( false );
+        ui->SigB->setVisible( false );
+        ui->SigMax->setVisible( true );
     }
+
     mControlBits.SetCR( ui->CR->isChecked() );
+
 }
 
 void ManualControl::on_RC1_clicked()
@@ -465,4 +563,66 @@ void ManualControl::on_ONRB_clicked()
         UpdateButton( ui->ONRA, mControlBits.ONRA );         //MX45.2 ВКЛ катушку А
     }
     mControlBits.SetONRB( ui->ONRB->isChecked() );
+}
+
+void ManualControl::on_SigLevel_currentIndexChanged(const QString &arg1)
+{
+    test::SIGNAL_TYPE s_type = test::ST_UNKNOWN;
+    test::ParseValue( s_type, arg1 );
+
+    ui->SigA->setEnabled(true);
+    ui->SigB->setEnabled(true);
+    ui->Sig0->setEnabled(true);
+    ui->SigMax->setEnabled(true);
+
+    ui->SigA->setText("");
+    ui->SigB->setText("");
+    ui->Sig0->setText("");
+    ui->SigMax->setText("");
+    switch (s_type)
+    {
+        case test::ST_0_20_mA:
+            ui->SigA->setValidator( new QIntValidator( 0, 20, this ) );
+            ui->SigB->setValidator( new QIntValidator( 0, 20, this ) );
+            ui->Sig0->setValidator( new QIntValidator( 0, 20, this ) );
+            break;
+        case test::ST_4_20_mA:
+            ui->SigA->setValidator( new QIntValidator( 4, 20, this ) );
+            ui->SigB->setValidator( new QIntValidator( 4, 20, this ) );
+            ui->Sig0->setValidator( new QIntValidator( 4, 20, this ) );
+            break;
+        case test::ST_10_10_mA:
+            ui->SigA->setValidator( new QIntValidator( -10, 10, this ) );
+            ui->SigB->setValidator( new QIntValidator( -10, 10, this ) );
+            ui->Sig0->setValidator( new QIntValidator( -10, 10, this ) );
+            break;
+        case test::ST_10_10_V:
+            ui->SigA->setValidator( new QIntValidator( -10, 10, this ) );
+            ui->SigB->setValidator( new QIntValidator( -10, 10, this ) );
+            ui->Sig0->setValidator( new QIntValidator( -10, 10, this ) );
+            break;
+        case test::ST_40_40_mA:
+            ui->SigA->setValidator( new QIntValidator( -40, 40, this ) );
+            ui->SigB->setValidator( new QIntValidator( -40, 40, this ) );
+            ui->Sig0->setValidator( new QIntValidator( -40, 40, this ) );
+            break;
+        case test::ST_100_mA:
+            ui->SigMax->setValidator( new QIntValidator( 0, 100, this ) );
+            break;
+        case test::ST_300_mA:
+            ui->SigMax->setValidator( new QIntValidator( 0, 300, this ) );
+            break;
+        case test::ST_600_mA:
+            ui->SigMax->setValidator( new QIntValidator( 0, 600, this ) );
+            break;
+        case test::ST_860_mA:
+            ui->SigMax->setValidator( new QIntValidator( 0, 860, this ) );
+            break;
+        default:
+            ui->SigA->setEnabled(false);
+            ui->SigB->setEnabled(false);
+            ui->Sig0->setEnabled(false);
+            ui->SigMax->setEnabled(false);
+            break;
+    }
 }

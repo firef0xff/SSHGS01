@@ -400,7 +400,9 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect ) const
     DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- в канале А при максимально опорном сигнале, л/мин"), test::ToString(mMaxExpenditureA), row_skale );
     DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- в канале В при максимально опорном сигнале, л/мин"), test::ToString(mMaxExpenditureB), row_skale );
 
-    DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Амплитуды управляющих сигналов, %"), "не реализовано", row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Амплитуды управляющих сигналов, %"), test::ToString(mAmplitudes[0]) + ", " +
+                                                                                                   test::ToString(mAmplitudes[1]) + ", " +
+                                                                                                   test::ToString(mAmplitudes[2]), row_skale );
     DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Инкремент частоты, Гц"), test::ToString(mFrequencyInc), row_skale );
     DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Тип масла"), "Лукойл Гейзер HLP32", row_skale );
     DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Вязкость масла (при 40˚С), сСт"), test::ToString(32), row_skale );
