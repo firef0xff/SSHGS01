@@ -1513,7 +1513,7 @@
         <property name="spacing">
          <number>2</number>
         </property>
-        <item row="0" column="0" colspan="2">
+        <item row="0" column="0">
          <widget class="QPushButton" name="CB">
           <property name="toolTip">
            <string>CB</string>
@@ -1529,7 +1529,7 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="2" colspan="2">
+        <item row="1" column="0">
          <widget class="QPushButton" name="CR">
           <property name="toolTip">
            <string>CR</string>
@@ -1539,38 +1539,6 @@
           </property>
           <property name="text">
            <string>Управление без карты</string>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QPushButton" name="RC2">
-          <property name="toolTip">
-           <string>RC2</string>
-          </property>
-          <property name="toolTipDuration">
-           <number>500</number>
-          </property>
-          <property name="text">
-           <string>2 катушки</string>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="2">
-         <widget class="QPushButton" name="ONRA">
-          <property name="toolTip">
-           <string>ONRA</string>
-          </property>
-          <property name="toolTipDuration">
-           <number>500</number>
-          </property>
-          <property name="text">
-           <string>ВКЛ катушку А</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -1593,7 +1561,7 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
+        <item row="0" column="2">
          <widget class="QPushButton" name="RC1">
           <property name="toolTip">
            <string>RC1</string>
@@ -1609,7 +1577,7 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="0" colspan="2">
+        <item row="3" column="0">
          <widget class="QLabel" name="label_10">
           <property name="text">
            <string>Положение золотника</string>
@@ -1619,7 +1587,7 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="2">
+        <item row="3" column="2">
          <widget class="QLCDNumber" name="POS3">
           <property name="minimumSize">
            <size>
@@ -1638,6 +1606,38 @@
           </property>
           <property name="toolTipDuration">
            <number>500</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="QPushButton" name="ONRA">
+          <property name="toolTip">
+           <string>ONRA</string>
+          </property>
+          <property name="toolTipDuration">
+           <number>500</number>
+          </property>
+          <property name="text">
+           <string>ВКЛ катушку А</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QPushButton" name="RC2">
+          <property name="toolTip">
+           <string>RC2</string>
+          </property>
+          <property name="toolTipDuration">
+           <number>500</number>
+          </property>
+          <property name="text">
+           <string>2 катушки</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
