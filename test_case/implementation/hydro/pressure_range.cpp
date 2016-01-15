@@ -43,7 +43,7 @@ bool PressureRange::Run()
     ResultMaxMinB = mResults.op6_max_min_ok_b && !mResults.op6_mex_min_no_b;
     ResultMaxMaxB = mResults.op6_max_max_ok_b && !mResults.op6_max_max_no_b;
 
-    OilTemp = mResults.T_oil;
+    OilTemp = round(mResults.T_oil*100)/100;
 
     return Success();
 }

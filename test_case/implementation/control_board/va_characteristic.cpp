@@ -27,7 +27,7 @@ bool VACharacteristic::Run()
         Graph.push_back(d);
     }
 
-    OilTemp = mTemperature.T_oil;
+    OilTemp = round( mTemperature.T_oil *100)/100;
     return true;
 }
 void VACharacteristic::UpdateData()

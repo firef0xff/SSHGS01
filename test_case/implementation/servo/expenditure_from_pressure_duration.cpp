@@ -38,7 +38,7 @@ bool ExpeditureFromPressureDuration::Run()
         mData.push_back( d );
     }
 
-    OilTemp = mTemperature.T_oil;
+    OilTemp = round( mTemperature.T_oil *100)/100;
     return Success();
 }
 void ExpeditureFromPressureDuration::UpdateData()

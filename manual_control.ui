@@ -1872,6 +1872,16 @@
             <property name="spacing">
              <number>2</number>
             </property>
+            <item row="0" column="2">
+             <widget class="QLabel" name="label_29">
+              <property name="text">
+               <string>Испытание</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
             <item row="0" column="1">
              <widget class="QLabel" name="label_28">
               <property name="text">
@@ -1892,16 +1902,6 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="2">
-             <widget class="QLabel" name="label_29">
-              <property name="text">
-               <string>Испытание</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
             <item row="1" column="0">
              <widget class="QLabel" name="l_large_gc">
               <property name="text">
@@ -1912,7 +1912,7 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="2">
+            <item row="1" column="1">
              <widget class="QPushButton" name="YA19">
               <property name="toolTip">
                <string>YA19</string>
@@ -1921,14 +1921,14 @@
                <number>500</number>
               </property>
               <property name="text">
-               <string>Канал Б</string>
+               <string>Канал А</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
+            <item row="1" column="2">
              <widget class="QPushButton" name="YA18">
               <property name="toolTip">
                <string>YA18</string>
@@ -1937,7 +1937,7 @@
                <number>500</number>
               </property>
               <property name="text">
-               <string>Канал А</string>
+               <string>Канал Б</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -1954,26 +1954,10 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="1">
+            <item row="2" column="2">
              <widget class="QPushButton" name="YA20">
               <property name="toolTip">
                <string>YA20</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>Канал А</string>
-              </property>
-              <property name="checkable">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="2">
-             <widget class="QPushButton" name="YA21">
-              <property name="toolTip">
-               <string>YA21</string>
               </property>
               <property name="toolTipDuration">
                <number>500</number>
@@ -2043,7 +2027,7 @@
               </property>
              </widget>
             </item>
-            <item row="4" column="1">
+            <item row="5" column="1">
              <widget class="QPushButton" name="YA24">
               <property name="toolTip">
                <string>YA24</string>
@@ -2059,7 +2043,7 @@
               </property>
              </widget>
             </item>
-            <item row="4" column="2">
+            <item row="5" column="2">
              <widget class="QPushButton" name="YA25">
               <property name="toolTip">
                <string>YA25</string>
@@ -2075,10 +2059,26 @@
               </property>
              </widget>
             </item>
-            <item row="3" column="0" colspan="4">
+            <item row="4" column="0" colspan="4">
              <widget class="Line" name="line_4">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QPushButton" name="YA21">
+              <property name="toolTip">
+               <string>YA21</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>Канал А</string>
+              </property>
+              <property name="checkable">
+               <bool>true</bool>
               </property>
              </widget>
             </item>

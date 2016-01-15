@@ -20,7 +20,7 @@ bool PowerTest::Run()
     if ( IsStopped() )
         return false;
 
-    OilTemp = mTemperature.T_oil;
+    OilTemp = round( mTemperature.T_oil *100)/100;
     Result = false;
     return Success();
 }

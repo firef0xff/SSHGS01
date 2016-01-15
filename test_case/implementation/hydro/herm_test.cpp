@@ -22,7 +22,7 @@ bool OutsideHermTest::Run()
     if ( IsStopped() )
         return false;
 
-    OilTemp = mResults.T_oil;
+    OilTemp = round(mResults.T_oil*100)/100;
 
     std::mutex mutex;
     std::unique_lock< std::mutex > lock( mutex );
@@ -191,7 +191,7 @@ bool InsideHermTest::Run()
 
     Result = mResults.op3_consumption_2 && !mResults.op3_consumption_3;
     Leak = mResults.op3_consumption_1;
-    OilTemp = mResults.T_oil;
+    OilTemp = round(mResults.T_oil*100)/100;
     return Success();
 }
 QJsonObject InsideHermTest::Serialise() const

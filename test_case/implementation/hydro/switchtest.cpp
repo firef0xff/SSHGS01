@@ -32,7 +32,7 @@ bool SwitchTest::Run()
     ResultMinB = mResults.op7_min_ok_b &&! mResults.op7_min_no_b;
     ResultMaxB = mResults.op7_max_ok_b &&! mResults.op7_max_no_b;
 
-    OilTemp = mResults.T_oil;
+    OilTemp = round(mResults.T_oil*100)/100;
 
     return Success();
 }

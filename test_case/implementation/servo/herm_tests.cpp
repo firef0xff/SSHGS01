@@ -29,7 +29,7 @@ bool OutsideHermTest::Run()
     if ( IsStopped() )
         return false;
 
-    OilTemp = mTemperature.T_oil;
+    OilTemp = round( mTemperature.T_oil *100)/100;
 
     std::mutex mutex;
     std::unique_lock< std::mutex > lock( mutex );
@@ -213,7 +213,7 @@ bool InsideHermTest::Run()
     }
 
 
-    OilTemp = mTemperature.T_oil;
+    OilTemp = round( mTemperature.T_oil *100)/100;
 
     return Success();
 }

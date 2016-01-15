@@ -36,7 +36,7 @@ bool FunctionalTest::Run()
     ReelB.R = mResults.op1_resist_b;
     ReelB.U = mResults.op1_volt_b;
 
-    OilTemp = mResults.T_oil;
+    OilTemp = round(mResults.T_oil*100)/100;
 
     return Success();
 }

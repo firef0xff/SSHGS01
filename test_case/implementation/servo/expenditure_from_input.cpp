@@ -31,7 +31,7 @@ bool ExpeditureFromInput::Run()
     if ( IsStopped() )
         return false;
 
-    OilTemp = mTemperature.T_oil;
+    OilTemp = round( mTemperature.T_oil *100)/100;
 
     return Success();
 }
@@ -134,13 +134,15 @@ ExpeditureFromInput::DataSet FromJson( QJsonArray const& arr )
 
 double CalckGain( ExpeditureFromInput::DataSet const& data )
 {
+    if ( !data.size() )
+        return 0;
     int pos_max_exp = 0;
     int pos_min_signal = 0;
     for ( int i = 0; i < data.size(); ++i )
     {
         if ( data[i].Expenditure > data[pos_max_exp].Expenditure )
             pos_max_exp = i;
-        if ( round( data[i].Expenditure ) == 0.0 )
+        if ( floor( data[i].Expenditure ) == 0.0 )
         {
             if ( fabs( data[i].Signal ) > fabs( data[pos_min_signal].Signal ) )
                 pos_min_signal = i;
@@ -157,13 +159,16 @@ double CalckGain( ExpeditureFromInput::DataSet const& data )
 }
 double CalckNonlinearity( ExpeditureFromInput::DataSet const& data )
 {
+    if ( !data.size() )
+        return 0;
+
     int pos_max_exp = 0;
     int pos_min_signal = 0;
     for ( int i = 0; i < data.size(); ++i )
     {
         if ( data[i].Expenditure > data[pos_max_exp].Expenditure )
             pos_max_exp = i;
-        if ( round( data[i].Expenditure ) == 0.0 )
+        if ( floor( data[i].Expenditure ) == 0.0 )
         {
             if ( fabs( data[i].Signal ) > fabs( data[pos_min_signal].Signal ) )
                 pos_min_signal = i;
@@ -199,7 +204,10 @@ double CalckNonlinearity( ExpeditureFromInput::DataSet const& data )
     return max_r / q_max * 100;
 }
 double CalckHysteresis( ExpeditureFromInput::DataSet const& data1, ExpeditureFromInput::DataSet const& data2 )
-{        
+{
+    if ( !data1.size() || !data2.size() )
+        return 0;
+
     double delta = 0;
     int q_max_pos = 0;
     for ( int i = 0; i < data1.size(); ++i )
@@ -439,10 +447,10 @@ bool ExpeditureFromInput::Draw( QPainter& painter, QRect &free_rect ) const
             }
         }
 
-        dataA1_e = Process( GraphA1, x_range_a1, y_range_a1 );
-        dataA2_e = Process( GraphA2, x_range_a2, y_range_a2 );
-        dataB1_e = Process( GraphB1, x_range_b1, y_range_b1 );
-        dataB2_e = Process( GraphB2, x_range_b2, y_range_b2 );
+        dataA1 = Process( GraphA1, x_range_a1, y_range_a1 );
+        dataA2 = Process( GraphA2, x_range_a2, y_range_a2 );
+        dataB1 = Process( GraphB1, x_range_b1, y_range_b1 );
+        dataB2 = Process( GraphB2, x_range_b2, y_range_b2 );
 
         QFont f = text_font;
         f.setPointSize( 6 );

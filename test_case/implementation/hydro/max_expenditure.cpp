@@ -30,7 +30,7 @@ bool MaxExpenditureTest::Run()
     ExpenditureA = mResults.op5_pa;
     ExpenditureB = mResults.op5_pb;
 
-    OilTemp = mResults.T_oil;
+    OilTemp = round(mResults.T_oil*100)/100;
 
     return Success();
 }

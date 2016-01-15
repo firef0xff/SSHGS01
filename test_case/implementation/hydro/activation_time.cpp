@@ -43,7 +43,7 @@ bool ActivationTime::Run()
     ReelB.IsOn = !mResults.op8_fault_on_b;
     ReelB.IsOff = !mResults.op8_fault_off_b;
 
-    OilTemp = mResults.T_oil;
+    OilTemp = round(mResults.T_oil*100)/100;
 
     return Success();
 }
