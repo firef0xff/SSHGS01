@@ -201,7 +201,7 @@ double CalckNonlinearity( ExpeditureFromInput::DataSet const& data )
     double x_max = data[pos_max_exp].Signal;
     double x_0 = data[pos_min_signal].Signal;
 
-    double k = (q_max - q_0) / ( x_max - x_0 );
+    double k = fabs( (q_max - q_0) / ( x_max - x_0 ) );
 
     double max_r;
     for ( int i = 0; i < data.size(); ++i )
