@@ -193,22 +193,32 @@ void ServoTitleInfo::on_buttonBox_accepted()
         const int pomp_max_power = 55;
         const int pomp_count = 2;
 
-        double max_expenditure = std::max( std::max( params.DefaultExpenditure(), params.MaxExpenditure() ),
-                                           (double)std::max( params.MaxExpenditureA(), params.MaxExpenditureB()) );
-        double max_pressure = std::max( params.PressureNominal(), params.PressureTesting() );
+        double power = pomp_count * pomp_max_power;
+        bool combo1 = params.DefaultExpenditure()*params.PressureNominal()/540 > power;
+        bool combo2 = params.DefaultExpenditure()*params.PressureTesting()/540 > power;
+        bool combo3 = params.MaxExpenditureA()*params.PressureNominal()/540 > power;
+        bool combo4 = params.MaxExpenditureB()*params.PressureNominal()/540 > power;
 
+        QString err_msg;
+        if ( combo1 )
+            err_msg += "Необходимо скорректировать расход по умолчанию и номинальное давление\n";
+        if ( combo2 )
+            err_msg += "Необходимо скорректировать расход по умолчанию и пробное давление\n";
+        if ( combo3 )
+            err_msg += "Необходимо скорректировать максимальный расход в канале А и номинальное давление\n";
+        if ( combo4 )
+            err_msg += "Необходимо скорректировать максимальный расход в канале Б и номинальное давление\n";
 
-        bool res = max_expenditure*max_pressure/540 <= pomp_count * pomp_max_power;
-        if (!res)
+        if ( !err_msg.isEmpty() )
         {
             QMessageBox msg;
             msg.setWindowTitle( "Превышена допустимая мощьность насосов" );
-            msg.setText( "Необходимо скорректировать параметры расходов и давлений" );
+            msg.setText( err_msg );
             msg.setStandardButtons( QMessageBox::Ok );
             msg.setModal( true );
             msg.exec();
         }
-        return res;
+        return !combo1 && !combo2 && !combo3 && !combo4;
     };
     if ( SaveInputParams() )
     {
