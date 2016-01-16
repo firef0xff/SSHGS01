@@ -32,6 +32,26 @@ DB34::DB34():
     memset( mBoolData, 0, sizeof(mBoolData) );
     memset( mFloatData, 0, sizeof(mFloatData) );
     mGroupID = opc::miniOPC::Instance().AddGroup( L"DB34", mAdresses, BOOL_COUNT + FLOAT_COUNT );
+#ifdef DEMO
+    op10_ok = true;
+    op11_ok = true;
+    op12_ok = true;
+    op13_ok = true;
+    op14_ok = true;
+    op15_ok = true;
+    op10_end = true;
+    op11_end = true;
+    op12_end = true;
+    op13_end = true;
+    op14_end = true;
+    op15_end = true;
+    HRESULT res = E_FAIL;
+    while ( res == E_FAIL )
+        res = opc::miniOPC::Instance().WriteMass( mGroupID, BOOL_COUNT, FLOAT_COUNT, static_cast<void*>( mFloatData ), opc::tFLOAT );
+    res = E_FAIL;
+    while ( res == E_FAIL )
+        res = opc::miniOPC::Instance().WriteMass( mGroupID, 0, BOOL_COUNT, static_cast<void*>( mBoolData ), opc::tBOOL );
+#endif
 }
 
 void DB34::Read()

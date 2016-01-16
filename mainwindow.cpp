@@ -364,37 +364,37 @@ void MainWindow::onUpdateControls()
     auto& table = cpu::CpuMemory::Instance().DB50;
     auto& table2 = cpu::CpuMemory::Instance().DB40;
 
-    DD1->update_value( table.BP3 );
-    DD2->update_value( table.BP4 );
-    DD3->update_value( table.BP5 );
-    M1M2->update_value( table.BP1 );
-    T->update_value( table.BP2 );
-    X->update_value( table.BP6 );
+    DD1->update_value( round( table.BP3 *100)/100 );
+    DD2->update_value( round( table.BP4 *100)/100 );
+    DD3->update_value( round( table.BP5 *100)/100 );
+    M1M2->update_value( round( table.BP1 *100)/100 );
+    T->update_value( round( table.BP2 *100)/100 );
+    X->update_value( round( table.BP6 *100)/100 );
 
     float lost = table.BV4;
     if ( lost < 1.9 )
         lost = table.BV3;
 
-    R_Lost->update_value( lost );
+    R_Lost->update_value( round( lost *100)/100 );
 
     float exp_t = table.BV2;
     if ( exp_t < 60.0 )
         exp_t = table.BV1;
-    R_P->update_value( exp_t );
+    R_P->update_value( round( exp_t *100)/100 );
 
     float voltage = table.V0_300B;
 //    if ( voltage == 60.0 )
 //        voltage = table.V0_300B;
-    ui->Voltage->display( voltage );
+    ui->Voltage->display( round( voltage *100)/100 );
 
     float amperage_dc = table.A1;  //постоянный ток
-    ui->Amperage->display(amperage_dc);
+    ui->Amperage->display(round( amperage_dc *100)/100);
 
     float amperage_ac = table.A2;  //переменный ток
 //    ui->Amperage->display(amperage_dc);
 
     //температура масла
-    ui->OilTemp->display( table.BT1 );
+    ui->OilTemp->display( round( table.BT1 *100)/100 );
 
     //уровень масла
     int lvl = 0;

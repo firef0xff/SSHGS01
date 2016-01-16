@@ -220,31 +220,31 @@ void ManualControl::UpdateValue  ( QLCDNumber *ctrl, float const& value )
 void ManualControl::UpdateData()
 {
 
-    UpdateValue( ui->BP1, mParams.BP1 );
-    UpdateValue( ui->BP2, mParams.BP2 );
-    UpdateValue( ui->BP3, mParams.BP3 );
-    UpdateValue( ui->BP4, mParams.BP4 );
-    UpdateValue( ui->BP5, mParams.BP5 );
-    UpdateValue( ui->BP6, mParams.BP6 );
-    UpdateValue( ui->BT1, mParams.BT1 );
+    UpdateValue( ui->BP1, round( mParams.BP1 *100 )/100 );
+    UpdateValue( ui->BP2, round( mParams.BP2 *100 )/100 );
+    UpdateValue( ui->BP3, round( mParams.BP3 *100 )/100 );
+    UpdateValue( ui->BP4, round( mParams.BP4 *100 )/100 );
+    UpdateValue( ui->BP5, round( mParams.BP5 *100 )/100 );
+    UpdateValue( ui->BP6, round( mParams.BP6 *100 )/100 );
+    UpdateValue( ui->BT1, round( mParams.BT1 *100 )/100 );
 
 
     float exp_t = mParams.BV2;
     if ( exp_t < 60.0 )
         exp_t = mParams.BV1;
-    UpdateValue( ui->BV1BV2, exp_t );
+    UpdateValue( ui->BV1BV2, round( exp_t *100 )/100 );
 
     float lost = mParams.BV4;
     if ( lost < 1.9 )
         lost = mParams.BV3;
-    UpdateValue( ui->BV3BV4, lost );
+    UpdateValue( ui->BV3BV4, round( lost *100 )/100 );
 
-    UpdateValue( ui->U, mParams.V0_300B );
-    UpdateValue( ui->I_DC, mParams.A1 );
-    UpdateValue( ui->I_AC, mParams.A2 );
-    UpdateValue( ui->POS1, mParams.POS_1_REAL );
-    UpdateValue( ui->POS2, mParams.POS_2_REAL );
-    UpdateValue( ui->POS3, mParams.POS_3_REAL );
+    UpdateValue( ui->U, round( mParams.V0_300B *100 )/100 );
+    UpdateValue( ui->I_DC, round( mParams.A1 *100 )/100 );
+    UpdateValue( ui->I_AC, round( mParams.A2 *100 )/100 );
+    UpdateValue( ui->POS1, round( mParams.POS_1_REAL *100 )/100 );
+    UpdateValue( ui->POS2, round( mParams.POS_2_REAL *100 )/100 );
+    UpdateValue( ui->POS3, round( mParams.POS_3_REAL *100 )/100 );
 }
 
 void ManualControl::on_KM1_clicked()

@@ -33,6 +33,27 @@ DB36::DB36():
     memset( mBoolData, 0, sizeof(mBoolData) );
     memset( mFloatData, 0, sizeof(mFloatData) );
     mGroupID = opc::miniOPC::Instance().AddGroup( L"DB36", mAdresses, BOOL_COUNT + FLOAT_COUNT );
+
+#ifdef DEMO
+    op20_ok = true;
+    op21_ok = true;
+    op22_ok = true;
+    op23_ok = true;
+    op24_ok = true;
+    op25_ok = true;
+    op20_end = true;
+    op21_end = true;
+    op22_end = true;
+    op23_end = true;
+    op24_end = true;
+    op25_end = true;
+    HRESULT res = E_FAIL;
+    while ( res == E_FAIL )
+        res = opc::miniOPC::Instance().WriteMass( mGroupID, BOOL_COUNT, FLOAT_COUNT, static_cast<void*>( mFloatData ), opc::tFLOAT );
+    res = E_FAIL;
+    while ( res == E_FAIL )
+        res = opc::miniOPC::Instance().WriteMass( mGroupID, 0, BOOL_COUNT, static_cast<void*>( mBoolData ), opc::tBOOL );
+#endif
 }
 
 void DB36::Read()
