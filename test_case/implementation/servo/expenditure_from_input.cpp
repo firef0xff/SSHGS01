@@ -141,17 +141,28 @@ double CalckGain( ExpeditureFromInput::DataSet const& data )
     if ( !data.size() )
         return 0;
     int pos_max_exp = 0;
+    int pos_min_exp = 0;
     int pos_min_signal = 0;
     for ( int i = 0; i < data.size(); ++i )
     {
         if ( data[i].Expenditure > data[pos_max_exp].Expenditure )
             pos_max_exp = i;
-        if ( i &&
-             data[i].Expenditure - data[i - 1 ].Expenditure > 0.5 &&
-             i < data.size() / 2 &&
-             !pos_min_signal)
+        if ( data[i].Expenditure < data[pos_min_exp].Expenditure )
+            pos_min_exp = i;
+    }
+    double range = data[pos_max_exp].Expenditure - data[pos_min_exp].Expenditure;
+    for ( int i = 0; i < data.size(); ++i )
+    {
+        if ( i )
         {
-            pos_min_signal = i;
+            double dist = (data[i].Expenditure - data[ 0 ].Expenditure);
+
+            if ( dist > range / 100 * 0.5 &&
+                 i < data.size() / 2 &&
+                 !pos_min_signal)
+            {
+                pos_min_signal = i;
+            }
         }
     }
 /// Коэффициент усиления по расходу
@@ -169,17 +180,28 @@ double CalckNonlinearity( ExpeditureFromInput::DataSet const& data )
         return 0;
 
     int pos_max_exp = 0;
+    int pos_min_exp = 0;
     int pos_min_signal = 0;
     for ( int i = 0; i < data.size(); ++i )
     {
         if ( data[i].Expenditure > data[pos_max_exp].Expenditure )
             pos_max_exp = i;
-        if ( i &&
-             data[i].Expenditure - data[i - 1 ].Expenditure > 0.5 &&
-             i < data.size() / 2 &&
-             !pos_min_signal)
+        if ( data[i].Expenditure < data[pos_min_exp].Expenditure )
+            pos_min_exp = i;
+    }
+    double range = data[pos_max_exp].Expenditure - data[pos_min_exp].Expenditure;
+    for ( int i = 0; i < data.size(); ++i )
+    {
+        if ( i )
         {
-            pos_min_signal = i;
+            double dist = (data[i].Expenditure - data[ 0 ].Expenditure);
+
+            if ( dist > range / 100 * 0.5 &&
+                 i < data.size() / 2 &&
+                 !pos_min_signal)
+            {
+                pos_min_signal = i;
+            }
         }
     }
 ///     Нелинейность
@@ -277,17 +299,28 @@ ff0x::NoAxisGraphBuilder::LinePoints ProcessET ( ExpeditureFromInput::DataSet co
         return std::move( result );;
 
     int pos_max_exp = 0;
+    int pos_min_exp = 0;
     int pos_min_signal = 0;
     for ( int i = 0; i < data.size(); ++i )
     {
         if ( data[i].Expenditure > data[pos_max_exp].Expenditure )
             pos_max_exp = i;
-        if ( i &&
-             data[i].Expenditure - data[i - 1 ].Expenditure > 0.5 &&
-             i < data.size() / 2 &&
-             !pos_min_signal)
+        if ( data[i].Expenditure < data[pos_min_exp].Expenditure )
+            pos_min_exp = i;
+    }
+    double range = data[pos_max_exp].Expenditure - data[pos_min_exp].Expenditure;
+    for ( int i = 0; i < data.size(); ++i )
+    {
+        if ( i )
         {
-            pos_min_signal = i;
+            double dist = (data[i].Expenditure - data[ 0 ].Expenditure);
+
+            if ( dist > range / 100 * 0.5 &&
+                 i < data.size() / 2 &&
+                 !pos_min_signal)
+            {
+                pos_min_signal = i;
+            }
         }
     }
 ///     Нелинейность
