@@ -10,17 +10,6 @@ namespace control_board
 class VACharacteristic :public test::control_board::Test
 {
 public:
-    VACharacteristic();
-    bool Run();
-    bool Success() const;
-    QJsonObject Serialise() const;
-    bool Deserialize( QJsonObject const& obj );
-
-    bool Draw(QPainter &painter, QRect &free_rect ) const;
-protected:
-    void UpdateData();
-private:
-
     struct Data
     {
         Data():
@@ -33,8 +22,21 @@ private:
         double signal;
         double current;
     };
+    typedef QVector<Data> DataSet;
+    VACharacteristic();
+    bool Run();
+    bool Success() const;
+    QJsonObject Serialise() const;
+    bool Deserialize( QJsonObject const& obj );
 
-    QVector<Data> Graph;
+    bool Draw(QPainter &painter, QRect &free_rect, const QString &compare_width ) const;
+protected:
+    void UpdateData();
+private:
+
+
+
+    DataSet Graph;
     /// вероятно тоже график
     /// (хочу просто массива с контроллера для рисования )
 };

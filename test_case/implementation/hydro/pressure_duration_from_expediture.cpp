@@ -184,7 +184,7 @@ bool PressureDurationFromExpenditure::Deserialize( QJsonObject const& obj )
     return true;
 }
 
-bool PressureDurationFromExpenditure::Draw( QPainter& painter, QRect &free_rect ) const
+bool PressureDurationFromExpenditure::Draw(QPainter& painter, QRect &free_rect , const QString &compare_width) const
 {
     test::hydro::Parameters *params = static_cast< test::hydro::Parameters * >( CURRENT_PARAMS );
     if ( !params )
@@ -360,7 +360,7 @@ bool PressureDurationFromExpenditure::Draw( QPainter& painter, QRect &free_rect 
     res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
     QFontMetrics metrix( text_font );
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &text_font, &params, &DrawRowCenter, &metrix ]( QRect const& rect )
+    [ this, &painter, &text_font, &params, &DrawRowCenter, &metrix, &compare_width ]( QRect const& rect )
     {
         painter.save();
         ff0x::NoAxisGraphBuilder::LinePoints B35A;
@@ -369,17 +369,26 @@ bool PressureDurationFromExpenditure::Draw( QPainter& painter, QRect &free_rect 
         ff0x::NoAxisGraphBuilder::LinePoints B35Ae;
         ff0x::NoAxisGraphBuilder::LinePoints B35Be;
 
+        ff0x::NoAxisGraphBuilder::LinePoints B35Ae2;
+        ff0x::NoAxisGraphBuilder::LinePoints B35Be2;
+
         QPointF x_range_1;
         QPointF y_range_1;
 
         QPointF x_range_1e;
         QPointF y_range_1e;
 
+        QPointF x_range_1e2;
+        QPointF y_range_1e2;
+
         QPointF x_range_2;
         QPointF y_range_2;
 
         QPointF x_range_2e;
         QPointF y_range_2e;
+
+        QPointF x_range_2e2;
+        QPointF y_range_2e2;
 
         //поиск данных теста
         foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
@@ -390,6 +399,17 @@ bool PressureDurationFromExpenditure::Draw( QPainter& painter, QRect &free_rect 
                 DataSet data = FromJson( obj.value("data").toObject().value("Data").toArray() );
                 B35Ae = ProcessA( data, x_range_1e, y_range_1e );
                 B35Be = ProcessB( data, x_range_2e, y_range_2e );
+            }
+        }
+        //поиск данных теста
+        foreach (QJsonValue const& val, test::ReadFromFile(compare_width).value("Results").toArray())
+        {
+            auto obj = val.toObject();
+            if ( obj.value("id").toInt() == mId )
+            {
+                DataSet data = FromJson( obj.value("data").toObject().value("Data").toArray() );
+                B35Ae2 = ProcessA( data, x_range_1e2, y_range_1e2 );
+                B35Be2 = ProcessB( data, x_range_2e2, y_range_2e2 );
             }
         }
 
@@ -414,12 +434,19 @@ bool PressureDurationFromExpenditure::Draw( QPainter& painter, QRect &free_rect 
         if ( !B35Ae.empty() )
             lines1.push_back( ff0x::NoAxisGraphBuilder::Line(B35Ae,
                               ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
+        if ( !B35Ae2.empty() )
+            lines1.push_back( ff0x::NoAxisGraphBuilder::Line(B35Ae2,
+                              ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
 
         lines2.push_back( ff0x::NoAxisGraphBuilder::Line(B35B,
                           ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
         if ( !B35Be.empty() )
             lines2.push_back( ff0x::NoAxisGraphBuilder::Line(B35Be,
                               ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
+        if ( !B35Be2.empty() )
+            lines1.push_back( ff0x::NoAxisGraphBuilder::Line(B35Be2,
+                              ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
+
 
         DrawRowCenter( p1t, text_font, Qt::black, "График: «перепад Р-->A»"  );
         {
@@ -427,16 +454,15 @@ bool PressureDurationFromExpenditure::Draw( QPainter& painter, QRect &free_rect 
             QPointF y_range;
             double x_step = 0;
             double y_step = 0;
-            if ( !B35Ae.empty() )
-            {
-                ff0x::DataLength( x_range_1, x_range_1e, x_range, x_step );
-                ff0x::DataLength( y_range_1, y_range_1e, y_range, y_step );
-            }
-            else
-            {
-                ff0x::DataLength( x_range_1, x_range, x_step );
-                ff0x::DataLength( y_range_1, y_range, y_step );
-            }
+
+            ff0x::DataLength( x_range_1,
+                              x_range_1e, !B35Ae.empty(),
+                              x_range_1e2, !B35Ae2.empty(),
+                              x_range, x_step );
+            ff0x::DataLength( y_range_1,
+                              y_range_1e, !B35Ae.empty(),
+                              y_range_1e2, !B35Ae2.empty(),
+                              y_range, y_step );
 
             painter.drawPixmap( p1, builder.Draw( lines1, x_range, y_range, x_step, y_step, "Расход (л/мин)", "Δ Р (бар)", true ) );
         }
@@ -446,16 +472,16 @@ bool PressureDurationFromExpenditure::Draw( QPainter& painter, QRect &free_rect 
             QPointF y_range;
             double x_step = 0;
             double y_step = 0;
-            if ( !B35Be.empty() )
-            {
-                ff0x::DataLength( x_range_2, x_range_2e, x_range, x_step );
-                ff0x::DataLength( y_range_2, y_range_2e, y_range, y_step );
-            }
-            else
-            {
-                ff0x::DataLength( x_range_2, x_range, x_step );
-                ff0x::DataLength( y_range_2, y_range, y_step );
-            }
+
+            ff0x::DataLength( x_range_2,
+                              x_range_2e, !B35Be.empty(),
+                              x_range_2e2, !B35Be2.empty(),
+                              x_range, x_step );
+            ff0x::DataLength( y_range_2,
+                              y_range_2e, !B35Be.empty(),
+                              y_range_2e2, !B35Be2.empty(),
+                              y_range, y_step );
+
             painter.drawPixmap( p2, builder.Draw( lines2, x_range, y_range, x_step, y_step, "Расход (л/мин)", "Δ Р (бар)", true ) );
         }
 

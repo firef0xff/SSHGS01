@@ -162,7 +162,7 @@ void ExpeditureFromPressureDuration::ResetDrawLine()
     Test::ResetDrawLine();
 }
 
-bool ExpeditureFromPressureDuration::Draw( QPainter& painter, QRect &free_rect ) const
+bool ExpeditureFromPressureDuration::Draw(QPainter& painter, QRect &free_rect , const QString &compare_width) const
 {
     QFont header_font = painter.font();
     header_font.setFamily("Arial");
@@ -348,15 +348,17 @@ bool ExpeditureFromPressureDuration::Draw( QPainter& painter, QRect &free_rect )
 
     QFontMetrics metrix( text_font );
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &text_font, &DrawRowCenter, &metrix ]( QRect const& rect )
+    [ this, &painter, &text_font, &DrawRowCenter, &metrix, &compare_width ]( QRect const& rect )
     {
         painter.save();
 
         ff0x::GraphBuilder::LinePoints dataA;
         ff0x::GraphBuilder::LinePoints dataA_e;
+        ff0x::GraphBuilder::LinePoints dataA_e2;
 
         ff0x::GraphBuilder::LinePoints dataB;
         ff0x::GraphBuilder::LinePoints dataB_e;
+        ff0x::GraphBuilder::LinePoints dataB_e2;
 
         QPointF x_range_1;
         QPointF y_range_1;
@@ -364,11 +366,17 @@ bool ExpeditureFromPressureDuration::Draw( QPainter& painter, QRect &free_rect )
         QPointF x_range_1e;
         QPointF y_range_1e;
 
+        QPointF x_range_1e2;
+        QPointF y_range_1e2;
+
         QPointF x_range_2;
         QPointF y_range_2;
 
         QPointF x_range_2e;
         QPointF y_range_2e;
+
+        QPointF x_range_2e2;
+        QPointF y_range_2e2;
 
         //поиск данных теста
         foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
@@ -381,6 +389,18 @@ bool ExpeditureFromPressureDuration::Draw( QPainter& painter, QRect &free_rect )
                 dataB_e = ProcessB( data, x_range_2e, y_range_2e );
             }
         }
+        //поиск данных теста
+        foreach (QJsonValue const& val, test::ReadFromFile(compare_width).value("Results").toArray())
+        {
+            auto obj = val.toObject();
+            if ( obj.value("id").toInt() == mId )
+            {
+                DataSet data = FromJson( obj.value("data").toObject().value("Data").toArray() );
+                dataA_e2 = ProcessA( data, x_range_1e2, y_range_1e2 );
+                dataB_e2 = ProcessB( data, x_range_2e2, y_range_2e2 );
+            }
+        }
+
 
         dataA = ProcessA( mData, x_range_1, y_range_1 );
         dataB = ProcessB( mData, x_range_2, y_range_2 );
@@ -396,12 +416,15 @@ bool ExpeditureFromPressureDuration::Draw( QPainter& painter, QRect &free_rect )
         lines_a.push_back( ff0x::NoAxisGraphBuilder::Line(dataA, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
         if ( !dataA_e.empty() )
             lines_a.push_back( ff0x::NoAxisGraphBuilder::Line(dataA_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
+        if ( !dataA_e2.empty() )
+            lines_a.push_back( ff0x::NoAxisGraphBuilder::Line(dataA_e2, ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
 
         ff0x::NoAxisGraphBuilder::GraphDataLine lines_b;
         lines_b.push_back( ff0x::NoAxisGraphBuilder::Line(dataB, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
         if ( !dataB_e.empty() )
             lines_b.push_back( ff0x::NoAxisGraphBuilder::Line(dataB_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
-
+        if ( !dataB_e2.empty() )
+            lines_b.push_back( ff0x::NoAxisGraphBuilder::Line(dataB_e2, ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
 
         QRect p1(rect.left(), rect.top(), w, h );
         QRect p2(rect.right() - w, rect.top(), w, h );
@@ -415,16 +438,14 @@ bool ExpeditureFromPressureDuration::Draw( QPainter& painter, QRect &free_rect )
             QPointF y_range;
             double x_step = 0;
             double y_step = 0;
-            if ( !dataA_e.empty() )
-            {
-                ff0x::DataLength( x_range_1, x_range_1e, x_range, x_step );
-                ff0x::DataLength( y_range_1, y_range_1e, y_range, y_step );
-            }
-            else
-            {
-                ff0x::DataLength( x_range_1, x_range, x_step );
-                ff0x::DataLength( y_range_1, y_range, y_step );
-            }
+            ff0x::DataLength( x_range_1,
+                              x_range_1e, !dataA_e.empty(),
+                              x_range_1e2, !dataA_e2.empty(),
+                              x_range, x_step );
+            ff0x::DataLength( y_range_1,
+                              y_range_1e, !dataA_e.empty(),
+                              y_range_1e2, !dataA_e2.empty(),
+                              y_range, y_step );
 
             painter.drawPixmap( p1, builder.Draw( lines_a, x_range, y_range, x_step, y_step, "Δ Р (бар)", "Расход (л/мин)", true ) );
         }
@@ -434,16 +455,14 @@ bool ExpeditureFromPressureDuration::Draw( QPainter& painter, QRect &free_rect )
             QPointF y_range;
             double x_step = 0;
             double y_step = 0;
-            if ( !dataB_e.empty() )
-            {
-                ff0x::DataLength( x_range_2, x_range_2e, x_range, x_step );
-                ff0x::DataLength( y_range_2, y_range_2e, y_range, y_step );
-            }
-            else
-            {
-                ff0x::DataLength( x_range_2, x_range, x_step );
-                ff0x::DataLength( y_range_2, y_range, y_step );
-            }
+            ff0x::DataLength( x_range_2,
+                              x_range_2e, !dataB_e.empty(),
+                              x_range_2e2, !dataB_e2.empty(),
+                              x_range, x_step );
+            ff0x::DataLength( y_range_2,
+                              y_range_2e, !dataB_e.empty(),
+                              y_range_2e2, !dataB_e2.empty(),
+                              y_range, y_step );
             painter.drawPixmap( p2, builder.Draw( lines_b, x_range, y_range, x_step, y_step, "Δ Р (бар)", "Расход (л/мин)", true ) );
 
         }

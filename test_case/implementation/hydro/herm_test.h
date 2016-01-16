@@ -16,7 +16,7 @@ public:
     QJsonObject Serialise() const;
     bool Deserialize( QJsonObject const& obj );
 
-    bool Draw(QPainter &painter, QRect &free_rect ) const;
+    bool Draw(QPainter &painter, QRect &free_rect, QString  const& ) const;
     bool Success() const;
 private:
     void Question();
@@ -33,7 +33,7 @@ public:
     QJsonObject Serialise() const;
     bool Deserialize( QJsonObject const& obj );
 
-    bool Draw(QPainter &painter, QRect &free_rect ) const;
+    bool Draw(QPainter &painter, QRect &free_rect, QString  const& ) const;
     bool Success() const;
 private:
     // Средний расчет расход утечки за %s сек, %s л/мин

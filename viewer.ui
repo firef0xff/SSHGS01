@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>519</width>
-    <height>464</height>
+    <width>766</width>
+    <height>604</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -48,6 +48,13 @@
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="Compare">
+       <property name="text">
+        <string>Сравнить с...</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -72,8 +79,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>499</width>
-        <height>407</height>
+        <width>746</width>
+        <height>553</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout">

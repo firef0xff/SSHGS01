@@ -185,7 +185,7 @@ bool TransientPerformance::Deserialize( QJsonObject const& obj )
     return true;
 }
 
-bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
+bool TransientPerformance::Draw(QPainter& painter, QRect &free_rect , const QString &compare_width) const
 {
     test::servo::Parameters *params = static_cast< test::servo::Parameters * >( CURRENT_PARAMS );
     if ( !params )
@@ -288,14 +288,16 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
 
     QFontMetrics metrix( text_font );
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &text_font, &DrawRowCenter, &metrix ]( QRect const& rect )
+    [ this, &painter, &text_font, &DrawRowCenter, &metrix, &compare_width ]( QRect const& rect )
     {
         painter.save();
 
         ff0x::GraphBuilder::LinePoints data1;
         ff0x::GraphBuilder::LinePoints data1_e;
+        ff0x::GraphBuilder::LinePoints data1_e2;
         ff0x::GraphBuilder::LinePoints data2;
         ff0x::GraphBuilder::LinePoints data2_e;
+        ff0x::GraphBuilder::LinePoints data2_e2;
 
 
         QPointF x_range_1;
@@ -304,11 +306,18 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
         QPointF x_range_1e;
         QPointF y_range_1e;
 
+        QPointF x_range_1e2;
+        QPointF y_range_1e2;
+
         QPointF x_range_2;
         QPointF y_range_2;
 
         QPointF x_range_2e;
         QPointF y_range_2e;
+
+        QPointF x_range_2e2;
+        QPointF y_range_2e2;
+
 
         //поиск данных теста
         foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
@@ -318,6 +327,16 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
             {
                 data1_e = Process( FromJson( obj.value("data").toObject().value("Graph1").toArray() ), x_range_1e, y_range_1e );
                 data2_e = Process( FromJson( obj.value("data").toObject().value("Graph1").toArray() ), x_range_2e, y_range_2e );
+            }
+        }
+        //поиск данных теста
+        foreach (QJsonValue const& val, test::ReadFromFile(compare_width).value("Results").toArray())
+        {
+            auto obj = val.toObject();
+            if ( obj.value("id").toInt() == mId )
+            {
+                data1_e2 = Process( FromJson( obj.value("data").toObject().value("Graph1").toArray() ), x_range_1e2, y_range_1e2 );
+                data2_e2 = Process( FromJson( obj.value("data").toObject().value("Graph1").toArray() ), x_range_2e2, y_range_2e2 );
             }
         }
 
@@ -342,7 +361,12 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
         if ( !data1_e.empty() )
             lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data1_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
         if ( !data2_e.empty() )
-            lines2.push_back( ff0x::NoAxisGraphBuilder::Line(data2_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::darkYellow ) ) );
+            lines2.push_back( ff0x::NoAxisGraphBuilder::Line(data2_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
+
+        if ( !data1_e2.empty() )
+            lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data1_e2, ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
+        if ( !data2_e2.empty() )
+            lines2.push_back( ff0x::NoAxisGraphBuilder::Line(data2_e2, ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
 
         QRect p1(rect.left(), rect.top(), w, h );
         QRect p2(rect.right() - w, rect.top(), w, h );
@@ -355,16 +379,14 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
             QPointF y_range;
             double x_step = 0;
             double y_step = 0;
-            if ( !data1_e.empty() )
-            {
-                ff0x::DataLength( x_range_1, x_range_1e, x_range, x_step );
-                ff0x::DataLength( y_range_1, y_range_1e, y_range, y_step );
-            }
-            else
-            {
-                ff0x::DataLength( x_range_1, x_range, x_step );
-                ff0x::DataLength( y_range_1, y_range, y_step );
-            }
+            ff0x::DataLength( x_range_1,
+                              x_range_1e, !data1_e.empty(),
+                              x_range_1e2, !data1_e2.empty(),
+                              x_range, x_step );
+            ff0x::DataLength( y_range_1,
+                              y_range_1e, !data1_e.empty(),
+                              y_range_1e2, !data1_e2.empty(),
+                              y_range, y_step );
             painter.drawPixmap( p1, builder.Draw( lines1, x_range, y_range, x_step, y_step, "Время (мс)", "Расход (л/мин)", true ) );
         }
         DrawRowCenter( p2t, text_font, Qt::black, "Переходные характеристики. Амплитуда 2" );
@@ -373,16 +395,14 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
             QPointF y_range;
             double x_step = 0;
             double y_step = 0;
-            if ( !data2_e.empty() )
-            {
-                ff0x::DataLength( x_range_2, x_range_2e, x_range, x_step );
-                ff0x::DataLength( y_range_2, y_range_2e, y_range, y_step );
-            }
-            else
-            {
-                ff0x::DataLength( x_range_2, x_range, x_step );
-                ff0x::DataLength( y_range_2, y_range, y_step );
-            }
+            ff0x::DataLength( x_range_2,
+                              x_range_2e, !data2_e.empty(),
+                              x_range_2e2, !data2_e2.empty(),
+                              x_range, x_step );
+            ff0x::DataLength( y_range_2,
+                              y_range_2e, !data2_e.empty(),
+                              y_range_2e2, !data2_e2.empty(),
+                              y_range, y_step );
             painter.drawPixmap( p2, builder.Draw( lines2, x_range, y_range, x_step, y_step, "Время (мс)", "Расход (л/мин)", true ) );
         }
 
@@ -390,12 +410,13 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
     }, 1, free_rect.width()/2 + metrix.height()  );
 
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &text_font, &DrawRowCenter, &metrix ]( QRect const& rect )
+    [ this, &painter, &text_font, &DrawRowCenter, &metrix, &compare_width ]( QRect const& rect )
     {
         painter.save();
 
         ff0x::GraphBuilder::LinePoints data3;
         ff0x::GraphBuilder::LinePoints data3_e;
+        ff0x::GraphBuilder::LinePoints data3_e2;
 
 
         QPointF x_range_3;
@@ -404,6 +425,9 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
         QPointF x_range_3e;
         QPointF y_range_3e;
 
+        QPointF x_range_3e2;
+        QPointF y_range_3e2;
+
         //поиск данных теста
         foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
         {
@@ -411,6 +435,15 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
             if ( obj.value("id").toInt() == mId )
             {
                 data3_e = Process( FromJson( obj.value("data").toObject().value("Graph3").toArray() ), x_range_3e, y_range_3e );
+            }
+        }
+        //поиск данных теста
+        foreach (QJsonValue const& val, test::ReadFromFile(compare_width).value("Results").toArray())
+        {
+            auto obj = val.toObject();
+            if ( obj.value("id").toInt() == mId )
+            {
+                data3_e2 = Process( FromJson( obj.value("data").toObject().value("Graph3").toArray() ), x_range_3e2, y_range_3e2 );
             }
         }
 
@@ -430,6 +463,9 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
         if ( !data3_e.empty() )
             lines3.push_back( ff0x::NoAxisGraphBuilder::Line(data3_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
 
+        if ( !data3_e2.empty() )
+            lines3.push_back( ff0x::NoAxisGraphBuilder::Line(data3_e2, ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
+
         QRect p1(rect.left(), rect.top(), w, h );
         QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
 
@@ -440,16 +476,14 @@ bool TransientPerformance::Draw( QPainter& painter, QRect &free_rect ) const
             QPointF y_range;
             double x_step = 0;
             double y_step = 0;
-            if ( !data3_e.empty() )
-            {
-                ff0x::DataLength( x_range_3, x_range_3e, x_range, x_step );
-                ff0x::DataLength( y_range_3, y_range_3e, y_range, y_step );
-            }
-            else
-            {
-                ff0x::DataLength( x_range_3, x_range, x_step );
-                ff0x::DataLength( y_range_3, y_range, y_step );
-            }
+            ff0x::DataLength( x_range_3,
+                              x_range_3e, !data3_e.empty(),
+                              x_range_3e2, !data3_e2.empty(),
+                              x_range, x_step );
+            ff0x::DataLength( y_range_3,
+                              y_range_3e, !data3_e.empty(),
+                              y_range_3e2, !data3_e2.empty(),
+                              y_range, y_step );
 
             painter.drawPixmap( p1, builder.Draw( lines3, x_range, y_range, x_step, y_step, "Время (мс)", "Расход (л/мин)", true ) );
         }

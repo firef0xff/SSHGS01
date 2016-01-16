@@ -46,7 +46,7 @@ bool OutsideHermTest::Deserialize( QJsonObject const& obj )
     return true;
 }
 
-bool OutsideHermTest::Draw( QPainter& painter, QRect &free_rect ) const
+bool OutsideHermTest::Draw(QPainter& painter, QRect &free_rect , const QString &) const
 {
     test::hydro::Parameters *params = static_cast< test::hydro::Parameters * >( CURRENT_PARAMS );
     if ( !params )
@@ -211,7 +211,7 @@ bool InsideHermTest::Deserialize( QJsonObject const& obj )
     return true;
 }
 
-bool InsideHermTest::Draw( QPainter& painter, QRect &free_rect ) const
+bool InsideHermTest::Draw(QPainter& painter, QRect &free_rect , const QString &) const
 {
     test::hydro::Parameters *params = static_cast< test::hydro::Parameters * >( CURRENT_PARAMS );
     if ( !params )

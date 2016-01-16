@@ -65,7 +65,7 @@ bool FunctionalTest::Success() const
 {
     return HermResult && MaxPressureResult && WorkPressureResult && ExpenditureResult && MoveTimeResult;
 }
-bool FunctionalTest::Draw( QPainter& painter, QRect &free_rect ) const
+bool FunctionalTest::Draw(QPainter& painter, QRect &free_rect , const QString &) const
 {
     test::hydro_cylinder::Parameters *params = static_cast< test::hydro_cylinder::Parameters * >( CURRENT_PARAMS );
     if ( !params )

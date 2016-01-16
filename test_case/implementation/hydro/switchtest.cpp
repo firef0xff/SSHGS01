@@ -58,7 +58,7 @@ bool SwitchTest::Deserialize( QJsonObject const& obj )
     return true;
 }
 
-bool SwitchTest::Draw( QPainter& painter, QRect &free_rect ) const
+bool SwitchTest::Draw(QPainter& painter, QRect &free_rect , const QString &) const
 {
     test::hydro::Parameters *params = static_cast< test::hydro::Parameters * >( CURRENT_PARAMS );
     if ( !params )

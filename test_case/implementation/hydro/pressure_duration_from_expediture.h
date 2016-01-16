@@ -36,7 +36,7 @@ public:
     QJsonObject Serialise() const;
     bool Deserialize( QJsonObject const& obj );
 
-    bool Draw(QPainter &painter, QRect &free_rect ) const;
+    bool Draw(QPainter &painter, QRect &free_rect, QString  const& compare_width ) const;
     bool Success() const;
 private:
     DataSet mData;

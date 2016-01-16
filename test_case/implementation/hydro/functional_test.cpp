@@ -57,7 +57,7 @@ bool FunctionalTest::Deserialize( QJsonObject const& obj )
     return res;
 }
 
-bool FunctionalTest::Draw( QPainter& painter, QRect &free_rect ) const
+bool FunctionalTest::Draw(QPainter& painter, QRect &free_rect , const QString &) const
 {
     test::hydro::Parameters *params = static_cast< test::hydro::Parameters * >( CURRENT_PARAMS );
     if ( !params )

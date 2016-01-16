@@ -15,6 +15,12 @@ Viewer::Viewer(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    Init();
+}
+
+void Viewer::Init()
+{
+    mPages.clear();
     QPixmap pixmap( 793, 1123 );
     QPainter painter(&pixmap);
     QRect rc = PreparePage( painter, QRect(0,0,793,1123) );
@@ -29,7 +35,7 @@ Viewer::Viewer(QWidget *parent) :
             bool draw = false;
             while( !draw )
             {
-                draw = test->Draw( painter, rc );
+                draw = test->Draw( painter, rc, CompareWidth );
                 if ( !draw )
                 {
                     painter.end();
@@ -149,7 +155,7 @@ void Viewer::on_SavePDF_clicked()
                 bool draw = false;
                 while( !draw )
                 {
-                    draw = test->Draw( painter, rc );
+                    draw = test->Draw( painter, rc, CompareWidth );
                     if ( !draw )
                     {
                         printer.newPage();
@@ -217,4 +223,20 @@ QRect Viewer::PreparePage( QPainter& painter, QRect const& page_rect )
 //    painter.translate( print_area.topLeft() );
 
     return print_area;
+}
+
+void Viewer::on_Compare_clicked()
+{
+    QFileDialog dlg;
+    dlg.setFileMode( QFileDialog::ExistingFile );
+    dlg.setDirectory( app::Settings::Instance().TestPath() );
+    dlg.setNameFilter( "Результаты испытаний (*.res )" );
+    dlg.setViewMode( QFileDialog::Detail );
+    if ( dlg.exec() )
+    {
+        CompareWidth = dlg.selectedFiles().front();
+    }
+    else
+        CompareWidth.clear();
+    Init();
 }

@@ -31,17 +31,19 @@ public:
     virtual bool Deserialize( QJsonObject const& obj ) = 0;
 
     // true если больше нечего выводить ecли false то предоставленного куска мало
-    virtual bool Draw( QPainter& painter, QRect &free_rect ) const = 0;
+    virtual bool Draw( QPainter& painter, QRect &free_rect, QString  const& compare_width ) const = 0;
 
     virtual void ResetDrawLine();  
 
     virtual bool Success() const;
 
+    void CompareWidth( QString const& f_name );
+
 protected:
     bool IsStopped();
     LogFunction Log;
     LaunchFunction Launcher;
-    QString mName;
+    QString mName;    
 
     typedef std::function< void ( QRect const& ) > DrawLineHandler;
     bool DrawLine ( uint32_t &num, QRect& source, QFont font, DrawLineHandler do_draw, double space = 1, int custom_height = 0 ) const;

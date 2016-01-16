@@ -642,9 +642,9 @@ void SaveToEtalone( const Parameters &params )
     f.close();
 }
 
-QJsonObject ReadFromEtalone()
+QJsonObject ReadFromFile( QString const& f_name )
 {
-    QFile f( "models.json" );
+    QFile f( f_name );
     if ( f.exists() )
     {
         f.open(QIODevice::ReadOnly);
@@ -655,6 +655,11 @@ QJsonObject ReadFromEtalone()
     }
 
     return QJsonObject();
+}
+
+QJsonObject ReadFromEtalone()
+{    
+    return ReadFromFile( "models.json" );
 }
 
 }//namespace test

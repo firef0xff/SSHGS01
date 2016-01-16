@@ -39,32 +39,87 @@ bool VACharacteristic::Success() const
 {
     return true;
 }
+
+namespace
+{
+
+QJsonArray  ToJson ( VACharacteristic::DataSet const& data )
+{
+    QJsonArray arr;
+
+    foreach ( VACharacteristic::Data const& d, data )
+    {
+        arr.insert( arr.end(), d.Serialise() );
+    }
+
+    return std::move( arr );
+}
+VACharacteristic::DataSet FromJson( QJsonArray const& arr )
+{
+    VACharacteristic::DataSet data;
+
+    foreach (QJsonValue const& v, arr)
+    {
+        VACharacteristic::Data d;
+        if ( d.Deserialize( v.toObject() ) )
+            data.insert( data.end(), d );
+    }
+
+    return std::move( data );
+}
+
+ff0x::NoAxisGraphBuilder::LinePoints Process ( VACharacteristic::DataSet const& src, QPointF& x_range, QPointF& y_range )
+{
+    ff0x::NoAxisGraphBuilder::LinePoints result;
+
+    for ( int i = 0; i < src.size(); ++i )
+    {
+        double const& x = fabs( src[i].signal );
+        double const& y = fabs( src[i].current );
+
+        if ( !i )
+        {
+            x_range.setX( x );
+            x_range.setY( x );
+            y_range.setX( y );
+            y_range.setY( y );
+        }
+        else
+        {
+            if ( x > x_range.x() )
+                x_range.setX( x );
+            if ( x < x_range.y() )
+                x_range.setY( x );
+
+            if ( y > y_range.x() )
+                y_range.setX( y );
+            if ( y < y_range.y() )
+                y_range.setY( y );
+        }
+
+        result.push_back( QPointF( x, y ) );
+    }
+    return std::move( result );
+}
+
+}//namespace
+
+
 QJsonObject VACharacteristic::Serialise() const
 {
     QJsonObject obj = Test::Serialise();
-    QJsonArray a;
-    foreach (Data const& d, Graph)
-    {
-        a.insert( a.end(), d.Serialise() );
-    }
-    obj.insert("Graph", a );
+    obj.insert("Graph", ToJson( Graph ) );
 
     return obj;
 }
 bool VACharacteristic::Deserialize( QJsonObject const& obj )
 {
-    QJsonArray a = obj.value("Graph").toArray();
-    foreach (QJsonValue const& v, a)
-    {
-        Data d;
-        if ( d.Deserialize( v.toObject() ) )
-            Graph.insert( Graph.end(), d );
-    }
+    Graph = FromJson( obj.value("Graph").toArray() );
     Test::Deserialize( obj );
     return true;
 }
 
-bool VACharacteristic::Draw( QPainter& painter, QRect &free_rect ) const
+bool VACharacteristic::Draw(QPainter& painter, QRect &free_rect , const QString &compare_width) const
 {
     QFont header_font = painter.font();
     header_font.setFamily("Arial");
@@ -104,15 +159,22 @@ bool VACharacteristic::Draw( QPainter& painter, QRect &free_rect ) const
 
     QFontMetrics metrix( text_font );
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &text_font, &DrawRowCenter, &metrix ]( QRect const& rect )
+    [ this, &painter, &text_font, &DrawRowCenter, &metrix, &compare_width ]( QRect const& rect )
     {
         painter.save();
 
-        ff0x::GraphBuilder::LinePoints data;
-        ff0x::GraphBuilder::LinePoints data_e;
+        ff0x::NoAxisGraphBuilder::LinePoints data;
+        ff0x::NoAxisGraphBuilder::LinePoints data_e;
+        ff0x::NoAxisGraphBuilder::LinePoints data_e2;
 
-        double max_signal = 0;
-        double max_Leak = 0;
+        QPointF x_range_1;
+        QPointF y_range_1;
+
+        QPointF x_range_1e;
+        QPointF y_range_1e;
+
+        QPointF x_range_1e2;
+        QPointF y_range_1e2;
 
         //поиск данных теста
         foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
@@ -121,42 +183,58 @@ bool VACharacteristic::Draw( QPainter& painter, QRect &free_rect ) const
             if ( obj.value("id").toInt() == mId )
             {
                 QJsonArray a = obj.value("data").toObject().value("Graph").toArray();
-                foreach ( QJsonValue const& v, a )
-                {
-                    QJsonObject o = v.toObject();
-                    data_e.push_back( QPointF( o.value("signal").toDouble(), o.value("current").toDouble() ) );
-                }
+                data_e = Process( FromJson( a ), x_range_1e, y_range_1e );
             }
         }
 
-        foreach ( Data const& item, Graph )
+        //поиск данных теста
+        foreach (QJsonValue const& val, test::ReadFromFile(compare_width).value("Results").toArray())
         {
-            double abs_sig = std::abs( item.signal );
-            double abs_leak = std::abs( item.current );
-
-            if ( max_signal < abs_sig )
-                max_signal = abs_sig;
-
-            if ( max_Leak < abs_leak )
-                max_Leak = abs_leak;
-
-            data.push_back( QPointF( item.signal, item.current ) );
+            auto obj = val.toObject();
+            if ( obj.value("id").toInt() == mId )
+            {
+                QJsonArray a = obj.value("data").toObject().value("Graph").toArray();
+                data_e2 = Process( FromJson( a ), x_range_1e2, y_range_1e2 );
+            }
         }
+
+
+        data = Process( Graph, x_range_1, y_range_1 );
+
         QFont f = text_font;
         f.setPointSize( 6 );
         int w = (rect.height() - metrix.height())*0.98;
         int h = (rect.height() - metrix.height())*0.98;
 
-        ff0x::GraphBuilder builder ( w, h, ff0x::GraphBuilder::PlusPlus, f );
-        ff0x::GraphBuilder::GraphDataLine lines;
-        lines.push_back( ff0x::GraphBuilder::Line(data, ff0x::GraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
+        ff0x::NoAxisGraphBuilder builder ( w, h, f );
+        ff0x::NoAxisGraphBuilder::GraphDataLine lines;
+        lines.push_back( ff0x::NoAxisGraphBuilder::Line(data, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
         if ( !data_e.empty() )
-            lines.push_back( ff0x::GraphBuilder::Line(data_e, ff0x::GraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
+            lines.push_back( ff0x::NoAxisGraphBuilder::Line(data_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
+        if ( !data_e2.empty() )
+            lines.push_back( ff0x::NoAxisGraphBuilder::Line(data_e2, ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
+
 
         QRect p1(rect.left(), rect.top(), w, h );
         QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
         DrawRowCenter( p1t, text_font, Qt::black, "График" );
-        painter.drawPixmap( p1, builder.Draw( lines, max_signal * 1.25, max_Leak * 1.25, ceil(max_signal)/10, ceil(max_Leak)/10, "Опорный сигнал", "Выходной ток", true ) );
+        {
+            QPointF x_range;
+            QPointF y_range;
+            double x_step = 0;
+            double y_step = 0;
+
+            ff0x::DataLength( x_range_1,
+                              x_range_1e, !data_e.empty(),
+                              x_range_1e2, !data_e2.empty(),
+                              x_range, x_step );
+            ff0x::DataLength( y_range_1,
+                              y_range_1e, !data_e.empty(),
+                              y_range_1e2, !data_e2.empty(),
+                              y_range, y_step );
+
+            painter.drawPixmap( p1, builder.Draw( lines, x_range, y_range, x_step, y_step, "Опорный сигнал", "Выходной ток", true ) );
+        }
 
         painter.restore();
     }, 1, free_rect.width()/2 + metrix.height()  );

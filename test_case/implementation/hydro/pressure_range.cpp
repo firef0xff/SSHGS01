@@ -79,7 +79,7 @@ bool PressureRange::Deserialize( QJsonObject const& obj )
     return true;
 }
 
-bool PressureRange::Draw( QPainter& painter, QRect &free_rect ) const
+bool PressureRange::Draw( QPainter& painter, QRect &free_rect, QString  const& ) const
 {
     test::hydro::Parameters *params = static_cast< test::hydro::Parameters * >( CURRENT_PARAMS );
     if ( !params )

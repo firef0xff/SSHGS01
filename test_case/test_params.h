@@ -182,6 +182,7 @@ bool DataFromFile( QString fname );
 QJsonObject GetTestData(const Parameters &params);
 
 void SaveToEtalone( const Parameters &params );
+QJsonObject ReadFromFile( QString const& f_name );
 QJsonObject ReadFromEtalone();
 
 }//namespace test

@@ -38,7 +38,7 @@ bool PowerTest::Deserialize( QJsonObject const& obj )
     return true;
 }
 
-bool PowerTest::Draw( QPainter& painter, QRect &free_rect ) const
+bool PowerTest::Draw(QPainter& painter, QRect &free_rect , const QString &) const
 {
     QFont header_font = painter.font();
     header_font.setFamily("Arial");

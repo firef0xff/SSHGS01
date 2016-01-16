@@ -21,10 +21,13 @@ private slots:
     void on_Save_clicked();
     void on_SavePDF_clicked();
 
+    void on_Compare_clicked();
+
 signals:
     void closed();
 
 private:
+    void Init();
     void closeEvent(QCloseEvent *e);
 
     Ui::Viewer *ui;
@@ -34,6 +37,7 @@ private:
     QPixmap header_logo;
     QPixmap footer_logo;
 
+    QString CompareWidth;
 
     void DrawPage();
 

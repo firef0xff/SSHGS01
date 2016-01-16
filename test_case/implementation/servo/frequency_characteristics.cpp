@@ -528,7 +528,7 @@ bool FrequencyCharacteristics::Deserialize( QJsonObject const& obj )
     return true;
 }
 
-bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
+bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const QString &compare_width ) const
 {
     test::servo::Parameters *params = static_cast< test::servo::Parameters * >( CURRENT_PARAMS );
     if ( !params )
@@ -866,15 +866,17 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
 #endif
 
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &text_font, &DrawRowCenter, &metrix ]( QRect const& rect )
+    [ this, &painter, &text_font, &DrawRowCenter, &metrix, &compare_width ]( QRect const& rect )
     {
         painter.save();
 
         ff0x::GraphBuilder::LinePoints data1;
         ff0x::GraphBuilder::LinePoints data1_e;
+        ff0x::GraphBuilder::LinePoints data1_e2;
 
         ff0x::GraphBuilder::LinePoints data2;
         ff0x::GraphBuilder::LinePoints data2_e;
+        ff0x::GraphBuilder::LinePoints data2_e2;
 
 
         QPointF x_range_1;
@@ -883,11 +885,17 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
         QPointF x_range_1e;
         QPointF y_range_1e;
 
+        QPointF x_range_1e2;
+        QPointF y_range_1e2;
+
         QPointF x_range_2;
         QPointF y_range_2;
 
         QPointF x_range_2e;
         QPointF y_range_2e;
+
+        QPointF x_range_2e2;
+        QPointF y_range_2e2;
 
         //поиск данных теста
         foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
@@ -898,6 +906,17 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
                 QJsonArray a = obj.value("data").toObject().value("mSource1").toArray();
                 data1_e = ProcessAFC( FromJson( a ), x_range_1e, y_range_1e );
                 data2_e = ProcessPFC( FromJson( a ), x_range_2e, y_range_2e );
+            }
+        }
+        //поиск данных теста
+        foreach (QJsonValue const& val, test::ReadFromFile(compare_width).value("Results").toArray())
+        {
+            auto obj = val.toObject();
+            if ( obj.value("id").toInt() == mId )
+            {
+                QJsonArray a = obj.value("data").toObject().value("mSource1").toArray();
+                data1_e2 = ProcessAFC( FromJson( a ), x_range_1e2, y_range_1e2 );
+                data2_e2 = ProcessPFC( FromJson( a ), x_range_2e2, y_range_2e2 );
             }
         }
 
@@ -915,12 +934,15 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
         lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data1, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
         if ( !data1_e.empty() )
             lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data1_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
+        if ( !data1_e2.empty() )
+            lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data1_e2, ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
 
         ff0x::NoAxisGraphBuilder::GraphDataLine lines2;
         lines2.push_back( ff0x::NoAxisGraphBuilder::Line(data2, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
         if ( !data2_e.empty() )
-            lines2.push_back( ff0x::NoAxisGraphBuilder::Line(data2_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
-
+            lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data2_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
+        if ( !data2_e2.empty() )
+            lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data2_e2, ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
 
         QRect p1(rect.left(), rect.top(), w, h );
         QRect p2(rect.right() - w, rect.top(), w, h );
@@ -932,17 +954,16 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
             QPointF x_range;
             QPointF y_range;
             double x_step = 0;
-            double y_step = 0;
-            if ( !data1_e.empty() )
-            {
-                ff0x::DataLength( x_range_1, x_range_1e, x_range, x_step );
-                ff0x::DataLength( y_range_1, y_range_1e, y_range, y_step );
-            }
-            else
-            {
-                ff0x::DataLength( x_range_1, x_range, x_step );
-                ff0x::DataLength( y_range_1, y_range, y_step );
-            }
+            double y_step = 0;            
+
+            ff0x::DataLength( x_range_1,
+                              x_range_1e, !data1_e.empty(),
+                              x_range_1e2, !data1_e2.empty(),
+                              x_range, x_step );
+            ff0x::DataLength( y_range_1,
+                              y_range_1e, !data1_e.empty(),
+                              y_range_1e2, !data1_e2.empty(),
+                              y_range, y_step );
             if ( y_range.x() - y_range.y() == 0 )
             {
                 y_range.setX( 1 );
@@ -957,16 +978,14 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
             QPointF y_range;
             double x_step = 0;
             double y_step = 0;
-            if ( !data2_e.empty() )
-            {
-                ff0x::DataLength( x_range_2, x_range_2e, x_range, x_step );
-                ff0x::DataLength( y_range_2, y_range_2e, y_range, y_step );
-            }
-            else
-            {
-                ff0x::DataLength( x_range_2, x_range, x_step );
-                ff0x::DataLength( y_range_2, y_range, y_step );
-            }
+            ff0x::DataLength( x_range_2,
+                              x_range_2e, !data2_e.empty(),
+                              x_range_2e2, !data2_e2.empty(),
+                              x_range, x_step );
+            ff0x::DataLength( y_range_2,
+                              y_range_2e, !data2_e.empty(),
+                              y_range_2e2, !data2_e2.empty(),
+                              y_range, y_step );
             if ( y_range.x() - y_range.y() == 0 )
             {
                 y_range.setX( 1 );
@@ -978,15 +997,17 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
     }, 1, free_rect.width()/2 + metrix.height()  );
 
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &text_font, &DrawRowCenter, &metrix ]( QRect const& rect )
+    [ this, &painter, &text_font, &DrawRowCenter, &metrix, &compare_width ]( QRect const& rect )
     {
         painter.save();
 
         ff0x::GraphBuilder::LinePoints data1;
         ff0x::GraphBuilder::LinePoints data1_e;
+        ff0x::GraphBuilder::LinePoints data1_e2;
 
         ff0x::GraphBuilder::LinePoints data2;
         ff0x::GraphBuilder::LinePoints data2_e;
+        ff0x::GraphBuilder::LinePoints data2_e2;
 
 
         QPointF x_range_1;
@@ -995,11 +1016,17 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
         QPointF x_range_1e;
         QPointF y_range_1e;
 
+        QPointF x_range_1e2;
+        QPointF y_range_1e2;
+
         QPointF x_range_2;
         QPointF y_range_2;
 
         QPointF x_range_2e;
         QPointF y_range_2e;
+
+        QPointF x_range_2e2;
+        QPointF y_range_2e2;
 
         //поиск данных теста
         foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
@@ -1010,6 +1037,18 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
                 QJsonArray a = obj.value("data").toObject().value("mSource2").toArray();
                 data1_e = ProcessAFC( FromJson( a ), x_range_1e, y_range_1e );
                 data2_e = ProcessPFC( FromJson( a ), x_range_2e, y_range_2e );
+            }
+        }
+
+        //поиск данных теста
+        foreach (QJsonValue const& val, test::ReadFromFile(compare_width).value("Results").toArray())
+        {
+            auto obj = val.toObject();
+            if ( obj.value("id").toInt() == mId )
+            {
+                QJsonArray a = obj.value("data").toObject().value("mSource2").toArray();
+                data1_e2 = ProcessAFC( FromJson( a ), x_range_1e2, y_range_1e2 );
+                data2_e2 = ProcessPFC( FromJson( a ), x_range_2e2, y_range_2e2 );
             }
         }
 
@@ -1027,11 +1066,15 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
         lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data1, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
         if ( !data1_e.empty() )
             lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data1_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
+        if ( !data1_e2.empty() )
+            lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data1_e2, ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
 
         ff0x::NoAxisGraphBuilder::GraphDataLine lines2;
         lines2.push_back( ff0x::NoAxisGraphBuilder::Line(data2, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
         if ( !data2_e.empty() )
             lines2.push_back( ff0x::NoAxisGraphBuilder::Line(data2_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
+        if ( !data2_e2.empty() )
+            lines2.push_back( ff0x::NoAxisGraphBuilder::Line(data2_e2, ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
 
 
         QRect p1(rect.left(), rect.top(), w, h );
@@ -1045,16 +1088,14 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
             QPointF y_range;
             double x_step = 0;
             double y_step = 0;
-            if ( !data1_e.empty() )
-            {
-                ff0x::DataLength( x_range_1, x_range_1e, x_range, x_step );
-                ff0x::DataLength( y_range_1, y_range_1e, y_range, y_step );
-            }
-            else
-            {
-                ff0x::DataLength( x_range_1, x_range, x_step );
-                ff0x::DataLength( y_range_1, y_range, y_step );
-            }
+            ff0x::DataLength( x_range_1,
+                              x_range_1e, !data1_e.empty(),
+                              x_range_1e2, !data1_e2.empty(),
+                              x_range, x_step );
+            ff0x::DataLength( y_range_1,
+                              y_range_1e, !data1_e.empty(),
+                              y_range_1e2, !data1_e2.empty(),
+                              y_range, y_step );
             if ( y_range.x() - y_range.y() == 0 )
             {
                 y_range.setX( 1 );
@@ -1069,16 +1110,14 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
             QPointF y_range;
             double x_step = 0;
             double y_step = 0;
-            if ( !data2_e.empty() )
-            {
-                ff0x::DataLength( x_range_2, x_range_2e, x_range, x_step );
-                ff0x::DataLength( y_range_2, y_range_2e, y_range, y_step );
-            }
-            else
-            {
-                ff0x::DataLength( x_range_2, x_range, x_step );
-                ff0x::DataLength( y_range_2, y_range, y_step );
-            }
+            ff0x::DataLength( x_range_2,
+                              x_range_2e, !data2_e.empty(),
+                              x_range_2e2, !data2_e2.empty(),
+                              x_range, x_step );
+            ff0x::DataLength( y_range_2,
+                              y_range_2e, !data2_e.empty(),
+                              y_range_2e2, !data2_e2.empty(),
+                              y_range, y_step );
             if ( y_range.x() - y_range.y() == 0 )
             {
                 y_range.setX( 1 );
@@ -1090,15 +1129,17 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
     }, 1, free_rect.width()/2 + metrix.height()  );
 
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &text_font, &DrawRowCenter, &metrix ]( QRect const& rect )
+    [ this, &painter, &text_font, &DrawRowCenter, &metrix, &compare_width ]( QRect const& rect )
     {
         painter.save();
 
         ff0x::GraphBuilder::LinePoints data1;
         ff0x::GraphBuilder::LinePoints data1_e;
+        ff0x::GraphBuilder::LinePoints data1_e2;
 
         ff0x::GraphBuilder::LinePoints data2;
         ff0x::GraphBuilder::LinePoints data2_e;
+        ff0x::GraphBuilder::LinePoints data2_e2;
 
 
         QPointF x_range_1;
@@ -1107,11 +1148,17 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
         QPointF x_range_1e;
         QPointF y_range_1e;
 
+        QPointF x_range_1e2;
+        QPointF y_range_1e2;
+
         QPointF x_range_2;
         QPointF y_range_2;
 
         QPointF x_range_2e;
         QPointF y_range_2e;
+
+        QPointF x_range_2e2;
+        QPointF y_range_2e2;
 
         //поиск данных теста
         foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
@@ -1122,6 +1169,17 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
                 QJsonArray a = obj.value("data").toObject().value("mSource3").toArray();
                 data1_e = ProcessAFC( FromJson( a ), x_range_1e, y_range_1e );
                 data2_e = ProcessPFC( FromJson( a ), x_range_2e, y_range_2e );
+            }
+        }
+        //поиск данных теста
+        foreach (QJsonValue const& val, test::ReadFromFile(compare_width).value("Results").toArray())
+        {
+            auto obj = val.toObject();
+            if ( obj.value("id").toInt() == mId )
+            {
+                QJsonArray a = obj.value("data").toObject().value("mSource3").toArray();
+                data1_e2 = ProcessAFC( FromJson( a ), x_range_1e2, y_range_1e2 );
+                data2_e2 = ProcessPFC( FromJson( a ), x_range_2e2, y_range_2e2 );
             }
         }
 
@@ -1139,11 +1197,15 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
         lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data1, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
         if ( !data1_e.empty() )
             lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data1_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
+        if ( !data1_e2.empty() )
+            lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data1_e2, ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
 
         ff0x::NoAxisGraphBuilder::GraphDataLine lines2;
         lines2.push_back( ff0x::NoAxisGraphBuilder::Line(data2, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
         if ( !data2_e.empty() )
             lines2.push_back( ff0x::NoAxisGraphBuilder::Line(data2_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
+        if ( !data2_e2.empty() )
+            lines2.push_back( ff0x::NoAxisGraphBuilder::Line(data2_e2, ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
 
 
         QRect p1(rect.left(), rect.top(), w, h );
@@ -1157,16 +1219,14 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
             QPointF y_range;
             double x_step = 0;
             double y_step = 0;
-            if ( !data1_e.empty() )
-            {
-                ff0x::DataLength( x_range_1, x_range_1e, x_range, x_step );
-                ff0x::DataLength( y_range_1, y_range_1e, y_range, y_step );
-            }
-            else
-            {
-                ff0x::DataLength( x_range_1, x_range, x_step );
-                ff0x::DataLength( y_range_1, y_range, y_step );
-            }
+            ff0x::DataLength( x_range_1,
+                              x_range_1e, !data1_e.empty(),
+                              x_range_1e2, !data1_e2.empty(),
+                              x_range, x_step );
+            ff0x::DataLength( y_range_1,
+                              y_range_1e, !data1_e.empty(),
+                              y_range_1e2, !data1_e2.empty(),
+                              y_range, y_step );
             if ( y_range.x() - y_range.y() == 0 )
             {
                 y_range.setX( 1 );
@@ -1181,16 +1241,14 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
             QPointF y_range;
             double x_step = 0;
             double y_step = 0;
-            if ( !data2_e.empty() )
-            {
-                ff0x::DataLength( x_range_2, x_range_2e, x_range, x_step );
-                ff0x::DataLength( y_range_2, y_range_2e, y_range, y_step );
-            }
-            else
-            {
-                ff0x::DataLength( x_range_2, x_range, x_step );
-                ff0x::DataLength( y_range_2, y_range, y_step );
-            }
+            ff0x::DataLength( x_range_2,
+                              x_range_2e, !data2_e.empty(),
+                              x_range_2e2, !data2_e2.empty(),
+                              x_range, x_step );
+            ff0x::DataLength( y_range_2,
+                              y_range_2e, !data2_e.empty(),
+                              y_range_2e2, !data2_e2.empty(),
+                              y_range, y_step );
             if ( y_range.x() - y_range.y() == 0 )
             {
                 y_range.setX( 1 );
@@ -1207,3 +1265,4 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect ) const
 }//namespace servo
 
 }//namespace test
+
