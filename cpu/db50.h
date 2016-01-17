@@ -13,8 +13,10 @@ class DB50 :public In
 public:
     void Read();
 
-        int& Osh_M;         //DB50,W66
-        int& Osh_DM;        //DB50,W128
+    bool& ReadyToWork;  //MX49.0 готовность системы к работе
+
+    int& Osh_M;         //DB50,W66
+    int& Osh_DM;        //DB50,W128
 
     float& BP1;         //DB50,REAL2    давление после М1/М2 (real)
     float& BP2;         //DB50,REAL6    давление на сливе испытуемого аппарата (real)
@@ -60,15 +62,20 @@ private:
 
     enum
     {
+        BOOL_COUNT = 1,
         INT_COUNT = 2,
         FLOAT_COUNT = 34
     };
 
+    bool mBoolData[ BOOL_COUNT ];
     int mIntData[ INT_COUNT ];
     float mFloatData[ FLOAT_COUNT ];
     uint64_t mGroupID = 0;
 
-    wchar_t const* mAdresses[ INT_COUNT + FLOAT_COUNT ] = {
+    wchar_t const* mAdresses[ BOOL_COUNT + INT_COUNT + FLOAT_COUNT ] = {
+        //bool
+        L"CPU/DB50.ReadyToWork",
+
         //int
         L"CPU/DB50.Osh_M",
         L"CPU/DB50.Osh_DM",

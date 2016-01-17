@@ -338,6 +338,7 @@ DB40.fault_m8;DB40,X6.3;RW;TST=;CMT=нет включения М8, М9
 DB40.fault_m10;DB40,X6.4;RW;TST=;CMT=нет включения М10, М11
 DB40.fault_m12;DB40,X6.5;RW;TST=;CMT=нет включения М12
 DB40.fault_phasing;DB40,X6.6;RW;TST=;CMT=не правильная фазировка
+DB50.ReadyToWork;MX49.0;RW;TST=;CMT=бит готовности системы к работе
 DB50.BP1;DB50,REAL2;RW;TST=;CMT=давление после М1/М2 (real)
 DB50.BP2;DB50,REAL6;RW;TST=;CMT=давление на сливе испытуемого аппарата (real)
 DB50.BP3;DB50,REAL10;RW;TST=;CMT=давление в полости А (real)

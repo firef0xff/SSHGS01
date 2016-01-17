@@ -411,7 +411,7 @@ void MainWindow::onUpdateControls()
     //готовность к работе
     bool ready = true;
 
-#warning использовать m49.0
+    ready *= table.ReadyToWork;
     ready *= table.BT1 > 25.0;     //температура масла должна быть больше 25
 
     UpdateMark( ui->l_Ready_To_Work, true , ready ? Qt::green : Qt::red );

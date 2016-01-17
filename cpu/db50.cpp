@@ -7,6 +7,7 @@ namespace data
 {
 
 DB50::DB50():
+    ReadyToWork( mBoolData[0] ),
     Osh_M(mIntData[0]),
     Osh_DM(mIntData[1]),
 
@@ -45,9 +46,10 @@ DB50::DB50():
     POS_2_REAL(mFloatData[32]),
     POS_3_REAL(mFloatData[33])
 {
+    memset( mBoolData, 0, sizeof(mBoolData) );
     memset( mIntData, 0, sizeof(mIntData) );
     memset( mFloatData, 0, sizeof(mFloatData) );
-    mGroupID = opc::miniOPC::Instance().AddGroup( L"DB50", mAdresses, INT_COUNT + FLOAT_COUNT );
+    mGroupID = opc::miniOPC::Instance().AddGroup( L"DB50", mAdresses, BOOL_COUNT + INT_COUNT + FLOAT_COUNT );
 }
 
 void DB50::Read()
@@ -58,12 +60,14 @@ void DB50::Read()
         //ошибка подключения..
         return;
     }
-    for (size_t i = 0; i < INT_COUNT + FLOAT_COUNT; i++)
+    for (size_t i = 0; i < BOOL_COUNT + INT_COUNT + FLOAT_COUNT; i++)
     {
-        if ( i < INT_COUNT )
-            mIntData[ i ] = rez[i].vDataValue.lVal;
+        if ( i < BOOL_COUNT )
+            mBoolData[ i ] = rez[i].vDataValue.boolVal;
+        else if ( i < ( BOOL_COUNT + INT_COUNT ) )
+            mIntData[ i - BOOL_COUNT ] = rez[i].vDataValue.lVal;
         else
-            mFloatData[ i - INT_COUNT ] = rez[i].vDataValue.fltVal;
+            mFloatData[ i - ( BOOL_COUNT + INT_COUNT ) ] = rez[i].vDataValue.fltVal;
     }
     opc::miniOPC::Instance().OpcMassFree( mGroupID, rez );
 }
@@ -72,7 +76,7 @@ void DB50::WriteTask()
 {
     HRESULT res = E_FAIL;
     while ( res == E_FAIL )
-        res = opc::miniOPC::Instance().WriteMass( mGroupID, INT_COUNT + 16, 8, static_cast<void*>( &YB1 ), opc::tFLOAT );
+        res = opc::miniOPC::Instance().WriteMass( mGroupID, BOOL_COUNT + INT_COUNT + 16, 8, static_cast<void*>( &YB1 ), opc::tFLOAT );
 }
 
 }
