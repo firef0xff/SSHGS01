@@ -5,7 +5,7 @@
 #include "test_case/test_params.h"
 #include "../test_params_servo.h"
 #include <thread>
-//#define DEBUG
+#define DEBUG
 namespace test
 {
 namespace servo
@@ -949,7 +949,7 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
             auto obj = val.toObject();
             if ( obj.value("id").toInt() == mId )
             {
-                QJsonArray a = obj.value("data").toObject().value("mSource1").toArray();
+                QJsonArray a = obj.value("data").toObject().value("Source1").toArray();
                 data1_e = ProcessAFC( FromJson( a ), x_range_1e, y_range_1e );
                 data2_e = ProcessPFC( FromJson( a ), x_range_2e, y_range_2e );
             }
@@ -960,7 +960,7 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
             auto obj = val.toObject();
             if ( obj.value("id").toInt() == mId )
             {
-                QJsonArray a = obj.value("data").toObject().value("mSource1").toArray();
+                QJsonArray a = obj.value("data").toObject().value("Source1").toArray();
                 data1_e2 = ProcessAFC( FromJson( a ), x_range_1e2, y_range_1e2 );
                 data2_e2 = ProcessPFC( FromJson( a ), x_range_2e2, y_range_2e2 );
             }
@@ -988,7 +988,7 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
         if ( !data2_e.empty() )
             lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data2_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
         if ( !data2_e2.empty() )
-            lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data2_e2, ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
+            lines2.push_back( ff0x::NoAxisGraphBuilder::Line(data2_e2, ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
 
         QRect p1(rect.left(), rect.top(), w, h );
         QRect p2(rect.right() - w, rect.top(), w, h );
@@ -1080,7 +1080,7 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
             auto obj = val.toObject();
             if ( obj.value("id").toInt() == mId )
             {
-                QJsonArray a = obj.value("data").toObject().value("mSource2").toArray();
+                QJsonArray a = obj.value("data").toObject().value("Source2").toArray();
                 data1_e = ProcessAFC( FromJson( a ), x_range_1e, y_range_1e );
                 data2_e = ProcessPFC( FromJson( a ), x_range_2e, y_range_2e );
             }
@@ -1092,7 +1092,7 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
             auto obj = val.toObject();
             if ( obj.value("id").toInt() == mId )
             {
-                QJsonArray a = obj.value("data").toObject().value("mSource2").toArray();
+                QJsonArray a = obj.value("data").toObject().value("Source2").toArray();
                 data1_e2 = ProcessAFC( FromJson( a ), x_range_1e2, y_range_1e2 );
                 data2_e2 = ProcessPFC( FromJson( a ), x_range_2e2, y_range_2e2 );
             }
@@ -1212,7 +1212,7 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
             auto obj = val.toObject();
             if ( obj.value("id").toInt() == mId )
             {
-                QJsonArray a = obj.value("data").toObject().value("mSource3").toArray();
+                QJsonArray a = obj.value("data").toObject().value("Source3").toArray();
                 data1_e = ProcessAFC( FromJson( a ), x_range_1e, y_range_1e );
                 data2_e = ProcessPFC( FromJson( a ), x_range_2e, y_range_2e );
             }
@@ -1223,7 +1223,7 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
             auto obj = val.toObject();
             if ( obj.value("id").toInt() == mId )
             {
-                QJsonArray a = obj.value("data").toObject().value("mSource3").toArray();
+                QJsonArray a = obj.value("data").toObject().value("Source3").toArray();
                 data1_e2 = ProcessAFC( FromJson( a ), x_range_1e2, y_range_1e2 );
                 data2_e2 = ProcessPFC( FromJson( a ), x_range_2e2, y_range_2e2 );
             }
