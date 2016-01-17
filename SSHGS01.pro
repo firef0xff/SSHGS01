@@ -12,6 +12,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 QMAKE_LFLAGS += '-Wl,-rpath,\'\$$ORIGIN/lib\''
 
 TARGET = SSHGS01
+RC_ICONS += img/Main.ico
 TEMPLATE = app
 
 INCLUDEPATH += ../mylib/Widgets\
@@ -205,3 +206,5 @@ release {
 #DEFINES += WINDOWS
 #DEFINES += DEMO
 #DEFINES += DEBUG
+
+RESOURCES +=
