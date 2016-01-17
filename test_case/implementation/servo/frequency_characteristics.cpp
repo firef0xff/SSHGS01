@@ -5,7 +5,7 @@
 #include "test_case/test_params.h"
 #include "../test_params_servo.h"
 #include <thread>
-#define DEBUG
+
 namespace test
 {
 namespace servo
@@ -209,7 +209,23 @@ public:
     };
     typedef QVector< PointInfo > Data;
 
-    GrapfInfo( QVector<QPointF> const& data )
+    template < class Strategy >
+    GrapfInfo( QVector<QPointF> const& data, Strategy s )
+    {
+        s.Process( data, Info );
+    }
+
+    Data const& GetInfo() const
+    {
+        return Info;
+    }
+private:
+    Data Info;
+};
+
+class FollowAnaliser
+{
+    void Process( QVector<QPointF> const& data, GrapfInfo::Data &Info )
     {
         int old_way = 0;
         QPointF curr_p;
@@ -225,58 +241,25 @@ public:
             if ( way != old_way )
             {
                 if ( way > 0 )
-                    Info.push_back(PointInfo( curr_p, PointInfo::Min ));
+                    Info.push_back(GrapfInfo::PointInfo( curr_p, GrapfInfo::PointInfo::Min ));
                 else if ( way < 0 )
-                    Info.push_back(PointInfo( curr_p, PointInfo::Max ));
+                    Info.push_back(GrapfInfo::PointInfo( curr_p, GrapfInfo::PointInfo::Max ));
                 old_way = way;
             }
         }
         if ( old_way )
         {
             if ( old_way < 0 )
-                Info.push_back(PointInfo( curr_p, PointInfo::Min ));
+                Info.push_back(GrapfInfo::PointInfo( curr_p, GrapfInfo::PointInfo::Min ));
             else if ( old_way > 0 )
-                Info.push_back(PointInfo( curr_p, PointInfo::Max ));
+                Info.push_back(GrapfInfo::PointInfo( curr_p, GrapfInfo::PointInfo::Max ));
         }
     }
-
-    Data const& GetInfo() const
-    {
-        return Info;
-    }
-private:
-    Data Info;
 };
-
 class SinusAnaliser
 {
 public:
-    struct PointInfo
-    {
-    public:
-        enum PointType
-        {
-            Unset,
-            Min,
-            Max,
-            Start,
-            Stop
-        };
-        PointInfo():
-            point(),
-            type(Unset)
-        {}
-        PointInfo( QPointF const& p, PointType t ):
-            point( p ),
-            type( t )
-        {}
-
-        QPointF point;
-        PointType type;
-    };
-    typedef QVector< PointInfo > Data;
-
-    SinusAnaliser( QVector<QPointF> const& data )
+    void Process( QVector<QPointF> const& data, GrapfInfo::Data &Info )
     {
         int old_way = 0;
         QPointF curr_p;
@@ -300,12 +283,12 @@ public:
             {
                 if ( way > 0 )
                 {
-                    Info.push_back(PointInfo( min_p, PointInfo::Min ));
+                    Info.push_back(GrapfInfo::PointInfo( min_p, GrapfInfo::PointInfo::Min ));
                     min_p = QPointF();
                 }
                 else if ( way < 0 )
                 {
-                    Info.push_back(PointInfo( max_p, PointInfo::Max ));
+                    Info.push_back(GrapfInfo::PointInfo( max_p, GrapfInfo::PointInfo::Max ));
                     max_p = QPointF();
                 }
             }
@@ -314,20 +297,263 @@ public:
         if ( old_way )
         {
             if ( old_way < 0 )
-                Info.push_back(PointInfo( min_p, PointInfo::Min ));
+                Info.push_back(GrapfInfo::PointInfo( min_p, GrapfInfo::PointInfo::Min ));
             else if ( old_way > 0 )
-                Info.push_back(PointInfo( max_p, PointInfo::Max ));
+                Info.push_back(GrapfInfo::PointInfo( max_p, GrapfInfo::PointInfo::Max ));
         }
     }
-
-    Data const& GetInfo() const
-    {
-        return Info;
-    }
-private:
-    Data Info;
 };
 
+class SinusAnaliser2
+{
+    enum ZoneType
+    {
+        undefined,
+        plus,
+        minus,
+        zero
+    };
+    struct Zone
+    {
+        int start = -1;
+        int stop = -1;
+        ZoneType type = undefined;
+    };
+public:
+    void Process( QVector<QPointF> const& data, GrapfInfo::Data &Info )
+    {
+        // опрередить амплитуду
+        // определить зоны + и зоны -
+        QVector< Zone > zones;
+        Zone current_zone;
+        int max_y = 0;
+        int min_y = 0;
+
+        for ( int i = 0; i < data.size(); ++i )
+        {
+            QPointF const& p = data[i];
+
+            if ( p.y() > data[max_y].y() )
+                max_y = i;
+            if ( p.y() < data[min_y].y() )
+                min_y = i;
+
+            // определим находимся ли мы еще в прошлой зоне
+            if ( ( p.y() < 0 && current_zone.type != minus ) ||
+                 ( p.y() > 0 && current_zone.type != plus ) ||
+                 ( p.y() == 0 && current_zone.type != zero ) )
+            {
+                if ( current_zone.type != undefined )
+                {
+                    zones.push_back( current_zone );
+                    current_zone = Zone();
+                }
+            }
+
+            if ( current_zone.start == -1 )
+            {
+                current_zone.start = i;
+                if ( p.y() < 0 )
+                    current_zone.type = minus;
+                else if ( p.y() > 0 )
+                    current_zone.type = plus;
+                else
+                    current_zone.type = zero;
+            }
+            current_zone.stop = i;
+        }
+        if ( current_zone.type != undefined )
+            zones.push_back( current_zone );
+
+        // уточнить околонулевые зоны
+        // околонулевыими зонами будут считаться зоны максимум которых меньше 50 % от масимума амплидуты
+        for ( int i = 0; i < zones.size(); ++i )
+        {
+            Zone &z = zones[i];
+            if ( z.type != zero )
+            {
+                int max = z.start;
+                int min = z.start;
+                for ( int i = z.start; i <= z.stop; ++i )
+                {
+                    QPointF const& p = data[i];
+
+                    if ( p.y() > data[max].y() )
+                        max = i;
+                    if ( p.y() < data[min].y() )
+                        min = i;
+                }
+
+                if ( z.type == plus && data[max].y() < 0.5 * data[max_y].y() )
+                    z.type = zero;
+
+                if ( z.type == minus && data[min].y() > 0.5 * data[min_y].y() )
+                    z.type = zero;
+            }
+        }
+
+        // объеденить околонулевые зоны
+        int splitted = 0;
+        do
+        {
+            splitted = 0;
+            QVector< Zone > split_zones;
+            for ( int i = 0; i < zones.size(); ++i )
+            {
+                if (!i)
+                    continue;
+
+                Zone &pz = zones[i-1];
+                Zone &z = zones[i];
+                if ( pz.type == zero && z.type == zero )
+                {
+                    ++splitted;
+                    pz.stop = z.stop;
+                    z.type = undefined;
+                }
+            }
+
+            for ( int i = 0; i < zones.size(); ++i )
+            {
+                Zone &z = zones[i];
+                if ( z.type != undefined )
+                {
+                    split_zones.push_back( z );
+                }
+            }
+            zones = split_zones;
+        } while( splitted );
+/*        // околонулевые зоны дробятся на две части на + и на -
+        do
+        {
+            splitted = 0;
+            QVector< Zone > split_zones;
+            for ( int i = 0; i < zones.size(); ++i )
+            {
+                if (!i)
+                    continue;
+
+                Zone &pz = zones[i-1];
+                Zone &z = zones[i];
+                if ( pz.type == zero && z.type != zero )
+                {
+                    ++splitted;
+                    z.start = pz.start;
+                    pz.type = undefined;
+                }
+                if ( pz.type != zero && pz.type != undefined && z.type == zero )
+                {
+                    double count = 0;
+                    if ( z.stop - z.start > 0 )
+                        count = ceil( double(z.stop - z.start)/2.0 );
+                    if ( count )
+                    {
+                        ++splitted;
+                        pz.stop += count;
+                        z.start += count;
+                    }
+                }
+            }
+
+            for ( int i = 0; i < zones.size(); ++i )
+            {
+                Zone &z = zones[i];
+                if ( z.type != undefined )
+                {
+                    split_zones.push_back( z );
+                }
+            }
+            zones = split_zones;
+        } while( splitted );
+*/
+        //объеденить рядом стоящие зоны
+        do
+        {
+            splitted = 0;
+            QVector< Zone > split_zones;
+            for ( int i = 0; i < zones.size(); ++i )
+            {
+                if (!i)
+                    continue;
+
+                Zone &pz = zones[i-1];
+                Zone &z = zones[i];
+                if ( pz.type == plus && z.type == plus )
+                {
+                    ++splitted;
+                    pz.stop = z.stop;
+                    z.type = undefined;
+                }
+            }
+
+            for ( int i = 0; i < zones.size(); ++i )
+            {
+                Zone &z = zones[i];
+                if ( z.type != undefined )
+                {
+                    split_zones.push_back( z );
+                }
+            }
+            zones = split_zones;
+        } while( splitted );
+
+        do
+        {
+            splitted = 0;
+            QVector< Zone > split_zones;
+            for ( int i = 0; i < zones.size(); ++i )
+            {
+                if (!i)
+                    continue;
+
+                Zone &pz = zones[i-1];
+                Zone &z = zones[i];
+                if ( pz.type == minus && z.type == minus )
+                {
+                    pz.stop = z.stop;
+                    z.type = undefined;
+                    ++splitted;
+                }
+            }
+
+            for ( int i = 0; i < zones.size(); ++i )
+            {
+                Zone &z = zones[i];
+                if ( z.type != undefined )
+                {
+                    split_zones.push_back( z );
+                }
+            }
+            zones = split_zones;
+        } while( splitted );
+
+        // поставить точку равную +- половине амплитуды на середине зон + -
+        for ( int i = 0; i < zones.size(); ++i )
+        {
+            Zone &z = zones[i];
+
+            int j = z.start + ceil( double( z.stop - z.start )/2.0 );
+
+            if ( z.type == plus )
+            {
+                QPointF p( data[j].x(), data[max_y].y() );
+                Info.push_back(GrapfInfo::PointInfo( p, GrapfInfo::PointInfo::Max ));
+            }
+            if ( z.type == minus )
+            {
+                QPointF p( data[j].x(), data[min_y].y() );
+                Info.push_back(GrapfInfo::PointInfo( p, GrapfInfo::PointInfo::Min ));
+            }
+            if ( z.type == zero )
+            {
+                QPointF p( data[j].x(), 0 );
+                Info.push_back(GrapfInfo::PointInfo( p, GrapfInfo::PointInfo::Unset ));
+            }
+        }
+    }
+};
+
+typedef SinusAnaliser2 DefaultAnaliser;
 double CalckFi( FrequencyCharacteristics::DataSet const& data, double frequency )
 {
     QVector< QPointF > speed;
@@ -341,16 +567,16 @@ double CalckFi( FrequencyCharacteristics::DataSet const& data, double frequency 
             speed.push_back( QPointF( i, data[i].position - data[i-1].position ) );
     }
 
-    SinusAnaliser info_speed( speed );
-    SinusAnaliser info_signal( signal );
+    GrapfInfo info_speed( speed, DefaultAnaliser() );
+    GrapfInfo info_signal( signal, DefaultAnaliser() );
 
 //        ищем координату первого максимума сигнала
-    SinusAnaliser::Data const& inf = info_signal.GetInfo();
+    GrapfInfo::Data const& inf = info_signal.GetInfo();
     double signal_max_time = 0;
     for ( int i = 0; i < inf.size(); ++i )
     {
-        SinusAnaliser::PointInfo const& point = inf[i];
-        if ( point.type == SinusAnaliser::PointInfo::Max )
+        GrapfInfo::PointInfo const& point = inf[i];
+        if ( point.type == GrapfInfo::PointInfo::Max )
         {
             signal_max_time = point.point.x();
             break;
@@ -358,12 +584,12 @@ double CalckFi( FrequencyCharacteristics::DataSet const& data, double frequency 
     }
 
 //        ищем координату первого максимума сигнала
-    SinusAnaliser::Data const& inf_sg = info_speed.GetInfo();
+    GrapfInfo::Data const& inf_sg = info_speed.GetInfo();
     double speed_max_time = 0;
     for ( int i = 0; i < inf_sg.size(); ++i )
     {
-        SinusAnaliser::PointInfo const& point = inf_sg[i];
-        if ( point.type == SinusAnaliser::PointInfo::Max && point.point.x() >= signal_max_time )
+        GrapfInfo::PointInfo const& point = inf_sg[i];
+        if ( point.type == GrapfInfo::PointInfo::Max && point.point.x() >= signal_max_time )
         {
             speed_max_time = point.point.x();
             break;
@@ -563,7 +789,7 @@ ff0x::NoAxisGraphBuilder::LinePoints ProcessDebug4( FrequencyCharacteristics::So
                 data.push_back( point );
             }
 
-            SinusAnaliser inf( data );
+            GrapfInfo inf( data, DefaultAnaliser() );
             for ( size_t j = 0; j < inf.GetInfo().size(); ++j )
             {
                 QPointF point = inf.GetInfo()[j].point;
