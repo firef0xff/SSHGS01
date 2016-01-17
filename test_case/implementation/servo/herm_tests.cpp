@@ -204,11 +204,17 @@ bool InsideHermTest::Run()
     {
         Data d;
         d.Leak = m11Results.consumption_a[i];
-        d.Signal = m11Results.ref_a[i];
+        if ( ReelControl() )
+            d.Signal = fabs( m11Results.ref_a[i] );
+        else
+            d.Signal = fabs( m11Results.ref_a[i] );
         GraphA.push_back(d);
 
         d.Leak = m11Results.consumption_b[i];
-        d.Signal = -m11Results.ref_b[i];
+        if ( ReelControl() )
+            d.Signal = fabs( m11Results.ref_b[i] );
+        else
+            d.Signal = fabs( m11Results.ref_b[i] );
         GraphB.push_back(d);
     }
 
