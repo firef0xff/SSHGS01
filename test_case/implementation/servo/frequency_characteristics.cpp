@@ -661,7 +661,7 @@ void FrequencyCharacteristics::UpdateData()
     if ( !src )
         return;
 
-    if ( src->at( *frequency ).size() == m1525Counts.OP15_25_count )
+    if ( src->operator []( *frequency ).size() == m1525Counts.OP15_25_count )
         return;    
 
     DataSet data;
@@ -678,7 +678,7 @@ void FrequencyCharacteristics::UpdateData()
         cpu::CpuMemory::Instance().DB31.SendNextAmp();
     else
 #endif
-        src->at( *frequency ) = data;
+        src->operator []( *frequency ) = data;
     cpu::CpuMemory::Instance().DB31.SendContinue();
 
 }
