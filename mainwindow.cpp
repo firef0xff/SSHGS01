@@ -68,7 +68,7 @@ MainWindow::MainWindow(QWidget *parent) :
             ptr->SetStep( 10 );
             ptr->SetUnits("Бар.");
             QFont w_font = font();
-            w_font.setPointSize( 10 );
+            w_font.setPointSize( 14 );
             ptr->setFont( w_font );
             ff0x::RoundDial::RangeList green_zone;
             green_zone.push_back( QPointF(10, 315) );
@@ -111,7 +111,7 @@ MainWindow::MainWindow(QWidget *parent) :
             ptr->SetStep( 10 );
             ptr->SetUnits("л/мин");
             QFont w_font = font();
-            w_font.setPointSize( 10 );
+            w_font.setPointSize( 14 );
             ptr->setFont( w_font );
 
             ptr->EnableSaffetyRanges( false );
@@ -134,7 +134,7 @@ MainWindow::MainWindow(QWidget *parent) :
             ptr->SetStep( 0.2 );
             ptr->SetUnits("л/мин");
             QFont w_font = font();
-            w_font.setPointSize( 10 );
+            w_font.setPointSize( 14 );
             ptr->setFont( w_font );
 
             ff0x::RoundDial::RangeList green_zone;

@@ -29,6 +29,15 @@ public:
 
             QJsonObject Serialise() const;
             bool Deserialize( QJsonObject const& obj );
+
+            bool operator == ( const Channel& r ) const
+            {
+                return Expenditure == r.Expenditure && BP5 == r.BP5  && BP3 == r.BP3;
+            }
+            bool operator != ( const Channel& r ) const
+            {
+                return !(*this == r);
+            }
         };
 
         Data()
@@ -37,6 +46,10 @@ public:
         QJsonObject Serialise() const;
         bool Deserialize( QJsonObject const& obj );
 
+        bool operator == ( const Data& r ) const
+        {
+            return ChA == r.ChA && ChB == r.ChB;
+        }
 
         Channel ChA;
         Channel ChB;

@@ -5,7 +5,7 @@
 #include "test_case/test_params.h"
 #include "../test_params_servo.h"
 #include <thread>
-
+//#define DEBUG
 namespace test
 {
 namespace servo
@@ -25,7 +25,7 @@ FrequencyCharacteristics::Source Build()
         {
             FrequencyCharacteristics::ArrData coord;
             coord.signal = sin( j * PI / 180.0 ) * 3;
-            coord.position = sin( ( j + double( sin(i) )*10 ) * PI / 180.0  ) * 2.5/(double( i*i )/100.0);
+            coord.position = sin( ( j + 180 + double(i)/2 ) * PI / 180.0  ) * 2.5/(i*i/1600.0);
             data_item.push_back( coord );
         }
         data.insert( FrequencyCharacteristics::SourceItem( i, data_item ) );
@@ -248,6 +248,86 @@ private:
     Data Info;
 };
 
+class SinusAnaliser
+{
+public:
+    struct PointInfo
+    {
+    public:
+        enum PointType
+        {
+            Unset,
+            Min,
+            Max,
+            Start,
+            Stop
+        };
+        PointInfo():
+            point(),
+            type(Unset)
+        {}
+        PointInfo( QPointF const& p, PointType t ):
+            point( p ),
+            type( t )
+        {}
+
+        QPointF point;
+        PointType type;
+    };
+    typedef QVector< PointInfo > Data;
+
+    SinusAnaliser( QVector<QPointF> const& data )
+    {
+        int old_way = 0;
+        QPointF curr_p;
+        QPointF max_p;
+        QPointF min_p;
+        for ( int i = 0; i < data.size(); ++i )
+        {
+            curr_p = data[i];
+            int way = curr_p.y() > 0 ? 1 : curr_p.y() < 0 ? -1 : old_way;
+            if ( way > 0 )
+            {
+                if ( max_p.y() < curr_p.y() )
+                    max_p = curr_p;
+            }
+            if ( way < 0 )
+            {
+                if ( min_p.y() > curr_p.y() )
+                    min_p = curr_p;
+            }
+            if ( way != old_way && old_way )
+            {
+                if ( way > 0 )
+                {
+                    Info.push_back(PointInfo( min_p, PointInfo::Min ));
+                    min_p = QPointF();
+                }
+                else if ( way < 0 )
+                {
+                    Info.push_back(PointInfo( max_p, PointInfo::Max ));
+                    max_p = QPointF();
+                }
+            }
+            old_way = way;
+        }
+        if ( old_way )
+        {
+            if ( old_way < 0 )
+                Info.push_back(PointInfo( min_p, PointInfo::Min ));
+            else if ( old_way > 0 )
+                Info.push_back(PointInfo( max_p, PointInfo::Max ));
+        }
+    }
+
+    Data const& GetInfo() const
+    {
+        return Info;
+    }
+private:
+    Data Info;
+};
+
 double CalckFi( FrequencyCharacteristics::DataSet const& data, double frequency )
 {
     QVector< QPointF > speed;
@@ -261,16 +341,16 @@ double CalckFi( FrequencyCharacteristics::DataSet const& data, double frequency 
             speed.push_back( QPointF( i, data[i].position - data[i-1].position ) );
     }
 
-    GrapfInfo info_speed( speed );
-    GrapfInfo info_signal( signal );
+    SinusAnaliser info_speed( speed );
+    SinusAnaliser info_signal( signal );
 
 //        ищем координату первого максимума сигнала
-    GrapfInfo::Data const& inf = info_signal.GetInfo();
+    SinusAnaliser::Data const& inf = info_signal.GetInfo();
     double signal_max_time = 0;
     for ( int i = 0; i < inf.size(); ++i )
     {
-        GrapfInfo::PointInfo const& point = inf[i];
-        if ( point.type == GrapfInfo::PointInfo::Max )
+        SinusAnaliser::PointInfo const& point = inf[i];
+        if ( point.type == SinusAnaliser::PointInfo::Max )
         {
             signal_max_time = point.point.x();
             break;
@@ -278,12 +358,12 @@ double CalckFi( FrequencyCharacteristics::DataSet const& data, double frequency 
     }
 
 //        ищем координату первого максимума сигнала
-    GrapfInfo::Data const& inf_sg = info_speed.GetInfo();
+    SinusAnaliser::Data const& inf_sg = info_speed.GetInfo();
     double speed_max_time = 0;
     for ( int i = 0; i < inf_sg.size(); ++i )
     {
-        GrapfInfo::PointInfo const& point = inf_sg[i];
-        if ( point.type == GrapfInfo::PointInfo::Max && point.point.x() >= signal_max_time )
+        SinusAnaliser::PointInfo const& point = inf_sg[i];
+        if ( point.type == SinusAnaliser::PointInfo::Max && point.point.x() >= signal_max_time )
         {
             speed_max_time = point.point.x();
             break;
@@ -417,6 +497,106 @@ ff0x::NoAxisGraphBuilder::LinePoints ProcessDebug2( FrequencyCharacteristics::So
     return std::move( result );
 }
 
+ff0x::NoAxisGraphBuilder::LinePoints ProcessDebug3( FrequencyCharacteristics::Source const& src, int i , QPointF& x_range, QPointF& y_range )
+{
+    ff0x::NoAxisGraphBuilder::LinePoints result;
+    int k = 0;
+    for ( auto it = src.begin(), end = src.end(); it != end; ++it  )
+    {
+        if ( i == k )
+        {
+            FrequencyCharacteristics::DataSet const& lnk = it->second;
+            for ( size_t j = 0; j < lnk.size(); ++j )
+            {
+                QPointF point;
+                point.setX( j );
+                if ( !j )
+                    point.setY( lnk[j + 1].position - lnk[j].position );
+                else
+                    point.setY( lnk[j].position - lnk[j-1].position );
+                if ( j == 0 )
+                {
+                    x_range.setX(point.x());
+                    x_range.setY(point.x());
+                    y_range.setX(point.y());
+                    y_range.setY(point.y());
+                }
+                else
+                {
+                    if ( x_range.x() < point.x() )
+                        x_range.setX( point.x() );
+                    if ( x_range.y() > point.x() )
+                        x_range.setY( point.x() );
+
+                    if ( y_range.x() < point.y() )
+                        y_range.setX( point.y() );
+                    if ( y_range.y() > point.y() )
+                        y_range.setY( point.y() );
+                }
+                result.push_back( point );
+            }
+            break;
+        }
+        ++k;
+    }
+    return std::move( result );
+}
+
+ff0x::NoAxisGraphBuilder::LinePoints ProcessDebug4( FrequencyCharacteristics::Source const& src, int i , QPointF& x_range, QPointF& y_range )
+{
+    ff0x::NoAxisGraphBuilder::LinePoints result;
+    int k = 0;
+    for ( auto it = src.begin(), end = src.end(); it != end; ++it  )
+    {
+        if ( i == k )
+        {
+            FrequencyCharacteristics::DataSet const& lnk = it->second;
+            QVector<QPointF> data;
+            for ( size_t j = 0; j < lnk.size(); ++j )
+            {
+                QPointF point;
+                point.setX( j );
+                if ( !j )
+                    point.setY( lnk[j + 1].position - lnk[j].position );
+                else
+                    point.setY( lnk[j].position - lnk[j-1].position );
+                data.push_back( point );
+            }
+
+            SinusAnaliser inf( data );
+            for ( size_t j = 0; j < inf.GetInfo().size(); ++j )
+            {
+                QPointF point = inf.GetInfo()[j].point;
+
+                if ( j == 0 )
+                {
+                    x_range.setX(point.x());
+                    x_range.setY(point.x());
+                    y_range.setX(point.y());
+                    y_range.setY(point.y());
+                }
+                else
+                {
+                    if ( x_range.x() < point.x() )
+                        x_range.setX( point.x() );
+                    if ( x_range.y() > point.x() )
+                        x_range.setY( point.x() );
+
+                    if ( y_range.x() < point.y() )
+                        y_range.setX( point.y() );
+                    if ( y_range.y() > point.y() )
+                        y_range.setY( point.y() );
+                }
+                result.push_back( point );
+            }
+            break;
+        }
+        ++k;
+    }
+    return std::move( result );
+}
+
+
 }//namespace
 
 
@@ -494,7 +674,7 @@ void FrequencyCharacteristics::UpdateData()
     }
 
 #ifndef DEBUG
-    if ( fabs( CalckFi( data, *frequency ) ) > 90.0 || fabs( CalckAmpl( data ) ) < 0.001 )
+    if ( fabs( CalckFi( data, *frequency ) ) > 90.0 || fabs( CalckAmpl( data ) ) < 0.01 )
         cpu::CpuMemory::Instance().DB31.SendNextAmp();
     else
 #endif
@@ -635,234 +815,100 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
 
     QFontMetrics metrix( text_font );
 #ifdef DEBUG
-    int size = mSource1.size();
-
-    for ( int i = 0; i < size; ++i )
+    auto DEBUG_DATA = [&]( Source const& s)
     {
-        res = DrawLine( num, free_rect, text_font,
-        [ this, &painter, &text_font, &DrawRowCenter, &metrix, i ]( QRect const& rect )
+        int size = s.size();
+        for ( int i = 0; i < size; ++i )
         {
-            painter.save();
-
-            ff0x::GraphBuilder::LinePoints data;
-            ff0x::GraphBuilder::LinePoints data2;
-
-            QPointF x_range_1;
-            QPointF y_range_1;
-
-            QPointF x_range_2;
-            QPointF y_range_2;
-
-            data = ProcessDebug1( mSource1, i, x_range_1, y_range_1 );
-            data2 = ProcessDebug2( mSource1, i, x_range_2, y_range_2 );
-
-            QFont f = text_font;
-            f.setPointSize( 6 );
-            int w = (rect.height() - metrix.height())*0.98;
-            int h = (rect.height() - metrix.height())*0.98;
-
-            ff0x::NoAxisGraphBuilder builder ( w, h, f );
-            ff0x::NoAxisGraphBuilder::GraphDataLine lines1;
-            ff0x::NoAxisGraphBuilder::GraphDataLine lines2;
-            lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data, ff0x::NoAxisGraphBuilder::LabelInfo( "", Qt::blue ) ) );
-            lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data2, ff0x::NoAxisGraphBuilder::LabelInfo( "", Qt::red ) ) );
-            lines2.push_back( ff0x::NoAxisGraphBuilder::Line(data2, ff0x::NoAxisGraphBuilder::LabelInfo( "", Qt::red ) ) );
-
-            QRect p1(rect.left(), rect.top(), w, h );
-            QRect p2(rect.right() - w, rect.top(), w, h );
-            QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
-            QRect p2t(p2.left(), p2.bottom(), p2.width(), metrix.height());
-
-            DrawRowCenter( p1t, text_font, Qt::black, "результат " + QString::number( i + 1  ) );
+            res = DrawLine( num, free_rect, text_font,
+            [ this, &painter, &text_font, &DrawRowCenter, &metrix, i, &s ]( QRect const& rect )
             {
-                QPointF x_range;
-                QPointF y_range;
-                double x_step = 0;
-                double y_step = 0;
+                painter.save();
 
-                ff0x::DataLength( x_range_1, x_range_2, x_range, x_step );
-                ff0x::DataLength( y_range_1, y_range_2, y_range, y_step );
+                ff0x::GraphBuilder::LinePoints data;
+                ff0x::GraphBuilder::LinePoints data2;
+                ff0x::GraphBuilder::LinePoints data3;
 
-                if ( y_range.x() - y_range.y() == 0 )
+                QPointF x_range_1;
+                QPointF y_range_1;
+
+                QPointF x_range_2;
+                QPointF y_range_2;
+
+                QPointF x_range_3;
+                QPointF y_range_3;
+
+                data = ProcessDebug2( s, i, x_range_1, y_range_1 );
+                data2 = ProcessDebug3( s, i, x_range_2, y_range_2 );
+                data3 = ProcessDebug4( s, i, x_range_3, y_range_3 );
+
+                QFont f = text_font;
+                f.setPointSize( 6 );
+                int w = (rect.height() - metrix.height())*0.98;
+                int h = (rect.height() - metrix.height())*0.98;
+
+                ff0x::NoAxisGraphBuilder builder ( w, h, f );
+                ff0x::NoAxisGraphBuilder::GraphDataLine lines1;
+                ff0x::NoAxisGraphBuilder::GraphDataLine lines2;
+                lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data, ff0x::NoAxisGraphBuilder::LabelInfo( "", Qt::blue ) ) );
+    //            lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data2, ff0x::NoAxisGraphBuilder::LabelInfo( "", Qt::red ) ) );
+                lines2.push_back( ff0x::NoAxisGraphBuilder::Line(data2, ff0x::NoAxisGraphBuilder::LabelInfo( "", Qt::red ) ) );
+                lines2.push_back( ff0x::NoAxisGraphBuilder::Line(data3, ff0x::NoAxisGraphBuilder::LabelInfo( "", Qt::blue ) ) );
+
+                QRect p1(rect.left(), rect.top(), w, h );
+                QRect p2(rect.right() - w, rect.top(), w, h );
+                QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
+                QRect p2t(p2.left(), p2.bottom(), p2.width(), metrix.height());
+
+                DrawRowCenter( p1t, text_font, Qt::black, "результат " + QString::number( i + 1  ) );
                 {
-                    y_range.setX( 1 );
-                    y_range.setY( -1 );
+                    QPointF x_range;
+                    QPointF y_range;
+                    double x_step = 0;
+                    double y_step = 0;
+
+    //                ff0x::DataLength( x_range_1, x_range_2, true, x_range, x_step );
+    //                ff0x::DataLength( y_range_1, y_range_2, true, y_range, y_step );
+
+                    ff0x::DataLength( x_range_1, x_range, x_step );
+                    ff0x::DataLength( y_range_1, y_range, y_step );
+
+                    if ( y_range.x() - y_range.y() == 0 )
+                    {
+                        y_range.setX( 1 );
+                        y_range.setY( -1 );
+                    }
+                    painter.drawPixmap( p1, builder.Draw( lines1, x_range, y_range, x_step, y_step, "x", "y", true ) );
                 }
-                painter.drawPixmap( p1, builder.Draw( lines1, x_range, y_range, x_step, y_step, "x", "y", true ) );
-            }
-            DrawRowCenter( p2t, text_font, Qt::black, "результат " + QString::number( i + 1  ) );
-            {
-                QPointF x_range;
-                QPointF y_range;
-                double x_step = 0;
-                double y_step = 0;
-
-                ff0x::DataLength( x_range_2, x_range, x_step );
-                ff0x::DataLength( y_range_2, y_range, y_step );
-
-                if ( y_range.x() - y_range.y() == 0 )
+                DrawRowCenter( p2t, text_font, Qt::black, "результат " + QString::number( i + 1  ) );
                 {
-                    y_range.setX( 1 );
-                    y_range.setY( -1 );
+                    QPointF x_range;
+                    QPointF y_range;
+                    double x_step = 0;
+                    double y_step = 0;
+
+                    ff0x::DataLength( x_range_2, x_range_3, true, x_range, x_step );
+                    ff0x::DataLength( y_range_2, y_range_3, true, y_range, y_step );
+
+//                    ff0x::DataLength( x_range_3, x_range, x_step );
+//                    ff0x::DataLength( y_range_3, y_range, y_step );
+
+                    if ( y_range.x() - y_range.y() == 0 )
+                    {
+                        y_range.setX( 1 );
+                        y_range.setY( -1 );
+                    }
+                    painter.drawPixmap( p2, builder.Draw( lines2, x_range, y_range, x_step, y_step, "x", "y", true ) );
                 }
-                painter.drawPixmap( p2, builder.Draw( lines2, x_range, y_range, x_step, y_step, "x", "y", true ) );
-            }
 
-            painter.restore();
-        }, 1, free_rect.width()/2 + metrix.height()  );
-    }
+                painter.restore();
+            }, 1, free_rect.width()/2 + metrix.height()  );
+        }
+    };
 
-    size = mSource2.size();
-    for ( int i = 0; i < size; ++i )
-    {
-        res = DrawLine( num, free_rect, text_font,
-        [ this, &painter, &text_font, &DrawRowCenter, &metrix, i ]( QRect const& rect )
-        {
-            painter.save();
-
-            ff0x::GraphBuilder::LinePoints data;
-            ff0x::GraphBuilder::LinePoints data2;
-
-            QPointF x_range_1;
-            QPointF y_range_1;
-
-            QPointF x_range_2;
-            QPointF y_range_2;
-
-            data = ProcessDebug1( mSource2, i, x_range_1, y_range_1 );
-            data2 = ProcessDebug2( mSource2, i, x_range_2, y_range_2 );
-
-            QFont f = text_font;
-            f.setPointSize( 6 );
-            int w = (rect.height() - metrix.height())*0.98;
-            int h = (rect.height() - metrix.height())*0.98;
-
-            ff0x::NoAxisGraphBuilder builder ( w, h, f );
-            ff0x::NoAxisGraphBuilder::GraphDataLine lines1;
-            ff0x::NoAxisGraphBuilder::GraphDataLine lines2;
-            lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data, ff0x::NoAxisGraphBuilder::LabelInfo( "", Qt::blue ) ) );
-            lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data2, ff0x::NoAxisGraphBuilder::LabelInfo( "", Qt::red ) ) );
-            lines2.push_back( ff0x::NoAxisGraphBuilder::Line(data2, ff0x::NoAxisGraphBuilder::LabelInfo( "", Qt::red ) ) );
-
-            QRect p1(rect.left(), rect.top(), w, h );
-            QRect p2(rect.right() - w, rect.top(), w, h );
-            QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
-            QRect p2t(p2.left(), p2.bottom(), p2.width(), metrix.height());
-
-            DrawRowCenter( p1t, text_font, Qt::black, "результат " + QString::number( i + 1  ) );
-            {
-                QPointF x_range;
-                QPointF y_range;
-                double x_step = 0;
-                double y_step = 0;
-
-                ff0x::DataLength( x_range_1, x_range_2, x_range, x_step );
-                ff0x::DataLength( y_range_1, y_range_2, y_range, y_step );
-
-                if ( y_range.x() - y_range.y() == 0 )
-                {
-                    y_range.setX( 1 );
-                    y_range.setY( -1 );
-                }
-                painter.drawPixmap( p1, builder.Draw( lines1, x_range, y_range, x_step, y_step, "x", "y", true ) );
-            }
-            DrawRowCenter( p2t, text_font, Qt::black, "результат " + QString::number( i + 1  ) );
-            {
-                QPointF x_range;
-                QPointF y_range;
-                double x_step = 0;
-                double y_step = 0;
-
-                ff0x::DataLength( x_range_2, x_range, x_step );
-                ff0x::DataLength( y_range_2, y_range, y_step );
-
-                if ( y_range.x() - y_range.y() == 0 )
-                {
-                    y_range.setX( 1 );
-                    y_range.setY( -1 );
-                }
-                painter.drawPixmap( p2, builder.Draw( lines2, x_range, y_range, x_step, y_step, "x", "y", true ) );
-            }
-
-            painter.restore();
-        }, 1, free_rect.width()/2 + metrix.height()  );
-    }
-
-    size = mSource3.size();
-    for ( int i = 0; i < size; ++i )
-    {
-        res = DrawLine( num, free_rect, text_font,
-        [ this, &painter, &text_font, &DrawRowCenter, &metrix, i ]( QRect const& rect )
-        {
-            painter.save();
-
-            ff0x::GraphBuilder::LinePoints data;
-            ff0x::GraphBuilder::LinePoints data2;
-
-            QPointF x_range_1;
-            QPointF y_range_1;
-
-            QPointF x_range_2;
-            QPointF y_range_2;
-
-            data = ProcessDebug1( mSource3, i, x_range_1, y_range_1 );
-            data2 = ProcessDebug2( mSource3, i, x_range_2, y_range_2 );
-
-            QFont f = text_font;
-            f.setPointSize( 6 );
-            int w = (rect.height() - metrix.height())*0.98;
-            int h = (rect.height() - metrix.height())*0.98;
-
-            ff0x::NoAxisGraphBuilder builder ( w, h, f );
-            ff0x::NoAxisGraphBuilder::GraphDataLine lines1;
-            ff0x::NoAxisGraphBuilder::GraphDataLine lines2;
-            lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data, ff0x::NoAxisGraphBuilder::LabelInfo( "", Qt::blue ) ) );
-            lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data2, ff0x::NoAxisGraphBuilder::LabelInfo( "", Qt::red ) ) );
-            lines2.push_back( ff0x::NoAxisGraphBuilder::Line(data2, ff0x::NoAxisGraphBuilder::LabelInfo( "", Qt::red ) ) );
-
-            QRect p1(rect.left(), rect.top(), w, h );
-            QRect p2(rect.right() - w, rect.top(), w, h );
-            QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
-            QRect p2t(p2.left(), p2.bottom(), p2.width(), metrix.height());
-
-            DrawRowCenter( p1t, text_font, Qt::black, "результат " + QString::number( i + 1  ) );
-            {
-                QPointF x_range;
-                QPointF y_range;
-                double x_step = 0;
-                double y_step = 0;
-
-                ff0x::DataLength( x_range_1, x_range_2, x_range, x_step );
-                ff0x::DataLength( y_range_1, y_range_2, y_range, y_step );
-
-                if ( y_range.x() - y_range.y() == 0 )
-                {
-                    y_range.setX( 1 );
-                    y_range.setY( -1 );
-                }
-                painter.drawPixmap( p1, builder.Draw( lines1, x_range, y_range, x_step, y_step, "x", "y", true ) );
-            }
-            DrawRowCenter( p2t, text_font, Qt::black, "результат " + QString::number( i + 1  ) );
-            {
-                QPointF x_range;
-                QPointF y_range;
-                double x_step = 0;
-                double y_step = 0;
-
-                ff0x::DataLength( x_range_2, x_range, x_step );
-                ff0x::DataLength( y_range_2, y_range, y_step );
-
-                if ( y_range.x() - y_range.y() == 0 )
-                {
-                    y_range.setX( 1 );
-                    y_range.setY( -1 );
-                }
-                painter.drawPixmap( p2, builder.Draw( lines2, x_range, y_range, x_step, y_step, "x", "y", true ) );
-            }
-
-            painter.restore();
-        }, 1, free_rect.width()/2 + metrix.height()  );
-    }
+    DEBUG_DATA( mSource1 );
+    DEBUG_DATA( mSource2 );
+    DEBUG_DATA( mSource3 );
 #endif
 
     res = DrawLine( num, free_rect, text_font,

@@ -35,6 +35,10 @@ bool ExpeditureFromPressureDuration::Run()
         d.ChB.BP3 = m13Results.bp4_b[i];
         d.ChA.BP5 = m13Results.bp5_a[i];
         d.ChB.BP5 = m13Results.bp5_b[i];
+
+        if ( d == Data() )
+            break;
+
         mData.push_back( d );
     }
 
@@ -285,16 +289,36 @@ bool ExpeditureFromPressureDuration::Draw(QPainter& painter, QRect &free_rect , 
     QString table = header;
     auto MakeRow = [ &table, this ]( int i ) -> QString
     {
-        QString row =   "<tr>"
-                            "<td>" + QString::number( mData[i].ChA.Expenditure ) + "</td>"
-                            "<td>" + QString::number( mData[i].ChA.BP5 ) + "</td>"
-                            "<td>" + QString::number( mData[i].ChA.BP3 ) + "</td>"
-                            "<td>" + QString::number( mData[i].ChA.BP5_3() ) + "</td>";
-                    row += "<td>" + QString::number( mData[i].ChB.Expenditure ) + "</td>"
-                            "<td>" + QString::number( mData[i].ChB.BP5 ) + "</td>"
-                            "<td>" + QString::number( mData[i].ChB.BP3 ) + "</td>"
-                            "<td>" + QString::number( mData[i].ChB.BP5_3() ) + "</td>";
-          row +=        "</tr>";
+        QString row =   "<tr>";
+        if ( mData[i].ChA != Data::Channel() )
+        {
+            row += "<td>" + QString::number( mData[i].ChA.Expenditure ) + "</td>"
+                   "<td>" + QString::number( mData[i].ChA.BP5 ) + "</td>"
+                   "<td>" + QString::number( mData[i].ChA.BP3 ) + "</td>"
+                   "<td>" + QString::number( mData[i].ChA.BP5_3() ) + "</td>";
+        }
+        else
+        {
+            row += "<td></td>"
+                   "<td></td>"
+                   "<td></td>"
+                   "<td></td>";
+        }
+        if ( mData[i].ChB != Data::Channel() )
+        {
+            row += "<td>" + QString::number( mData[i].ChB.Expenditure ) + "</td>"
+                  "<td>" + QString::number( mData[i].ChB.BP5 ) + "</td>"
+                  "<td>" + QString::number( mData[i].ChB.BP3 ) + "</td>"
+                  "<td>" + QString::number( mData[i].ChB.BP5_3() ) + "</td>";
+        }
+        else
+        {
+            row += "<td></td>"
+                   "<td></td>"
+                   "<td></td>"
+                   "<td></td>";
+        }
+        row +=        "</tr>";
         return row;
     };
 
