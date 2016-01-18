@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>874</width>
-    <height>227</height>
+    <height>260</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -128,6 +128,12 @@
       </item>
       <item>
        <widget class="QLCDNumber" name="Voltage">
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="intValue" stdset="0">
          <number>0</number>
         </property>
@@ -141,7 +147,14 @@
        </widget>
       </item>
       <item>
-       <widget class="QLCDNumber" name="Amperage"/>
+       <widget class="QLCDNumber" name="Amperage">
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QLabel" name="label_7">
@@ -151,18 +164,77 @@
        </widget>
       </item>
       <item>
-       <widget class="QProgressBar" name="OilLavel">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+       <widget class="QLabel" name="SL3">
+        <property name="minimumSize">
+         <size>
+          <width>29</width>
+          <height>29</height>
+         </size>
         </property>
-        <property name="maximum">
-         <number>3</number>
+        <property name="maximumSize">
+         <size>
+          <width>29</width>
+          <height>29</height>
+         </size>
         </property>
-        <property name="value">
-         <number>-1</number>
+        <property name="toolTip">
+         <string>SL3</string>
+        </property>
+        <property name="toolTipDuration">
+         <number>501</number>
+        </property>
+        <property name="text">
+         <string>       </string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="SL2">
+        <property name="minimumSize">
+         <size>
+          <width>29</width>
+          <height>29</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>29</width>
+          <height>29</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>SL2</string>
+        </property>
+        <property name="toolTipDuration">
+         <number>500</number>
+        </property>
+        <property name="text">
+         <string>       </string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="SL1">
+        <property name="minimumSize">
+         <size>
+          <width>29</width>
+          <height>29</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>29</width>
+          <height>29</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>SL1</string>
+        </property>
+        <property name="toolTipDuration">
+         <number>500</number>
+        </property>
+        <property name="text">
+         <string>       </string>
         </property>
        </widget>
       </item>
@@ -174,12 +246,38 @@
        </widget>
       </item>
       <item>
-       <widget class="QLCDNumber" name="OilTemp"/>
+       <widget class="QLCDNumber" name="OilTemp">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>29</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>29</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QLabel" name="l_Ready_To_Work">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="text">
-         <string>Готов к работе</string>
+         <string> Готов к работе </string>
         </property>
        </widget>
       </item>
@@ -475,7 +573,7 @@ X</string>
      <x>0</x>
      <y>0</y>
      <width>874</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">

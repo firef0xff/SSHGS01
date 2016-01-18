@@ -62,6 +62,15 @@ ManualControl::~ManualControl()
 
 void ManualControl::closeEvent(QCloseEvent *e)
 {
+    Updater.stop();
+    mControlBits.Reset();
+    mTaskMode.N_Operation = 0;
+    mTaskMode.Nasos_M2 = false;
+    mTaskMode.OP15_25_Continum = false;
+    mTaskMode.Q_5_5ma = 80.0;
+    mTaskMode.Start_Oper = false;
+    mTaskMode.Stop_Oper = false;
+    mTaskMode.Write();
     QWidget::closeEvent( e );
     emit closed();
 }
@@ -80,15 +89,6 @@ void ManualControl::showEvent( QShowEvent *e )
 }
 void ManualControl::hideEvent( QHideEvent *e )
 {
-    Updater.stop();
-    mControlBits.Reset();
-    mTaskMode.N_Operation = 0;
-    mTaskMode.Nasos_M2 = false;
-    mTaskMode.OP15_25_Continum = false;
-    mTaskMode.Q_5_5ma = 80.0;
-    mTaskMode.Start_Oper = false;
-    mTaskMode.Stop_Oper = false;
-    mTaskMode.Write();
     QWidget::hideEvent( e );
 }
 
@@ -194,16 +194,25 @@ void ManualControl::UpdateMarks()
     UpdateMark( ui->SP14,true , !mErrorBits.SP14 ? Qt::red : Qt::green );   //IX3.5    фильтр контура охлаждения
     UpdateMark( ui->SP15,true , !mErrorBits.SP15 ? Qt::red : Qt::green );   //IX3.6    фильтр тонкой очистки М12
 
-    QColor c;
+    QColor c = Qt::red;
+    bool err = false;
     if ( mErrorBits.SL1 )
         c = Qt::green;
     else if ( mErrorBits.SL2 )
         c = Qt::yellow;
     else if ( mErrorBits.SL3 )
-        c = Qt::red;
+        c = Qt::yellow;
+    err = !mErrorBits.SL1 && !mErrorBits.SL2 && !mErrorBits.SL3;
     UpdateMark( ui->SL1, mErrorBits.SL1, c );     //IX4.0    уровень масла - норма
     UpdateMark( ui->SL2, mErrorBits.SL2, c );     //IX4.1    уровень масла -  предупреждение
     UpdateMark( ui->SL3, mErrorBits.SL3, c );     //IX4.2    уровень масла - авария
+
+    if (err)
+    {
+        UpdateMark( ui->SL1, err, c );     //IX4.0    уровень масла - норма
+        UpdateMark( ui->SL2, err, c );     //IX4.1    уровень масла -  предупреждение
+        UpdateMark( ui->SL3, err, c );     //IX4.2    уровень масла - авария
+    }
 
     UpdateMark( ui->SL4, mErrorBits.SL4, Qt::red    );     //IX4.3    уровень масла верхний (поддон)
     UpdateMark( ui->SL5, mErrorBits.SL5, Qt::green  );     //IX4.4    уровень масла нижний (поддон)
@@ -475,6 +484,15 @@ void ManualControl::on_Accept_clicked()
 void ManualControl::on_CB_clicked()
 {
     ui->SigLevel->clear();
+    ui->l_sig_a->setVisible( false );
+    ui->l_sig_0->setVisible( false );
+    ui->l_sig_b->setVisible( false );
+    ui->l_sig_max->setVisible( false );
+
+    ui->SigA->setVisible( false );
+    ui->Sig0->setVisible( false );
+    ui->SigB->setVisible( false );
+    ui->SigMax->setVisible( false );
     if ( ui->CB->isChecked() )
     {
         mControlBits.SetCR( false );
@@ -489,12 +507,10 @@ void ManualControl::on_CB_clicked()
         ui->l_sig_a->setVisible( true );
         ui->l_sig_0->setVisible( true );
         ui->l_sig_b->setVisible( true );
-        ui->l_sig_max->setVisible( false );
 
         ui->SigA->setVisible( true );
         ui->Sig0->setVisible( true );
         ui->SigB->setVisible( true );
-        ui->SigMax->setVisible( false );
     }
 
     mControlBits.SetCB( ui->CB->isChecked() );
@@ -502,7 +518,16 @@ void ManualControl::on_CB_clicked()
 void ManualControl::on_CR_clicked()
 {
     ui->SigLevel->clear();
-    if ( ui->CB->isChecked() )
+    ui->l_sig_a->setVisible( false );
+    ui->l_sig_0->setVisible( false );
+    ui->l_sig_b->setVisible( false );
+    ui->l_sig_max->setVisible( false );
+
+    ui->SigA->setVisible( false );
+    ui->Sig0->setVisible( false );
+    ui->SigB->setVisible( false );
+    ui->SigMax->setVisible( false );
+    if ( ui->CR->isChecked() )
     {
         mControlBits.SetCB( false );
         UpdateButton( ui->CB, mControlBits.CB );         //MX45.4 Управление от карты
@@ -512,14 +537,7 @@ void ManualControl::on_CR_clicked()
         ui->SigLevel->addItem( test::ToString( test::ST_860_mA ) );
         ui->SigLevel->setCurrentIndex( -1 );
 
-        ui->l_sig_a->setVisible( false );
-        ui->l_sig_0->setVisible( false );
-        ui->l_sig_b->setVisible( false );
         ui->l_sig_max->setVisible( true );
-
-        ui->SigA->setVisible( false );
-        ui->Sig0->setVisible( false );
-        ui->SigB->setVisible( false );
         ui->SigMax->setVisible( true );
     }
 

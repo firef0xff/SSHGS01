@@ -362,7 +362,7 @@ void MainWindow::on_Open_results_triggered()
 void MainWindow::onUpdateControls()
 {
     auto& table = cpu::CpuMemory::Instance().DB50;
-    auto& table2 = cpu::CpuMemory::Instance().DB40;
+    auto& table2 = cpu::CpuMemory::Instance().I1;
 
     DD1->update_value( round( table.BP3 *100)/100 );
     DD2->update_value( round( table.BP4 *100)/100 );
@@ -397,15 +397,26 @@ void MainWindow::onUpdateControls()
     ui->OilTemp->display( round( table.BT1 *100)/100 );
 
     //уровень масла
-    int lvl = 0;
-    if ( table2.sl2 )
-        lvl += 1;
-    if ( table2.sl3 )
-        lvl += 1;
-    if ( table2.sl4 )
-        lvl += 1;
-    ui->OilLavel->setRange( 0, 3 );
-    ui->OilLavel->setValue( lvl );
+    QColor c = Qt::red;
+    bool err = false;
+    if ( table2.SL1 )
+        c = Qt::green;
+    else if ( table2.SL2 )
+        c = Qt::yellow;
+    else if ( table2.SL3 )
+        c = Qt::yellow;
+
+    err = !table2.SL1 && !table2.SL2 && !table2.SL3;
+    UpdateMark( ui->SL1, table2.SL1, c );     //IX4.0    уровень масла - норма
+    UpdateMark( ui->SL2, table2.SL2, c );     //IX4.1    уровень масла -  предупреждение
+    UpdateMark( ui->SL3, table2.SL3, c );     //IX4.2    уровень масла - авария
+
+    if (err)
+    {
+        UpdateMark( ui->SL1, err, c );     //IX4.0    уровень масла - норма
+        UpdateMark( ui->SL2, err, c );     //IX4.1    уровень масла -  предупреждение
+        UpdateMark( ui->SL3, err, c );     //IX4.2    уровень масла - авария
+    }
     //см DB40
 
     //готовность к работе
@@ -428,7 +439,7 @@ void ControlsUpdater::run()
     while ( !mStopSignal )
     {
         cpu::CpuMemory::Instance().DB50.Read();
-        cpu::CpuMemory::Instance().DB40.Read();
+        cpu::CpuMemory::Instance().I1.Read();
         emit update();
         msleep(500);
     }
