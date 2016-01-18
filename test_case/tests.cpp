@@ -96,7 +96,7 @@ static OutsideHermTest t2;
 static InsideHermTest t3;
 static MaxExpenditureTest t4;
 static PressureDurationFromExpenditure t5;
-static SwitchTest t6;
+//static SwitchTest t6;
 static PressureRange t7;
 //static ActivationTime t8;
 }
