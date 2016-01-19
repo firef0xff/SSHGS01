@@ -409,24 +409,16 @@ void ManualControl::on_Accept_clicked()
 
     mParams.YB1 = ui->YB1->text().toDouble( &s );
     mParams.YB2 = ui->YB2->text().toDouble( &s );
-    mParams.YB3 = ui->YB3->text().toDouble( &s );
-    mParams.YB4 = ui->YB4->text().toDouble( &s );
+    mParams.P_YB3 = ui->YB3->text().toDouble( &s );
+    mParams.P_YB4 = ui->YB4->text().toDouble( &s );
     mParams.YB5 = ui->YB5->text().toDouble( &s );
     mParams.YB6 = ui->YB6->text().toDouble( &s );
+    mParams.Manual_set = ui->SignalPersent->value();
 
     double voltage = ui->U_ACDC->text().toDouble( &s );
-    if ( ui->rb_AC->isChecked() )
-    {
-        mParams.Z_U_Post = 0.0;
-        mParams.Z_U_Per = voltage;
-    }
-    else
-    {
-        mParams.Z_U_Per = 0.0;
-        mParams.Z_U_Post = voltage;
-    }
-
-    mParams.WriteTask();
+    cpu::CpuMemory::Instance().DB30.Voltage = voltage;
+    cpu::CpuMemory::Instance().DB30.Current = ui->rb_AC->isChecked()? 1 : 0;
+    cpu::CpuMemory::Instance().DB30.Write();
 
     test::SIGNAL_TYPE s_type = test::ST_UNKNOWN;
     test::ParseValue( s_type, ui->SigLevel->currentText() );
@@ -478,7 +470,7 @@ void ManualControl::on_Accept_clicked()
         mem.Write();
     }
 
-    cpu::CpuMemory::Instance().DB31.SetManualSignal( ui->SignalPersent->value() );
+    mParams.WriteTask();
 }
 
 void ManualControl::on_CB_clicked()

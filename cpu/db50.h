@@ -52,6 +52,16 @@ public:
     float& POS_1_REAL;  //DB50,REAL130    Позиция Г/Ц (1..10л/мин) 100мм
     float& POS_2_REAL;  //DB50,REAL134    Позиция Г/Ц (0..1л/мин) 100мм
     float& POS_3_REAL;  //DB50,REAL138    Положение золотника
+
+    //DB31
+    float& P_YB3;           //DB31.DBD22
+    float& P_YB4;           //DB31.DBD26
+    float& Manual_set;      //31 сигнал на ручном режиме
+//    управление золотником
+    float& man_zol_v;       //DB31.DBD30 ВЕРХНИЙ УРОВЕНЬ СИГНАЛА
+    float& man_zol_n;       //DB31.DBD34 НИЖНИЙ УРОВЕНЬ СИГНАЛА
+    bool& man_tupe_sign;   //DB31.DBX38.0 ВЫБОР ТИПА ВЫХОДА -ток -напряжение
+
     void WriteTask();
 private:    
 
@@ -62,9 +72,9 @@ private:
 
     enum
     {
-        BOOL_COUNT = 1,
+        BOOL_COUNT = 2,
         INT_COUNT = 2,
-        FLOAT_COUNT = 34
+        FLOAT_COUNT = 39
     };
 
     bool mBoolData[ BOOL_COUNT ];
@@ -75,6 +85,7 @@ private:
     wchar_t const* mAdresses[ BOOL_COUNT + INT_COUNT + FLOAT_COUNT ] = {
         //bool
         L"CPU/DB50.ReadyToWork",
+        L"CPU/DB50.man_tupe_sign",
 
         //int
         L"CPU/DB50.Osh_M",
@@ -97,12 +108,8 @@ private:
         L"CPU/DB50.A1",
         L"CPU/DB50.A2",
         L"CPU/DB50.A_Plata",
-        L"CPU/DB50.YB1",
-        L"CPU/DB50.YB2",
         L"CPU/DB50.YB3",
         L"CPU/DB50.YB4",
-        L"CPU/DB50.YB5",
-        L"CPU/DB50.YB6",
         L"CPU/DB50.Z_U_Post",
         L"CPU/DB50.Z_U_Per",
         L"CPU/DB50.Plata_1",
@@ -114,7 +121,20 @@ private:
         L"CPU/DB50.Plata_860mA",
         L"CPU/DB50.POS_1_REAL",
         L"CPU/DB50.POS_2_REAL",
-        L"CPU/DB50.POS_3_REAL"
+        L"CPU/DB50.POS_3_REAL",
+
+        //write group
+        L"CPU/DB50.YB1",
+        L"CPU/DB50.YB2",
+        L"CPU/DB50.YB5",
+        L"CPU/DB50.YB6",
+        //db31
+        L"CPU/DB50.P_YB3",
+        L"CPU/DB50.P_YB4",
+        L"CPU/DB50.Manual_set",
+        //
+        L"CPU/DB50.man_zol_v",
+        L"CPU/DB50.man_zol_n",
     };
 };
 

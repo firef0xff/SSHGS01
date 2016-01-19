@@ -57,7 +57,6 @@ DB31.Nasos_M2;DB31,X2.2;RW;TST=;CMT=
 DB31.N_Operation;DB31,REAL4;RW;TST=;CMT=
 DB31.Next_Amp;DB31,X16.0;RW;TST=;CMT=Указание переключиться на следующую амплитуду
 DB31.Q_5_5ma;DB31,REAL8;RW;TST=;CMT=расход по умолчанию
-DB31.Manual_set;DB31,REAL18;RW;TST=;CMT=текущий сигнал на катушку
 DB32.p_e_ok;DB32,X2.4;RW;TST=;CMT=давление в системе установлено (электро)
 DB32.p_eg_ok;DB32,X2.5;RW;TST=;CMT=давление в системе установлено (электрогидрав)
 DB32.op1_min_ok_a;DB32,X2.0;RW;TST=;CMT=переключение при мин давлении А
@@ -375,6 +374,12 @@ DB50.Osh_DM;DB50,W128;RW;TST=;CMT=
 DB50.POS_1_REAL;DB50,REAL130;RW;TST=;CMT=Позиция Г/Ц (1..10л/мин) 100мм
 DB50.POS_2_REAL;DB50,REAL134;RW;TST=;CMT=Позиция Г/Ц (0..1л/мин) 100мм
 DB50.POS_3_REAL;DB50,REAL138;RW;TST=;CMT=Положение золотника
+DB50.Manual_set;DB31,REAL18;RW;TST=;CMT=текущий сигнал на катушку
+DB50.P_YB3;DB31,REAL22;RW;TST=;CMT=текущий сигнал на катушку
+DB50.P_YB4;DB31,REAL26;RW;TST=;CMT=текущий сигнал на катушку
+DB50.man_zol_v;DB31,REAL30;RW;TST=;CMT=ВЕРХНИЙ УРОВЕНЬ СИГНАЛА
+DB50.man_zol_n;DB31,REAL34;RW;TST=;CMT=НИЖНИЙ УРОВЕНЬ СИГНАЛА
+DB50.man_tupe_sign;DB31,X38.0;RW;TST=;CMT=ВЫБОР ТИПА ВЫХОДА -ток -напряжение
 DB60.OP15_25_count;DB60,INT136;RW;TST=;CMT=количестви измерений для заданий 15 и 25
 DB60.OP15_25_Opor_1;DB60,X210.0;RW;TST=;CMT=
 DB60.OP15_25_Opor_2;DB60,X210.1;RW;TST=;CMT=

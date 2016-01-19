@@ -14,8 +14,7 @@ DB31::DB31():
     OP15_25_Continum(mBoolData[3]),
     Next_Amp( mBoolData[4] ),
     N_Operation( mFloatData[0] ),
-    Q_5_5ma ( mFloatData[1] ),
-    Manual_set ( mFloatData[2] )
+    Q_5_5ma ( mFloatData[1] )
 {
     memset( mBoolData, 0, sizeof(mBoolData) );
     memset( mFloatData, 0, sizeof(mFloatData) );
@@ -47,13 +46,6 @@ void DB31::SendNextAmp()
     HRESULT res = E_FAIL;
     while ( res == E_FAIL )
         res = opc::miniOPC::Instance().WriteValue( mGroupID, 4, static_cast<void*>( &Next_Amp ), opc::tBOOL );
-}
-void DB31::SetManualSignal( double persent )
-{
-    Manual_set = persent;
-    HRESULT res = E_FAIL;
-    while ( res == E_FAIL )
-        res = opc::miniOPC::Instance().WriteValue( mGroupID, BOOL_COUNT + 2, static_cast<void*>( &Manual_set ), opc::tFLOAT );
 }
 
 }//namespace data
