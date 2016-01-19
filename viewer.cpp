@@ -27,7 +27,7 @@ void Viewer::Init()
 
     if ( test::CURRENT_PARAMS )
     {
-        test::CURRENT_PARAMS->Draw( painter, rc );
+        test::CURRENT_PARAMS->Draw( painter, rc, CompareWidth );
         foreach (test::Test* test, test::CURRENT_PARAMS->TestCase())
         {
             test->ResetDrawLine();
@@ -147,7 +147,7 @@ void Viewer::on_SavePDF_clicked()
 
         if ( test::CURRENT_PARAMS )
         {
-            test::CURRENT_PARAMS->Draw( painter, rc );
+            test::CURRENT_PARAMS->Draw( painter, rc, CompareWidth );
             foreach (test::Test* test, test::CURRENT_PARAMS->TestCase())
             {
                 test->ResetDrawLine();
@@ -199,6 +199,43 @@ QRect Viewer::PreparePage( QPainter& painter, QRect const& page_rect )
     painter.translate( header_point );
     painter.drawPixmap( header_rect, header_logo );
     painter.restore();
+
+    {
+        painter.save();
+        QFont font = painter.font();
+        font.setFamily("Calibri");
+        font.setPointSize( 11 );
+        painter.setFont( font );
+        QFontMetrics m( font );
+        QPoint text_point( work_area.left(), work_area.top() - 3 * m.height() );
+//        painter.translate( text_point );
+        painter.drawText( text_point, "Центр \"ПРОМСЕРВИС\"" );
+        painter.restore();
+    }
+    {
+        painter.save();
+        QFont font = painter.font();
+        font.setFamily("Calibri");
+        font.setPointSize( 11 );
+        painter.setFont( font );
+        QFontMetrics m( font );
+        QPoint text_point( work_area.left(), work_area.top() - 2 * m.height() );
+//        painter.translate( text_point );
+        painter.drawText( text_point, "Ремонтное производство" );
+        painter.restore();
+    }
+    {
+        painter.save();
+        QFont font = painter.font();
+        font.setFamily("Calibri");
+        font.setPointSize( 11 );
+        painter.setFont( font );
+        QFontMetrics m( font );
+        QPoint text_point( work_area.left(), work_area.top() - 1 * m.height() );
+//        painter.translate( text_point );
+        painter.drawText( text_point, "ЦРПО участок ТОиР ГО" );
+        painter.restore();
+    }
 
     painter.save();
     QPoint footer_point( work_area.right() - footer_rect.width(), work_area.bottom() + 4 );

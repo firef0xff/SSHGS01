@@ -1138,7 +1138,7 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
 #endif
 
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &text_font, &DrawRowCenter, &metrix, &compare_width ]( QRect const& rect )
+    [ this, &painter, &text_font, &DrawRowCenter, &metrix, &compare_width, &params ]( QRect const& rect )
     {
         painter.save();
 
@@ -1169,17 +1169,17 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
         QPointF x_range_2e2;
         QPointF y_range_2e2;
 
-        //поиск данных теста
-        foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
-        {
-            auto obj = val.toObject();
-            if ( obj.value("id").toInt() == mId )
-            {
-                QJsonArray a = obj.value("data").toObject().value("Source1").toArray();
-                data1_e = ProcessAFC( FromJson( a ), x_range_1e, y_range_1e );
-                data2_e = ProcessPFC( FromJson( a ), x_range_2e, y_range_2e );
-            }
-        }
+//        //поиск данных теста
+//        foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
+//        {
+//            auto obj = val.toObject();
+//            if ( obj.value("id").toInt() == mId )
+//            {
+//                QJsonArray a = obj.value("data").toObject().value("Source1").toArray();
+//                data1_e = ProcessAFC( FromJson( a ), x_range_1e, y_range_1e );
+//                data2_e = ProcessPFC( FromJson( a ), x_range_2e, y_range_2e );
+//            }
+//        }
         //поиск данных теста
         foreach (QJsonValue const& val, test::ReadFromFile(compare_width).value("Results").toArray())
         {
@@ -1221,7 +1221,8 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
         QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
         QRect p2t(p2.left(), p2.bottom(), p2.width(), metrix.height());
 
-        DrawRowCenter( p1t, text_font, Qt::black, "АЧХ. Амплитуда 1" );
+        QString amp = test::ToString( params->Amplitudes()[0] );
+        DrawRowCenter( p1t, text_font, Qt::black, "АЧХ. Амплитуда " + amp + "%" );
         {
             QPointF x_range;
             QPointF y_range;
@@ -1244,7 +1245,7 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
             painter.drawPixmap( p1, builder.Draw( lines1, x_range, y_range, x_step, y_step, "Частота (Гц)", "Дб", true ) );
         }
 
-        DrawRowCenter( p2t, text_font, Qt::black, "ФЧХ. Амплитуда 1" );
+        DrawRowCenter( p2t, text_font, Qt::black, "ФЧХ. Амплитуда " + amp + "%"  );
         {
             QPointF x_range;
             QPointF y_range;
@@ -1269,7 +1270,7 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
     }, 1, free_rect.width()/2 + metrix.height()  );
 
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &text_font, &DrawRowCenter, &metrix, &compare_width ]( QRect const& rect )
+    [ this, &painter, &text_font, &DrawRowCenter, &metrix, &compare_width, &params ]( QRect const& rect )
     {
         painter.save();
 
@@ -1300,17 +1301,17 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
         QPointF x_range_2e2;
         QPointF y_range_2e2;
 
-        //поиск данных теста
-        foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
-        {
-            auto obj = val.toObject();
-            if ( obj.value("id").toInt() == mId )
-            {
-                QJsonArray a = obj.value("data").toObject().value("Source2").toArray();
-                data1_e = ProcessAFC( FromJson( a ), x_range_1e, y_range_1e );
-                data2_e = ProcessPFC( FromJson( a ), x_range_2e, y_range_2e );
-            }
-        }
+//        //поиск данных теста
+//        foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
+//        {
+//            auto obj = val.toObject();
+//            if ( obj.value("id").toInt() == mId )
+//            {
+//                QJsonArray a = obj.value("data").toObject().value("Source2").toArray();
+//                data1_e = ProcessAFC( FromJson( a ), x_range_1e, y_range_1e );
+//                data2_e = ProcessPFC( FromJson( a ), x_range_2e, y_range_2e );
+//            }
+//        }
 
         //поиск данных теста
         foreach (QJsonValue const& val, test::ReadFromFile(compare_width).value("Results").toArray())
@@ -1354,7 +1355,8 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
         QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
         QRect p2t(p2.left(), p2.bottom(), p2.width(), metrix.height());
 
-        DrawRowCenter( p1t, text_font, Qt::black, "АЧХ. Амплитуда 2" );
+        QString amp = test::ToString( params->Amplitudes()[1] );
+        DrawRowCenter( p1t, text_font, Qt::black, "АЧХ. Амплитуда " + amp + "%" );
         {
             QPointF x_range;
             QPointF y_range;
@@ -1376,7 +1378,7 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
             painter.drawPixmap( p1, builder.Draw( lines1, x_range, y_range, x_step, y_step, "Частота (Гц)", "Дб", true ) );
         }
 
-        DrawRowCenter( p2t, text_font, Qt::black, "ФЧХ. Амплитуда 2" );
+        DrawRowCenter( p2t, text_font, Qt::black, "ФЧХ. Амплитуда " + amp + "%" );
         {
             QPointF x_range;
             QPointF y_range;
@@ -1401,7 +1403,7 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
     }, 1, free_rect.width()/2 + metrix.height()  );
 
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &text_font, &DrawRowCenter, &metrix, &compare_width ]( QRect const& rect )
+    [ this, &painter, &text_font, &DrawRowCenter, &metrix, &compare_width, &params ]( QRect const& rect )
     {
         painter.save();
 
@@ -1432,17 +1434,17 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
         QPointF x_range_2e2;
         QPointF y_range_2e2;
 
-        //поиск данных теста
-        foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
-        {
-            auto obj = val.toObject();
-            if ( obj.value("id").toInt() == mId )
-            {
-                QJsonArray a = obj.value("data").toObject().value("Source3").toArray();
-                data1_e = ProcessAFC( FromJson( a ), x_range_1e, y_range_1e );
-                data2_e = ProcessPFC( FromJson( a ), x_range_2e, y_range_2e );
-            }
-        }
+//        //поиск данных теста
+//        foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
+//        {
+//            auto obj = val.toObject();
+//            if ( obj.value("id").toInt() == mId )
+//            {
+//                QJsonArray a = obj.value("data").toObject().value("Source3").toArray();
+//                data1_e = ProcessAFC( FromJson( a ), x_range_1e, y_range_1e );
+//                data2_e = ProcessPFC( FromJson( a ), x_range_2e, y_range_2e );
+//            }
+//        }
         //поиск данных теста
         foreach (QJsonValue const& val, test::ReadFromFile(compare_width).value("Results").toArray())
         {
@@ -1485,7 +1487,8 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
         QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
         QRect p2t(p2.left(), p2.bottom(), p2.width(), metrix.height());
 
-        DrawRowCenter( p1t, text_font, Qt::black, "АЧХ. Амплитуда 3" );
+        QString amp = test::ToString( params->Amplitudes()[2] );
+        DrawRowCenter( p1t, text_font, Qt::black, "АЧХ. Амплитуда " + amp + "%" );
         {
             QPointF x_range;
             QPointF y_range;
@@ -1507,7 +1510,7 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
             painter.drawPixmap( p1, builder.Draw( lines1, x_range, y_range, x_step, y_step, "Частота (Гц)", "Дб", true ) );
         }
 
-        DrawRowCenter( p2t, text_font, Qt::black, "ФЧХ. Амплитуда 3" );
+        DrawRowCenter( p2t, text_font, Qt::black, "ФЧХ. Амплитуда " + amp + "%" );
         {
             QPointF x_range;
             QPointF y_range;
@@ -1530,7 +1533,8 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
         }
         painter.restore();
     }, 1, free_rect.width()/2 + metrix.height()  );
-//    free_rect.setHeight( 0 );
+
+    free_rect.setHeight( 0 );
     return res;
 }
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
-    <height>480</height>
+    <width>749</width>
+    <height>451</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,8 +24,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>620</width>
-        <height>423</height>
+        <width>729</width>
+        <height>394</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -65,6 +65,20 @@
        </property>
       </widget>
      </item>
+     <item row="2" column="1">
+      <widget class="QPushButton" name="SaveTest">
+       <property name="text">
+        <string>Сохранить тест</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="5">
+      <widget class="QPushButton" name="Start">
+       <property name="text">
+        <string>Начать тест</string>
+       </property>
+      </widget>
+     </item>
      <item row="2" column="4">
       <spacer name="horizontalSpacer">
        <property name="orientation">
@@ -78,24 +92,10 @@
        </property>
       </spacer>
      </item>
-     <item row="2" column="1">
-      <widget class="QPushButton" name="SaveTest">
-       <property name="text">
-        <string>Сохранить тест</string>
-       </property>
-      </widget>
-     </item>
      <item row="2" column="6">
       <widget class="QPushButton" name="Abort">
        <property name="text">
         <string>Прервать</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="5">
-      <widget class="QPushButton" name="Start">
-       <property name="text">
-        <string>Начать тест</string>
        </property>
       </widget>
      </item>
@@ -107,10 +107,31 @@
       </widget>
      </item>
      <item row="2" column="0">
-      <widget class="QCheckBox" name="Etalone">
-       <property name="text">
-        <string>Эталон</string>
+      <widget class="QComboBox" name="ReportType">
+       <property name="minimumSize">
+        <size>
+         <width>210</width>
+         <height>0</height>
+        </size>
        </property>
+       <property name="currentIndex">
+        <number>2</number>
+       </property>
+       <item>
+        <property name="text">
+         <string>Эталон</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Входной контроль</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Сервисное обслуживание</string>
+        </property>
+       </item>
       </widget>
      </item>
     </layout>

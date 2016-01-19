@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>898</width>
-    <height>558</height>
+    <height>624</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -128,7 +128,7 @@ X_max_B, л/мин</string>
      <item row="8" column="0">
       <widget class="QLabel" name="l_max_expenditure">
        <property name="text">
-        <string>Максимально – допустимый расход, л/мин</string>
+        <string>Максимальный расход цилидра, л/мин</string>
        </property>
       </widget>
      </item>

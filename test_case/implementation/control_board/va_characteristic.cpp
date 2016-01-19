@@ -176,16 +176,16 @@ bool VACharacteristic::Draw(QPainter& painter, QRect &free_rect , const QString 
         QPointF x_range_1e2;
         QPointF y_range_1e2;
 
-        //поиск данных теста
-        foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
-        {
-            auto obj = val.toObject();
-            if ( obj.value("id").toInt() == mId )
-            {
-                QJsonArray a = obj.value("data").toObject().value("Graph").toArray();
-                data_e = Process( FromJson( a ), x_range_1e, y_range_1e );
-            }
-        }
+//        //поиск данных теста
+//        foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
+//        {
+//            auto obj = val.toObject();
+//            if ( obj.value("id").toInt() == mId )
+//            {
+//                QJsonArray a = obj.value("data").toObject().value("Graph").toArray();
+//                data_e = Process( FromJson( a ), x_range_1e, y_range_1e );
+//            }
+//        }
 
         //поиск данных теста
         foreach (QJsonValue const& val, test::ReadFromFile(compare_width).value("Results").toArray())

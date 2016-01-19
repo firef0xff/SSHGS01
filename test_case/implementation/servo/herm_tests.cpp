@@ -448,16 +448,16 @@ bool InsideHermTest::Draw(QPainter& painter, QRect &free_rect , const QString &c
         QPointF x_range_2e2;
         QPointF y_range_2e2;
 
-        //поиск данных теста
-        foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
-        {
-            auto obj = val.toObject();
-            if ( obj.value("id").toInt() == mId )
-            {
-                dataA_e = Process( FromJson( obj.value("data").toObject().value("GraphA").toArray()), x_range_1e, y_range_1e );
-                dataB_e = Process( FromJson( obj.value("data").toObject().value("GraphB").toArray()), x_range_2e, y_range_2e );
-            }
-        }
+//        //поиск данных теста
+//        foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
+//        {
+//            auto obj = val.toObject();
+//            if ( obj.value("id").toInt() == mId )
+//            {
+//                dataA_e = Process( FromJson( obj.value("data").toObject().value("GraphA").toArray()), x_range_1e, y_range_1e );
+//                dataB_e = Process( FromJson( obj.value("data").toObject().value("GraphB").toArray()), x_range_2e, y_range_2e );
+//            }
+//        }
         //поиск данных теста
         foreach (QJsonValue const& val, test::ReadFromFile(compare_width).value("Results").toArray())
         {

@@ -92,7 +92,7 @@ public:
 
     virtual void WriteToController() const = 0;
 
-    virtual bool Draw(QPainter &painter, QRect &free_rect ) const;
+    virtual bool Draw(QPainter &painter, QRect &free_rect , const QString &compare_width) const;
     virtual bool DrawResults(QPainter &/*painter*/, QRect &/*free_rect*/ ) const
     { return true; }
     virtual bool HasResults()
@@ -112,6 +112,9 @@ public:
     void User( QString const& user );
     QString const& User();
 
+    void ReportType(QString const& val );
+    QString const& ReportType();
+
     bool DefaultExpenditure( QString const& value );
     double const& DefaultExpenditure() const;
 
@@ -119,6 +122,7 @@ protected:
     TestsList mTestCase;        //набор тестов для выполнения
     QDateTime mDate;            //дата проведения испытаний
     QString   mUser;            //испытатель.
+    QString   mReportType;      //тип отчета.
 
     double mDefaultExpenditure; //расход по умолчанию
 };

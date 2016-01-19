@@ -110,6 +110,18 @@ ff0x::NoAxisGraphBuilder::LinePoints ProcessA( ExpeditureFromPressureDuration::D
 
         result.push_back( QPointF( x, y ) );
     }
+    result.push_back( QPointF( 0, 0 ) );
+    if ( 0 > x_range.x() )
+        x_range.setX( 0 );
+    if ( 0 < x_range.y() )
+        x_range.setY( 0 );
+
+    if ( 0 > y_range.x() )
+        y_range.setX( 0 );
+    if ( 0 < y_range.y() )
+        y_range.setY( 0 );
+
+
     return std::move( result );
 }
 ff0x::NoAxisGraphBuilder::LinePoints ProcessB( ExpeditureFromPressureDuration::DataSet const& src, QPointF& x_range, QPointF& y_range )
@@ -142,6 +154,16 @@ ff0x::NoAxisGraphBuilder::LinePoints ProcessB( ExpeditureFromPressureDuration::D
 
         result.push_back( QPointF( x, y ) );
     }
+    result.push_back( QPointF( 0, 0 ) );
+    if ( 0 > x_range.x() )
+        x_range.setX( 0 );
+    if ( 0 < x_range.y() )
+        x_range.setY( 0 );
+
+    if ( 0 > y_range.x() )
+        y_range.setX( 0 );
+    if ( 0 < y_range.y() )
+        y_range.setY( 0 );
     return std::move( result );
 }
 }//namespace
@@ -402,17 +424,17 @@ bool ExpeditureFromPressureDuration::Draw(QPainter& painter, QRect &free_rect , 
         QPointF x_range_2e2;
         QPointF y_range_2e2;
 
-        //поиск данных теста
-        foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
-        {
-            auto obj = val.toObject();
-            if ( obj.value("id").toInt() == mId )
-            {
-                DataSet data = FromJson( obj.value("data").toObject().value("Data").toArray() );
-                dataA_e = ProcessA( data, x_range_1e, y_range_1e );
-                dataB_e = ProcessB( data, x_range_2e, y_range_2e );
-            }
-        }
+//        //поиск данных теста
+//        foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
+//        {
+//            auto obj = val.toObject();
+//            if ( obj.value("id").toInt() == mId )
+//            {
+//                DataSet data = FromJson( obj.value("data").toObject().value("Data").toArray() );
+//                dataA_e = ProcessA( data, x_range_1e, y_range_1e );
+//                dataB_e = ProcessB( data, x_range_2e, y_range_2e );
+//            }
+//        }
         //поиск данных теста
         foreach (QJsonValue const& val, test::ReadFromFile(compare_width).value("Results").toArray())
         {
@@ -495,7 +517,7 @@ bool ExpeditureFromPressureDuration::Draw(QPainter& painter, QRect &free_rect , 
     }, 1, free_rect.width()/2 + metrix.height()  );
 
 
-//    free_rect.setHeight( 0 );
+    free_rect.setHeight( 0 );
     return res;
 }
 

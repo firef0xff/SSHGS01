@@ -22,7 +22,7 @@ public:
         return false;
     }
 
-    bool Draw(QPainter &painter, QRect &free_rect ) const;
+    bool Draw(QPainter &painter, QRect &free_rect, QString const& compare_width ) const;
     QString ModelId() const;
 
     void WriteToController() const;

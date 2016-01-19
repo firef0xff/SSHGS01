@@ -109,7 +109,7 @@ bool Parameters::Deserialize(const QJsonObject &obj )
     return ret;
 }
 
-bool Parameters::Draw(QPainter &painter, QRect &free_rect ) const
+bool Parameters::Draw(QPainter &painter, QRect &free_rect, QString const& compare_width ) const
 {
     QFont title_font = painter.font();
     title_font.setFamily("Arial");
@@ -131,6 +131,22 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect ) const
         painter.setFont( font );
         painter.setPen( color );
         painter.drawText( start_point, text );
+        painter.restore();
+    };
+
+    auto DrawRowCenter2 = [ &painter, &free_rect ]( QFont font, QColor color, QString text,  QColor color2, QString text2, double spase = 1 )
+    {
+        painter.save();
+        QFontMetrics metrix( font );
+        QRect place;
+        AllocatePlace( place, metrix.height()*spase ,free_rect );
+        QPoint start_point( place.center().x() - metrix.width( text + text2 ) / 2, place.center().y() +metrix.height()/2);
+        painter.setFont( font );
+        painter.setPen( color );
+        painter.drawText( start_point, text );
+        QPoint start_point2( place.center().x() - metrix.width( text + text2 ) / 2 + metrix.width( text ) , place.center().y() +metrix.height()/2);
+        painter.setPen( color2 );
+        painter.drawText( start_point2, text2 );
         painter.restore();
     };
 
@@ -163,7 +179,7 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect ) const
 
     double row_skale = 2;
 
-    DrawRowCenter( title_font, Qt::black, "ОТЧЕТ", row_skale );
+    DrawRowCenter2( title_font, Qt::black, "ОТЧЕТ", Qt::red, " ( " + mReportType + " ) ", row_skale);
     DrawRowCenter( level_font, Qt::black, "Испытания плат управления", row_skale );
     DrawRowCenter( level_font, Qt::red, mGsType, row_skale );
 
@@ -175,9 +191,22 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect ) const
     DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Максимальный выходной ток платы, А"), test::ToString(mMaxAmperage), row_skale );
     DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Сопротивление катушки распределителя, Ом"), test::ToString(mReelResist), row_skale );
 
-    QString model_ser_no = test::ReadFromEtalone().value(ModelId()).toObject().value("Params").toObject().value("control_board").toObject().value("SerNo").toString();
-    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Эталонный аппарат"), model_ser_no, row_skale );
-
+    if ( !compare_width.isEmpty() )
+    {
+        QJsonObject f = test::ReadFromFile( compare_width ).value("Params").toObject();
+        QString model_ser_no = f.value("control_board").toObject().value("SerNo").toString();
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Аппарат для сравнения характеристик"), model_ser_no, row_skale );
+        QDateTime dt = QDateTime::fromString( f.value("Date").toString(), Qt::ISODate );
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Дата испытания сравниваемого аппарата"), dt.toString("dd MMMM yyyy г. hh:mm"), row_skale );
+        QString type = f.value("ReportType").toString();
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Сравнение с эталоном"), type.compare("Эталон", Qt::CaseInsensitive) == 0? "Да": "Нет", row_skale );
+    }
+    else
+    {
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Аппарат для сравнения характеристик"), "-", row_skale );
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Дата испытания сравниваемого аппарата"), "-", row_skale );
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Сравнение с эталоном"), "-", row_skale );
+    }
 
     DrawRowLeft( text_font, Qt::black, Qt::red, "Испытания проводил: ", mUser, row_skale );
     DrawRowLeft( text_font, Qt::black, Qt::red, "Дата проведения испытаний: ", mDate.toString("dd MMMM yyyy г. hh:mm"), row_skale );

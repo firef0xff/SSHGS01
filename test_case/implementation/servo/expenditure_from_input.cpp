@@ -554,18 +554,18 @@ bool ExpeditureFromInput::Draw(QPainter& painter, QRect &free_rect , const QStri
         QPointF x_range_b2e2;
         QPointF y_range_b2e2;
 
-        //поиск данных теста
-        foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
-        {
-            auto obj = val.toObject();
-            if ( obj.value("id").toInt() == mId )
-            {
-                dataA1_e = Process( FromJson( obj.value("data").toObject().value("GraphA1").toArray() ), x_range_a1e, y_range_a1e );
-                dataA2_e = Process( FromJson( obj.value("data").toObject().value("GraphA2").toArray() ), x_range_a2e, y_range_a2e );
-                dataB1_e = Process( FromJson( obj.value("data").toObject().value("GraphB1").toArray() ), x_range_b1e, y_range_b1e );
-                dataB2_e = Process( FromJson( obj.value("data").toObject().value("GraphB2").toArray() ), x_range_b2e, y_range_b2e );
-            }
-        }
+//        //поиск данных теста
+//        foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
+//        {
+//            auto obj = val.toObject();
+//            if ( obj.value("id").toInt() == mId )
+//            {
+//                dataA1_e = Process( FromJson( obj.value("data").toObject().value("GraphA1").toArray() ), x_range_a1e, y_range_a1e );
+//                dataA2_e = Process( FromJson( obj.value("data").toObject().value("GraphA2").toArray() ), x_range_a2e, y_range_a2e );
+//                dataB1_e = Process( FromJson( obj.value("data").toObject().value("GraphB1").toArray() ), x_range_b1e, y_range_b1e );
+//                dataB2_e = Process( FromJson( obj.value("data").toObject().value("GraphB2").toArray() ), x_range_b2e, y_range_b2e );
+//            }
+//        }
         //поиск данных теста
         foreach (QJsonValue const& val, test::ReadFromFile(compare_width).value("Results").toArray())
         {
@@ -742,6 +742,7 @@ bool ExpeditureFromInput::Draw(QPainter& painter, QRect &free_rect , const QStri
     {
         DrawRowLeft( rect, text_font, Qt::black, FillToSize("Гистерезис, %"), Qt::red, test::ToString( CalckHysteresis( GraphB1, GraphB2 ) ) );
     }, 2 );
+    free_rect.setHeight( 0 );
     return res;
 }
 

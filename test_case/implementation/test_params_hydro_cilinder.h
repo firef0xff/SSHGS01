@@ -20,7 +20,7 @@ public:
 
     void WriteToController() const;
 
-    bool Draw(QPainter &painter, QRect &free_rect ) const;
+    bool Draw(QPainter &painter, QRect &free_rect, QString const& compare_width ) const;
 
     bool SerNo ( QString const& val );
     QString const& SerNo () const;

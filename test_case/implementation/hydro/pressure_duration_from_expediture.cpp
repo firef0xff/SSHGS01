@@ -390,17 +390,17 @@ bool PressureDurationFromExpenditure::Draw(QPainter& painter, QRect &free_rect ,
         QPointF x_range_2e2;
         QPointF y_range_2e2;
 
-        //поиск данных теста
-        foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
-        {
-            auto obj = val.toObject();
-            if ( obj.value("id").toInt() == mId )
-            {
-                DataSet data = FromJson( obj.value("data").toObject().value("Data").toArray() );
-                B35Ae = ProcessA( data, x_range_1e, y_range_1e );
-                B35Be = ProcessB( data, x_range_2e, y_range_2e );
-            }
-        }
+//        //поиск данных теста
+//        foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
+//        {
+//            auto obj = val.toObject();
+//            if ( obj.value("id").toInt() == mId )
+//            {
+//                DataSet data = FromJson( obj.value("data").toObject().value("Data").toArray() );
+//                B35Ae = ProcessA( data, x_range_1e, y_range_1e );
+//                B35Be = ProcessB( data, x_range_2e, y_range_2e );
+//            }
+//        }
         //поиск данных теста
         foreach (QJsonValue const& val, test::ReadFromFile(compare_width).value("Results").toArray())
         {

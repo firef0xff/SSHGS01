@@ -331,6 +331,15 @@ QString const& Parameters::User()
     return mUser;
 }
 
+void Parameters::ReportType( QString const& val )
+{
+    mReportType = val;
+}
+QString const& Parameters::ReportType()
+{
+    return mReportType;
+}
+
 bool Parameters::DefaultExpenditure( QString const& value )
 {
     return ParseValue( mDefaultExpenditure, value );
@@ -351,6 +360,7 @@ QJsonObject Parameters::Serialise() const
     obj.insert("TestCase", tests);
     obj.insert("Date", mDate.toString(Qt::ISODate));
     obj.insert("User", mUser);
+    obj.insert("ReportType", mReportType);
     obj.insert("DefaultExpenditure", mDefaultExpenditure);
     return obj;
 }
@@ -379,12 +389,13 @@ bool Parameters::Deserialize(const QJsonObject &obj )
 
     mDate = QDateTime::fromString( obj.value("Date").toString(), Qt::ISODate );
     mUser = obj.value("User").toString();
+    mReportType = obj.value("ReportType").toString();
     mDefaultExpenditure = obj.value("DefaultExpenditure").toDouble();
 
     return res;
 }
 
-bool Parameters::Draw(QPainter &painter, QRect &free_rect ) const
+bool Parameters::Draw(QPainter &painter, QRect &free_rect, QString const& compare_width ) const
 {
     QFont text_font = painter.font();
     text_font.setPointSize( 12 );

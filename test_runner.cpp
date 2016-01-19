@@ -58,8 +58,9 @@ void TestRunner::on_Start_clicked()
 
     test::CURRENT_PARAMS->Date( QDateTime::currentDateTime() );
     test::CURRENT_PARAMS->User( app::Settings::Instance().User() );
+    test::CURRENT_PARAMS->ReportType( ui->ReportType->currentText() );
 
-    mWorker.reset( new Worker(ui->Etalone->checkState() == Qt::Checked ) );
+    mWorker.reset( new Worker(/* ui->ReportType->currentText().compare( "Эталон", Qt::CaseInsensitive ) == 0 */) );
     QObject::connect( mWorker.get(), &Worker::to_log, ui->LogBox, &QTextBrowser::append );
     QObject::connect( mWorker.get(), &Worker::progress, this, &TestRunner::on_progress );
     QObject::connect( mWorker.get(), &Worker::started, this, &TestRunner::on_test_start );
@@ -133,9 +134,9 @@ void TestRunner::exec( Functor func )
         func();
 }
 
-Worker::Worker( bool etalone ):
-    mStopSignal(false),
-    mEtalone(etalone)
+Worker::Worker(/* bool etalone */):
+    mStopSignal(false)/*,
+    mEtalone(etalone)*/
 {}
 void Worker::run()
 {
@@ -157,10 +158,10 @@ void Worker::run()
         LogIt( QString() );
     }
 
-    if (mEtalone)
+    /*if (mEtalone)
     {
         test::SaveToEtalone( *test::CURRENT_PARAMS );
-    }
+    }*/
 }
 void Worker::stop()
 {
