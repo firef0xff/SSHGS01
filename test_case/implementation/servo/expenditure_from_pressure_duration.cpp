@@ -185,6 +185,7 @@ bool ExpeditureFromPressureDuration::Deserialize( QJsonObject const& obj )
 void ExpeditureFromPressureDuration::ResetDrawLine()
 {
     PrintedRows = 0;
+    PrintedPage = 0;
     Test::ResetDrawLine();
 }
 
