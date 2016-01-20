@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>790</width>
-    <height>673</height>
+    <width>901</width>
+    <height>581</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -38,749 +38,6 @@
    <property name="spacing">
     <number>2</number>
    </property>
-   <item row="0" column="0" colspan="3">
-    <widget class="QGroupBox" name="indicators">
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>700</height>
-      </size>
-     </property>
-     <property name="title">
-      <string>Индикаторы</string>
-     </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
-      <property name="spacing">
-       <number>2</number>
-      </property>
-      <property name="leftMargin">
-       <number>2</number>
-      </property>
-      <property name="topMargin">
-       <number>4</number>
-      </property>
-      <property name="rightMargin">
-       <number>2</number>
-      </property>
-      <property name="bottomMargin">
-       <number>2</number>
-      </property>
-      <item>
-       <widget class="QGroupBox" name="filtres">
-        <property name="title">
-         <string>Фильтры</string>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_7">
-         <property name="spacing">
-          <number>2</number>
-         </property>
-         <property name="leftMargin">
-          <number>2</number>
-         </property>
-         <property name="topMargin">
-          <number>4</number>
-         </property>
-         <property name="rightMargin">
-          <number>2</number>
-         </property>
-         <property name="bottomMargin">
-          <number>2</number>
-         </property>
-         <item>
-          <widget class="QGroupBox" name="suction_filter">
-           <property name="title">
-            <string>Всасывающий</string>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_11">
-            <property name="leftMargin">
-             <number>2</number>
-            </property>
-            <property name="topMargin">
-             <number>4</number>
-            </property>
-            <property name="rightMargin">
-             <number>2</number>
-            </property>
-            <property name="bottomMargin">
-             <number>2</number>
-            </property>
-            <property name="spacing">
-             <number>2</number>
-            </property>
-            <item row="0" column="2">
-             <widget class="QLabel" name="SP4">
-              <property name="toolTip">
-               <string>SP4</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>M3.1</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QLabel" name="SP6">
-              <property name="toolTip">
-               <string>SP6</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>M5</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="SP5">
-              <property name="toolTip">
-               <string>SP5</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>M4</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="2">
-             <widget class="QLabel" name="SP3">
-              <property name="toolTip">
-               <string>SP3</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>M3.2</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="SP1">
-              <property name="toolTip">
-               <string>SP1</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>M1</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QLabel" name="SP2">
-              <property name="toolTip">
-               <string>SP2</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>M2</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="first_filter">
-           <property name="title">
-            <string>Грубой очистки</string>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_13">
-            <property name="leftMargin">
-             <number>2</number>
-            </property>
-            <property name="topMargin">
-             <number>4</number>
-            </property>
-            <property name="rightMargin">
-             <number>2</number>
-            </property>
-            <property name="bottomMargin">
-             <number>2</number>
-            </property>
-            <property name="spacing">
-             <number>2</number>
-            </property>
-            <item row="0" column="1">
-             <widget class="QLabel" name="SP10">
-              <property name="toolTip">
-               <string>SP10</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>M2</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="2">
-             <widget class="QLabel" name="SP11">
-              <property name="toolTip">
-               <string>SP11</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>M4</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="SP8">
-              <property name="toolTip">
-               <string>SP8</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>M1</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="3">
-             <widget class="QLabel" name="SP14">
-              <property name="toolTip">
-               <string>SP14</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>M5</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="secondary_filter">
-           <property name="toolTip">
-            <string/>
-           </property>
-           <property name="title">
-            <string>Тонкой очистки</string>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_12">
-            <property name="leftMargin">
-             <number>2</number>
-            </property>
-            <property name="topMargin">
-             <number>4</number>
-            </property>
-            <property name="rightMargin">
-             <number>2</number>
-            </property>
-            <property name="bottomMargin">
-             <number>2</number>
-            </property>
-            <property name="spacing">
-             <number>2</number>
-            </property>
-            <item row="0" column="1">
-             <widget class="QLabel" name="SP9">
-              <property name="toolTip">
-               <string>SP9</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>M2</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="SP7">
-              <property name="toolTip">
-               <string>SP7</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>M1</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="2">
-             <widget class="QLabel" name="SP13">
-              <property name="toolTip">
-               <string>SP13</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>M3.1</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QLabel" name="SP15">
-              <property name="toolTip">
-               <string>SP15</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>M12</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="2">
-             <widget class="QLabel" name="SP12">
-              <property name="toolTip">
-               <string>SP12</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>M3.2</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QGroupBox" name="valves">
-        <property name="title">
-         <string>Краны</string>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_9">
-         <property name="spacing">
-          <number>2</number>
-         </property>
-         <property name="leftMargin">
-          <number>2</number>
-         </property>
-         <property name="topMargin">
-          <number>4</number>
-         </property>
-         <property name="rightMargin">
-          <number>2</number>
-         </property>
-         <property name="bottomMargin">
-          <number>2</number>
-         </property>
-         <item>
-          <widget class="QGroupBox" name="pump_valves">
-           <property name="title">
-            <string>Насосы</string>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_9">
-            <property name="leftMargin">
-             <number>2</number>
-            </property>
-            <property name="topMargin">
-             <number>4</number>
-            </property>
-            <property name="rightMargin">
-             <number>2</number>
-            </property>
-            <property name="bottomMargin">
-             <number>2</number>
-            </property>
-            <property name="spacing">
-             <number>2</number>
-            </property>
-            <item row="0" column="2">
-             <widget class="QLabel" name="SQ7">
-              <property name="toolTip">
-               <string>SQ7</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>М3.1</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="SQ9">
-              <property name="toolTip">
-               <string>SQ9</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>М4</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="SQ1">
-              <property name="toolTip">
-               <string>SQ1</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>М1</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="2">
-             <widget class="QLabel" name="SQ5">
-              <property name="toolTip">
-               <string>SQ5</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>М3.2</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <widget class="QLabel" name="SQ11">
-              <property name="toolTip">
-               <string>SQ11</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>М5</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QLabel" name="SQ3">
-              <property name="toolTip">
-               <string>SQ3</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>М2</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="drainage_valves">
-           <property name="title">
-            <string>Дренаж</string>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_10">
-            <property name="leftMargin">
-             <number>2</number>
-            </property>
-            <property name="topMargin">
-             <number>4</number>
-            </property>
-            <property name="rightMargin">
-             <number>2</number>
-            </property>
-            <property name="bottomMargin">
-             <number>2</number>
-            </property>
-            <property name="spacing">
-             <number>2</number>
-            </property>
-            <item row="0" column="1">
-             <widget class="QLabel" name="SQ14">
-              <property name="toolTip">
-               <string>SQ14</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>M2</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="SQ13">
-              <property name="toolTip">
-               <string>SQ13</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>M1</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="2">
-             <widget class="QLabel" name="SQ15">
-              <property name="toolTip">
-               <string>SQ15</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>M4</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QGroupBox" name="levels">
-        <property name="title">
-         <string>Уровень масла</string>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_10">
-         <property name="spacing">
-          <number>2</number>
-         </property>
-         <property name="leftMargin">
-          <number>2</number>
-         </property>
-         <property name="topMargin">
-          <number>4</number>
-         </property>
-         <property name="rightMargin">
-          <number>2</number>
-         </property>
-         <property name="bottomMargin">
-          <number>2</number>
-         </property>
-         <item>
-          <widget class="QGroupBox" name="pallet">
-           <property name="title">
-            <string>Поддон</string>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_16">
-            <property name="leftMargin">
-             <number>2</number>
-            </property>
-            <property name="topMargin">
-             <number>4</number>
-            </property>
-            <property name="rightMargin">
-             <number>2</number>
-            </property>
-            <property name="bottomMargin">
-             <number>2</number>
-            </property>
-            <property name="spacing">
-             <number>2</number>
-            </property>
-            <item row="0" column="0">
-             <widget class="QLabel" name="SL5">
-              <property name="toolTip">
-               <string>SL5</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>МИН</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QLabel" name="SL4">
-              <property name="toolTip">
-               <string>SL4</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>МАКС</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="tank">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="title">
-            <string>Бак</string>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_15">
-            <property name="leftMargin">
-             <number>2</number>
-            </property>
-            <property name="topMargin">
-             <number>4</number>
-            </property>
-            <property name="rightMargin">
-             <number>2</number>
-            </property>
-            <property name="bottomMargin">
-             <number>2</number>
-            </property>
-            <property name="spacing">
-             <number>2</number>
-            </property>
-            <item row="0" column="0">
-             <widget class="QLabel" name="SL3">
-              <property name="toolTip">
-               <string>SL3 - авария</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>А</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QLabel" name="SL2">
-              <property name="toolTip">
-               <string>SL2 - предупреждение</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>П</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="2">
-             <widget class="QLabel" name="SL1">
-              <property name="toolTip">
-               <string>SL1 - норма</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>Н</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
    <item row="2" column="0">
     <layout class="QVBoxLayout" name="verticalLayout_6">
      <property name="topMargin">
@@ -1493,6 +750,19 @@
       </widget>
      </item>
      <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
       <widget class="QGroupBox" name="ReelControl">
        <property name="title">
         <string>Управление катушками</string>
@@ -1513,55 +783,82 @@
         <property name="spacing">
          <number>6</number>
         </property>
-        <item row="0" column="0">
-         <widget class="QPushButton" name="CB">
-          <property name="toolTip">
-           <string>CB</string>
+        <item row="0" column="5" rowspan="3">
+         <widget class="QGroupBox" name="voltage">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
           </property>
-          <property name="toolTipDuration">
-           <number>500</number>
+          <property name="maximumSize">
+           <size>
+            <width>120</width>
+            <height>16777215</height>
+           </size>
           </property>
-          <property name="text">
-           <string>Управление от карты</string>
+          <property name="title">
+           <string>Напряжение, В</string>
           </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_7">
+           <property name="spacing">
+            <number>2</number>
+           </property>
+           <property name="leftMargin">
+            <number>2</number>
+           </property>
+           <property name="topMargin">
+            <number>4</number>
+           </property>
+           <property name="rightMargin">
+            <number>2</number>
+           </property>
+           <property name="bottomMargin">
+            <number>2</number>
+           </property>
+           <item>
+            <widget class="QRadioButton" name="rb_DC">
+             <property name="text">
+              <string>Постоянное</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="rb_AC">
+             <property name="text">
+              <string>Переменное</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="U_ACDC">
+             <property name="minimumSize">
+              <size>
+               <width>43</width>
+               <height>29</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>100</width>
+               <height>29</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>U_ACDC</string>
+             </property>
+             <property name="toolTipDuration">
+              <number>500</number>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </item>
-        <item row="1" column="0">
-         <widget class="QPushButton" name="CR">
-          <property name="toolTip">
-           <string>CR</string>
-          </property>
-          <property name="toolTipDuration">
-           <number>500</number>
-          </property>
-          <property name="text">
-           <string>Управление без карты</string>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="3">
-         <widget class="QPushButton" name="ONRB">
-          <property name="toolTip">
-           <string>ONRB</string>
-          </property>
-          <property name="toolTipDuration">
-           <number>500</number>
-          </property>
-          <property name="text">
-           <string>ВКЛ катушку Б</string>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
+        <item row="0" column="4">
          <widget class="QPushButton" name="RC1">
           <property name="toolTip">
            <string>RC1</string>
@@ -1577,55 +874,7 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="label_10">
-          <property name="text">
-           <string>Положение золотника</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="2">
-         <widget class="QLCDNumber" name="POS3">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>29</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>29</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>POS3</string>
-          </property>
-          <property name="toolTipDuration">
-           <number>500</number>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="3">
-         <widget class="QPushButton" name="ONRA">
-          <property name="toolTip">
-           <string>ONRA</string>
-          </property>
-          <property name="toolTipDuration">
-           <number>500</number>
-          </property>
-          <property name="text">
-           <string>ВКЛ катушку А</string>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="2">
+        <item row="1" column="4">
          <widget class="QPushButton" name="RC2">
           <property name="toolTip">
            <string>RC2</string>
@@ -1641,21 +890,72 @@
           </property>
          </widget>
         </item>
+        <item row="0" column="0" colspan="4">
+         <widget class="QPushButton" name="CB">
+          <property name="toolTip">
+           <string>CB</string>
+          </property>
+          <property name="toolTipDuration">
+           <number>500</number>
+          </property>
+          <property name="text">
+           <string>Управление от карты</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" colspan="4">
+         <widget class="QPushButton" name="CR">
+          <property name="toolTip">
+           <string>CR</string>
+          </property>
+          <property name="toolTipDuration">
+           <number>500</number>
+          </property>
+          <property name="text">
+           <string>Управление без карты</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="3" colspan="2">
+         <widget class="QPushButton" name="ONRB">
+          <property name="toolTip">
+           <string>ONRB</string>
+          </property>
+          <property name="toolTipDuration">
+           <number>500</number>
+          </property>
+          <property name="text">
+           <string>ВКЛ катушку Б</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" colspan="3">
+         <widget class="QPushButton" name="ONRA">
+          <property name="toolTip">
+           <string>ONRA</string>
+          </property>
+          <property name="toolTipDuration">
+           <number>500</number>
+          </property>
+          <property name="text">
+           <string>ВКЛ катушку А</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
-     </item>
-     <item>
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
      </item>
     </layout>
    </item>
@@ -1681,6 +981,101 @@
        <property name="spacing">
         <number>2</number>
        </property>
+       <item row="0" column="1">
+        <widget class="QGroupBox" name="FMControl">
+         <property name="title">
+          <string>Расходомеры</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <property name="spacing">
+           <number>2</number>
+          </property>
+          <property name="leftMargin">
+           <number>2</number>
+          </property>
+          <property name="topMargin">
+           <number>4</number>
+          </property>
+          <property name="rightMargin">
+           <number>2</number>
+          </property>
+          <property name="bottomMargin">
+           <number>2</number>
+          </property>
+          <item>
+           <layout class="QGridLayout" name="gridLayout_3">
+            <property name="spacing">
+             <number>2</number>
+            </property>
+            <item row="0" column="1">
+             <widget class="QPushButton" name="YA12">
+              <property name="toolTip">
+               <string>YA12</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>Канал Y</string>
+              </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QPushButton" name="YA11">
+              <property name="toolTip">
+               <string>YA11</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>Канал T</string>
+              </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QPushButton" name="YA23">
+              <property name="toolTip">
+               <string>YA23</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>Малый расход. Y</string>
+              </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QPushButton" name="YA7">
+              <property name="toolTip">
+               <string>YA7</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>Малый расход. P</string>
+              </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
        <item row="0" column="0">
         <widget class="QGroupBox" name="ClimatControl">
          <property name="title">
@@ -1897,101 +1292,6 @@
                </size>
               </property>
              </spacer>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QGroupBox" name="FMControl">
-         <property name="title">
-          <string>Расходомеры</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_5">
-          <property name="spacing">
-           <number>2</number>
-          </property>
-          <property name="leftMargin">
-           <number>2</number>
-          </property>
-          <property name="topMargin">
-           <number>4</number>
-          </property>
-          <property name="rightMargin">
-           <number>2</number>
-          </property>
-          <property name="bottomMargin">
-           <number>2</number>
-          </property>
-          <item>
-           <layout class="QGridLayout" name="gridLayout_3">
-            <property name="spacing">
-             <number>2</number>
-            </property>
-            <item row="0" column="1">
-             <widget class="QPushButton" name="YA12">
-              <property name="toolTip">
-               <string>YA12</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>Канал Y</string>
-              </property>
-              <property name="checkable">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QPushButton" name="YA11">
-              <property name="toolTip">
-               <string>YA11</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>Канал T</string>
-              </property>
-              <property name="checkable">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QPushButton" name="YA23">
-              <property name="toolTip">
-               <string>YA23</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>Малый расход. Y</string>
-              </property>
-              <property name="checkable">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <widget class="QPushButton" name="YA7">
-              <property name="toolTip">
-               <string>YA7</string>
-              </property>
-              <property name="toolTipDuration">
-               <number>500</number>
-              </property>
-              <property name="text">
-               <string>Малый расход. P</string>
-              </property>
-              <property name="checkable">
-               <bool>true</bool>
-              </property>
-             </widget>
             </item>
            </layout>
           </item>
@@ -2239,48 +1539,6 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="1">
-        <layout class="QVBoxLayout" name="verticalLayout_10">
-         <property name="spacing">
-          <number>2</number>
-         </property>
-         <property name="leftMargin">
-          <number>6</number>
-         </property>
-         <property name="rightMargin">
-          <number>6</number>
-         </property>
-         <item>
-          <widget class="QPushButton" name="YA4">
-           <property name="toolTip">
-            <string>YA4</string>
-           </property>
-           <property name="toolTipDuration">
-            <number>500</number>
-           </property>
-           <property name="text">
-            <string>Гидоаккумулятор</string>
-           </property>
-           <property name="checkable">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="verticalSpacer_4">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </item>
       </layout>
      </item>
      <item>
@@ -2462,6 +1720,153 @@
         </widget>
        </item>
        <item>
+        <widget class="QGroupBox" name="groupBox_4">
+         <property name="title">
+          <string>Золотник</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_8">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <property name="spacing">
+           <number>4</number>
+          </property>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_26">
+            <property name="text">
+             <string>Тип:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLCDNumber" name="POS3">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>29</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>29</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>POS3</string>
+            </property>
+            <property name="toolTipDuration">
+             <number>500</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" colspan="2">
+           <widget class="QLabel" name="label_10">
+            <property name="text">
+             <string>Положение, %</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="3">
+           <widget class="QGroupBox" name="groupBox_5">
+            <property name="title">
+             <string>Пределы:</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_19">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <property name="spacing">
+              <number>4</number>
+             </property>
+             <item row="2" column="1">
+              <widget class="QLineEdit" name="man_zol_n">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLineEdit" name="man_zol_v">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLabel" name="label_25">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Нижний</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_21">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Верхний</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="2" column="1" colspan="2">
+           <widget class="QComboBox" name="man_tupe_sign">
+            <item>
+             <property name="text">
+              <string>Ток</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Напряжение</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <spacer name="horizontalSpacer_3">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -2473,88 +1878,6 @@
           </size>
          </property>
         </spacer>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="voltage">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="title">
-          <string>Напряжение, В</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_7">
-          <property name="spacing">
-           <number>2</number>
-          </property>
-          <property name="leftMargin">
-           <number>2</number>
-          </property>
-          <property name="topMargin">
-           <number>4</number>
-          </property>
-          <property name="rightMargin">
-           <number>2</number>
-          </property>
-          <property name="bottomMargin">
-           <number>2</number>
-          </property>
-          <item>
-           <widget class="QRadioButton" name="rb_DC">
-            <property name="text">
-             <string>Постоянное</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="rb_AC">
-            <property name="text">
-             <string>Переменное</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="U_ACDC">
-            <property name="minimumSize">
-             <size>
-              <width>43</width>
-              <height>29</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>100</width>
-              <height>29</height>
-             </size>
-            </property>
-            <property name="toolTip">
-             <string>U_ACDC</string>
-            </property>
-            <property name="toolTipDuration">
-             <number>500</number>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="verticalSpacer_3">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </widget>
        </item>
       </layout>
      </item>
@@ -3026,6 +2349,749 @@
       </spacer>
      </item>
     </layout>
+   </item>
+   <item row="1" column="2" rowspan="2">
+    <widget class="QGroupBox" name="indicators">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>700</height>
+      </size>
+     </property>
+     <property name="title">
+      <string>Индикаторы</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_11">
+      <property name="spacing">
+       <number>2</number>
+      </property>
+      <property name="leftMargin">
+       <number>2</number>
+      </property>
+      <property name="topMargin">
+       <number>4</number>
+      </property>
+      <property name="rightMargin">
+       <number>2</number>
+      </property>
+      <property name="bottomMargin">
+       <number>2</number>
+      </property>
+      <item>
+       <widget class="QGroupBox" name="levels">
+        <property name="title">
+         <string>Уровень масла</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_10">
+         <property name="spacing">
+          <number>2</number>
+         </property>
+         <property name="leftMargin">
+          <number>2</number>
+         </property>
+         <property name="topMargin">
+          <number>4</number>
+         </property>
+         <property name="rightMargin">
+          <number>2</number>
+         </property>
+         <property name="bottomMargin">
+          <number>2</number>
+         </property>
+         <item>
+          <widget class="QGroupBox" name="tank">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="title">
+            <string>Бак</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_15">
+            <property name="leftMargin">
+             <number>2</number>
+            </property>
+            <property name="topMargin">
+             <number>4</number>
+            </property>
+            <property name="rightMargin">
+             <number>2</number>
+            </property>
+            <property name="bottomMargin">
+             <number>2</number>
+            </property>
+            <property name="spacing">
+             <number>2</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QLabel" name="SL3">
+              <property name="toolTip">
+               <string>SL3 - авария</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>А</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLabel" name="SL2">
+              <property name="toolTip">
+               <string>SL2 - предупреждение</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>П</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QLabel" name="SL1">
+              <property name="toolTip">
+               <string>SL1 - норма</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>Н</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="pallet">
+           <property name="title">
+            <string>Поддон</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_16">
+            <property name="leftMargin">
+             <number>2</number>
+            </property>
+            <property name="topMargin">
+             <number>4</number>
+            </property>
+            <property name="rightMargin">
+             <number>2</number>
+            </property>
+            <property name="bottomMargin">
+             <number>2</number>
+            </property>
+            <property name="spacing">
+             <number>2</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QLabel" name="SL5">
+              <property name="toolTip">
+               <string>SL5</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>МИН</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLabel" name="SL4">
+              <property name="toolTip">
+               <string>SL4</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>МАКС</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="valves">
+        <property name="title">
+         <string>Краны</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_9">
+         <property name="spacing">
+          <number>2</number>
+         </property>
+         <property name="leftMargin">
+          <number>2</number>
+         </property>
+         <property name="topMargin">
+          <number>4</number>
+         </property>
+         <property name="rightMargin">
+          <number>2</number>
+         </property>
+         <property name="bottomMargin">
+          <number>2</number>
+         </property>
+         <item>
+          <widget class="QGroupBox" name="drainage_valves">
+           <property name="title">
+            <string>Дренаж</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_10">
+            <property name="leftMargin">
+             <number>2</number>
+            </property>
+            <property name="topMargin">
+             <number>4</number>
+            </property>
+            <property name="rightMargin">
+             <number>2</number>
+            </property>
+            <property name="bottomMargin">
+             <number>2</number>
+            </property>
+            <property name="spacing">
+             <number>2</number>
+            </property>
+            <item row="0" column="1">
+             <widget class="QLabel" name="SQ14">
+              <property name="toolTip">
+               <string>SQ14</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>M2</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="SQ13">
+              <property name="toolTip">
+               <string>SQ13</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>M1</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QLabel" name="SQ15">
+              <property name="toolTip">
+               <string>SQ15</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>M4</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="pump_valves">
+           <property name="title">
+            <string>Насосы</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_9">
+            <property name="leftMargin">
+             <number>2</number>
+            </property>
+            <property name="topMargin">
+             <number>4</number>
+            </property>
+            <property name="rightMargin">
+             <number>2</number>
+            </property>
+            <property name="bottomMargin">
+             <number>2</number>
+            </property>
+            <property name="spacing">
+             <number>2</number>
+            </property>
+            <item row="0" column="2">
+             <widget class="QLabel" name="SQ7">
+              <property name="toolTip">
+               <string>SQ7</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>М3.1</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="SQ9">
+              <property name="toolTip">
+               <string>SQ9</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>М4</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="SQ1">
+              <property name="toolTip">
+               <string>SQ1</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>М1</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="2">
+             <widget class="QLabel" name="SQ5">
+              <property name="toolTip">
+               <string>SQ5</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>М3.2</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QLabel" name="SQ11">
+              <property name="toolTip">
+               <string>SQ11</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>М5</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLabel" name="SQ3">
+              <property name="toolTip">
+               <string>SQ3</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>М2</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="filtres">
+        <property name="title">
+         <string>Фильтры</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_8">
+         <property name="spacing">
+          <number>2</number>
+         </property>
+         <property name="leftMargin">
+          <number>2</number>
+         </property>
+         <property name="topMargin">
+          <number>4</number>
+         </property>
+         <property name="rightMargin">
+          <number>2</number>
+         </property>
+         <property name="bottomMargin">
+          <number>2</number>
+         </property>
+         <item>
+          <widget class="QGroupBox" name="secondary_filter">
+           <property name="toolTip">
+            <string/>
+           </property>
+           <property name="title">
+            <string>Тонкой очистки</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_12">
+            <property name="leftMargin">
+             <number>2</number>
+            </property>
+            <property name="topMargin">
+             <number>4</number>
+            </property>
+            <property name="rightMargin">
+             <number>2</number>
+            </property>
+            <property name="bottomMargin">
+             <number>2</number>
+            </property>
+            <property name="spacing">
+             <number>2</number>
+            </property>
+            <item row="0" column="1">
+             <widget class="QLabel" name="SP9">
+              <property name="toolTip">
+               <string>SP9</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>M2</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="SP7">
+              <property name="toolTip">
+               <string>SP7</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>M1</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QLabel" name="SP13">
+              <property name="toolTip">
+               <string>SP13</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>M3.1</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLabel" name="SP15">
+              <property name="toolTip">
+               <string>SP15</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>M12</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QLabel" name="SP12">
+              <property name="toolTip">
+               <string>SP12</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>M3.2</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="first_filter">
+           <property name="title">
+            <string>Грубой очистки</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_13">
+            <property name="leftMargin">
+             <number>2</number>
+            </property>
+            <property name="topMargin">
+             <number>4</number>
+            </property>
+            <property name="rightMargin">
+             <number>2</number>
+            </property>
+            <property name="bottomMargin">
+             <number>2</number>
+            </property>
+            <property name="spacing">
+             <number>2</number>
+            </property>
+            <item row="0" column="1">
+             <widget class="QLabel" name="SP10">
+              <property name="toolTip">
+               <string>SP10</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>M2</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QLabel" name="SP11">
+              <property name="toolTip">
+               <string>SP11</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>M4</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="SP8">
+              <property name="toolTip">
+               <string>SP8</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>M1</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="3">
+             <widget class="QLabel" name="SP14">
+              <property name="toolTip">
+               <string>SP14</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>M5</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="suction_filter">
+           <property name="title">
+            <string>Всасывающий</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_11">
+            <property name="leftMargin">
+             <number>2</number>
+            </property>
+            <property name="topMargin">
+             <number>4</number>
+            </property>
+            <property name="rightMargin">
+             <number>2</number>
+            </property>
+            <property name="bottomMargin">
+             <number>2</number>
+            </property>
+            <property name="spacing">
+             <number>2</number>
+            </property>
+            <item row="0" column="2">
+             <widget class="QLabel" name="SP4">
+              <property name="toolTip">
+               <string>SP4</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>M3.1</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLabel" name="SP6">
+              <property name="toolTip">
+               <string>SP6</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>M5</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="SP5">
+              <property name="toolTip">
+               <string>SP5</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>M4</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QLabel" name="SP3">
+              <property name="toolTip">
+               <string>SP3</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>M3.2</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="SP1">
+              <property name="toolTip">
+               <string>SP1</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>M1</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLabel" name="SP2">
+              <property name="toolTip">
+               <string>SP2</string>
+              </property>
+              <property name="toolTipDuration">
+               <number>500</number>
+              </property>
+              <property name="text">
+               <string>M2</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item row="1" column="0" colspan="2">
     <widget class="QLabel" name="ErrorMark">

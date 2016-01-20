@@ -90,7 +90,7 @@ private slots:
     void on_YA21_clicked();
     void on_YA24_clicked();
     void on_YA25_clicked();
-    void on_YA4_clicked();
+//    void on_YA4_clicked();
     void on_Accept_clicked(); // передача задания в контроллер
     void on_CB_clicked();
     void on_CR_clicked();

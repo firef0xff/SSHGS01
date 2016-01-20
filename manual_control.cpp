@@ -1,6 +1,7 @@
 #include "manual_control.h"
 #include "ui_manual_control.h"
 #include "test_case/test_params.h"
+#include <QMessageBox>
 
 ManualControlUpdater::ManualControlUpdater():
     mStopSignal(false)
@@ -49,7 +50,11 @@ ManualControl::ManualControl(QWidget *parent) :
     ui->YB4->setValidator( new QIntValidator( 10, 315, this ) );
     ui->YB5->setValidator( new QIntValidator( 10, 315, this ) );
     ui->YB6->setValidator( new QIntValidator( 10, 315, this ) );
+
+    ui->man_zol_n->setValidator( new QIntValidator( -1000, 1000, this ) );
+    ui->man_zol_v->setValidator( new QIntValidator( -1000, 1000, this ) );
     ui->U_ACDC->setValidator( new QIntValidator( 0, 220, this ) );
+
 
     QObject::connect( &Updater, SIGNAL(update()), this, SLOT(onUpdateControls()) );    
 }
@@ -117,7 +122,7 @@ void ManualControl::SynkControls()
     UpdateButton( ui->YA1, mControlBits.YA1 );          //MX40.0 Разгрузка управл.насоса для М1 м3
     UpdateButton( ui->YA2, mControlBits.YA2 );          //MX40.1 Разгрузка управл.насоса для М2 м3
     UpdateButton( ui->YA3, mControlBits.YA3 );          //MX40.2 Разгрузка насоса управления м4
-    UpdateButton( ui->YA4, mControlBits.YA4 );          //MX40.3 Включение гидроаккумулятора
+//    UpdateButton( ui->YA4, mControlBits.YA4 );          //MX40.3 Включение гидроаккумулятора
     UpdateButton( ui->YA5, mControlBits.YA5 );          //MX40.4 Разгрузка основных насосов м1м2
     UpdateButton( ui->YA6, mControlBits.YA6 );          //MX40.5 Подача расхода к испытательному модулю
     UpdateButton( ui->YA7, mControlBits.YA7 );          //MX40.6 Включ малый расходомер (до 60л/мин)
@@ -369,7 +374,17 @@ void ManualControl::on_YA11_clicked()
 }
 void ManualControl::on_YA7_clicked()
 {
-    mControlBits.SetYA7( ui->YA7->isChecked() );
+    if ( mParams.YB1 + mParams.YB2 < 65 && ui->YA7->isChecked() )
+        mControlBits.SetYA7( ui->YA7->isChecked() );
+    else
+    {
+        QMessageBox msg;
+        msg.setWindowTitle( "Превышение допустимого расхода" );
+        msg.setText( "Расход насосов М1 и М2 первышает допустимое значение" );
+        msg.setStandardButtons( QMessageBox::Ok );
+        msg.setModal( true );
+        msg.exec();
+    }
 }
 
 
@@ -398,13 +413,37 @@ void ManualControl::on_YA25_clicked()
     mControlBits.SetYA25( ui->YA25->isChecked() );
 }
 
-void ManualControl::on_YA4_clicked()
-{
-    mControlBits.SetYA4( ui->YA4->isChecked() );
-}
+//void ManualControl::on_YA4_clicked()
+//{
+//    mControlBits.SetYA4( ui->YA4->isChecked() );
+//}
 
 void ManualControl::on_Accept_clicked()
 {
+    auto CheckPower = [ this ]() -> bool
+    {
+        const int pomp_max_power = 55;
+
+        bool combo1 = mParams.YB1*mParams.P_YB3/540 > pomp_max_power;
+        bool combo2 = mParams.YB2*mParams.P_YB3/540 > pomp_max_power;
+
+        QString err_msg;
+        if ( combo1 )
+            err_msg += "Необходимо скорректировать расход и давление для насоса М1\n";
+        if ( combo2 )
+            err_msg += "Необходимо скорректировать расход и давление для насоса М2\n";
+
+        if ( !err_msg.isEmpty() )
+        {
+            QMessageBox msg;
+            msg.setWindowTitle( "Превышена допустимая мощьность насосов" );
+            msg.setText( err_msg );
+            msg.setStandardButtons( QMessageBox::Ok );
+            msg.setModal( true );
+            msg.exec();
+        }
+        return !combo1 && !combo2;
+    };
     bool s = false;
 
     mParams.YB1 = ui->YB1->text().toDouble( &s );
@@ -414,7 +453,22 @@ void ManualControl::on_Accept_clicked()
     mParams.YB5 = ui->YB5->text().toDouble( &s );
     mParams.YB6 = ui->YB6->text().toDouble( &s );
     mParams.Manual_set = ui->SignalPersent->value();
+    mParams.man_zol_n = ui->man_zol_n->text().toDouble( &s );
+    mParams.man_zol_v = ui->man_zol_v->text().toDouble( &s );
+    mParams.man_tupe_sign = ui->man_tupe_sign->currentIndex();
 
+    if ( mControlBits.YA7 && mParams.YB1 + mParams.YB2 < 65 )
+    {
+        QMessageBox msg;
+        msg.setWindowTitle( "Превышение допустимого расхода" );
+        msg.setText( "Расход насосов М1 и М2 первышает допустимое значение" );
+        msg.setStandardButtons( QMessageBox::Ok );
+        msg.setModal( true );
+        msg.exec();
+    }
+
+
+    CheckPower();
     double voltage = ui->U_ACDC->text().toDouble( &s );
     cpu::CpuMemory::Instance().DB30.Voltage = voltage;
     cpu::CpuMemory::Instance().DB30.Current = ui->rb_AC->isChecked()? 1 : 0;
