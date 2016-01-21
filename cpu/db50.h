@@ -1,6 +1,7 @@
 #pragma once
 #include "data_block_base.h"
 #include <inttypes.h>
+#include <mutex>
 
 namespace cpu
 {
@@ -62,6 +63,7 @@ public:
     float& man_zol_n;       //DB31.DBD34 НИЖНИЙ УРОВЕНЬ СИГНАЛА
     bool& man_tupe_sign;   //DB31.DBX38.0 ВЫБОР ТИПА ВЫХОДА -ток -напряжение
 
+    std::mutex& ReadLocker();
     void WriteTask();
 private:    
 
@@ -81,6 +83,7 @@ private:
     int mIntData[ INT_COUNT ];
     float mFloatData[ FLOAT_COUNT ];
     uint64_t mGroupID = 0;
+    std::mutex mLock;
 
     wchar_t const* mAdresses[ BOOL_COUNT + INT_COUNT + FLOAT_COUNT ] = {
         //bool

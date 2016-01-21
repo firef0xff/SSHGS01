@@ -446,6 +446,7 @@ void ManualControl::on_Accept_clicked()
     };
     bool s = false;
 
+    std::lock_guard<std::mutex> lock( mParams.ReadLocker() );
     mParams.YB1 = ui->YB1->text().toDouble( &s );
     mParams.YB2 = ui->YB2->text().toDouble( &s );
     mParams.P_YB3 = ui->YB3->text().toDouble( &s );

@@ -61,6 +61,7 @@ DB50::DB50():
 
 void DB50::Read()
 {
+    std::lock_guard< std::mutex > lock( mLock );
     OPCITEMSTATE* rez = opc::miniOPC::Instance().Read( mGroupID );
     if (!rez)
     {
@@ -77,6 +78,11 @@ void DB50::Read()
             mFloatData[ i - ( BOOL_COUNT + INT_COUNT ) ] = rez[i].vDataValue.fltVal;
     }
     opc::miniOPC::Instance().OpcMassFree( mGroupID, rez );
+}
+
+std::mutex& DB50::ReadLocker()
+{
+    return mLock;
 }
 
 void DB50::WriteTask()
