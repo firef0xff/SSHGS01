@@ -451,8 +451,8 @@ void ManualControl::on_Accept_clicked()
     mParams.YB2 = ui->YB2->text().toDouble( &s );
     mParams.P_YB3 = ui->YB3->text().toDouble( &s );
     mParams.P_YB4 = ui->YB4->text().toDouble( &s );
-    mParams.YB5 = ui->YB5->text().toDouble( &s );
-    mParams.YB6 = ui->YB6->text().toDouble( &s );
+    mParams.P_YB5 = ui->YB5->text().toDouble( &s );
+    mParams.P_YB6 = ui->YB6->text().toDouble( &s );
     mParams.Manual_set = ui->SignalPersent->value();
     mParams.man_zol_n = ui->man_zol_n->text().toDouble( &s );
     mParams.man_zol_v = ui->man_zol_v->text().toDouble( &s );

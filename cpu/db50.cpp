@@ -27,29 +27,31 @@ DB50::DB50():
     A1(mFloatData[13]),
     A2(mFloatData[14]),
     A_Plata(mFloatData[15]),//---
-    YB1(mFloatData[30]),        /*w*/
-    YB2(mFloatData[31]),        /*w*/
+    YB1(mFloatData[32]),        /*w*/
+    YB2(mFloatData[33]),        /*w*/
     YB3(mFloatData[16]),
     YB4(mFloatData[17]),
-    YB5(mFloatData[32]),        /*w*/
-    YB6(mFloatData[33]),        /*w*/
-    Z_U_Post(mFloatData[18]),
-    Z_U_Per(mFloatData[19]),
-    Plata_1(mFloatData[20]),
-    Plata_2(mFloatData[21]),
-    Plata_3(mFloatData[22]),
-    Plata_4_5_6(mFloatData[23]),
-    Plata_7(mFloatData[24]),
-    Plata_8(mFloatData[25]),
-    Plata_860mA(mFloatData[26]),
-    POS_1_REAL(mFloatData[27]),
-    POS_2_REAL(mFloatData[28]),
-    POS_3_REAL(mFloatData[29]),
+    YB5(mFloatData[18]),
+    YB6(mFloatData[19]),
+    Z_U_Post(mFloatData[20]),
+    Z_U_Per(mFloatData[21]),
+    Plata_1(mFloatData[22]),
+    Plata_2(mFloatData[23]),
+    Plata_3(mFloatData[24]),
+    Plata_4_5_6(mFloatData[25]),
+    Plata_7(mFloatData[26]),
+    Plata_8(mFloatData[27]),
+    Plata_860mA(mFloatData[28]),
+    POS_1_REAL(mFloatData[29]),
+    POS_2_REAL(mFloatData[30]),
+    POS_3_REAL(mFloatData[31]),
     P_YB3(mFloatData[34]),          /*w*/
     P_YB4(mFloatData[35]),          /*w*/
     Manual_set(mFloatData[36]),     /*w*/
     man_zol_v(mFloatData[37]),      /*w*/
     man_zol_n(mFloatData[38]),      /*w*/
+    P_YB5(mFloatData[39]),      /*w*/
+    P_YB6(mFloatData[40]),      /*w*/
     man_tupe_sign(mBoolData[1])     /*w*/
 
 {

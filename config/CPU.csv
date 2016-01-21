@@ -380,6 +380,8 @@ DB50.P_YB4;DB31,REAL26;RW;TST=;CMT=текущий сигнал на катушку
 DB50.man_zol_v;DB31,REAL30;RW;TST=;CMT=ВЕРХНИЙ УРОВЕНЬ СИГНАЛА
 DB50.man_zol_n;DB31,REAL34;RW;TST=;CMT=НИЖНИЙ УРОВЕНЬ СИГНАЛА
 DB50.man_tupe_sign;DB31,X38.0;RW;TST=;CMT=ВЫБОР ТИПА ВЫХОДА -ток -напряжение
+DB50.P_YB5;DB31,REAL40;RW;TST=;CMT=Нагрузка в канеле А
+DB50.P_YB6;DB31,REAL44;RW;TST=;CMT=Нагрузка в канале В
 DB60.OP15_25_count;DB60,INT136;RW;TST=;CMT=количестви измерений для заданий 15 и 25
 DB60.OP15_25_Opor_1;DB60,X210.0;RW;TST=;CMT=
 DB60.OP15_25_Opor_2;DB60,X210.1;RW;TST=;CMT=

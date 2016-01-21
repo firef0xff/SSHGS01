@@ -61,6 +61,8 @@ public:
 //    управление золотником
     float& man_zol_v;       //DB31.DBD30 ВЕРХНИЙ УРОВЕНЬ СИГНАЛА
     float& man_zol_n;       //DB31.DBD34 НИЖНИЙ УРОВЕНЬ СИГНАЛА
+    float& P_YB5;           //DB31,REAL40 Нагрузка в канеле А
+    float& P_YB6;           //DB31,REAL44 Нагрузка в канале В
     bool& man_tupe_sign;   //DB31.DBX38.0 ВЫБОР ТИПА ВЫХОДА -ток -напряжение
 
     std::mutex& ReadLocker();
@@ -76,7 +78,7 @@ private:
     {
         BOOL_COUNT = 2,
         INT_COUNT = 2,
-        FLOAT_COUNT = 39
+        FLOAT_COUNT = 41
     };
 
     bool mBoolData[ BOOL_COUNT ];
@@ -113,6 +115,8 @@ private:
         L"CPU/DB50.A_Plata",
         L"CPU/DB50.YB3",
         L"CPU/DB50.YB4",
+        L"CPU/DB50.YB5",
+        L"CPU/DB50.YB6",
         L"CPU/DB50.Z_U_Post",
         L"CPU/DB50.Z_U_Per",
         L"CPU/DB50.Plata_1",
@@ -129,8 +133,6 @@ private:
         //write group
         L"CPU/DB50.YB1",
         L"CPU/DB50.YB2",
-        L"CPU/DB50.YB5",
-        L"CPU/DB50.YB6",
         //db31
         L"CPU/DB50.P_YB3",
         L"CPU/DB50.P_YB4",
@@ -138,6 +140,8 @@ private:
         //
         L"CPU/DB50.man_zol_v",
         L"CPU/DB50.man_zol_n",
+        L"CPU/DB50.P_YB5",
+        L"CPU/DB50.P_YB6",
     };
 };
 
