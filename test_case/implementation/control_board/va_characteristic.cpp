@@ -8,38 +8,6 @@ namespace test
 namespace control_board
 {
 
-VACharacteristic::VACharacteristic():
-    test::control_board::Test( "Построение зависимости выходного тока на катушку от входного опорного сигнала", 31 )
-{}
-
-bool VACharacteristic::Run()
-{
-    Start();
-    Wait( mBits.op31_ok, mBits.op31_end );
-    if ( IsStopped() )
-        return false;
-
-    for ( size_t i = 0; i < m31Results.SIGNAL_COUNT; ++i )
-    {
-        Data d;
-        d.signal = m31Results.signal[i];
-        d.current = m31Results.current[i];
-        Graph.push_back(d);
-    }
-
-    OilTemp = round( mTemperature.T_oil *100)/100;
-    return true;
-}
-void VACharacteristic::UpdateData()
-{
-    Test::UpdateData();
-    m31Results.Read();
-}
-bool VACharacteristic::Success() const
-{
-    return true;
-}
-
 namespace
 {
 
@@ -104,6 +72,74 @@ ff0x::NoAxisGraphBuilder::LinePoints Process ( VACharacteristic::DataSet const& 
 
 }//namespace
 
+class VACharacteristic::GrapfData
+{
+public:
+    GrapfData( VACharacteristic const* test, QString compare_width )
+    {
+        QPointF x_range_1;
+        QPointF y_range_1;
+
+        QPointF x_range_e;
+        QPointF y_range_e;
+        //поиск данных теста
+        bool use_etalone = false;
+        foreach (QJsonValue const& val, test::ReadFromFile(compare_width).value("Results").toArray())
+        {
+            auto obj = val.toObject();
+            if ( obj.value("id").toInt() == test->mId )
+            {
+                QJsonArray a = obj.value("data").toObject().value("Graph").toArray();
+                data_e2 = Process( FromJson( a ), x_range_e, y_range_e );
+                use_etalone = true;
+            }
+        }
+
+        data = Process( test->Graph, x_range_1, y_range_1 );
+        x_range = ff0x::MergeRanges( x_range_1, x_range_e );
+        y_range = ff0x::MergeRanges( y_range_1, y_range_e );
+    }
+
+    ff0x::NoAxisGraphBuilder::LinePoints data;
+    ff0x::NoAxisGraphBuilder::LinePoints data_e2;
+
+    QPointF x_range;
+    QPointF y_range;
+};
+
+VACharacteristic::VACharacteristic():
+    test::control_board::Test( "Построение зависимости выходного тока на катушку от входного опорного сигнала", 31 )
+{}
+
+bool VACharacteristic::Run()
+{
+    Start();
+    Wait( mBits.op31_ok, mBits.op31_end );
+    if ( IsStopped() )
+        return false;
+
+    for ( size_t i = 0; i < m31Results.SIGNAL_COUNT; ++i )
+    {
+        Data d;
+        d.signal = m31Results.signal[i];
+        d.current = m31Results.current[i];
+        Graph.push_back(d);
+    }
+
+    OilTemp = round( mTemperature.T_oil *100)/100;
+    return true;
+}
+void VACharacteristic::UpdateData()
+{
+    Test::UpdateData();
+    m31Results.Read();
+}
+bool VACharacteristic::Success() const
+{
+    return true;
+}
+
+
 
 QJsonObject VACharacteristic::Serialise() const
 {
@@ -118,7 +154,15 @@ bool VACharacteristic::Deserialize( QJsonObject const& obj )
     Test::Deserialize( obj );
     return true;
 }
-
+void VACharacteristic::ResetDrawLine()
+{
+    Test::ResetDrawLine();
+    if ( mGrapfs )
+    {
+        delete mGrapfs;
+        mGrapfs = nullptr;
+    }
+}
 bool VACharacteristic::Draw(QPainter& painter, QRect &free_rect , const QString &compare_width) const
 {
     QFont header_font = painter.font();
@@ -158,62 +202,23 @@ bool VACharacteristic::Draw(QPainter& painter, QRect &free_rect , const QString 
 
 
     QFontMetrics metrix( text_font );
+    if (!mGrapfs)
+        mGrapfs = new GrapfData( this, compare_width );
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &text_font, &DrawRowCenter, &metrix, &compare_width ]( QRect const& rect )
+    [ this, &painter, &text_font, &DrawRowCenter, &metrix ]( QRect const& rect )
     {
         painter.save();
 
-        ff0x::NoAxisGraphBuilder::LinePoints data;
-        ff0x::NoAxisGraphBuilder::LinePoints data_e;
-        ff0x::NoAxisGraphBuilder::LinePoints data_e2;
-
-        QPointF x_range_1;
-        QPointF y_range_1;
-
-        QPointF x_range_1e;
-        QPointF y_range_1e;
-
-        QPointF x_range_1e2;
-        QPointF y_range_1e2;
-
-//        //поиск данных теста
-//        foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
-//        {
-//            auto obj = val.toObject();
-//            if ( obj.value("id").toInt() == mId )
-//            {
-//                QJsonArray a = obj.value("data").toObject().value("Graph").toArray();
-//                data_e = Process( FromJson( a ), x_range_1e, y_range_1e );
-//            }
-//        }
-
-        //поиск данных теста
-        foreach (QJsonValue const& val, test::ReadFromFile(compare_width).value("Results").toArray())
-        {
-            auto obj = val.toObject();
-            if ( obj.value("id").toInt() == mId )
-            {
-                QJsonArray a = obj.value("data").toObject().value("Graph").toArray();
-                data_e2 = Process( FromJson( a ), x_range_1e2, y_range_1e2 );
-            }
-        }
-
-
-        data = Process( Graph, x_range_1, y_range_1 );
-
         QFont f = text_font;
-        f.setPointSize( 6 );
-        int w = (rect.height() - metrix.height())*0.98;
+        f.setPointSize( 12 );
+        int w = (rect.width())*0.98;
         int h = (rect.height() - metrix.height())*0.98;
 
         ff0x::NoAxisGraphBuilder builder ( w, h, f );
         ff0x::NoAxisGraphBuilder::GraphDataLine lines;
-        lines.push_back( ff0x::NoAxisGraphBuilder::Line(data, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
-        if ( !data_e.empty() )
-            lines.push_back( ff0x::NoAxisGraphBuilder::Line(data_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
-        if ( !data_e2.empty() )
-            lines.push_back( ff0x::NoAxisGraphBuilder::Line(data_e2, ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
-
+        lines.push_back( ff0x::NoAxisGraphBuilder::Line(mGrapfs->data, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
+         if ( !mGrapfs->data_e2.empty() )
+            lines.push_back( ff0x::NoAxisGraphBuilder::Line(mGrapfs->data_e2, ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
 
         QRect p1(rect.left(), rect.top(), w, h );
         QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
@@ -224,20 +229,14 @@ bool VACharacteristic::Draw(QPainter& painter, QRect &free_rect , const QString 
             double x_step = 0;
             double y_step = 0;
 
-            ff0x::DataLength( x_range_1,
-                              x_range_1e, !data_e.empty(),
-                              x_range_1e2, !data_e2.empty(),
-                              x_range, x_step );
-            ff0x::DataLength( y_range_1,
-                              y_range_1e, !data_e.empty(),
-                              y_range_1e2, !data_e2.empty(),
-                              y_range, y_step );
+            ff0x::DataLength( mGrapfs->x_range,x_range, x_step );
+            ff0x::DataLength( mGrapfs->y_range,y_range, y_step );
 
             painter.drawPixmap( p1, builder.Draw( lines, x_range, y_range, x_step, y_step, "Опорный сигнал", "Выходной ток", true ) );
         }
 
         painter.restore();
-    }, 1, free_rect.width()/2 + metrix.height()  );
+    }, 1, 480  );
 
     return res;
 }

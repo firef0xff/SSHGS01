@@ -10,6 +10,7 @@ namespace servo
 class ExpeditureFromInput :public test::servo::Test
 {
 public:
+    class GrapfData;
     struct Data
     {
         Data():
@@ -31,11 +32,12 @@ public:
     QJsonObject Serialise() const;
     bool Deserialize( QJsonObject const& obj );
 
+    void ResetDrawLine();
     bool Draw(QPainter &painter, QRect &free_rect, const QString &compare_width ) const;
 protected:
     void UpdateData();
 private:
-
+    friend class GrapfData;
 
     // графиг опорного сигнала и расхода в канале
     //+ расчеты
@@ -46,6 +48,7 @@ private:
     DataSet GraphB1;
     DataSet GraphB2;
 
+    mutable GrapfData* mGrapfs;
     int level;
 };
 

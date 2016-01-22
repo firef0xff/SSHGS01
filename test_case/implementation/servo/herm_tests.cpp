@@ -182,56 +182,6 @@ void OutsideHermTest::Question()
 
 
 //----------------------------------------------
-InsideHermTest::InsideHermTest():
-    test::servo::Test( "Проверка внутренней герметичности", 11, 21 )
-{}
-
-bool InsideHermTest::Run()
-{
-    GraphA.clear();
-    GraphB.clear();
-    Start();
-    if ( ReelControl() )
-        Wait( mControlReelBits.op21_ok, mControlReelBits.op21_end );
-    else
-        Wait( mControlBoardBits.op11_ok, mControlBoardBits.op11_end );
-    if ( IsStopped() )
-        return false;
-
-    std::this_thread::sleep_for( std::chrono::seconds(2));
-    UpdateData();
-    for ( size_t i = 0; i < m11Results.CONSUMPTION_A_COUNT; ++i )
-    {
-        Data d;
-        d.Leak = m11Results.consumption_a[i];
-        if ( ReelControl() )
-            d.Signal = fabs( m11Results.ref_a[i] );
-        else
-            d.Signal = fabs( m11Results.ref_a[i] );
-        GraphA.push_back(d);
-
-        d.Leak = m11Results.consumption_b[i];
-        if ( ReelControl() )
-            d.Signal = fabs( m11Results.ref_b[i] );
-        else
-            d.Signal = fabs( m11Results.ref_b[i] );
-        GraphB.push_back(d);
-    }
-
-
-    OilTemp = round( mTemperature.T_oil *100)/100;
-
-    return Success();
-}
-void InsideHermTest::UpdateData()
-{
-    Test::UpdateData();
-    m11Results.Read();
-}
-bool InsideHermTest::Success() const
-{
-    return true;
-}
 
 namespace
 {
@@ -297,6 +247,105 @@ ff0x::NoAxisGraphBuilder::LinePoints Process ( InsideHermTest::DataSet const& sr
 
 }//namespace
 
+class InsideHermTest::GrapfData
+{
+public:
+    GrapfData( InsideHermTest const* test, QString compare_width )
+    {
+        QPointF x_range_1;
+        QPointF y_range_1;
+
+        QPointF x_range_2;
+        QPointF y_range_2;
+
+        QPointF x_range_e;
+        QPointF y_range_e;
+        //поиск данных теста
+        bool use_etalone = false;
+        foreach (QJsonValue const& val, test::ReadFromFile(compare_width).value("Results").toArray())
+        {
+            auto obj = val.toObject();
+            if ( obj.value("id").toInt() == test->mId )
+            {
+                dataA_e2 = Process( FromJson( obj.value("data").toObject().value("GraphA").toArray()), x_range_1, y_range_1 );
+                dataB_e2 = Process( FromJson( obj.value("data").toObject().value("GraphB").toArray()), x_range_2, y_range_2 );
+                x_range_e = ff0x::MergeRanges( x_range_1, x_range_2 );
+                y_range_e = ff0x::MergeRanges( y_range_1, y_range_2 );
+                use_etalone = true;
+            }
+        }
+
+        dataA = Process( test->GraphA, x_range_1, y_range_1);
+        dataB = Process( test->GraphB, x_range_2, y_range_2);
+        x_range = ff0x::MergeRanges( x_range_1, x_range_2 );
+        y_range = ff0x::MergeRanges( y_range_1, y_range_2 );
+
+        x_range = ff0x::MergeRanges( x_range, x_range_e, use_etalone );
+        y_range = ff0x::MergeRanges( y_range, y_range_e, use_etalone );
+    }
+
+    ff0x::NoAxisGraphBuilder::LinePoints dataA;
+    ff0x::NoAxisGraphBuilder::LinePoints dataA_e2;
+
+    ff0x::NoAxisGraphBuilder::LinePoints dataB;
+    ff0x::NoAxisGraphBuilder::LinePoints dataB_e2;
+
+    QPointF x_range;
+    QPointF y_range;
+};
+
+InsideHermTest::InsideHermTest():
+    test::servo::Test( "Проверка внутренней герметичности", 11, 21 )
+{}
+
+bool InsideHermTest::Run()
+{
+    GraphA.clear();
+    GraphB.clear();
+    Start();
+    if ( ReelControl() )
+        Wait( mControlReelBits.op21_ok, mControlReelBits.op21_end );
+    else
+        Wait( mControlBoardBits.op11_ok, mControlBoardBits.op11_end );
+    if ( IsStopped() )
+        return false;
+
+    std::this_thread::sleep_for( std::chrono::seconds(2));
+    UpdateData();
+    for ( size_t i = 0; i < m11Results.CONSUMPTION_A_COUNT; ++i )
+    {
+        Data d;
+        d.Leak = m11Results.consumption_a[i];
+        if ( ReelControl() )
+            d.Signal = fabs( m11Results.ref_a[i] );
+        else
+            d.Signal = fabs( m11Results.ref_a[i] );
+        GraphA.push_back(d);
+
+        d.Leak = m11Results.consumption_b[i];
+        if ( ReelControl() )
+            d.Signal = fabs( m11Results.ref_b[i] );
+        else
+            d.Signal = fabs( m11Results.ref_b[i] );
+        GraphB.push_back(d);
+    }
+
+
+    OilTemp = round( mTemperature.T_oil *100)/100;
+
+    return Success();
+}
+void InsideHermTest::UpdateData()
+{
+    Test::UpdateData();
+    m11Results.Read();
+}
+bool InsideHermTest::Success() const
+{
+    return true;
+}
+
+
 QJsonObject InsideHermTest::Serialise() const
 {
     QJsonObject obj = Test::Serialise();
@@ -314,7 +363,15 @@ bool InsideHermTest::Deserialize( QJsonObject const& obj )
     return true;
 }
 
-
+void InsideHermTest::ResetDrawLine()
+{
+    Test::ResetDrawLine();
+    if ( mGrapfs )
+    {
+        delete mGrapfs;
+        mGrapfs = nullptr;
+    }
+}
 bool InsideHermTest::Draw(QPainter& painter, QRect &free_rect , const QString &compare_width) const
 {
     test::servo::Parameters *params = static_cast< test::servo::Parameters * >( CURRENT_PARAMS );
@@ -417,93 +474,29 @@ bool InsideHermTest::Draw(QPainter& painter, QRect &free_rect , const QString &c
 
 
     QFontMetrics metrix( text_font );
+    if (!mGrapfs)
+        mGrapfs = new GrapfData( this, compare_width );
+
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &text_font, &DrawRowCenter, &metrix, &compare_width ]( QRect const& rect )
     {
-        painter.save();
-
-        ff0x::NoAxisGraphBuilder::LinePoints dataA;
-        ff0x::NoAxisGraphBuilder::LinePoints dataA_e;
-        ff0x::NoAxisGraphBuilder::LinePoints dataA_e2;
-
-        ff0x::NoAxisGraphBuilder::LinePoints dataB;
-        ff0x::NoAxisGraphBuilder::LinePoints dataB_e;
-        ff0x::NoAxisGraphBuilder::LinePoints dataB_e2;
-
-        QPointF x_range_1;
-        QPointF y_range_1;
-
-        QPointF x_range_1e;
-        QPointF y_range_1e;
-
-        QPointF x_range_1e2;
-        QPointF y_range_1e2;
-
-        QPointF x_range_2;
-        QPointF y_range_2;
-
-        QPointF x_range_2e;
-        QPointF y_range_2e;
-
-        QPointF x_range_2e2;
-        QPointF y_range_2e2;
-
-//        //поиск данных теста
-//        foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
-//        {
-//            auto obj = val.toObject();
-//            if ( obj.value("id").toInt() == mId )
-//            {
-//                dataA_e = Process( FromJson( obj.value("data").toObject().value("GraphA").toArray()), x_range_1e, y_range_1e );
-//                dataB_e = Process( FromJson( obj.value("data").toObject().value("GraphB").toArray()), x_range_2e, y_range_2e );
-//            }
-//        }
-        //поиск данных теста
-        foreach (QJsonValue const& val, test::ReadFromFile(compare_width).value("Results").toArray())
-        {
-            auto obj = val.toObject();
-            if ( obj.value("id").toInt() == mId )
-            {
-                dataA_e2 = Process( FromJson( obj.value("data").toObject().value("GraphA").toArray()), x_range_1e2, y_range_1e2 );
-                dataB_e2 = Process( FromJson( obj.value("data").toObject().value("GraphB").toArray()), x_range_2e2, y_range_2e2 );
-            }
-        }
-
-        dataA = Process( GraphA, x_range_1, y_range_1);
-        dataB = Process( GraphB, x_range_2, y_range_2);
+        painter.save();        
 
         QFont f = text_font;
-        f.setPointSize( 6 );
-        int w = (rect.height() - metrix.height())*0.98;
+        f.setPointSize( 12 );
+        int w = (rect.width())*0.98;
         int h = (rect.height() - metrix.height())*0.98;
 
         ff0x::NoAxisGraphBuilder builder ( w, h, f );
-        ff0x::NoAxisGraphBuilder::GraphDataLine lines_a;
-        lines_a.push_back( ff0x::NoAxisGraphBuilder::Line(dataA,
+        ff0x::NoAxisGraphBuilder::GraphDataLine lines;
+        lines.push_back( ff0x::NoAxisGraphBuilder::Line(mGrapfs->dataA,
                            ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
-        if ( !dataA_e.empty() )
-            lines_a.push_back( ff0x::NoAxisGraphBuilder::Line(dataA_e,
-                               ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
-        if ( !dataA_e2.empty() )
-            lines_a.push_back( ff0x::NoAxisGraphBuilder::Line(dataA_e2,
+        if ( !mGrapfs->dataA_e2.empty() )
+            lines.push_back( ff0x::NoAxisGraphBuilder::Line(mGrapfs->dataA_e2,
                                ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
-
-        ff0x::NoAxisGraphBuilder::GraphDataLine lines_b;
-        lines_b.push_back( ff0x::NoAxisGraphBuilder::Line(dataB,
-                           ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
-        if ( !dataB_e.empty() )
-            lines_b.push_back( ff0x::NoAxisGraphBuilder::Line(dataB_e,
-                               ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
-        if ( !dataB_e2.empty() )
-            lines_b.push_back( ff0x::NoAxisGraphBuilder::Line(dataB_e2,
-                               ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
-
 
         QRect p1(rect.left(), rect.top(), w, h );
         QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
-        QRect p2(rect.right() - w, rect.top(), w, h );
-        QRect p2t(p2.left(), p2.bottom(), p2.width(), metrix.height());
-
         DrawRowCenter( p1t, text_font, Qt::black, "График утечек (канал А)" );
         {
             QPointF x_range;
@@ -511,37 +504,50 @@ bool InsideHermTest::Draw(QPainter& painter, QRect &free_rect , const QString &c
             double x_step = 0;
             double y_step = 0;
 
-            ff0x::DataLength( x_range_1,
-                              x_range_1e, !dataA_e.empty(),
-                              x_range_1e2, !dataA_e2.empty(),
-                              x_range, x_step );
-            ff0x::DataLength( y_range_1,
-                              y_range_1e, !dataA_e.empty(),
-                              y_range_1e2, !dataA_e2.empty(),
-                              y_range, y_step );
+            ff0x::DataLength( mGrapfs->x_range, x_range, x_step );
+            ff0x::DataLength( mGrapfs->y_range, y_range, y_step );
 
-            painter.drawPixmap( p1, builder.Draw( lines_a, x_range, y_range, x_step, y_step, "Опорный сигнал", "Расход (л/мин)", true ) );
+            painter.drawPixmap( p1, builder.Draw( lines, x_range, y_range, x_step, y_step, "Опорный сигнал", "Расход (л/мин)", true ) );
         }
 
-        DrawRowCenter( p2t, text_font, Qt::black, "График утечек (канал B)" );
+        painter.restore();
+    }, 1, 480  );
+
+
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter, &text_font, &DrawRowCenter, &metrix, &compare_width ]( QRect const& rect )
+    {
+        painter.save();
+
+        QFont f = text_font;
+        f.setPointSize( 12 );
+        int w = (rect.width())*0.98;
+        int h = (rect.height() - metrix.height())*0.98;
+
+        ff0x::NoAxisGraphBuilder builder ( w, h, f );
+        ff0x::NoAxisGraphBuilder::GraphDataLine lines;
+        lines.push_back( ff0x::NoAxisGraphBuilder::Line(mGrapfs->dataB,
+                           ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
+        if ( !mGrapfs->dataB_e2.empty() )
+            lines.push_back( ff0x::NoAxisGraphBuilder::Line(mGrapfs->dataB_e2,
+                               ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
+
+
+        QRect p1(rect.left(), rect.top(), w, h );
+        QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
+        DrawRowCenter( p1t, text_font, Qt::black, "График утечек (канал B)" );
         {
             QPointF x_range;
             QPointF y_range;
             double x_step = 0;
             double y_step = 0;
-            ff0x::DataLength( x_range_2,
-                              x_range_2e, !dataB_e.empty(),
-                              x_range_2e2, !dataB_e2.empty(),
-                              x_range, x_step );
-            ff0x::DataLength( y_range_2,
-                              y_range_2e, !dataB_e.empty(),
-                              y_range_2e2, !dataB_e2.empty(),
-                              y_range, y_step );
-            painter.drawPixmap( p2, builder.Draw( lines_b, x_range, y_range, x_step, y_step, "Опорный сигнал", "Расход (л/мин)", true ) );
+            ff0x::DataLength( mGrapfs->x_range, x_range, x_step );
+            ff0x::DataLength( mGrapfs->y_range, y_range, y_step );
+            painter.drawPixmap( p1, builder.Draw( lines, x_range, y_range, x_step, y_step, "Опорный сигнал", "Расход (л/мин)", true ) );
         }
 
         painter.restore();
-    }, 1, free_rect.width()/2 + metrix.height()  );
+    }, 1, 480  );
 
     free_rect.setHeight( 0 );
     return res;

@@ -11,6 +11,7 @@ namespace servo
 class FrequencyCharacteristics :public test::servo::Test
 {
 public:
+    class GrapfData;
     struct ArrData
     {
         double position = 0;
@@ -27,15 +28,19 @@ public:
     QJsonObject Serialise() const;
     bool Deserialize( QJsonObject const& obj );
 
+    void ResetDrawLine();
     bool Draw(QPainter &painter, QRect &free_rect, const QString &compare_width ) const;
 
 protected:
     void UpdateData();
 private:
-
+    friend class GrapfData;
     Source mSource1;
     Source mSource2;
     Source mSource3;
+    mutable GrapfData* mGrapfs1;
+    mutable GrapfData* mGrapfs2;
+    mutable GrapfData* mGrapfs3;
 };
 
 }//namespace servo

@@ -11,64 +11,6 @@ namespace test
 namespace hydro
 {
 
-PressureDurationFromExpenditure::PressureDurationFromExpenditure():
-    test::hydro::Test( "Проверка перепада давления и зависимость\nперепада давления от расхода", 4 )
-{}
-
-bool PressureDurationFromExpenditure::Run()
-{
-    Start();
-    Wait( mResults.op4_ok, mResults.op4_end );
-    if ( IsStopped() )
-        return false;
-
-    mData.clear();
-    Data a1;
-    a1.BP5 = mResults.op4_p_p_03_a;
-    a1.BP3 = mResults.op4_p_a_03_a;
-    a1.BP5_3 = mResults.op4_bp5_bp3_03_a;
-    a1.Expenditure = mResults.op4_q_03_a;
-
-    Data a2;
-    a2.BP5 = mResults.op4_p_p_06_a;
-    a2.BP3 = mResults.op4_p_a_06_a;
-    a2.BP5_3 = mResults.op4_bp5_bp3_06_a;
-    a2.Expenditure = mResults.op4_q_06_a;
-
-    Data a3;
-    a3.BP5 = mResults.op4_p_p_max_a;
-    a3.BP3 = mResults.op4_p_a_max_a;
-    a3.BP5_3 = mResults.op4_bp5_bp3_max_a;
-    a3.Expenditure = mResults.op4_q_max_a;
-
-
-    Data b1;
-    b1.BP5 = mResults.op4_p_p_03_b;
-    b1.BP3 = mResults.op4_p_a_03_b;
-    b1.BP5_3 = mResults.op4_bp5_bp3_03_b;
-    b1.Expenditure = mResults.op4_q_03_b;
-
-    Data b2;
-    b2.BP5 = mResults.op4_p_p_06_b;
-    b2.BP3 = mResults.op4_p_a_06_b;
-    b2.BP5_3 = mResults.op4_bp5_bp3_06_b;
-    b2.Expenditure = mResults.op4_q_06_b;
-
-    Data b3;
-    b3.BP5 = mResults.op4_p_p_max_b;
-    b3.BP3 = mResults.op4_p_a_max_b;
-    b3.BP5_3 = mResults.op4_bp5_bp3_max_b;
-    b3.Expenditure = mResults.op4_q_max_b;
-
-    mData.push_back( Channels( a1, b1 ) );
-    mData.push_back( Channels( a2, b2 ) );
-    mData.push_back( Channels( a3, b3 ) );
-
-    OilTemp = round(mResults.T_oil*100)/100;
-
-    return Success();
-}
-
 namespace
 {
 
@@ -170,6 +112,113 @@ ff0x::NoAxisGraphBuilder::LinePoints ProcessB( PressureDurationFromExpenditure::
 
 }//namespace
 
+
+class PressureDurationFromExpenditure::GrapfData
+{
+public:
+    GrapfData( PressureDurationFromExpenditure const* test, QString compare_width )
+    {
+        QPointF x_range_1;
+        QPointF y_range_1;
+
+        QPointF x_range_2;
+        QPointF y_range_2;
+
+        QPointF x_range_e;
+        QPointF y_range_e;
+        //поиск данных теста
+        bool use_etalone = false;
+        foreach (QJsonValue const& val, test::ReadFromFile(compare_width).value("Results").toArray())
+        {
+            auto obj = val.toObject();
+            if ( obj.value("id").toInt() == test->mId )
+            {
+                PressureDurationFromExpenditure::DataSet data = FromJson( obj.value("data").toObject().value("Data").toArray() );
+                B35Ae2 = ProcessA( data, x_range_1, y_range_1 );
+                B35Be2 = ProcessB( data, x_range_2, y_range_2 );
+                x_range_e = ff0x::MergeRanges( x_range_1, x_range_2 );
+                y_range_e = ff0x::MergeRanges( y_range_1, y_range_2 );
+                use_etalone = true;
+            }
+        }
+
+        B35A = ProcessA( test->mData, x_range_1, y_range_1 );
+        B35B = ProcessB( test->mData, x_range_2, y_range_2 );
+        x_range = ff0x::MergeRanges( x_range_1, x_range_2 );
+        y_range = ff0x::MergeRanges( y_range_1, y_range_2 );
+
+        x_range = ff0x::MergeRanges( x_range, x_range_e, use_etalone );
+        y_range = ff0x::MergeRanges( y_range, y_range_e, use_etalone );
+    }
+
+    ff0x::NoAxisGraphBuilder::LinePoints B35A;
+    ff0x::NoAxisGraphBuilder::LinePoints B35B;
+
+    ff0x::NoAxisGraphBuilder::LinePoints B35Ae2;
+    ff0x::NoAxisGraphBuilder::LinePoints B35Be2;
+
+    QPointF x_range;
+    QPointF y_range;
+};
+
+PressureDurationFromExpenditure::PressureDurationFromExpenditure():
+    test::hydro::Test( "Проверка перепада давления и зависимость\nперепада давления от расхода", 4 )
+{}
+
+bool PressureDurationFromExpenditure::Run()
+{
+    Start();
+    Wait( mResults.op4_ok, mResults.op4_end );
+    if ( IsStopped() )
+        return false;
+
+    mData.clear();
+    Data a1;
+    a1.BP5 = mResults.op4_p_p_03_a;
+    a1.BP3 = mResults.op4_p_a_03_a;
+    a1.BP5_3 = mResults.op4_bp5_bp3_03_a;
+    a1.Expenditure = mResults.op4_q_03_a;
+
+    Data a2;
+    a2.BP5 = mResults.op4_p_p_06_a;
+    a2.BP3 = mResults.op4_p_a_06_a;
+    a2.BP5_3 = mResults.op4_bp5_bp3_06_a;
+    a2.Expenditure = mResults.op4_q_06_a;
+
+    Data a3;
+    a3.BP5 = mResults.op4_p_p_max_a;
+    a3.BP3 = mResults.op4_p_a_max_a;
+    a3.BP5_3 = mResults.op4_bp5_bp3_max_a;
+    a3.Expenditure = mResults.op4_q_max_a;
+
+
+    Data b1;
+    b1.BP5 = mResults.op4_p_p_03_b;
+    b1.BP3 = mResults.op4_p_a_03_b;
+    b1.BP5_3 = mResults.op4_bp5_bp3_03_b;
+    b1.Expenditure = mResults.op4_q_03_b;
+
+    Data b2;
+    b2.BP5 = mResults.op4_p_p_06_b;
+    b2.BP3 = mResults.op4_p_a_06_b;
+    b2.BP5_3 = mResults.op4_bp5_bp3_06_b;
+    b2.Expenditure = mResults.op4_q_06_b;
+
+    Data b3;
+    b3.BP5 = mResults.op4_p_p_max_b;
+    b3.BP3 = mResults.op4_p_a_max_b;
+    b3.BP5_3 = mResults.op4_bp5_bp3_max_b;
+    b3.Expenditure = mResults.op4_q_max_b;
+
+    mData.push_back( Channels( a1, b1 ) );
+    mData.push_back( Channels( a2, b2 ) );
+    mData.push_back( Channels( a3, b3 ) );
+
+    OilTemp = round(mResults.T_oil*100)/100;
+
+    return Success();
+}
+
 QJsonObject PressureDurationFromExpenditure::Serialise() const
 {
     QJsonObject obj = Test::Serialise();
@@ -184,6 +233,15 @@ bool PressureDurationFromExpenditure::Deserialize( QJsonObject const& obj )
     return true;
 }
 
+void PressureDurationFromExpenditure::ResetDrawLine()
+{
+    Test::ResetDrawLine();
+    if ( mGrapfs )
+    {
+        delete mGrapfs;
+        mGrapfs = nullptr;
+    }
+}
 bool PressureDurationFromExpenditure::Draw(QPainter& painter, QRect &free_rect , const QString &compare_width) const
 {
     test::hydro::Parameters *params = static_cast< test::hydro::Parameters * >( CURRENT_PARAMS );
@@ -359,92 +417,27 @@ bool PressureDurationFromExpenditure::Draw(QPainter& painter, QRect &free_rect ,
 
     res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
     QFontMetrics metrix( text_font );
+
+    if (!mGrapfs)
+        mGrapfs = new GrapfData( this, compare_width );
+
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &text_font, &params, &DrawRowCenter, &metrix, &compare_width ]( QRect const& rect )
+    [ this, &painter, &text_font, &params, &DrawRowCenter, &metrix ]( QRect const& rect )
     {
         painter.save();
-        ff0x::NoAxisGraphBuilder::LinePoints B35A;
-        ff0x::NoAxisGraphBuilder::LinePoints B35B;
-
-        ff0x::NoAxisGraphBuilder::LinePoints B35Ae;
-        ff0x::NoAxisGraphBuilder::LinePoints B35Be;
-
-        ff0x::NoAxisGraphBuilder::LinePoints B35Ae2;
-        ff0x::NoAxisGraphBuilder::LinePoints B35Be2;
-
-        QPointF x_range_1;
-        QPointF y_range_1;
-
-        QPointF x_range_1e;
-        QPointF y_range_1e;
-
-        QPointF x_range_1e2;
-        QPointF y_range_1e2;
-
-        QPointF x_range_2;
-        QPointF y_range_2;
-
-        QPointF x_range_2e;
-        QPointF y_range_2e;
-
-        QPointF x_range_2e2;
-        QPointF y_range_2e2;
-
-//        //поиск данных теста
-//        foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
-//        {
-//            auto obj = val.toObject();
-//            if ( obj.value("id").toInt() == mId )
-//            {
-//                DataSet data = FromJson( obj.value("data").toObject().value("Data").toArray() );
-//                B35Ae = ProcessA( data, x_range_1e, y_range_1e );
-//                B35Be = ProcessB( data, x_range_2e, y_range_2e );
-//            }
-//        }
-        //поиск данных теста
-        foreach (QJsonValue const& val, test::ReadFromFile(compare_width).value("Results").toArray())
-        {
-            auto obj = val.toObject();
-            if ( obj.value("id").toInt() == mId )
-            {
-                DataSet data = FromJson( obj.value("data").toObject().value("Data").toArray() );
-                B35Ae2 = ProcessA( data, x_range_1e2, y_range_1e2 );
-                B35Be2 = ProcessB( data, x_range_2e2, y_range_2e2 );
-            }
-        }
-
-        B35A = ProcessA( mData, x_range_1, y_range_1 );
-        B35B = ProcessB( mData, x_range_2, y_range_2 );
-
-
 
         QFont f = text_font;
-        f.setPointSize( 6 );
-        int w = (rect.height() - metrix.height())*0.98;
+        f.setPointSize( 12 );
+        int w = (rect.width())*0.98;
         int h = (rect.height() - metrix.height())*0.98;
         QRect p1(rect.left(), rect.top(), w, h );
-        QRect p2(rect.right() - w, rect.top(), w, h );
         QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
-        QRect p2t(p2.left(), p2.bottom(), p2.width(), metrix.height());
         ff0x::NoAxisGraphBuilder builder ( w, h, f );
-        ff0x::NoAxisGraphBuilder::GraphDataLine lines1;
-        ff0x::NoAxisGraphBuilder::GraphDataLine lines2;
-        lines1.push_back( ff0x::NoAxisGraphBuilder::Line(B35A,
+        ff0x::NoAxisGraphBuilder::GraphDataLine lines;
+        lines.push_back( ff0x::NoAxisGraphBuilder::Line(mGrapfs->B35A,
                           ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
-        if ( !B35Ae.empty() )
-            lines1.push_back( ff0x::NoAxisGraphBuilder::Line(B35Ae,
-                              ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
-        if ( !B35Ae2.empty() )
-            lines1.push_back( ff0x::NoAxisGraphBuilder::Line(B35Ae2,
-                              ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
-
-        lines2.push_back( ff0x::NoAxisGraphBuilder::Line(B35B,
-                          ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
-        if ( !B35Be.empty() )
-            lines2.push_back( ff0x::NoAxisGraphBuilder::Line(B35Be,
-                              ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон", Qt::red ) ) );
-        if ( !B35Be2.empty() )
-            lines1.push_back( ff0x::NoAxisGraphBuilder::Line(B35Be2,
+        if ( !mGrapfs->B35Ae2.empty() )
+            lines.push_back( ff0x::NoAxisGraphBuilder::Line(mGrapfs->B35Ae2,
                               ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
 
 
@@ -455,39 +448,52 @@ bool PressureDurationFromExpenditure::Draw(QPainter& painter, QRect &free_rect ,
             double x_step = 0;
             double y_step = 0;
 
-            ff0x::DataLength( x_range_1,
-                              x_range_1e, !B35Ae.empty(),
-                              x_range_1e2, !B35Ae2.empty(),
-                              x_range, x_step );
-            ff0x::DataLength( y_range_1,
-                              y_range_1e, !B35Ae.empty(),
-                              y_range_1e2, !B35Ae2.empty(),
-                              y_range, y_step );
+            ff0x::DataLength( mGrapfs->x_range, x_range, x_step );
+            ff0x::DataLength( mGrapfs->y_range, y_range, y_step );
 
-            painter.drawPixmap( p1, builder.Draw( lines1, x_range, y_range, x_step, y_step, "Расход (л/мин)", "Δ Р (бар)", true ) );
+            painter.drawPixmap( p1, builder.Draw( lines, x_range, y_range, x_step, y_step, "Расход (л/мин)", "Δ Р (бар)", true ) );
         }
-        DrawRowCenter( p2t, text_font, Qt::black, "График: «перепад Р-->B»" );
+
+
+        painter.restore();
+    }, 1, 480  );
+
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter, &text_font, &params, &DrawRowCenter, &metrix ]( QRect const& rect )
+    {
+        painter.save();
+
+        QFont f = text_font;
+        f.setPointSize( 12 );
+        int w = (rect.width())*0.98;
+        int h = (rect.height() - metrix.height())*0.98;
+        QRect p1(rect.left(), rect.top(), w, h );
+        QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
+        ff0x::NoAxisGraphBuilder builder ( w, h, f );
+        ff0x::NoAxisGraphBuilder::GraphDataLine lines;
+
+        lines.push_back( ff0x::NoAxisGraphBuilder::Line( mGrapfs->B35B,
+                          ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
+        if ( !mGrapfs->B35Be2.empty() )
+            lines.push_back( ff0x::NoAxisGraphBuilder::Line(mGrapfs->B35Be2,
+                              ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
+
+
+        DrawRowCenter( p1t, text_font, Qt::black, "График: «перепад Р-->B»" );
         {
             QPointF x_range;
             QPointF y_range;
             double x_step = 0;
             double y_step = 0;
 
-            ff0x::DataLength( x_range_2,
-                              x_range_2e, !B35Be.empty(),
-                              x_range_2e2, !B35Be2.empty(),
-                              x_range, x_step );
-            ff0x::DataLength( y_range_2,
-                              y_range_2e, !B35Be.empty(),
-                              y_range_2e2, !B35Be2.empty(),
-                              y_range, y_step );
+            ff0x::DataLength( mGrapfs->x_range, x_range, x_step );
+            ff0x::DataLength( mGrapfs->y_range, y_range, y_step );
 
-            painter.drawPixmap( p2, builder.Draw( lines2, x_range, y_range, x_step, y_step, "Расход (л/мин)", "Δ Р (бар)", true ) );
+            painter.drawPixmap( p1, builder.Draw( lines, x_range, y_range, x_step, y_step, "Расход (л/мин)", "Δ Р (бар)", true ) );
         }
 
-
         painter.restore();
-    }, 1, free_rect.width()/2 + metrix.height()  );
+    }, 1, 480  );
 
 
     res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
@@ -533,3 +539,4 @@ bool PressureDurationFromExpenditure::Data::Deserialize( QJsonObject const& obj 
 }//namespace hydro
 
 }//namespace test
+

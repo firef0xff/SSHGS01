@@ -10,6 +10,7 @@ namespace servo
 class TransientPerformance :public test::servo::Test
 {
 public:
+    class GrapfData;
     struct Data
     {
         Data():
@@ -30,14 +31,16 @@ public:
     QJsonObject Serialise() const;
     bool Deserialize( QJsonObject const& obj );
 
+    void ResetDrawLine();
     bool Draw(QPainter &painter, QRect &free_rect, const QString &compare_width ) const;
 protected:
     void UpdateData();
 private:
-
+    friend class GrapfData;
     Source Graph1;
     Source Graph2;
     Source Graph3;
+    mutable GrapfData* mGrapfs;
 };
 
 }//namespace servo

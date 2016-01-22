@@ -31,6 +31,7 @@ private:
 class InsideHermTest :public test::servo::Test
 {
 public:
+    class GrapfData;
     struct Data
     {
         Data():
@@ -52,16 +53,19 @@ public:
     QJsonObject Serialise() const;
     bool Deserialize( QJsonObject const& obj );
 
+    void ResetDrawLine();
     bool Draw(QPainter &painter, QRect &free_rect, QString  const& compare_width ) const;
 
 protected:
     void UpdateData();
 private:
+    friend class GrapfData;
 
     // графиг опорного сигнала и расхода в канале утечки ( Т )
 
     DataSet GraphA;
     DataSet GraphB;
+    mutable GrapfData* mGrapfs;
 };
 
 }//namespace servo

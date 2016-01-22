@@ -10,6 +10,7 @@ namespace control_board
 class VACharacteristic :public test::control_board::Test
 {
 public:
+    class GrapfData;
     struct Data
     {
         Data():
@@ -30,13 +31,13 @@ public:
     bool Deserialize( QJsonObject const& obj );
 
     bool Draw(QPainter &painter, QRect &free_rect, const QString &compare_width ) const;
+    void ResetDrawLine();
 protected:
     void UpdateData();
 private:
-
-
-
+    friend class GrapfData;
     DataSet Graph;
+    mutable GrapfData* mGrapfs;
     /// вероятно тоже график
     /// (хочу просто массива с контроллера для рисования )
 };

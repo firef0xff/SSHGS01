@@ -11,107 +11,6 @@ namespace test
 {
 namespace servo
 {
-
-ExpeditureFromInput::ExpeditureFromInput():
-    test::servo::Test( "Зависимость расхода «к потребителю» от входного тока без нагрузки", 12, 22 )
-{}
-
-bool ExpeditureFromInput::Run()
-{
-    level = 0;
-    GraphA1.clear();
-    GraphB1.clear();
-    GraphA2.clear();
-    GraphB2.clear();
-    Start();
-    if ( ReelControl() )
-        Wait( mControlReelBits.op22_ok, mControlReelBits.op22_end );
-    else
-        Wait( mControlBoardBits.op12_ok, mControlBoardBits.op12_end );
-    if ( IsStopped() )
-        return false;
-
-    OilTemp = round( mTemperature.T_oil *100)/100;
-
-    return Success();
-}
-void ExpeditureFromInput::UpdateData()
-{
-    servo::Parameters &params = test::servo::Parameters::Instance();
-    Test::UpdateData();
-    std::this_thread::sleep_for(std::chrono::seconds(5));
-
-    bool *ready = 0;
-    if ( ReelControl() )
-    {
-        ready = &mControlReelBits.op24_ready;
-    }
-    else
-    {
-        ready = &mControlBoardBits.op14_ready;
-    }
-
-    auto ConvertData = [this]( DataSet *first, DataSet *second  )
-    {
-        for ( int i = 0; i < m12Results.OPEN_REF_COUNT; ++i )
-        {
-            Data d;
-            d.Expenditure = m12Results.open_consumption[i];
-            d.Signal = m12Results.open_ref[i];
-            first->push_back( d );
-            d.Expenditure = m12Results.close_consumption[i];
-            d.Signal = m12Results.close_ref[i];
-            second->push_front( d );
-        }
-    };
-
-    if ( *ready )
-    {
-        m12Results.Read();
-        m1525Counts.Read();
-        switch ( level )
-        {
-        case 0:
-            if ( m1525Counts.OP15_25_Opor_1 )
-            {
-                if ( params.TestChannelA() && params.SignalOnChannelA() == CS_REEL_A )
-                {// P -> A
-                    ConvertData( &GraphA1, &GraphA2 );
-                }
-                if ( params.TestChannelB() && params.SignalOnChannelA() == CS_REEL_B )
-                {// P -> B
-                    ConvertData( &GraphB1, &GraphB2 );
-                }
-                ++level;
-                cpu::CpuMemory::Instance().DB31.SendContinue();
-            }            
-            break;
-        case 1:
-            if ( m1525Counts.OP15_25_Opor_2 )
-            {
-                if ( params.TestChannelA() && params.SignalOnChannelB() == CS_REEL_A )
-                {// P -> A
-                    ConvertData( &GraphA1, &GraphA2 );
-                }
-                if ( params.TestChannelB()  && params.SignalOnChannelB() == CS_REEL_B )
-                {// P -> B
-                    ConvertData( &GraphB1, &GraphB2 );
-                }
-                ++level;
-                cpu::CpuMemory::Instance().DB31.SendContinue();
-            }
-            break;
-        default:
-            ++level;
-            break;
-        }
-    }
-}
-bool ExpeditureFromInput::Success() const
-{
-    return true;
-}
-
 namespace
 {
 
@@ -371,6 +270,190 @@ ff0x::NoAxisGraphBuilder::LinePoints ProcessET ( ExpeditureFromInput::DataSet co
 
 }//namespace
 
+
+class ExpeditureFromInput::GrapfData
+{
+public:
+    GrapfData( ExpeditureFromInput const* test, QString compare_width )
+    {
+        QPointF x_range_1t;
+        QPointF y_range_1t;
+
+        QPointF x_range_2t;
+        QPointF y_range_2t;
+
+        QPointF x_range_e1;
+        QPointF y_range_e1;
+
+        QPointF x_range_e2;
+        QPointF y_range_e2;
+        //поиск данных теста
+        bool use_etalone = false;
+        foreach (QJsonValue const& val, test::ReadFromFile(compare_width).value("Results").toArray())
+        {
+            auto obj = val.toObject();
+            if ( obj.value("id").toInt() == test->mId )
+            {
+
+
+                dataA1_e2 = Process( FromJson( obj.value("data").toObject().value("GraphA1").toArray() ), x_range_1t, y_range_1t );
+                dataA2_e2 = Process( FromJson( obj.value("data").toObject().value("GraphA2").toArray() ), x_range_2t, y_range_2t );
+                x_range_e1 = ff0x::MergeRanges( x_range_1t, x_range_2t );
+                y_range_e1 = ff0x::MergeRanges( y_range_1t, y_range_2t );
+
+                dataB1_e2 = Process( FromJson( obj.value("data").toObject().value("GraphB1").toArray() ), x_range_1t, y_range_1t );
+                dataB2_e2 = Process( FromJson( obj.value("data").toObject().value("GraphB2").toArray() ), x_range_2t, y_range_2t );
+                x_range_e2 = ff0x::MergeRanges( x_range_1t, x_range_2t );
+                y_range_e2 = ff0x::MergeRanges( y_range_1t, y_range_2t );
+
+
+                use_etalone = true;
+            }
+        }
+
+        QPointF x_range_t1;
+        QPointF y_range_t1;
+
+        QPointF x_range_t2;
+        QPointF y_range_t2;
+
+//                dataA1_e = ProcessET( GraphA1, x_range_a1e, y_range_a1e );
+//                dataB1_e = ProcessET( GraphB1, x_range_b1e, y_range_b1e );
+        dataA1 = Process( test->GraphA1, x_range_1t, y_range_1t );
+        dataA2 = Process( test->GraphA2, x_range_2t, y_range_2t );
+        x_range_1 = ff0x::MergeRanges( x_range_1t, x_range_2t );
+        y_range_1 = ff0x::MergeRanges( y_range_1t, y_range_2t );
+
+        dataB1 = Process( test->GraphB1, x_range_1t, y_range_1t );
+        dataB2 = Process( test->GraphB2, x_range_2t, y_range_2t );
+        x_range_2 = ff0x::MergeRanges( x_range_1t, x_range_2t );
+        y_range_2 = ff0x::MergeRanges( y_range_1t, y_range_2t );
+
+        x_range_1 = ff0x::MergeRanges( x_range_1, x_range_e1, use_etalone );
+        y_range_1 = ff0x::MergeRanges( y_range_1, y_range_e1, use_etalone );
+
+        x_range_2 = ff0x::MergeRanges( x_range_2, x_range_e2, use_etalone );
+        y_range_2 = ff0x::MergeRanges( y_range_2, y_range_e2, use_etalone );
+    }
+
+    ff0x::NoAxisGraphBuilder::LinePoints dataA1;
+    ff0x::NoAxisGraphBuilder::LinePoints dataA1_e2;
+    ff0x::NoAxisGraphBuilder::LinePoints dataA2;
+    ff0x::NoAxisGraphBuilder::LinePoints dataA2_e2;
+
+    ff0x::NoAxisGraphBuilder::LinePoints dataB1;
+    ff0x::NoAxisGraphBuilder::LinePoints dataB1_e2;
+    ff0x::NoAxisGraphBuilder::LinePoints dataB2;
+    ff0x::NoAxisGraphBuilder::LinePoints dataB2_e2;
+
+    QPointF x_range_1;
+    QPointF y_range_1;
+
+    QPointF x_range_2;
+    QPointF y_range_2;
+};
+
+ExpeditureFromInput::ExpeditureFromInput():
+    test::servo::Test( "Зависимость расхода «к потребителю» от входного тока без нагрузки", 12, 22 )
+{}
+
+bool ExpeditureFromInput::Run()
+{
+    level = 0;
+    GraphA1.clear();
+    GraphB1.clear();
+    GraphA2.clear();
+    GraphB2.clear();
+    Start();
+    if ( ReelControl() )
+        Wait( mControlReelBits.op22_ok, mControlReelBits.op22_end );
+    else
+        Wait( mControlBoardBits.op12_ok, mControlBoardBits.op12_end );
+    if ( IsStopped() )
+        return false;
+
+    OilTemp = round( mTemperature.T_oil *100)/100;
+
+    return Success();
+}
+void ExpeditureFromInput::UpdateData()
+{
+    servo::Parameters &params = test::servo::Parameters::Instance();
+    Test::UpdateData();
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+
+    bool *ready = 0;
+    if ( ReelControl() )
+    {
+        ready = &mControlReelBits.op24_ready;
+    }
+    else
+    {
+        ready = &mControlBoardBits.op14_ready;
+    }
+
+    auto ConvertData = [this]( DataSet *first, DataSet *second  )
+    {
+        for ( int i = 0; i < m12Results.OPEN_REF_COUNT; ++i )
+        {
+            Data d;
+            d.Expenditure = m12Results.open_consumption[i];
+            d.Signal = m12Results.open_ref[i];
+            first->push_back( d );
+            d.Expenditure = m12Results.close_consumption[i];
+            d.Signal = m12Results.close_ref[i];
+            second->push_front( d );
+        }
+    };
+
+    if ( *ready )
+    {
+        m12Results.Read();
+        m1525Counts.Read();
+        switch ( level )
+        {
+        case 0:
+            if ( m1525Counts.OP15_25_Opor_1 )
+            {
+                if ( params.TestChannelA() && params.SignalOnChannelA() == CS_REEL_A )
+                {// P -> A
+                    ConvertData( &GraphA1, &GraphA2 );
+                }
+                if ( params.TestChannelB() && params.SignalOnChannelA() == CS_REEL_B )
+                {// P -> B
+                    ConvertData( &GraphB1, &GraphB2 );
+                }
+                ++level;
+                cpu::CpuMemory::Instance().DB31.SendContinue();
+            }            
+            break;
+        case 1:
+            if ( m1525Counts.OP15_25_Opor_2 )
+            {
+                if ( params.TestChannelA() && params.SignalOnChannelB() == CS_REEL_A )
+                {// P -> A
+                    ConvertData( &GraphA1, &GraphA2 );
+                }
+                if ( params.TestChannelB()  && params.SignalOnChannelB() == CS_REEL_B )
+                {// P -> B
+                    ConvertData( &GraphB1, &GraphB2 );
+                }
+                ++level;
+                cpu::CpuMemory::Instance().DB31.SendContinue();
+            }
+            break;
+        default:
+            ++level;
+            break;
+        }
+    }
+}
+bool ExpeditureFromInput::Success() const
+{
+    return true;
+}
+
+
 QJsonObject ExpeditureFromInput::Serialise() const
 {
     QJsonObject obj = Test::Serialise();
@@ -393,7 +476,15 @@ bool ExpeditureFromInput::Deserialize( QJsonObject const& obj )
     Test::Deserialize( obj );
     return true;
 }
-
+void ExpeditureFromInput::ResetDrawLine()
+{
+    Test::ResetDrawLine();
+    if ( mGrapfs )
+    {
+        delete mGrapfs;
+        mGrapfs = nullptr;
+    }
+}
 bool ExpeditureFromInput::Draw(QPainter& painter, QRect &free_rect , const QString &compare_width) const
 {
     test::servo::Parameters *params = static_cast< test::servo::Parameters * >( CURRENT_PARAMS );
@@ -507,198 +598,83 @@ bool ExpeditureFromInput::Draw(QPainter& painter, QRect &free_rect , const QStri
 
 
     QFontMetrics metrix( text_font );
+    if (!mGrapfs)
+        mGrapfs = new GrapfData( this, compare_width );
+
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &text_font, &DrawRowCenter, &metrix, &compare_width ]( QRect const& rect )
+    [ this, &painter, &text_font, &DrawRowCenter, &metrix ]( QRect const& rect )
     {
         painter.save();
-
-        ff0x::NoAxisGraphBuilder::LinePoints dataA1;
-        ff0x::NoAxisGraphBuilder::LinePoints dataA1_e;
-        ff0x::NoAxisGraphBuilder::LinePoints dataA1_e2;
-        ff0x::NoAxisGraphBuilder::LinePoints dataA2;
-        ff0x::NoAxisGraphBuilder::LinePoints dataA2_e;
-        ff0x::NoAxisGraphBuilder::LinePoints dataA2_e2;
-
-        ff0x::NoAxisGraphBuilder::LinePoints dataB1;
-        ff0x::NoAxisGraphBuilder::LinePoints dataB1_e;
-        ff0x::NoAxisGraphBuilder::LinePoints dataB1_e2;
-        ff0x::NoAxisGraphBuilder::LinePoints dataB2;
-        ff0x::NoAxisGraphBuilder::LinePoints dataB2_e;
-        ff0x::NoAxisGraphBuilder::LinePoints dataB2_e2;
-
-        QPointF x_range_a1;
-        QPointF y_range_a1;
-        QPointF x_range_a1e;
-        QPointF y_range_a1e;
-        QPointF x_range_a1e2;
-        QPointF y_range_a1e2;
-
-        QPointF x_range_a2;
-        QPointF y_range_a2;
-        QPointF x_range_a2e;
-        QPointF y_range_a2e;
-        QPointF x_range_a2e2;
-        QPointF y_range_a2e2;
-
-        QPointF x_range_b1;
-        QPointF y_range_b1;
-        QPointF x_range_b1e;
-        QPointF y_range_b1e;
-        QPointF x_range_b1e2;
-        QPointF y_range_b1e2;
-
-        QPointF x_range_b2;
-        QPointF y_range_b2;
-        QPointF x_range_b2e;
-        QPointF y_range_b2e;
-        QPointF x_range_b2e2;
-        QPointF y_range_b2e2;
-
-//        //поиск данных теста
-//        foreach (QJsonValue const& val, test::ReadFromEtalone().value( test::CURRENT_PARAMS->ModelId()).toObject().value("Results").toArray())
-//        {
-//            auto obj = val.toObject();
-//            if ( obj.value("id").toInt() == mId )
-//            {
-//                dataA1_e = Process( FromJson( obj.value("data").toObject().value("GraphA1").toArray() ), x_range_a1e, y_range_a1e );
-//                dataA2_e = Process( FromJson( obj.value("data").toObject().value("GraphA2").toArray() ), x_range_a2e, y_range_a2e );
-//                dataB1_e = Process( FromJson( obj.value("data").toObject().value("GraphB1").toArray() ), x_range_b1e, y_range_b1e );
-//                dataB2_e = Process( FromJson( obj.value("data").toObject().value("GraphB2").toArray() ), x_range_b2e, y_range_b2e );
-//            }
-//        }
-        //поиск данных теста
-        foreach (QJsonValue const& val, test::ReadFromFile(compare_width).value("Results").toArray())
-        {
-            auto obj = val.toObject();
-            if ( obj.value("id").toInt() == mId )
-            {
-                dataA1_e2 = Process( FromJson( obj.value("data").toObject().value("GraphA1").toArray() ), x_range_a1e2, y_range_a1e2 );
-                dataA2_e2 = Process( FromJson( obj.value("data").toObject().value("GraphA2").toArray() ), x_range_a2e2, y_range_a2e2 );
-                dataB1_e2 = Process( FromJson( obj.value("data").toObject().value("GraphB1").toArray() ), x_range_b1e2, y_range_b1e2 );
-                dataB2_e2 = Process( FromJson( obj.value("data").toObject().value("GraphB2").toArray() ), x_range_b2e2, y_range_b2e2 );
-            }
-        }
-
-//        dataA1_e = ProcessET( GraphA1, x_range_a1e, y_range_a1e );
-//        dataB1_e = ProcessET( GraphB1, x_range_b1e, y_range_b1e );
-        dataA1 = Process( GraphA1, x_range_a1, y_range_a1 );
-        dataA2 = Process( GraphA2, x_range_a2, y_range_a2 );
-        dataB1 = Process( GraphB1, x_range_b1, y_range_b1 );
-        dataB2 = Process( GraphB2, x_range_b2, y_range_b2 );
-
         QFont f = text_font;
-        f.setPointSize( 6 );
-        int w = (rect.height() - metrix.height())*0.98;
+        f.setPointSize( 12 );
+        int w = (rect.width())*0.98;
         int h = (rect.height() - metrix.height())*0.98;
 
         ff0x::NoAxisGraphBuilder builder ( w, h, f );
-        ff0x::NoAxisGraphBuilder::GraphDataLine lines_a;
-        lines_a.push_back( ff0x::NoAxisGraphBuilder::Line(dataA1, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат. Прямой ход", Qt::blue ) ) );
-        if ( !dataA1_e.empty() )
-            lines_a.push_back( ff0x::NoAxisGraphBuilder::Line(dataA1_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон. Прямой ход", Qt::red ) ) );
-        if ( !dataA1_e2.empty() )
-            lines_a.push_back( ff0x::NoAxisGraphBuilder::Line(dataA1_e2, ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат. Прямой ход", Qt::gray ) ) );
+        ff0x::NoAxisGraphBuilder::GraphDataLine lines;
+        lines.push_back( ff0x::NoAxisGraphBuilder::Line(mGrapfs->dataA1, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат. Прямой ход", Qt::blue ) ) );
+        if ( !mGrapfs->dataA1_e2.empty() )
+            lines.push_back( ff0x::NoAxisGraphBuilder::Line(mGrapfs->dataA1_e2, ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат. Прямой ход", Qt::gray ) ) );
 
-        lines_a.push_back( ff0x::NoAxisGraphBuilder::Line(dataA2, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат. Обратный ход", Qt::darkGreen ) ) );
-        if ( !dataA2_e.empty() )
-            lines_a.push_back( ff0x::NoAxisGraphBuilder::Line(dataA2_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон. Обратный ход", Qt::darkRed ) ) );
-        if ( !dataA2_e2.empty() )
-            lines_a.push_back( ff0x::NoAxisGraphBuilder::Line(dataA2_e2, ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат. Обратный ход", Qt::darkGray ) ) );
-
-        ff0x::NoAxisGraphBuilder::GraphDataLine lines_b;
-        lines_b.push_back( ff0x::NoAxisGraphBuilder::Line(dataB1, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат. Прямой ход", Qt::blue ) ) );
-        if ( !dataB1_e.empty() )
-            lines_b.push_back( ff0x::NoAxisGraphBuilder::Line(dataB1_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон. Прямой ход", Qt::red ) ) );
-        if ( !dataB1_e2.empty() )
-            lines_b.push_back( ff0x::NoAxisGraphBuilder::Line(dataB1_e2, ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат. Прямой ход", Qt::gray ) ) );
-
-        lines_b.push_back( ff0x::NoAxisGraphBuilder::Line(dataB2, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат. Обратный ход", Qt::darkGreen ) ) );
-        if ( !dataB2_e.empty() )
-            lines_b.push_back( ff0x::NoAxisGraphBuilder::Line(dataB2_e, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон. Обратный ход", Qt::darkRed ) ) );
-        if ( !dataB2_e2.empty() )
-            lines_b.push_back( ff0x::NoAxisGraphBuilder::Line(dataB2_e2, ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат. Обратный ход", Qt::darkGray ) ) );
+        lines.push_back( ff0x::NoAxisGraphBuilder::Line(mGrapfs->dataA2, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат. Обратный ход", Qt::darkGreen ) ) );
+        if ( !mGrapfs->dataA2_e2.empty() )
+            lines.push_back( ff0x::NoAxisGraphBuilder::Line(mGrapfs->dataA2_e2, ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат. Обратный ход", Qt::darkGray ) ) );
 
         QRect p1(rect.left(), rect.top(), w, h );
-        QRect p2(rect.right() - w, rect.top(), w, h );
         QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
-        QRect p2t(p2.left(), p2.bottom(), p2.width(), metrix.height());
         DrawRowCenter( p1t, text_font, Qt::black, "P->A" );
         {
-            QPointF x_test_range;
-            QPointF y_test_range;
-
-            x_test_range.setX( std::max( x_range_a1.x(), x_range_a2.x() ) );
-            x_test_range.setY( std::min( x_range_a1.y(), x_range_a2.y() ) );
-
-            y_test_range.setX( std::max( y_range_a1.x(), y_range_a2.x() ) );
-            y_test_range.setY( std::min( y_range_a1.y(), y_range_a2.y() ) );
-
-            if ( !dataA1_e.empty() )
-            {
-                x_test_range.setX( std::max( x_range_a1e.x(), x_test_range.x() ) );
-                x_test_range.setY( std::min( x_range_a1e.y(), x_test_range.y() ) );
-
-                y_test_range.setX( std::max( y_range_a1e.x(), y_test_range.x() ) );
-                y_test_range.setY( std::min( y_range_a1e.y(), y_test_range.y() ) );
-            }
-            if ( !dataA2_e.empty() )
-            {
-                x_test_range.setX( std::max( x_range_a2e.x(), x_test_range.x() ) );
-                x_test_range.setY( std::min( x_range_a2e.y(), x_test_range.y() ) );
-
-                y_test_range.setX( std::max( y_range_a2e.x(), y_test_range.x() ) );
-                y_test_range.setY( std::min( y_range_a2e.y(), y_test_range.y() ) );
-            }
-
             QPointF x_range;
             QPointF y_range;
             double x_step = 0;
             double y_step = 0;
 
-            ff0x::DataLength( x_range_a1,
-                              x_range_a1e, !dataA1_e.empty(),
-                              x_range_a1e2, !dataA1_e2.empty(),
-                              x_range_a2, true,
-                              x_range_a2e, !dataA2_e.empty(),
-                              x_range_a2e2, !dataA2_e2.empty(),
-                              x_range, x_step );
-            ff0x::DataLength( y_range_a1,
-                              y_range_a1e, !dataA1_e.empty(),
-                              y_range_a1e2, !dataA1_e2.empty(),
-                              y_range_a2, true,
-                              y_range_a2e, !dataA2_e.empty(),
-                              y_range_a2e2, !dataA2_e2.empty(),
-                              y_range, y_step );
+            ff0x::DataLength( mGrapfs->x_range_1, x_range, x_step );
+            ff0x::DataLength( mGrapfs->y_range_2, y_range, y_step );
 
-            painter.drawPixmap( p1, builder.Draw( lines_a, x_range, y_range, x_step, y_step, "Опорный сигнал", "Расход (л/мин)", true ) );
+            painter.drawPixmap( p1, builder.Draw( lines, x_range, y_range, x_step, y_step, "Опорный сигнал", "Расход (л/мин)", true ) );
         }
-        DrawRowCenter( p2t, text_font, Qt::black, "P->B" );
+
+
+        painter.restore();
+    }, 1, 480  );
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter, &text_font, &DrawRowCenter, &metrix ]( QRect const& rect )
+    {
+        painter.save();
+        QFont f = text_font;
+        f.setPointSize( 12 );
+        int w = (rect.width())*0.98;
+        int h = (rect.height() - metrix.height())*0.98;
+
+        ff0x::NoAxisGraphBuilder builder ( w, h, f );
+        ff0x::NoAxisGraphBuilder::GraphDataLine lines;
+        lines.push_back( ff0x::NoAxisGraphBuilder::Line(mGrapfs->dataB1, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат. Прямой ход", Qt::blue ) ) );
+        if ( !mGrapfs->dataB1_e2.empty() )
+            lines.push_back( ff0x::NoAxisGraphBuilder::Line(mGrapfs->dataB1_e2, ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат. Прямой ход", Qt::gray ) ) );
+
+        lines.push_back( ff0x::NoAxisGraphBuilder::Line(mGrapfs->dataB2, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат. Обратный ход", Qt::darkGreen ) ) );
+        if ( !mGrapfs->dataB2_e2.empty() )
+            lines.push_back( ff0x::NoAxisGraphBuilder::Line(mGrapfs->dataB2_e2, ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат. Обратный ход", Qt::darkGray ) ) );
+
+        QRect p1(rect.left(), rect.top(), w, h );
+        QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
+        DrawRowCenter( p1t, text_font, Qt::black, "P->B" );
         {
             QPointF x_range;
             QPointF y_range;
             double x_step = 0;
             double y_step = 0;
 
-            ff0x::DataLength( x_range_b1,
-                              x_range_b1e, !dataA1_e.empty(),
-                              x_range_b1e2, !dataA1_e2.empty(),
-                              x_range_b2, true,
-                              x_range_b2e, !dataA2_e.empty(),
-                              x_range_b2e2, !dataA2_e2.empty(),
-                              x_range, x_step );
-            ff0x::DataLength( y_range_b1,
-                              y_range_b1e, !dataA1_e.empty(),
-                              y_range_b1e2, !dataA1_e2.empty(),
-                              y_range_b2, true,
-                              y_range_b2e, !dataA2_e.empty(),
-                              y_range_b2e2, !dataA2_e2.empty(),
-                              y_range, y_step );
+            ff0x::DataLength( mGrapfs->x_range_2, x_range, x_step );
+            ff0x::DataLength( mGrapfs->y_range_2, y_range, y_step );
 
-            painter.drawPixmap( p2, builder.Draw( lines_b, x_range, y_range, x_step, y_step, "Опорный сигнал", "Расход (л/мин)", true ) );
+            painter.drawPixmap( p1, builder.Draw( lines, x_range, y_range, x_step, y_step, "Опорный сигнал", "Расход (л/мин)", true ) );
         }
 
         painter.restore();
-    }, 1, free_rect.width()/2 + metrix.height()  );
+    }, 1, 480  );
+
 
 
     res = DrawLine( num, free_rect, text_font,

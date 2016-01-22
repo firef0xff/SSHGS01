@@ -23,7 +23,7 @@ void Viewer::Init()
     mPages.clear();
     QPixmap pixmap( 793, 1123 );
     QPainter painter(&pixmap);
-    QRect rc = PreparePage( painter, QRect(0,0,793,1123) );
+    QRect rc = PreparePage( painter, QRect(0,0,793,1123) ); //397 562
 
     if ( test::CURRENT_PARAMS )
     {

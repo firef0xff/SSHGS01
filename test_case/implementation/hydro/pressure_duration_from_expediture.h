@@ -7,10 +7,10 @@ namespace test
 {
 namespace hydro
 {
-
 class PressureDurationFromExpenditure :public test::hydro::Test
 {
 public:
+    class GrapfData;
     struct Data
     {
         Data():
@@ -38,8 +38,12 @@ public:
 
     bool Draw(QPainter &painter, QRect &free_rect, QString  const& compare_width ) const;
     bool Success() const;
+
+    void ResetDrawLine();
 private:
+    friend class GrapfData;
     DataSet mData;
+    mutable GrapfData* mGrapfs;
 
     //Зависимость перепада давления от расхода
     /// |--------------------------------------------|--------------------------------------------|

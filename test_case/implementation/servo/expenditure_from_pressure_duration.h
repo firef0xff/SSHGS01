@@ -10,6 +10,7 @@ namespace servo
 class ExpeditureFromPressureDuration :public test::servo::Test
 {
 public:
+    class GrapfData;
     struct Data
     {
         struct Channel
@@ -69,11 +70,12 @@ public:
 protected:
     void UpdateData();
 private:
-
+    friend class GrapfData;
 
     DataSet mData;
     mutable int PrintedRows = 0;
     mutable int PrintedPage = 0;
+    mutable GrapfData* mGrapfs;
 };
 
 }//namespace servo
