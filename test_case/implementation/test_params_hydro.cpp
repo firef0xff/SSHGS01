@@ -346,7 +346,10 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect, QString const& compar
     };
 
 
-    auto DrawRowLeft = [ &painter, &free_rect ]( QFont font, QColor color1, QColor color2,  QString label, QString value, double spase = 1 )
+    auto DrawRowLeft = [ &painter, &free_rect ]( QFont font,
+            QColor color1, QColor color2,
+            QString label, QString value,
+            QString value2 = "", double spase = 1 )
     {
         painter.save();
         QFontMetrics metrix( font );
@@ -354,11 +357,14 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect, QString const& compar
         AllocatePlace( place, metrix.height()*spase, free_rect );
         QPoint start_point( place.left() , place.center().y()+metrix.height()/2 );
         QPoint start_point2( place.left() + metrix.width(label), place.center().y() +metrix.height()/2);
+        QPoint start_point3( place.left() + metrix.width(label + value), place.center().y() +metrix.height()/2);
         painter.setFont( font );
         painter.setPen( color1 );
         painter.drawText( start_point, label );
         painter.setPen( color2 );
         painter.drawText( start_point2, value );
+        painter.setPen( Qt::gray );
+        painter.drawText( start_point3, value2 );
         painter.restore();
     };
 
@@ -396,47 +402,54 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect, QString const& compar
     DrawRowCenter( level_font, Qt::black, "Испытания дискретного аппарата", row_skale );
     DrawRowCenter( level_font, Qt::red, mGsType, row_skale );
 
-    DrawRowLeft( text_font, Qt::black, Qt::red, "Идентификационный номер: ", mSerNo, row_skale);
-    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Максимальное давление, бар"), test::ToString( mMaxWorkPressure ), row_skale );
-    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Максимальный расход, л/мин"), test::ToString( mMaxExpenditure ), row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::red, "Идентификационный номер: ", mSerNo, "", row_skale);
+
+    test::hydro::Parameters old;
+    QJsonObject f = test::ReadFromFile( compare_width ).value("Params").toObject();
+    old.Deserialize( f );
+
+    QString str_e_wp =          !compare_width.isEmpty() ? " (" +test::ToString(old.MaxWorkPressure()) + ")" : QString();
+    QString str_e_exp =         !compare_width.isEmpty() ? " (" +test::ToString(old.MaxExpenditure()) + ")" : QString();
+    QString str_e_mxcp =        !compare_width.isEmpty() ? ( old.ControlType() != CT_ELECTRIC ? " (" +test::ToString(old.MaxControlPressure()) + ")" : "( - )" ) : QString();
+    QString str_e_mncp =        !compare_width.isEmpty() ? ( old.ControlType() != CT_ELECTRIC ? " (" +test::ToString(old.MinControlPressure()) + ")" : "( - )" ) : QString();
+    QString str_e_vt =          !compare_width.isEmpty() ? " (" +test::ToString(old.Voltage()) + ")" : QString();
+
+    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Максимальное давление, бар"), test::ToString( mMaxWorkPressure ),str_e_wp, row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Максимальный расход, л/мин"), test::ToString( mMaxExpenditure ), str_e_exp,row_skale );
     if ( mControlType == CT_ELECTRIC )
     {
-        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Максимальное давление управления*, бар"), "-", row_skale );
-        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Минимальное давление управления*, бар"), "-", row_skale );
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Максимальное давление управления*, бар"), "-", str_e_mxcp, row_skale );
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Минимальное давление управления*, бар"), "-", str_e_mncp, row_skale );
     }
     else
     {
-        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Максимальное давление управления*, бар"), test::ToString(mMaxControlPressure), row_skale );
-        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Минимальное давление управления*, бар"), test::ToString(mMinControlPressure), row_skale );
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Максимальное давление управления*, бар"), test::ToString(mMaxControlPressure), str_e_mxcp,  row_skale );
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Минимальное давление управления*, бар"), test::ToString(mMinControlPressure), str_e_mncp, row_skale );
     }
-    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Напряжение пинания, В"), "="+test::ToString( mVoltage )+" (~220)", row_skale );
-    DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Тонкость фильтрации рабочей жидкости, мкм"), test::ToString(3), row_skale );
-    DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Тип масла"), "Лукой Гейзер HLP32", row_skale );
-    DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Вязкость масла (при 40˚С), сСт"), test::ToString(32), row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Напряжение пинания, В"), "="+test::ToString( mVoltage )+" (~220)",str_e_vt, row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Тонкость фильтрации рабочей жидкости, мкм"), test::ToString(3), "", row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Тип масла"), "Лукой Гейзер HLP32", "", row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Вязкость масла (при 40˚С), сСт"), test::ToString(32), "", row_skale );
 
     if ( !compare_width.isEmpty() )
-    {
-        QJsonObject f = test::ReadFromFile( compare_width ).value("Params").toObject();
-        QString model_ser_no = f.value("SerNo").toString();
-        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Аппарат для сравнения характеристик"), model_ser_no, row_skale );
-        QDateTime dt = QDateTime::fromString( f.value("Date").toString(), Qt::ISODate );
-        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Дата испытания сравниваемого аппарата"), dt.toString("dd MMMM yyyy г. hh:mm"), row_skale );
-        QString type = f.value("ReportType").toString();
-        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Сравнение с эталоном"), type.compare("Эталон", Qt::CaseInsensitive) == 0? "Да": "Нет", row_skale );
+    {        
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Аппарат для сравнения характеристик"), old.SerNo(), "", row_skale );
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Дата испытания сравниваемого аппарата"), old.Date().toString("dd MMMM yyyy г. hh:mm"), "", row_skale );
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Сравнение с эталоном"), old.ReportType().compare("Эталон", Qt::CaseInsensitive) == 0? "Да": "Нет", "", row_skale );
     }
     else
     {
-        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Аппарат для сравнения характеристик"), "-", row_skale );
-        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Дата испытания сравниваемого аппарата"), "-", row_skale );
-        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Сравнение с эталоном"), "-", row_skale );
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Аппарат для сравнения характеристик"), "-", "", row_skale );
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Дата испытания сравниваемого аппарата"), "-", "", row_skale );
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Сравнение с эталоном"), "-", "", row_skale );
     }
 
-    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Класс чистоты жидкости (по ISO 4406)"), "17/15/12", row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Класс чистоты жидкости (по ISO 4406)"), "17/15/12", "", row_skale );
 
     DrawRowCenter( text_font, Qt::black, "", row_skale );
 
-    DrawRowLeft( text_font, Qt::black, Qt::red, "Испытания проводил: ", mUser, row_skale );
-    DrawRowLeft( text_font, Qt::black, Qt::red, "Дата проведения испытаний: ", mDate.toString("dd MMMM yyyy г. hh:mm"), row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::red, "Испытания проводил: ", mUser, "", row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::red, "Дата проведения испытаний: ", mDate.toString("dd MMMM yyyy г. hh:mm"), "", row_skale );
 
     DrawLastRow( text_font, Qt::black, "*Для распределителей с электрогидравлическим управлением");
     return true;

@@ -418,6 +418,8 @@ bool ExpeditureFromPressureDuration::Draw(QPainter& painter, QRect &free_rect , 
     }
     if ( PrintedRows && rows_prapared )
         num += PrintedPage;
+    else if( PrintedPage )
+        num += PrintedPage - 1;
     PrintedRows += rows_prapared;
     table += footer;
 

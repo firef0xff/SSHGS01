@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>898</width>
-    <height>624</height>
+    <width>657</width>
+    <height>443</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,6 +26,12 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>150</width>
+         <height>16777215</height>
+        </size>
        </property>
        <property name="toolTip">
         <string>1...300 Бар</string>
@@ -171,6 +177,12 @@ X_max_B, л/мин</string>
      </item>
      <item row="2" column="3">
       <widget class="QComboBox" name="RaspredControl">
+       <property name="maximumSize">
+        <size>
+         <width>150</width>
+         <height>16777215</height>
+        </size>
+       </property>
        <property name="currentIndex">
         <number>0</number>
        </property>
@@ -202,6 +214,12 @@ X_max_B, л/мин</string>
      </item>
      <item row="8" column="3">
       <widget class="QSpinBox" name="DefExpenditure">
+       <property name="maximumSize">
+        <size>
+         <width>150</width>
+         <height>16777215</height>
+        </size>
+       </property>
        <property name="toolTip">
         <string>1...660 л/мин</string>
        </property>
@@ -226,6 +244,12 @@ X_max_B, л/мин</string>
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>150</width>
+         <height>16777215</height>
+        </size>
        </property>
        <property name="toolTip">
         <string>10...315 Бар</string>
@@ -291,6 +315,12 @@ X_max_B, л/мин</string>
      </item>
      <item row="5" column="3">
       <widget class="QComboBox" name="Voltage">
+       <property name="maximumSize">
+        <size>
+         <width>150</width>
+         <height>16777215</height>
+        </size>
+       </property>
        <property name="currentIndex">
         <number>-1</number>
        </property>
@@ -322,13 +352,6 @@ X_max_B, л/мин</string>
        </property>
        <property name="clearButtonEnabled">
         <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="2">
-      <widget class="QLabel" name="l_control_type">
-       <property name="text">
-        <string>Тип управления</string>
        </property>
       </widget>
      </item>
@@ -366,6 +389,12 @@ X_max_B, л/мин</string>
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>150</width>
+         <height>16777215</height>
+        </size>
        </property>
        <property name="toolTip">
         <string>1...660 л/мин</string>
@@ -407,26 +436,13 @@ X_max_B, л/мин</string>
       </widget>
      </item>
      <item row="6" column="3">
-      <widget class="QLineEdit" name="ControlReelResist"/>
-     </item>
-     <item row="0" column="3">
-      <widget class="QComboBox" name="ControlType">
-       <property name="editable">
-        <bool>false</bool>
+      <widget class="QLineEdit" name="ControlReelResist">
+       <property name="maximumSize">
+        <size>
+         <width>150</width>
+         <height>16777215</height>
+        </size>
        </property>
-       <property name="currentIndex">
-        <number>-1</number>
-       </property>
-       <item>
-        <property name="text">
-         <string>Блок управления</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Катушками управления</string>
-        </property>
-       </item>
       </widget>
      </item>
      <item row="4" column="3">
@@ -436,6 +452,12 @@ X_max_B, л/мин</string>
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>150</width>
+         <height>16777215</height>
+        </size>
        </property>
        <property name="toolTipDuration">
         <number>1000</number>
@@ -581,6 +603,12 @@ X_max_A, л/мин</string>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="maximumSize">
+        <size>
+         <width>150</width>
+         <height>16777215</height>
+        </size>
+       </property>
        <property name="toolTip">
         <string>0,1...20 ГЦ</string>
        </property>
@@ -647,6 +675,12 @@ X_max_A, л/мин</string>
      </item>
      <item row="11" column="3">
       <widget class="QComboBox" name="ControlReelChB">
+       <property name="maximumSize">
+        <size>
+         <width>150</width>
+         <height>16777215</height>
+        </size>
+       </property>
        <property name="currentIndex">
         <number>1</number>
        </property>
@@ -660,6 +694,56 @@ X_max_A, л/мин</string>
          <string>Катушка Б</string>
         </property>
        </item>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLabel" name="l_control_type">
+       <property name="text">
+        <string>Тип управления</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="3">
+      <widget class="QComboBox" name="ControlType">
+       <property name="maximumSize">
+        <size>
+         <width>150</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="editable">
+        <bool>false</bool>
+       </property>
+       <property name="currentIndex">
+        <number>-1</number>
+       </property>
+       <item>
+        <property name="text">
+         <string>Блок управления</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Катушками управления</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLabel" name="l_gs_type">
+       <property name="text">
+        <string>Тип распределителя</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="QComboBox" name="GsType">
+       <property name="maximumSize">
+        <size>
+         <width>150</width>
+         <height>16777215</height>
+        </size>
+       </property>
       </widget>
      </item>
     </layout>

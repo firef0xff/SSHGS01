@@ -5,7 +5,7 @@
 #include "test_case/test_params.h"
 #include "../test_params_servo.h"
 #include <thread>
-
+#define DEBUG
 namespace test
 {
 namespace servo
@@ -1161,7 +1161,7 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
 
                 QFont f = text_font;
                 f.setPointSize( 12 );
-                int w = (rect.width())*0.98;
+                int w = (rect.height() - metrix.height())*0.98;
                 int h = (rect.height() - metrix.height())*0.98;
 
                 ff0x::NoAxisGraphBuilder builder ( w, h, f );
@@ -1204,8 +1204,9 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
                     double x_step = 0;
                     double y_step = 0;
 
-                    ff0x::DataLength( x_range_2, x_range_3, true, x_range, x_step );
-                    ff0x::DataLength( y_range_2, y_range_3, true, y_range, y_step );
+
+                    ff0x::DataLength( ff0x::MergeRanges( x_range_2, x_range_3, true ), x_range, x_step );
+                    ff0x::DataLength( ff0x::MergeRanges( y_range_2, y_range_3, true ), y_range, y_step );
 
 //                    ff0x::DataLength( x_range_3, x_range, x_step );
 //                    ff0x::DataLength( y_range_3, y_range, y_step );
@@ -1219,7 +1220,7 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
                 }
 
                 painter.restore();
-            }, 1, 480  );
+            }, 1, free_rect.width()/2 + metrix.height()  );
         }
     };
 

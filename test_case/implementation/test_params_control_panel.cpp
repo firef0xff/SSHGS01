@@ -150,7 +150,10 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect, QString const& compar
         painter.restore();
     };
 
-    auto DrawRowLeft = [ &painter, &free_rect ]( QFont font, QColor color1, QColor color2,  QString label, QString value, double spase = 1 )
+    auto DrawRowLeft = [ &painter, &free_rect ]( QFont font,
+            QColor color1, QColor color2,
+            QString label, QString value,
+            QString value2 = "", double spase = 1 )
     {
         painter.save();
         QFontMetrics metrix( font );
@@ -158,11 +161,14 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect, QString const& compar
         AllocatePlace( place, metrix.height()*spase, free_rect );
         QPoint start_point( place.left() , place.center().y()+metrix.height()/2 );
         QPoint start_point2( place.left() + metrix.width(label), place.center().y() +metrix.height()/2);
+        QPoint start_point3( place.left() + metrix.width(label + value), place.center().y() +metrix.height()/2);
         painter.setFont( font );
         painter.setPen( color1 );
         painter.drawText( start_point, label );
         painter.setPen( color2 );
         painter.drawText( start_point2, value );
+        painter.setPen( Qt::gray );
+        painter.drawText( start_point3, value2 );
         painter.restore();
     };
 
@@ -183,33 +189,38 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect, QString const& compar
     DrawRowCenter( level_font, Qt::black, "Испытания плат управления", row_skale );
     DrawRowCenter( level_font, Qt::red, mGsType, row_skale );
 
-    DrawRowLeft( text_font, Qt::black, Qt::red, "Идентификационный номер: ", mSerNo, row_skale);
+    DrawRowLeft( text_font, Qt::black, Qt::red, "Идентификационный номер: ", mSerNo, "", row_skale);
 
-    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Тип входного сигнала"), test::ToString(mSignalType), row_skale );
-    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Напряжение питания платы, VDC"), test::ToString(mVoltage), row_skale );
+    test::control_board::Parameters old;
+    QJsonObject f = test::ReadFromFile( compare_width ).value("Params").toObject();
+    old.Deserialize( f );
 
-    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Максимальный выходной ток платы, А"), test::ToString(mMaxAmperage), row_skale );
-    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Сопротивление катушки распределителя, Ом"), test::ToString(mReelResist), row_skale );
+    QString str_e_st =          !compare_width.isEmpty() ? " (" +test::ToString(old.SignalType()) + ")" : QString();
+    QString str_e_volt =        !compare_width.isEmpty() ? " (" +test::ToString(old.Voltage()) + ")"    : QString();
+    QString str_e_max_amp =     !compare_width.isEmpty() ? " (" +test::ToString(old.MaxAmperage()) + ")": QString();
+    QString str_e_reel_resist = !compare_width.isEmpty() ? " (" +test::ToString(old.ReelResist()) + ")" : QString();
+
+    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Тип входного сигнала"), test::ToString(mSignalType), str_e_st, row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Напряжение питания платы, VDC"), test::ToString(mVoltage), str_e_volt, row_skale );
+
+    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Максимальный выходной ток платы, А"), test::ToString(mMaxAmperage), str_e_max_amp, row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Сопротивление катушки распределителя, Ом"), test::ToString(mReelResist), str_e_reel_resist, row_skale );
 
     if ( !compare_width.isEmpty() )
-    {
-        QJsonObject f = test::ReadFromFile( compare_width ).value("Params").toObject();
-        QString model_ser_no = f.value("control_board").toObject().value("SerNo").toString();
-        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Аппарат для сравнения характеристик"), model_ser_no, row_skale );
-        QDateTime dt = QDateTime::fromString( f.value("Date").toString(), Qt::ISODate );
-        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Дата испытания сравниваемого аппарата"), dt.toString("dd MMMM yyyy г. hh:mm"), row_skale );
-        QString type = f.value("ReportType").toString();
-        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Сравнение с эталоном"), type.compare("Эталон", Qt::CaseInsensitive) == 0? "Да": "Нет", row_skale );
+    {       
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Аппарат для сравнения характеристик"), old.SerNo(), "", row_skale );
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Дата испытания сравниваемого аппарата"), old.Date().toString("dd MMMM yyyy г. hh:mm"), "", row_skale );
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Сравнение с эталоном"), old.ReportType().compare("Эталон", Qt::CaseInsensitive) == 0? "Да": "Нет", "", row_skale );
     }
     else
     {
-        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Аппарат для сравнения характеристик"), "-", row_skale );
-        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Дата испытания сравниваемого аппарата"), "-", row_skale );
-        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Сравнение с эталоном"), "-", row_skale );
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Аппарат для сравнения характеристик"), "-", "", row_skale );
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Дата испытания сравниваемого аппарата"), "-", "", row_skale );
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Сравнение с эталоном"), "-", "", row_skale );
     }
 
-    DrawRowLeft( text_font, Qt::black, Qt::red, "Испытания проводил: ", mUser, row_skale );
-    DrawRowLeft( text_font, Qt::black, Qt::red, "Дата проведения испытаний: ", mDate.toString("dd MMMM yyyy г. hh:mm"), row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::red, "Испытания проводил: ", mUser, "", row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::red, "Дата проведения испытаний: ", mDate.toString("dd MMMM yyyy г. hh:mm"), "", row_skale );
 
     return true;
 }

@@ -212,6 +212,7 @@ QRect Viewer::PreparePage( QPainter& painter, QRect const& page_rect )
         painter.drawText( text_point, "Центр \"ПРОМСЕРВИС\"" );
         painter.restore();
     }
+
     {
         painter.save();
         QFont font = painter.font();
@@ -224,6 +225,7 @@ QRect Viewer::PreparePage( QPainter& painter, QRect const& page_rect )
         painter.drawText( text_point, "Ремонтное производство" );
         painter.restore();
     }
+
     {
         painter.save();
         QFont font = painter.font();
