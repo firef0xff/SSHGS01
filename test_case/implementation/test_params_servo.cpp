@@ -398,7 +398,7 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect, QString const& compar
     QString str_e_mxcp =        !compare_width.isEmpty() ? ( old.ControlType() != CT_ELECTRIC ? " (" +test::ToString(old.MaxControlPressure()) + ")" : "( - )" ) : QString();
     QString str_e_mncp =        !compare_width.isEmpty() ? ( old.ControlType() != CT_ELECTRIC ? " (" +test::ToString(old.MinControlPressure()) + ")" : "( - )" ) : QString();
 
-    QString str_e_rc =          !compare_width.isEmpty() ? " (" +test::ToString(old.ReelControl()) + ")" : QString();
+    QString str_e_rc =          !compare_width.isEmpty() ? " (" +test::ToShortString(old.ReelControl()) + ")" : QString();
     QString str_e_vt =          !compare_width.isEmpty() ? " (" +test::ToString(old.Voltage()) + ")" : QString();
     QString str_e_sa =          !compare_width.isEmpty() ? " (" +test::ToString(old.SignalStateA()) + ")" : QString();
     QString str_e_sb =          !compare_width.isEmpty() ? " (" +test::ToString(old.SignalStateB()) + ")" : QString();
@@ -427,7 +427,7 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect, QString const& compar
         DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Минимальное давление управления*, бар"), test::ToString(mMinControlPressure),str_e_mncp, row_skale );
     }
 
-    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Тип управления"), test::ToString(mReelControl),str_e_rc, row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Тип управления"), test::ToShortString(mReelControl),str_e_rc, row_skale );
     if ( mReelControl == RC_CONTROL_BOX )
     {
         DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Напряжение питания"), test::ToString(mVoltage),str_e_vt, row_skale );

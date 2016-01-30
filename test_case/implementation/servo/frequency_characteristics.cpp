@@ -84,105 +84,6 @@ FrequencyCharacteristics::Source FromJson( QJsonArray arr )
     return std::move( res );
 }
 
-double CalckAmpl( FrequencyCharacteristics::DataSet const& data )
-{
-    double ampl = 0;
-    std::vector< double > expenditure;
-    for ( size_t i = 0; i < data.size(); ++i )
-    {
-        if ( !i )
-            expenditure.push_back(0);
-        else
-            expenditure.push_back( (data[i].position - data[i-1].position) );
-    }
-
-    if ( !expenditure.empty() )
-    {
-        int max = 0;
-        int min = 0;
-        for ( size_t i = 0; i < expenditure.size(); ++i )
-        {
-            if ( expenditure[ max ] < expenditure[i] )
-                max = i;
-            if ( expenditure[ min ] > expenditure[i] )
-                min = i;
-        }
-
-        ampl = expenditure[ max ] - expenditure[ min ];
-    }
-
-    return ampl;
-}
-
-ff0x::NoAxisGraphBuilder::LinePoints ProcessAFC( FrequencyCharacteristics::Source const& src, QPointF& x_range, QPointF& y_range )
-{
-    auto f_S = []( double expenditure )
-    {
-        double r1 = 0, r2 = 0;
-        if ( expenditure < 30 )
-        {
-            r1 = 25.0/2.0;
-            r2 = 18.0/2.0;
-        }
-        else
-        {
-            r1 = 63.0/2.0;
-            r2 = 36.0/2.0;
-        }
-        return 2 *3.14 * ( r1*r1 - r2*r2 );
-    };
-    double K = 0.00006 * f_S( test::servo::Parameters::Instance().DefaultExpenditure() );
-    double time_period = 1.0/1000.0; //время между замерами данных с
-
-    ff0x::NoAxisGraphBuilder::LinePoints result;
-    double min_ampl;
-    for ( auto it = src.begin(), end = src.end(); it != end; ++it  )
-    {
-        QPointF point;
-        point.setX( it->first );
-
-        double ampl = CalckAmpl( it->second ) *K / time_period;
-
-        if ( it == src.begin() )
-            min_ampl = ampl;
-
-        if ( min_ampl != 0 && ampl/min_ampl != 0 )
-        {
-            point.setY( 10.0*log10( ampl / min_ampl) );
-        }
-        else
-            point.setY(0);
-
-        if ( it == src.begin() )
-        {
-            x_range.setX(point.x());
-            x_range.setY(point.x());
-            y_range.setX(point.y());
-            y_range.setY(point.y());
-        }
-        else
-        {
-            if ( x_range.x() < point.x() )
-                x_range.setX( point.x() );
-            if ( x_range.y() > point.x() )
-                x_range.setY( point.x() );
-
-            if ( y_range.x() < point.y() )
-                y_range.setX( point.y() );
-            if ( y_range.y() > point.y() )
-                y_range.setY( point.y() );
-        }
-
-#ifndef DEBUG
-        if ( fabs( point.y() ) > 15 )
-            break;
-#endif
-        result.push_back( point );
-    }
-    return std::move( result );
-}
-
-
 class GrapfInfo
 {
 public:
@@ -225,6 +126,7 @@ private:
 
 class FollowAnaliser
 {
+public:
     void Process( QVector<QPointF> const& data, GrapfInfo::Data &Info )
     {
         int old_way = 0;
@@ -263,12 +165,27 @@ public:
     {
         int old_way = 0;
         QPointF curr_p;
-        QPointF max_p;
-        QPointF min_p;
+
+        int i_max = 0, i_min = 0;
         for ( int i = 0; i < data.size(); ++i )
         {
             curr_p = data[i];
-            int way = curr_p.y() > 0 ? 1 : curr_p.y() < 0 ? -1 : old_way;
+            if ( curr_p.y() < data[i_min].y() )
+                i_min = i;
+            if ( curr_p.y() > data[i_max].y() )
+                i_max = i;
+        }
+
+        double zero_lvl = data[i_min].y() + (data[i_max].y() - data[i_min].y())/2;
+
+        QPointF max_p(0,zero_lvl);
+        QPointF min_p(0,zero_lvl);
+        for ( int i = 0; i < data.size(); ++i )
+        {
+            curr_p = data[i];
+            if ( !i )
+                Info.push_back(GrapfInfo::PointInfo( curr_p, GrapfInfo::PointInfo::Unset ));
+            int way = curr_p.y() > zero_lvl ? 1 : curr_p.y() < zero_lvl ? -1 : old_way;
             if ( way > 0 )
             {
                 if ( max_p.y() < curr_p.y() )
@@ -284,12 +201,12 @@ public:
                 if ( way > 0 )
                 {
                     Info.push_back(GrapfInfo::PointInfo( min_p, GrapfInfo::PointInfo::Min ));
-                    min_p = QPointF();
+                    min_p = QPointF( 0, zero_lvl );
                 }
                 else if ( way < 0 )
                 {
                     Info.push_back(GrapfInfo::PointInfo( max_p, GrapfInfo::PointInfo::Max ));
-                    max_p = QPointF();
+                    max_p = QPointF( 0, zero_lvl );
                 }
             }
             old_way = way;
@@ -300,6 +217,108 @@ public:
                 Info.push_back(GrapfInfo::PointInfo( min_p, GrapfInfo::PointInfo::Min ));
             else if ( old_way > 0 )
                 Info.push_back(GrapfInfo::PointInfo( max_p, GrapfInfo::PointInfo::Max ));
+        }
+        Info.push_back(GrapfInfo::PointInfo( curr_p, GrapfInfo::PointInfo::Unset ));
+    }
+};
+
+class StepAnaliser
+{
+public:
+    void Process( QVector<QPointF> const& data, GrapfInfo::Data &Info )
+    {
+        int old_way = 0;
+        QPointF curr_p;
+        GrapfInfo::Data inf;
+        int i_max = 0, i_min = 0;
+        for ( int i = 0; i < data.size(); ++i )
+        {
+            curr_p = data[i];
+            if ( curr_p.y() < data[i_min].y() )
+                i_min = i;
+            if ( curr_p.y() > data[i_max].y() )
+                i_max = i;
+        }
+        double range = data[i_max].y() - data[i_min].y();
+//        double zero_lvl = data[i_min].y() + (data[i_max].y() - data[i_min].y())/2;
+
+        QPointF start_p;
+        QPointF stop_p;
+        for ( int i = 0; i < data.size(); ++i )
+        {
+            curr_p = data[i];
+            if ( !i )
+            {
+                start_p = curr_p;
+                continue;
+            }
+
+            double dist_top = fabs( data[i].y() - data[ i_max ].y() );
+            double dist_bottom = fabs(data[i].y() - data[ i_min ].y() );
+            int way = 0;
+            if ( dist_top <= range / 100 * 15 ||
+                 dist_bottom <= range / 100 * 15 )
+            {
+                //зона не чувствительности
+                way = 1;
+            }
+            else
+            {
+                //зона чувствительности
+                way = -1;
+            }
+
+            if ( way != old_way && old_way )
+            {
+                if ( way == 1 )
+                {
+                    inf.push_back(GrapfInfo::PointInfo( start_p, GrapfInfo::PointInfo::Min ));
+                    inf.push_back(GrapfInfo::PointInfo( stop_p, GrapfInfo::PointInfo::Max ));
+                }
+            }
+
+            if ( way == 1 )
+                start_p = curr_p;
+            else if ( way == -1 )
+                stop_p = curr_p;
+
+            old_way = way;
+        }
+        if ( old_way < 0 )
+        {
+            inf.push_back(GrapfInfo::PointInfo( start_p, GrapfInfo::PointInfo::Min ));
+            inf.push_back(GrapfInfo::PointInfo( stop_p, GrapfInfo::PointInfo::Max ));
+        }
+
+
+        //найти самый большой отрезок по dy
+        int f_max = 0;
+        for ( int i = 0; i < inf.size(); ++i )
+        {
+            if ( !i )
+                continue;
+
+            if ( inf[ i ].type != GrapfInfo::PointInfo::Max ||
+                 inf[ i - 1 ].type != GrapfInfo::PointInfo::Min)
+                continue;
+
+            if ( inf[ i ].point.y() < inf[ i - 1 ].point.y() )
+                continue;
+
+            if ( !f_max )
+                f_max = i;
+
+            GrapfInfo::PointInfo const& point = inf[i];
+            GrapfInfo::PointInfo const& prev = inf[i-1];
+
+            if ( fabs(point.point.y() - prev.point.y()) >
+                 fabs(inf[f_max].point.y() - inf[f_max-1].point.y()))
+                f_max = i;
+        }
+        if (!inf.empty())
+        {
+            Info.push_back( inf[f_max-1] );
+            Info.push_back( inf[f_max] );
         }
     }
 };
@@ -554,6 +573,164 @@ public:
 };
 
 typedef SinusAnaliser2 DefaultAnaliser;
+
+
+double CalckAmpl( FrequencyCharacteristics::DataSet const& data )
+{
+    double ampl = 0;
+    std::vector< double > expenditure;
+    for ( size_t i = 0; i < data.size(); ++i )
+    {
+        if ( !i )
+            expenditure.push_back(0);
+        else
+            expenditure.push_back( (data[i].position - data[i-1].position) );
+    }
+
+    if ( !expenditure.empty() )
+    {
+        int max = 0;
+        int min = 0;
+        for ( size_t i = 0; i < expenditure.size(); ++i )
+        {
+            if ( expenditure[ max ] < expenditure[i] )
+                max = i;
+            if ( expenditure[ min ] > expenditure[i] )
+                min = i;
+        }
+
+        ampl = expenditure[ max ] - expenditure[ min ];
+    }
+
+    return ampl;
+}
+double CalckAmpl3( FrequencyCharacteristics::DataSet const& data )
+{
+    QVector< QPointF > pos;
+    for ( size_t i = 0; i < data.size(); ++i )
+    {
+        pos.push_back( QPointF( i, data[i].position ) );
+    }
+
+    GrapfInfo info_pos( pos, StepAnaliser() );
+    GrapfInfo::Data const& inf = info_pos.GetInfo();
+
+    double sum_speed = 0;
+    int count = 0;
+    //найти самый большой отрезок по dy
+    int i_max = 0;
+    for ( int i = 0; i < inf.size(); ++i )
+    {
+        if ( !i )
+            continue;
+
+        if ( inf[ i ].type != GrapfInfo::PointInfo::Max ||
+             inf[ i - 1 ].type != GrapfInfo::PointInfo::Min)
+            continue;
+        if ( !i_max )
+            i_max = i;
+
+        GrapfInfo::PointInfo const& point = inf[i];
+        GrapfInfo::PointInfo const& prev = inf[i-1];
+
+        if ( fabs(point.point.y() - prev.point.y()) >
+             fabs(inf[i_max].point.y() - inf[i_max-1].point.y()))
+            i_max = i;
+    }
+    if ( !inf.empty() )
+        sum_speed += fabs(inf[i_max].point.y() - inf[i_max-1].point.y()) / ( inf[i_max].point.x() - inf[i_max-1].point.x() );
+
+//    for ( int i = 0; i < inf.size(); ++i )
+//    {
+//        if ( !i )
+//            continue;
+
+//        if ( inf[ i ].type != GrapfInfo::PointInfo::Max ||
+//             inf[ i - 1 ].type != GrapfInfo::PointInfo::Min)
+//            continue;
+
+//        GrapfInfo::PointInfo const& point = inf[i];
+//        GrapfInfo::PointInfo const& prev = inf[i-1];
+//        double dx = ( point.point.x() - prev.point.x() );
+//        if ( dx )
+//        {
+//            sum_speed += fabs( point.point.y() - prev.point.y() )/ dx;
+//            ++count;
+//            break;
+//        }
+//    }
+
+    sum_speed = sum_speed / ( count ? count : 1 );
+    return sum_speed;
+}
+
+ff0x::NoAxisGraphBuilder::LinePoints ProcessAFC( FrequencyCharacteristics::Source const& src, QPointF& x_range, QPointF& y_range )
+{
+    auto f_S = []( double expenditure )
+    {
+        double r1 = 0, r2 = 0;
+        if ( expenditure < 30 )
+        {
+            r1 = 25.0/2.0;
+            r2 = 18.0/2.0;
+        }
+        else
+        {
+            r1 = 63.0/2.0;
+            r2 = 36.0/2.0;
+        }
+        return 2 *3.14 * ( r1*r1 - r2*r2 );
+    };
+    double K = 0.00006 * f_S( test::servo::Parameters::Instance().DefaultExpenditure() );
+    double time_period = 1.0/1000.0; //время между замерами данных с
+
+    ff0x::NoAxisGraphBuilder::LinePoints result;
+    double min_ampl;
+    for ( auto it = src.begin(), end = src.end(); it != end; ++it  )
+    {
+        QPointF point;
+        point.setX( it->first );
+
+        double ampl = CalckAmpl3( it->second ) *K / time_period;
+        if ( it == src.begin() )
+            min_ampl = ampl;
+
+        if ( min_ampl != 0 && ampl/min_ampl != 0 )
+        {
+            point.setY( 10.0*log10( ampl / min_ampl) );
+        }
+        else
+            point.setY(0);
+
+        if ( it == src.begin() )
+        {
+            x_range.setX(point.x());
+            x_range.setY(point.x());
+            y_range.setX(point.y());
+            y_range.setY(point.y());
+        }
+        else
+        {
+            if ( x_range.x() < point.x() )
+                x_range.setX( point.x() );
+            if ( x_range.y() > point.x() )
+                x_range.setY( point.x() );
+
+            if ( y_range.x() < point.y() )
+                y_range.setX( point.y() );
+            if ( y_range.y() > point.y() )
+                y_range.setY( point.y() );
+        }
+
+#ifndef DEBUG
+        if ( fabs( point.y() ) > 15 )
+            break;
+#endif
+        result.push_back( point );
+    }
+    return std::move( result );
+}
+
 double CalckFi( FrequencyCharacteristics::DataSet const& data, double frequency )
 {
     QVector< QPointF > speed;
@@ -736,10 +913,14 @@ ff0x::NoAxisGraphBuilder::LinePoints ProcessDebug3( FrequencyCharacteristics::So
             {
                 QPointF point;
                 point.setX( j );
+                double y = 0;
                 if ( !j )
-                    point.setY( lnk[j + 1].position - lnk[j].position );
+                    y = lnk[j + 1].position - lnk[j].position;
                 else
-                    point.setY( lnk[j].position - lnk[j-1].position );
+                    y = lnk[j].position - lnk[j-1].position;
+                if ( !y )
+                    continue;
+                point.setY( y );
                 if ( j == 0 )
                 {
                     x_range.setX(point.x());
@@ -782,14 +963,11 @@ ff0x::NoAxisGraphBuilder::LinePoints ProcessDebug4( FrequencyCharacteristics::So
             {
                 QPointF point;
                 point.setX( j );
-                if ( !j )
-                    point.setY( lnk[j + 1].position - lnk[j].position );
-                else
-                    point.setY( lnk[j].position - lnk[j-1].position );
+                point.setY( lnk[j].position );
                 data.push_back( point );
             }
 
-            GrapfInfo inf( data, DefaultAnaliser() );
+            GrapfInfo inf( data, StepAnaliser() );
             for ( size_t j = 0; j < inf.GetInfo().size(); ++j )
             {
                 QPointF point = inf.GetInfo()[j].point;
@@ -1168,9 +1346,9 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
                 ff0x::NoAxisGraphBuilder::GraphDataLine lines1;
                 ff0x::NoAxisGraphBuilder::GraphDataLine lines2;
                 lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data, ff0x::NoAxisGraphBuilder::LabelInfo( "", Qt::blue ) ) );
-    //            lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data2, ff0x::NoAxisGraphBuilder::LabelInfo( "", Qt::red ) ) );
+                lines1.push_back( ff0x::NoAxisGraphBuilder::Line(data3, ff0x::NoAxisGraphBuilder::LabelInfo( "", Qt::red ) ) );
                 lines2.push_back( ff0x::NoAxisGraphBuilder::Line(data2, ff0x::NoAxisGraphBuilder::LabelInfo( "", Qt::red ) ) );
-                lines2.push_back( ff0x::NoAxisGraphBuilder::Line(data3, ff0x::NoAxisGraphBuilder::LabelInfo( "", Qt::blue ) ) );
+//                lines2.push_back( ff0x::NoAxisGraphBuilder::Line(data3, ff0x::NoAxisGraphBuilder::LabelInfo( "", Qt::blue ) ) );
 
                 QRect p1(rect.left(), rect.top(), w, h );
                 QRect p2(rect.right() - w, rect.top(), w, h );
@@ -1187,8 +1365,10 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
     //                ff0x::DataLength( x_range_1, x_range_2, true, x_range, x_step );
     //                ff0x::DataLength( y_range_1, y_range_2, true, y_range, y_step );
 
-                    ff0x::DataLength( x_range_1, x_range, x_step );
-                    ff0x::DataLength( y_range_1, y_range, y_step );
+                    ff0x::DataLength( ff0x::MergeRanges( x_range_1, x_range_3, true ), x_range, x_step );
+                    ff0x::DataLength( ff0x::MergeRanges( y_range_1, y_range_3, true ), y_range, y_step );
+//                    ff0x::DataLength( x_range_1, x_range, x_step );
+//                    ff0x::DataLength( y_range_1, y_range, y_step );
 
                     if ( y_range.x() - y_range.y() == 0 )
                     {
@@ -1205,11 +1385,11 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
                     double y_step = 0;
 
 
-                    ff0x::DataLength( ff0x::MergeRanges( x_range_2, x_range_3, true ), x_range, x_step );
-                    ff0x::DataLength( ff0x::MergeRanges( y_range_2, y_range_3, true ), y_range, y_step );
+//                    ff0x::DataLength( ff0x::MergeRanges( x_range_2, x_range_3, true ), x_range, x_step );
+//                    ff0x::DataLength( ff0x::MergeRanges( y_range_2, y_range_3, true ), y_range, y_step );
 
-//                    ff0x::DataLength( x_range_3, x_range, x_step );
-//                    ff0x::DataLength( y_range_3, y_range, y_step );
+                    ff0x::DataLength( x_range_2, x_range, x_step );
+                    ff0x::DataLength( y_range_2, y_range, y_step );
 
                     if ( y_range.x() - y_range.y() == 0 )
                     {
@@ -1228,7 +1408,6 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
     DEBUG_DATA( mSource2 );
     DEBUG_DATA( mSource3 );
 #endif
-
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &text_font, &DrawRowCenter, &metrix, &compare_width, &params ]( QRect const& rect )
     {

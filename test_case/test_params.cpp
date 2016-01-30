@@ -254,6 +254,20 @@ QString ToString( RELL_CONTROL const& v )
         return "Неизвестное значение";
     }
 }
+QString ToShortString( RELL_CONTROL const& v )
+{
+    switch (v)
+    {
+        case RC_UNKNOWN:
+            return "Не задано";
+        case RC_REEL:
+            return "Кат. упр.";
+        case RC_CONTROL_BOX:
+            return "Блок упр.";
+    default:
+        return "Неизвестное значение";
+    }
+}
 QString ToString( double const& v )
 {
     QChar const decimalsep = QLocale::system().decimalPoint();

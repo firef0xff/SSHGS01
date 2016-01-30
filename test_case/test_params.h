@@ -74,6 +74,7 @@ QString ToString( CONTROL_TYPE const& v );
 QString ToString( CONTROL_SIGNAL const& v );
 QString ToString( DYNAMIC const& v );
 QString ToString( RELL_CONTROL const& v );
+QString ToShortString( RELL_CONTROL const& v );
 QString ToString( double const& v );
 QString ToString( SIGNAL_TYPE const& v );
 
