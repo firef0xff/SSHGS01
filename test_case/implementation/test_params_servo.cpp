@@ -212,6 +212,7 @@ void Parameters::WriteToController() const
     if ( test::servo::Parameters::Instance().ReelControl() == RC_REEL )
     {
         auto& mem = cpu::CpuMemory::Instance().DB35;
+        auto& mem2 = cpu::CpuMemory::Instance().DB33;
         mem.channel_a = mTestChannelA; //62.0 испытание канал А
         mem.channel_b = mTestChannelB; //62.1 испытание канала В
         mem.channel_k_a = mSignalOnChannelA == CS_REEL_B ? 1: 0;
@@ -246,7 +247,20 @@ void Parameters::WriteToController() const
                 mem.s860ma = 0;
                 break;
         }
-        mem.x_max_a = mEndSgnal;             //6 полное перключение в А
+
+
+        if ( mReelCount == 1 )
+        {
+            mem.x_max_a = mSignalStateA;             //4 сигнал переключение в А
+            mem2.x_max_b = mSignalStateB;             //8 сигнал переключение в В
+            mem2.x_pos_0 = mSignalState0;             //12 сигнал переключение в 0
+            mem2.Write();
+        }
+        else
+        {
+            mem.x_max_a = mEndSgnal;             //6 полное перключение в А
+        }
+
         mem.test_press = mPressureTesting;          //18 испытание пробным давлением
         mem.nominal_press = mPressureNominal;       //22 номинальное давление
         mem.q_max_a = mMaxExpenditureA;             //26 макс расход в А    ПОКАЗАТЬ НА ФОРМЕ

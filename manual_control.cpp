@@ -511,9 +511,24 @@ void ManualControl::on_Accept_clicked()
                 mem.s860ma = 0;
                 break;
         }
-        double val = 0;
-        test::ParseValue( val, ui->SigMax->text() );
-        mem.x_max_a = val;
+        if ( mControlBits.RC2 )
+        {
+            double val = 0;
+            test::ParseValue( val, ui->SigMax->text() );
+            mem.x_max_a = val;
+        }
+        if ( mControlBits.RC1 )
+        {
+            auto& mem2 = cpu::CpuMemory::Instance().DB33;
+            double val = 0;
+            test::ParseValue( val, ui->SigA->text() );
+            mem.x_max_a = val;             //4 сигнал переключение в А
+            test::ParseValue( val, ui->SigB->text() );
+            mem2.x_max_b = val;             //8 сигнал переключение в В
+            test::ParseValue( val, ui->Sig0->text() );
+            mem2.x_pos_0 = val;             //12 сигнал переключение в 0
+            mem2.Write();
+        }
         mem.Write();
     }
     if ( mControlBits.CB )//Управление от карты
@@ -605,8 +620,22 @@ void ManualControl::on_CR_clicked()
 
         ui->SigLevel->setCurrentIndex( -1 );
 
-        ui->l_sig_max->setVisible( true );
-        ui->SigMax->setVisible( true );
+        if (mControlBits.RC2)
+        {
+            ui->l_sig_max->setVisible( true );
+            ui->SigMax->setVisible( true );
+        }
+        if (mControlBits.RC1)
+        {
+            ui->l_sig_a->setVisible( true );
+            ui->l_sig_0->setVisible( true );
+            ui->l_sig_b->setVisible( true );
+
+            ui->SigA->setVisible( true );
+            ui->Sig0->setVisible( true );
+            ui->SigB->setVisible( true );
+        }
+
     }
 
     mControlBits.SetCR( ui->CR->isChecked() );
@@ -621,6 +650,11 @@ void ManualControl::on_RC1_clicked()
         UpdateButton( ui->RC2, mControlBits.RC2   );         //MX45.7 2 катушки
     }
     mControlBits.SetRC1( ui->RC1->isChecked() );
+
+    if ( mControlBits.CB)
+        on_CB_clicked();
+    if ( mControlBits.CR)
+        on_CR_clicked();
 }
 void ManualControl::on_RC2_clicked()
 {
@@ -630,6 +664,11 @@ void ManualControl::on_RC2_clicked()
         UpdateButton( ui->RC1, mControlBits.RC1   );         //MX45.6 1 катушка
     }
     mControlBits.SetRC2( ui->RC2->isChecked() );
+
+    if ( mControlBits.CB)
+        on_CB_clicked();
+    if ( mControlBits.CR)
+        on_CR_clicked();
 }
 
 void ManualControl::on_ONRA_clicked()
@@ -709,27 +748,51 @@ void ManualControl::on_SigLevel_currentIndexChanged(const QString &arg1)
             break;
         case test::ST_100_mA:
             ui->SigMax->setValidator( new QIntValidator( 0, 100, this ) );
+            ui->SigA->setValidator( new QIntValidator( 0, 100, this ) );
+            ui->SigB->setValidator( new QIntValidator( 0, 100, this ) );
+            ui->Sig0->setValidator( new QIntValidator( 0, 100, this ) );
             break;
         case test::ST_300_mA:
             ui->SigMax->setValidator( new QIntValidator( 0, 300, this ) );
+            ui->SigA->setValidator( new QIntValidator( 0, 300, this ) );
+            ui->SigB->setValidator( new QIntValidator( 0, 300, this ) );
+            ui->Sig0->setValidator( new QIntValidator( 0, 300, this ) );
             break;
         case test::ST_600_mA:
             ui->SigMax->setValidator( new QIntValidator( 0, 600, this ) );
+            ui->SigA->setValidator( new QIntValidator( 0, 600, this ) );
+            ui->SigB->setValidator( new QIntValidator( 0, 600, this ) );
+            ui->Sig0->setValidator( new QIntValidator( 0, 600, this ) );
             break;
         case test::ST_860_mA:
             ui->SigMax->setValidator( new QIntValidator( 0, 860, this ) );
+            ui->SigA->setValidator( new QIntValidator( 0, 860, this ) );
+            ui->SigB->setValidator( new QIntValidator( 0, 860, this ) );
+            ui->Sig0->setValidator( new QIntValidator( 0, 860, this ) );
             break;
         case test::ST_1600_mA:
             ui->SigMax->setValidator( new QIntValidator( 0, 1600, this ) );
+            ui->SigA->setValidator( new QIntValidator( 0, 1600, this ) );
+            ui->SigB->setValidator( new QIntValidator( 0, 1600, this ) );
+            ui->Sig0->setValidator( new QIntValidator( 0, 1600, this ) );
             break;
         case test::ST_2500_mA:
             ui->SigMax->setValidator( new QIntValidator( 0, 2500, this ) );
+            ui->SigA->setValidator( new QIntValidator( 0, 2500, this ) );
+            ui->SigB->setValidator( new QIntValidator( 0, 2500, this ) );
+            ui->Sig0->setValidator( new QIntValidator( 0, 2500, this ) );
             break;
         case test::ST_3750_mA:
             ui->SigMax->setValidator( new QIntValidator( 0, 3750, this ) );
+            ui->SigA->setValidator( new QIntValidator( 0, 3750, this ) );
+            ui->SigB->setValidator( new QIntValidator( 0, 3750, this ) );
+            ui->Sig0->setValidator( new QIntValidator( 0, 3750, this ) );
             break;
         case test::ST_5000_mA:
             ui->SigMax->setValidator( new QIntValidator( 0, 5000, this ) );
+            ui->SigA->setValidator( new QIntValidator( 0, 5000, this ) );
+            ui->SigB->setValidator( new QIntValidator( 0, 5000, this ) );
+            ui->Sig0->setValidator( new QIntValidator( 0, 5000, this ) );
             break;
         default:
             ui->SigA->setEnabled(false);
