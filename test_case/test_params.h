@@ -47,15 +47,16 @@ enum SIGNAL_TYPE
     ST_UNKNOWN = -1,
     ST_4_20_mA = 0,
     ST_0_20_mA = 1,
+    ST_0_10_V = 11,
     ST_10_10_V = 2,
     ST_10_10_mA = 3,
     ST_40_40_mA = 4,
+    ST_15_15_mA = 9,
+    ST_20_20_mA = 10,
     ST_100_mA = 5,
     ST_300_mA = 6,
     ST_600_mA = 7,
     ST_860_mA = 8,
-    ST_15_15_mA = 9,
-    ST_20_20_mA = 10,
 };
 
 bool ParseValue ( CONTROL_SIGNAL& sig, QString const& val );

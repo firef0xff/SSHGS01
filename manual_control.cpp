@@ -509,6 +509,7 @@ void ManualControl::on_Accept_clicked()
         auto& mem = cpu::CpuMemory::Instance().DB33;
         mem.s4_20ma = s_type == test::ST_4_20_mA; //2.0 сигнал 4-20 мА
         mem.s0_20ma = s_type == test::ST_0_20_mA; //2.1 сигнал 0-20 мА
+        mem.s0_10v = s_type == test::ST_0_10_V; //2.2 сигнал 0-10В
         mem.s10v = s_type == test::ST_10_10_V; //2.2 сигнал +/- 10В
         mem.s10ma = s_type == test::ST_10_10_mA; //2.3 сигнал +/- 10 мА
         mem.s15ma = s_type == test::ST_15_15_mA; //2.4 сигнал +/- 15мА
@@ -547,8 +548,11 @@ void ManualControl::on_CB_clicked()
         ui->SigLevel->addItem( test::ToString( test::ST_0_20_mA ) );
         ui->SigLevel->addItem( test::ToString( test::ST_4_20_mA ) );
         ui->SigLevel->addItem( test::ToString( test::ST_10_10_mA ) );
+//        ui->SigLevel->addItem( test::ToString( test::ST_15_15_mA ) );
+        ui->SigLevel->addItem( test::ToString( test::ST_20_20_mA ) );
         ui->SigLevel->addItem( test::ToString( test::ST_40_40_mA ) );
         ui->SigLevel->addItem( test::ToString( test::ST_10_10_V ) );
+        ui->SigLevel->addItem( test::ToString( test::ST_0_10_V ) );
         ui->SigLevel->setCurrentIndex( -1 );
 
         ui->l_sig_a->setVisible( true );
@@ -665,6 +669,21 @@ void ManualControl::on_SigLevel_currentIndexChanged(const QString &arg1)
             ui->SigA->setValidator( new QIntValidator( -10, 10, this ) );
             ui->SigB->setValidator( new QIntValidator( -10, 10, this ) );
             ui->Sig0->setValidator( new QIntValidator( -10, 10, this ) );
+            break;
+        case test::ST_0_10_V:
+            ui->SigA->setValidator( new QIntValidator( 0, 10, this ) );
+            ui->SigB->setValidator( new QIntValidator( 0, 10, this ) );
+            ui->Sig0->setValidator( new QIntValidator( 0, 10, this ) );
+            break;
+//        case test::ST_15_15_mA:
+//            ui->SigA->setValidator( new QIntValidator( -15, 15, this ) );
+//            ui->SigB->setValidator( new QIntValidator( -15, 15, this ) );
+//            ui->Sig0->setValidator( new QIntValidator( -15, 15, this ) );
+//            break;
+        case test::ST_20_20_mA:
+            ui->SigA->setValidator( new QIntValidator( -20, 20, this ) );
+            ui->SigB->setValidator( new QIntValidator( -20, 20, this ) );
+            ui->Sig0->setValidator( new QIntValidator( -20, 20, this ) );
             break;
         case test::ST_40_40_mA:
             ui->SigA->setValidator( new QIntValidator( -40, 40, this ) );

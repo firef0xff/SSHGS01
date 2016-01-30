@@ -254,6 +254,7 @@ void Parameters::WriteToController() const
         mem.s4_20ma = mControlSignal == ST_4_20_mA; //2.0 сигнал 4-20 мА
         mem.s0_20ma = mControlSignal == ST_0_20_mA; //2.1 сигнал 0-20 мА
         mem.s10v = mControlSignal == ST_10_10_V; //2.2 сигнал +/- 10В
+        mem.s0_10v = mControlSignal == ST_0_10_V; //2.2 сигнал 0 - 10В
         mem.s10ma = mControlSignal == ST_10_10_mA; //2.3 сигнал +/- 10 мА
         mem.s15ma = mControlSignal == ST_15_15_mA; //2.4 сигнал +/- 15мА
         mem.s20ma = mControlSignal == ST_20_20_mA; //2.5 сиганл +/- 20 мА
@@ -433,7 +434,7 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect, QString const& compar
         DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Напряжение питания"), test::ToString(mVoltage),str_e_vt, row_skale );
     }
     DrawRowLeft( text_font, Qt::black, Qt::red, "Сигнал, соответствующий:", "" );
-    QString ed_izm = mControlSignal == ST_10_10_V ? " В": " мА";
+    QString ed_izm = (mControlSignal == ST_10_10_V || mControlSignal == ST_0_10_V) ? " В": " мА";
 
     if ( mReelControl == RC_CONTROL_BOX )
     {

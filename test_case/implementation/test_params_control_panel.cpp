@@ -235,6 +235,7 @@ void Parameters::WriteToController() const
 
     mem.s4_20ma = mSignalType == ST_4_20_mA;
     mem.s0_20ma = mSignalType == ST_0_20_mA;
+//    mem.s0_10v = mSignalType == ST_0_10_V;
     mem.s10v = mSignalType == ST_10_10_V;
     mem.s10ma = mSignalType == ST_10_10_mA;
     mem.s15ma = mSignalType == ST_15_15_mA;

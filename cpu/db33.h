@@ -19,6 +19,7 @@ public:
     bool& s4_20ma; //2.0 сигнал 4-20 мА
     bool& s0_20ma; //2.1 сигнал 0-20 мА
     bool& s10v; //2.2 сигнал +/- 10В
+    bool& s0_10v; //2.2 сигнал 0..10В
     bool& s10ma; //2.3 сигнал +/- 10 мА
     bool& s15ma; //2.4 сигнал +/- 15мА
     bool& s20ma; //2.5 сиганл +/- 20 мА
@@ -51,7 +52,7 @@ private:
 
     enum
     {
-        BOOL_COUNT = 11,
+        BOOL_COUNT = 12,
         FLOAT_COUNT = 15
     };
 
@@ -64,6 +65,7 @@ private:
         L"CPU/DB33.s4_20ma",
         L"CPU/DB33.s0_20ma",
         L"CPU/DB33.s10v",
+        L"CPU/DB33.s0_10v",
         L"CPU/DB33.s10ma",
         L"CPU/DB33.s15ma",
         L"CPU/DB33.s20ma",

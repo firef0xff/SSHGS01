@@ -332,6 +332,21 @@ void ServoTitleInfo::on_ControlSignal_activated(int index)
             ui->SignalStateB->setValidator( new QDoubleValidator( -10, 10, 2, this ) );
             ui->SignalState0->setValidator( new QDoubleValidator( -10, 10, 2, this ) );
             break;
+        case test::ST_0_10_V:
+            ui->SignalStateA->setValidator( new QDoubleValidator( 0, 10, 2, this ) );
+            ui->SignalStateB->setValidator( new QDoubleValidator( 0, 10, 2, this ) );
+            ui->SignalState0->setValidator( new QDoubleValidator( 0, 10, 2, this ) );
+            break;
+//        case test::ST_15_15_mA:
+//            ui->SignalStateA->setValidator( new QDoubleValidator( -15, 15, 2, this ) );
+//            ui->SignalStateB->setValidator( new QDoubleValidator( -15, 15, 2, this ) );
+//            ui->SignalState0->setValidator( new QDoubleValidator( -15, 15, 2, this ) );
+//            break;
+        case test::ST_20_20_mA:
+            ui->SignalStateA->setValidator( new QDoubleValidator( -20, 20, 2, this ) );
+            ui->SignalStateB->setValidator( new QDoubleValidator( -20, 20, 2, this ) );
+            ui->SignalState0->setValidator( new QDoubleValidator( -20, 20, 2, this ) );
+            break;
         case test::ST_40_40_mA:
             ui->SignalStateA->setValidator( new QDoubleValidator( -40, 40, 2, this ) );
             ui->SignalStateB->setValidator( new QDoubleValidator( -40, 40, 2, this ) );
@@ -386,8 +401,11 @@ void ServoTitleInfo::on_ControlType_activated(int index)
         ui->ControlSignal->addItem( test::ToString( test::ST_0_20_mA ) );
         ui->ControlSignal->addItem( test::ToString( test::ST_4_20_mA ) );
         ui->ControlSignal->addItem( test::ToString( test::ST_10_10_mA ) );
+//        ui->ControlSignal->addItem( test::ToString( test::ST_15_15_mA ) );
+        ui->ControlSignal->addItem( test::ToString( test::ST_20_20_mA ) );
         ui->ControlSignal->addItem( test::ToString( test::ST_40_40_mA ) );
         ui->ControlSignal->addItem( test::ToString( test::ST_10_10_V ) );
+        ui->ControlSignal->addItem( test::ToString( test::ST_0_10_V ) );
     }
     else if ( control == test::RC_REEL )
     {

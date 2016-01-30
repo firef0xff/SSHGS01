@@ -195,6 +195,7 @@ DB32.T_oil;DB32,REAL162;RW;TST=;CMT=температура масла
 DB33.s4_20ma;DB33,X2.0;RW;TST=;CMT=сигнал 4-20 мА
 DB33.s0_20ma;DB33,X2.1;RW;TST=;CMT=сигнал 0-20 мА
 DB33.s10v;DB33,X2.2;RW;TST=;CMT=сигнал +/- 10В
+DB33.s0_10v;DB33,X66.0;RW;TST=;CMT=сигнал 0-10В
 DB33.s10ma;DB33,X2.3;RW;TST=;CMT=сигнал +/- 10 мА
 DB33.s15ma;DB33,X2.4;RW;TST=;CMT=сигнал +/- 15мА
 DB33.s20ma;DB33,X2.5;RW;TST=;CMT=сиганл +/- 20 мА
