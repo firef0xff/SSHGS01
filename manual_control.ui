@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>902</width>
-    <height>597</height>
+    <width>1055</width>
+    <height>822</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -939,7 +939,7 @@
             <item>
              <widget class="QLabel" name="label_12">
               <property name="text">
-               <string>Температура масла</string>
+               <string>Температура масла, гр С</string>
               </property>
              </widget>
             </item>
@@ -1673,7 +1673,7 @@
         <item row="0" column="6" rowspan="4">
          <widget class="QGroupBox" name="groupBox_3">
           <property name="title">
-           <string>Ток</string>
+           <string>Ток, мА</string>
           </property>
           <layout class="QFormLayout" name="formLayout_2">
            <property name="horizontalSpacing">

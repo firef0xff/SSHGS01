@@ -227,8 +227,8 @@ void ManualControl::UpdateMarks()
 }
 
 void ManualControl::UpdateValue  ( QLCDNumber *ctrl, float const& value )
-{
-    ctrl->display( value );
+{    
+    ctrl->display( value > 0 ? value : 0 );
 }
 
 void ManualControl::UpdateData()
