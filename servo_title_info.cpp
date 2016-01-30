@@ -364,6 +364,18 @@ void ServoTitleInfo::on_ControlSignal_activated(int index)
         case test::ST_860_mA:
             ui->EndSgnal->setValidator( new QDoubleValidator( 0, 860, 2, this ) );
             break;
+        case test::ST_1600_mA:
+            ui->EndSgnal->setValidator( new QIntValidator( 0, 1600, this ) );
+            break;
+        case test::ST_2500_mA:
+            ui->EndSgnal->setValidator( new QIntValidator( 0, 2500, this ) );
+            break;
+        case test::ST_3750_mA:
+            ui->EndSgnal->setValidator( new QIntValidator( 0, 3750, this ) );
+            break;
+        case test::ST_5000_mA:
+            ui->EndSgnal->setValidator( new QIntValidator( 0, 5000, this ) );
+            break;
         default:
             ui->SignalStateA->setEnabled(false);
             ui->SignalStateB->setEnabled(false);
@@ -413,6 +425,10 @@ void ServoTitleInfo::on_ControlType_activated(int index)
         ui->ControlSignal->addItem( test::ToString( test::ST_300_mA ) );
         ui->ControlSignal->addItem( test::ToString( test::ST_600_mA ) );
         ui->ControlSignal->addItem( test::ToString( test::ST_860_mA ) );
+        ui->ControlSignal->addItem( test::ToString( test::ST_1600_mA ) );
+        ui->ControlSignal->addItem( test::ToString( test::ST_2500_mA ) );
+        ui->ControlSignal->addItem( test::ToString( test::ST_3750_mA ) );
+        ui->ControlSignal->addItem( test::ToString( test::ST_5000_mA ) );
     }
     ui->ControlSignal->setCurrentIndex( -1 );
     on_ControlSignal_activated( ui->ControlSignal->currentIndex() );

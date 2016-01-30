@@ -495,6 +495,18 @@ void ManualControl::on_Accept_clicked()
             case test::ST_860_mA:
                 mem.s860ma = 860;
                 break;
+            case test::ST_1600_mA:
+                mem.s860ma = 1600;
+                break;
+            case test::ST_2500_mA:
+                mem.s860ma = 2500;
+                break;
+            case test::ST_3750_mA:
+                mem.s860ma = 3750;
+                break;
+            case test::ST_5000_mA:
+                mem.s860ma = 5000;
+                break;
             default:
                 mem.s860ma = 0;
                 break;
@@ -586,6 +598,11 @@ void ManualControl::on_CR_clicked()
         ui->SigLevel->addItem( test::ToString( test::ST_300_mA ) );
         ui->SigLevel->addItem( test::ToString( test::ST_600_mA ) );
         ui->SigLevel->addItem( test::ToString( test::ST_860_mA ) );
+        ui->SigLevel->addItem( test::ToString( test::ST_1600_mA ) );
+        ui->SigLevel->addItem( test::ToString( test::ST_2500_mA ) );
+        ui->SigLevel->addItem( test::ToString( test::ST_3750_mA ) );
+        ui->SigLevel->addItem( test::ToString( test::ST_5000_mA ) );
+
         ui->SigLevel->setCurrentIndex( -1 );
 
         ui->l_sig_max->setVisible( true );
@@ -701,6 +718,18 @@ void ManualControl::on_SigLevel_currentIndexChanged(const QString &arg1)
             break;
         case test::ST_860_mA:
             ui->SigMax->setValidator( new QIntValidator( 0, 860, this ) );
+            break;
+        case test::ST_1600_mA:
+            ui->SigMax->setValidator( new QIntValidator( 0, 1600, this ) );
+            break;
+        case test::ST_2500_mA:
+            ui->SigMax->setValidator( new QIntValidator( 0, 2500, this ) );
+            break;
+        case test::ST_3750_mA:
+            ui->SigMax->setValidator( new QIntValidator( 0, 3750, this ) );
+            break;
+        case test::ST_5000_mA:
+            ui->SigMax->setValidator( new QIntValidator( 0, 5000, this ) );
             break;
         default:
             ui->SigA->setEnabled(false);

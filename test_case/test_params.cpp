@@ -174,6 +174,26 @@ bool ParseValue (SIGNAL_TYPE &param, QString const& val )
         param = ST_860_mA;
         return true;
     }
+    else if( !val.compare( "1600 мА", Qt::CaseInsensitive ) )
+    {
+        param = ST_1600_mA;
+        return true;
+    }
+    else if( !val.compare( "2500 мА", Qt::CaseInsensitive ) )
+    {
+        param = ST_2500_mA;
+        return true;
+    }
+    else if( !val.compare( "3750 мА", Qt::CaseInsensitive ) )
+    {
+        param = ST_3750_mA;
+        return true;
+    }
+    else if( !val.compare( "5000 мА", Qt::CaseInsensitive ) )
+    {
+        param = ST_5000_mA;
+        return true;
+    }
     return false;
 }
 
@@ -308,6 +328,14 @@ QString ToString( SIGNAL_TYPE const& v )
             return "600 мА";
         case ST_860_mA:
             return "860 мА";
+        case ST_1600_mA:
+            return "1600 мА";
+        case ST_2500_mA:
+            return "2500 мА";
+        case ST_3750_mA:
+            return "3750 мА";
+        case ST_5000_mA:
+            return "5000 мА";
     default:
         return "Неизвестное значение";
     }

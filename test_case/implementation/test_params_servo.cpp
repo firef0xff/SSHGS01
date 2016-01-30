@@ -230,6 +230,18 @@ void Parameters::WriteToController() const
             case ST_860_mA:
                 mem.s860ma = 860;
                 break;
+            case test::ST_1600_mA:
+                mem.s860ma = 1600;
+                break;
+            case test::ST_2500_mA:
+                mem.s860ma = 2500;
+                break;
+            case test::ST_3750_mA:
+                mem.s860ma = 3750;
+                break;
+            case test::ST_5000_mA:
+                mem.s860ma = 5000;
+                break;
             default:
                 mem.s860ma = 0;
                 break;

@@ -57,6 +57,11 @@ enum SIGNAL_TYPE
     ST_300_mA = 6,
     ST_600_mA = 7,
     ST_860_mA = 8,
+
+    ST_1600_mA = 12,
+    ST_2500_mA = 13,
+    ST_3750_mA = 14,
+    ST_5000_mA = 15,
 };
 
 bool ParseValue ( CONTROL_SIGNAL& sig, QString const& val );
