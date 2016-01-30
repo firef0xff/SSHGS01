@@ -23,7 +23,7 @@ private slots:
 
     void on_ControlType_activated(int index);
 
-    void on_GsType_activated(int index);
+//    void on_GsType_activated(int index);
 
     void on_ReelCount_valueChanged(int arg1);
 

@@ -12,11 +12,11 @@ HydroTitleInfo::HydroTitleInfo(bool new_mode, QWidget *parent) :
 {
     ui->setupUi(this);
 
-    foreach ( examinee::Device const* device, test::hydro::Parameters::Instance().TestCollection().Devices().Get() )
-    {
-        ui->GsType->addItem( device->Name() + " " + device->Manufacturer(), QVariant::fromValue( device ) );
-    }
-    ui->GsType->setCurrentIndex( -1 );
+//    foreach ( examinee::Device const* device, test::hydro::Parameters::Instance().TestCollection().Devices().Get() )
+//    {
+//        ui->GsType->addItem( device->Name() + " " + device->Manufacturer(), QVariant::fromValue( device ) );
+//    }
+//    ui->GsType->setCurrentIndex( -1 );
     ui->ActuationOnTime->setValidator( new QIntValidator( 1, 2000, this ) );
     ui->ActuationOffTime->setValidator( new QIntValidator( 1, 2000, this ) );
     ui->MaxExpenditure->setValidator( new QIntValidator( 10, 660, this ) );
@@ -79,7 +79,6 @@ bool HydroTitleInfo::SaveInputParams()
 
     res *= ParamChecker( ui->l_sn,              params.SerNo( ui->SerNo->text() ) );
     res *= ParamChecker( ui->l_def_expenditure, params.DefaultExpenditure( ui->DefExpenditure->text() ) );
-    res *= ParamChecker( ui->l_gs_type,         params.GsType( ui->GsType->currentText() ) && ui->GsType->currentIndex() >= 0 );
     res *= ParamChecker( ui->l_voltage,         params.Voltage( ui->Voltage->currentText() ) );
     res *= ParamChecker( ui->l_voltage_type,    params.VoltageType( ui->VoltageType->currentText() ) );
     res *= ParamChecker( ui->l_reel_count,      params.ReelCount( QString::number( ui->ReelCount->value() ) ) );
@@ -100,6 +99,7 @@ bool HydroTitleInfo::SaveInputParams()
     res *= ParamChecker( ui->l_pabt_signal,        params.PABTSignal( ui->PABTSignal->currentText() ) );
     res *= ParamChecker( ui->l_pbat_signal,        params.PBATSignal( ui->PBATSignal->currentText() ) );
 //убраны из набора тестов
+//    res *= ParamChecker( ui->l_gs_type,         params.GsType( ui->GsType->currentText() ) && ui->GsType->currentIndex() >= 0 );
 //    res *= ParamChecker( ui->l_actuation_on_time,  ValidateRange( ui->ActuationOnTime, params.ActuationOnTime( ui->ActuationOnTime->text() ) ) );
 //    res *= ParamChecker( ui->l_actuation_off_time, ValidateRange( ui->ActuationOffTime, params.ActuationOffTime( ui->ActuationOffTime->text() ) ) );
 
@@ -111,8 +111,6 @@ void HydroTitleInfo::FromParams()
     test::hydro::Parameters& params = test::hydro::Parameters::Instance();
     ui->SerNo->setText( params.SerNo() );
     ui->DefExpenditure->setValue( params.DefaultExpenditure() );
-    ui->GsType->setCurrentIndex( ui->GsType->findText( params.GsType() ) );
-    on_GsType_activated( ui->GsType->currentIndex() );
     ui->Voltage->setCurrentIndex( ui->Voltage->findText( test::ToString( params.Voltage()  ) ) );
     ui->VoltageType->setCurrentIndex( ui->VoltageType->findText( test::ToString( params.VoltageType() ) ) );
     ui->ReelCount->setValue( params.ReelCount() );
@@ -136,6 +134,8 @@ void HydroTitleInfo::FromParams()
     ui->PBATSignal->setCurrentIndex( ui->PBATSignal->findText( test::ToString( params.PBATSignal() ) ) );
 
     //убраны из набора тестов
+//    ui->GsType->setCurrentIndex( ui->GsType->findText( params.GsType() ) );
+//    on_GsType_activated( ui->GsType->currentIndex() );
 //    ui->ActuationOnTime->setText( test::ToString( params.ActuationOnTime() ) );
 //    ui->ActuationOffTime->setText( test::ToString( params.ActuationOffTime() ) );
 }
@@ -239,7 +239,7 @@ void HydroTitleInfo::on_ControlType_activated(int index)
     }
 }
 
-void HydroTitleInfo::on_GsType_activated(int index)
+/*void HydroTitleInfo::on_GsType_activated(int index)
 {
     /// по индексу извлечь девайс прочитать его свойства выставить пределы на контролах
 
@@ -293,7 +293,7 @@ void HydroTitleInfo::on_GsType_activated(int index)
         on_ControlType_activated( index );
     }
 }
-
+*/
 
 void HydroTitleInfo::on_ReelCount_valueChanged(int arg1)
 {

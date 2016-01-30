@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>707</width>
-    <height>384</height>
+    <width>868</width>
+    <height>539</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -37,10 +37,62 @@
      <property name="verticalSpacing">
       <number>6</number>
      </property>
+     <item row="10" column="1">
+      <widget class="QSpinBox" name="MinPressure">
+       <property name="toolTip">
+        <string>10...100 Бар</string>
+       </property>
+       <property name="toolTipDuration">
+        <number>1000</number>
+       </property>
+       <property name="suffix">
+        <string> Бар.</string>
+       </property>
+       <property name="minimum">
+        <number>10</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+       <property name="value">
+        <number>15</number>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="2">
+      <widget class="QLabel" name="l_herm_pressure">
+       <property name="text">
+        <string>Давления для испытания
+наружней герметичности</string>
+       </property>
+      </widget>
+     </item>
      <item row="2" column="0">
       <widget class="QLabel" name="l_voltage">
        <property name="text">
         <string>Напряжение электропитания, В</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="2">
+      <widget class="QLabel" name="l_control_type">
+       <property name="text">
+        <string>Тип управления
+гидрораспределителя</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="l_sn">
+       <property name="text">
+        <string>Идентификационный код</string>
+       </property>
+      </widget>
+     </item>
+     <item row="13" column="2">
+      <widget class="QLabel" name="l_pbat_signal">
+       <property name="text">
+        <string>Сигнал P-B, A-T</string>
        </property>
       </widget>
      </item>
@@ -79,33 +131,20 @@
        </item>
       </widget>
      </item>
-     <item row="10" column="1">
-      <widget class="QSpinBox" name="MinPressure">
-       <property name="toolTip">
-        <string>10...100 Бар</string>
-       </property>
-       <property name="toolTipDuration">
-        <number>1000</number>
-       </property>
-       <property name="suffix">
-        <string> Бар.</string>
-       </property>
-       <property name="minimum">
-        <number>10</number>
-       </property>
-       <property name="maximum">
-        <number>100</number>
-       </property>
-       <property name="value">
-        <number>15</number>
+     <item row="7" column="0">
+      <widget class="QLabel" name="l_voltage_range">
+       <property name="text">
+        <string>Допустимые отклонения
+ напряжения питания</string>
        </property>
       </widget>
      </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="l_reel_count">
+     <item row="10" column="0">
+      <widget class="QLabel" name="l_min_pressure">
        <property name="text">
-        <string>Количество катушек
- управления</string>
+        <string>Давление для испытания
+функционирования
+минимальным давлением</string>
        </property>
       </widget>
      </item>
@@ -131,163 +170,11 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="SerNo">
-       <property name="clearButtonEnabled">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="2">
-      <widget class="QLabel" name="l_control_type">
+     <item row="4" column="0">
+      <widget class="QLabel" name="l_reel_count">
        <property name="text">
-        <string>Тип управления
-гидрораспределителя</string>
-       </property>
-      </widget>
-     </item>
-     <item row="14" column="0">
-      <widget class="QLabel" name="l_actuation_on_time">
-       <property name="text">
-        <string>Время срабатывания
-включения распределителя, мс</string>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="1">
-      <widget class="QSpinBox" name="VoltageRange">
-       <property name="toolTip">
-        <string>0...30 %</string>
-       </property>
-       <property name="toolTipDuration">
-        <number>1000</number>
-       </property>
-       <property name="suffix">
-        <string> %</string>
-       </property>
-       <property name="maximum">
-        <number>30</number>
-       </property>
-       <property name="value">
-        <number>10</number>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="l_sn">
-       <property name="text">
-        <string>Серийный номер</string>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="0">
-      <widget class="QLabel" name="l_max_expenditure">
-       <property name="text">
-        <string>Максимальный расход, л/мин</string>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="0">
-      <widget class="QLabel" name="l_voltage_range">
-       <property name="text">
-        <string>Допустимые отклонения
- напряжения питания</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="3">
-      <widget class="QComboBox" name="VoltageType">
-       <property name="currentIndex">
-        <number>-1</number>
-       </property>
-       <item>
-        <property name="text">
-         <string>Постоянное</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Переменное</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item row="14" column="1">
-      <widget class="QLineEdit" name="ActuationOnTime">
-       <property name="toolTip">
-        <string>1...2000 мс</string>
-       </property>
-       <property name="toolTipDuration">
-        <number>1000</number>
-       </property>
-       <property name="clearButtonEnabled">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="14" column="2">
-      <widget class="QLabel" name="l_actuation_off_time">
-       <property name="text">
-        <string>Время срабатывания
-выключения распределителя, мс</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="1">
-      <widget class="QSpinBox" name="ReelCount">
-       <property name="suffix">
-        <string> шт.</string>
-       </property>
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>2</number>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="0">
-      <widget class="QLabel" name="l_min_pressure">
-       <property name="text">
-        <string>Давление для испытания
-функционирования
-минимальным давлением</string>
-       </property>
-      </widget>
-     </item>
-     <item row="13" column="1">
-      <widget class="QComboBox" name="PABTSignal">
-       <property name="currentIndex">
-        <number>-1</number>
-       </property>
-       <item>
-        <property name="text">
-         <string>Отсутствует</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Катушка А</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Катушка Б</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item row="13" column="0">
-      <widget class="QLabel" name="l_pabt_signal">
-       <property name="text">
-        <string>Сигнал P-A, B-T</string>
-       </property>
-      </widget>
-     </item>
-     <item row="13" column="2">
-      <widget class="QLabel" name="l_pbat_signal">
-       <property name="text">
-        <string>Сигнал P-B, A-T</string>
+        <string>Количество катушек
+ управления</string>
        </property>
       </widget>
      </item>
@@ -313,40 +200,29 @@
        </item>
       </widget>
      </item>
-     <item row="2" column="2">
-      <widget class="QLabel" name="l_voltage_type">
+     <item row="4" column="1">
+      <widget class="QSpinBox" name="ReelCount">
+       <property name="suffix">
+        <string> шт.</string>
+       </property>
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>2</number>
+       </property>
+      </widget>
+     </item>
+     <item row="14" column="2">
+      <widget class="QLabel" name="l_actuation_off_time">
        <property name="text">
-        <string>Тип напряжения питания</string>
+        <string>Время срабатывания
+выключения распределителя, мс</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="3">
-      <widget class="QComboBox" name="GsType">
-       <property name="duplicatesEnabled">
-        <bool>false</bool>
-       </property>
-       <property name="frame">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="2">
-      <widget class="QLabel" name="l_gs_type">
-       <property name="text">
-        <string>Тип гидрораспределителя</string>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="2">
-      <widget class="QLabel" name="l_herm_pressure">
-       <property name="text">
-        <string>Давления для испытания
-наружней герметичности</string>
-       </property>
-      </widget>
-     </item>
-     <item row="14" column="3">
-      <widget class="QLineEdit" name="ActuationOffTime">
+     <item row="14" column="1">
+      <widget class="QLineEdit" name="ActuationOnTime">
        <property name="toolTip">
         <string>1...2000 мс</string>
        </property>
@@ -355,6 +231,13 @@
        </property>
        <property name="clearButtonEnabled">
         <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="13" column="0">
+      <widget class="QLabel" name="l_pabt_signal">
+       <property name="text">
+        <string>Сигнал P-A, B-T</string>
        </property>
       </widget>
      </item>
@@ -379,6 +262,77 @@
        </property>
        <property name="maximum">
         <number>30</number>
+       </property>
+      </widget>
+     </item>
+     <item row="14" column="3">
+      <widget class="QLineEdit" name="ActuationOffTime">
+       <property name="toolTip">
+        <string>1...2000 мс</string>
+       </property>
+       <property name="toolTipDuration">
+        <number>1000</number>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="QSpinBox" name="VoltageRange">
+       <property name="toolTip">
+        <string>0...30 %</string>
+       </property>
+       <property name="toolTipDuration">
+        <number>1000</number>
+       </property>
+       <property name="suffix">
+        <string> %</string>
+       </property>
+       <property name="maximum">
+        <number>30</number>
+       </property>
+       <property name="value">
+        <number>10</number>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="3">
+      <widget class="QComboBox" name="VoltageType">
+       <property name="currentIndex">
+        <number>-1</number>
+       </property>
+       <item>
+        <property name="text">
+         <string>Постоянное</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Переменное</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="8" column="0">
+      <widget class="QLabel" name="l_max_expenditure">
+       <property name="text">
+        <string>Максимальный расход, л/мин</string>
+       </property>
+      </widget>
+     </item>
+     <item row="14" column="0">
+      <widget class="QLabel" name="l_actuation_on_time">
+       <property name="text">
+        <string>Время срабатывания
+включения распределителя, мс</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QLabel" name="l_voltage_type">
+       <property name="text">
+        <string>Тип напряжения питания</string>
        </property>
       </widget>
      </item>
@@ -409,6 +363,14 @@
        </property>
       </widget>
      </item>
+     <item row="7" column="2">
+      <widget class="QLabel" name="l_lost">
+       <property name="text">
+        <string>Допустимое значение
+утечки, л/мин</string>
+       </property>
+      </widget>
+     </item>
      <item row="4" column="3">
       <widget class="QComboBox" name="ControlType">
        <property name="currentIndex">
@@ -426,11 +388,18 @@
        </item>
       </widget>
      </item>
-     <item row="7" column="2">
-      <widget class="QLabel" name="l_lost">
+     <item row="7" column="3">
+      <widget class="QLineEdit" name="Lost">
+       <property name="toolTip">
+        <string>0,01..10  л/мин.</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="l_test_control_Pressure">
        <property name="text">
-        <string>Допустимое значение
-утечки, л/мин</string>
+        <string>Давление управления для
+испытания  времени переключения</string>
        </property>
       </widget>
      </item>
@@ -450,43 +419,6 @@
        </property>
        <property name="clearButtonEnabled">
         <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="3">
-      <widget class="QLineEdit" name="Lost">
-       <property name="toolTip">
-        <string>0,01..10  л/мин.</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="0">
-      <widget class="QLabel" name="l_test_control_Pressure">
-       <property name="text">
-        <string>Давление управления для
-испытания  времени переключения</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="1">
-      <widget class="QSpinBox" name="TestControlPressure">
-       <property name="toolTip">
-        <string>10...300 Бар</string>
-       </property>
-       <property name="toolTipDuration">
-        <number>1000</number>
-       </property>
-       <property name="suffix">
-        <string> Бар</string>
-       </property>
-       <property name="minimum">
-        <number>10</number>
-       </property>
-       <property name="maximum">
-        <number>300</number>
-       </property>
-       <property name="value">
-        <number>100</number>
        </property>
       </widget>
      </item>
@@ -531,6 +463,13 @@
        </property>
       </widget>
      </item>
+     <item row="8" column="2">
+      <widget class="QLabel" name="l_def_expenditure">
+       <property name="text">
+        <string>Расход по умолчанию, л/мин</string>
+       </property>
+      </widget>
+     </item>
      <item row="12" column="1">
       <widget class="QLineEdit" name="MaxWorkPressure">
        <property name="toolTip">
@@ -563,10 +502,54 @@
        </property>
       </widget>
      </item>
-     <item row="8" column="2">
-      <widget class="QLabel" name="l_def_expenditure">
-       <property name="text">
-        <string>Расход по умолчанию, л/мин</string>
+     <item row="6" column="1">
+      <widget class="QSpinBox" name="TestControlPressure">
+       <property name="toolTip">
+        <string>10...300 Бар</string>
+       </property>
+       <property name="toolTipDuration">
+        <number>1000</number>
+       </property>
+       <property name="suffix">
+        <string> Бар</string>
+       </property>
+       <property name="minimum">
+        <number>10</number>
+       </property>
+       <property name="maximum">
+        <number>300</number>
+       </property>
+       <property name="value">
+        <number>100</number>
+       </property>
+      </widget>
+     </item>
+     <item row="13" column="1">
+      <widget class="QComboBox" name="PABTSignal">
+       <property name="currentIndex">
+        <number>-1</number>
+       </property>
+       <item>
+        <property name="text">
+         <string>Отсутствует</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Катушка А</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Катушка Б</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="0" column="1" colspan="3">
+      <widget class="QLineEdit" name="SerNo">
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
