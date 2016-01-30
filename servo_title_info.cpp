@@ -12,10 +12,10 @@ ServoTitleInfo::ServoTitleInfo(bool new_mode, QWidget *parent) :
 {
     ui->setupUi(this);
 
-    foreach ( examinee::Device const* device, test::servo::Parameters::Instance().TestCollection().Devices().Get() )
-    {
-        ui->GsType->addItem( device->Name() + " " + device->Manufacturer(), QVariant::fromValue( device ) );
-    }
+//    foreach ( examinee::Device const* device, test::servo::Parameters::Instance().TestCollection().Devices().Get() )
+//    {
+//        ui->GsType->addItem( device->Name() + " " + device->Manufacturer(), QVariant::fromValue( device ) );
+//    }
 
     ui->PressureNominal->setValidator( new QIntValidator( 10, 315, this ) );
     ui->MaxExpenditure->setValidator( new QIntValidator( 1, 660, this ) );
@@ -69,7 +69,7 @@ bool ServoTitleInfo::SaveInputParams()
     };
 
     res *= ParamChecker( ui->l_ser_no,          params.SerNo( ui->SerNo->text() ) );
-    res *= ParamChecker( ui->l_gs_type,         params.GsType( ui->GsType->currentText() ) && ui->GsType->currentIndex() >= 0 );
+//    res *= ParamChecker( ui->l_gs_type,         params.GsType( ui->GsType->currentText() ) && ui->GsType->currentIndex() >= 0 );
     res *= ParamChecker( ui->l_def_expenditure, params.DefaultExpenditure( ui->DefExpenditure->text() ) );
     res *= ParamChecker( ui->l_reel_count,      params.ReelCount( ui->ReelCount->text() ) );
 
@@ -131,7 +131,7 @@ void ServoTitleInfo::FromParams()
     test::servo::Parameters& params = test::servo::Parameters::Instance();
 
     ui->SerNo->setText( params.SerNo() );
-    ui->GsType->setCurrentIndex( ui->GsType->findText( params.GsType() ) );
+//    ui->GsType->setCurrentIndex( ui->GsType->findText( params.GsType() ) );
     ui->DefExpenditure->setValue( params.DefaultExpenditure() );
     ui->ReelCount->setValue( params.ReelCount() );
     on_ReelCount_valueChanged( ui->ReelCount->value() );

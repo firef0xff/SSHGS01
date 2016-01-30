@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>657</width>
-    <height>443</height>
+    <width>814</width>
+    <height>624</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -62,19 +62,6 @@
         <string>Сигнал, соответствующий полному
 переключению аппарата в состояние
 «А»</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="SerNo">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="clearButtonEnabled">
-        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -527,7 +514,7 @@ X_max_A, л/мин</string>
      <item row="0" column="0">
       <widget class="QLabel" name="l_ser_no">
        <property name="text">
-        <string>Серийный номер</string>
+        <string>Идентификационный код</string>
        </property>
       </widget>
      </item>
@@ -729,20 +716,16 @@ X_max_A, л/мин</string>
        </item>
       </widget>
      </item>
-     <item row="0" column="2">
-      <widget class="QLabel" name="l_gs_type">
-       <property name="text">
-        <string>Тип распределителя</string>
+     <item row="0" column="1" colspan="3">
+      <widget class="QLineEdit" name="SerNo">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
-      </widget>
-     </item>
-     <item row="0" column="3">
-      <widget class="QComboBox" name="GsType">
-       <property name="maximumSize">
-        <size>
-         <width>150</width>
-         <height>16777215</height>
-        </size>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
