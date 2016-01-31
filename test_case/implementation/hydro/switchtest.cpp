@@ -28,9 +28,13 @@ bool SwitchTest::Run()
 
     ResultMinA = mResults.op7_min_ok_a &&! mResults.op7_min_no_a;
     ResultMaxA = mResults.op7_max_ok_a &&! mResults.op7_max_no_a;
-
     ResultMinB = mResults.op7_min_ok_b &&! mResults.op7_min_no_b;
     ResultMaxB = mResults.op7_max_ok_b &&! mResults.op7_max_no_b;
+
+    ResultMinA_OFF = mResults.OP7_Min_D_YESa_off &&! mResults.OP7_Min_D_NOa_off;
+    ResultMaxA_OFF = mResults.OP7_Max_D_YESa_off &&! mResults.OP7_Max_D_NOa_off;
+    ResultMinB_OFF = mResults.OP7_Min_D_YESb_off &&! mResults.OP7_Min_D_NOb_off;
+    ResultMaxB_OFF = mResults.OP7_Max_D_YESb_off &&! mResults.OP7_Max_D_NOb_off;
 
     OilTemp = round(mResults.T_oil*100)/100;
 
@@ -45,6 +49,11 @@ QJsonObject SwitchTest::Serialise() const
     obj.insert("ResultMinB", ResultMinB );
     obj.insert("ResultMaxB", ResultMaxB );
 
+    obj.insert("ResultMinA_OFF", ResultMinA_OFF );
+    obj.insert("ResultMaxA_OFF", ResultMaxA_OFF );
+    obj.insert("ResultMinB_OFF", ResultMinB_OFF );
+    obj.insert("ResultMaxB_OFF", ResultMaxB_OFF );
+
     return obj;
 
 }
@@ -54,6 +63,11 @@ bool SwitchTest::Deserialize( QJsonObject const& obj )
     ResultMaxA = obj.value("ResultMaxA").toBool();
     ResultMinB = obj.value("ResultMinB").toBool();
     ResultMaxB = obj.value("ResultMaxB").toBool();
+
+    ResultMinA_OFF = obj.value("ResultMinA_OFF").toBool();
+    ResultMaxA_OFF = obj.value("ResultMaxA_OFF").toBool();
+    ResultMinB_OFF = obj.value("ResultMinB_OFF").toBool();
+    ResultMaxB_OFF = obj.value("ResultMaxB_OFF").toBool();
     Test::Deserialize( obj );
     return true;
 }
@@ -196,7 +210,12 @@ bool SwitchTest::Success() const
     test::hydro::Parameters *params = static_cast< test::hydro::Parameters * >( CURRENT_PARAMS );
     if ( !params )
         return false;
-    return ResultMinA && ResultMaxA && ( params->ReelCount() == 2 ? ResultMinB && ResultMaxB : true );
+    return ResultMinA && ResultMaxA &&
+            ResultMinA_OFF && ResultMaxA_OFF &&
+            ( params->ReelCount() == 2 ?
+                  ResultMinB && ResultMaxB &&
+                  ResultMinB_OFF && ResultMaxB_OFF
+                : true );
 }
 
 }//namespace hydro

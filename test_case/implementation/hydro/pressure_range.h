@@ -30,6 +30,15 @@ private:
     bool ResultMaxMinB;
     bool ResultMaxMaxB;
 
+    bool ResultMinMinA_OFF;
+    bool ResultMinMaxA_OFF;
+    bool ResultMinMinB_OFF;
+    bool ResultMinMaxB_OFF;
+
+    bool ResultMaxMinA_OFF;
+    bool ResultMaxMaxA_OFF;
+    bool ResultMaxMinB_OFF;
+    bool ResultMaxMaxB_OFF;
 };
 
 

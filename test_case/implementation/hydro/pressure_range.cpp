@@ -33,15 +33,21 @@ bool PressureRange::Run()
 
     ResultMinMinA = mResults.op6_min_min_ok_a && !mResults.op6_min_min_no_a;
     ResultMinMaxA = mResults.op6_min_max_ok_a && !mResults.op6_min_max_no_a;
-
     ResultMinMinB = mResults.op6_min_min_ok_b && !mResults.op6_min_min_no_b;
     ResultMinMaxB = mResults.op6_min_max_ok_b && !mResults.op6_min_max_no_b;
-
     ResultMaxMinA = mResults.op6_max_min_ok_a && !mResults.op6_max_min_no_b;
     ResultMaxMaxA = mResults.op6_max_max_ok_a && !mResults.op6_max_max_no_a;
-
     ResultMaxMinB = mResults.op6_max_min_ok_b && !mResults.op6_mex_min_no_b;
     ResultMaxMaxB = mResults.op6_max_max_ok_b && !mResults.op6_max_max_no_b;
+
+    ResultMinMinA_OFF = mResults.OP6_MinD_MinUpr_YESa_off && !mResults.OP6_MinD_MinUpr_NOa_off;
+    ResultMinMaxA_OFF = mResults.OP6_MinD_MaxUpr_YESa_off && !mResults.OP6_MinD_MaxUpr_NOa_off;
+    ResultMinMinB_OFF = mResults.OP6_MinD_MinUpr_YESb_off && !mResults.OP6_MinD_MinUpr_NOb_off;
+    ResultMinMaxB_OFF = mResults.OP6_MinD_MaxUpr_YESb_off && !mResults.OP6_MinD_MaxUpr_NOb_off;
+    ResultMaxMinA_OFF = mResults.OP6_MaxD_MinUpr_YESa_off && !mResults.OP6_MaxD_MinUpr_NOa_off;
+    ResultMaxMaxA_OFF = mResults.OP6_MaxD_MaxUpr_YESa_off && !mResults.OP6_MaxD_MaxUpr_NOa_off;
+    ResultMaxMinB_OFF = mResults.OP6_MaxD_MinUpr_YESb_off && !mResults.OP6_MaxD_MinUpr_NOb_off;
+    ResultMaxMaxB_OFF = mResults.OP6_MaxD_MaxUpr_YESb_off && !mResults.OP6_MaxD_MaxUpr_NOb_off;
 
     OilTemp = round(mResults.T_oil*100)/100;
 
@@ -61,6 +67,17 @@ QJsonObject PressureRange::Serialise() const
     obj.insert("ResultMaxMinB", ResultMaxMinB );
     obj.insert("ResultMaxMaxB", ResultMaxMaxB );
 
+    obj.insert("ResultMinMinA_OFF", ResultMinMinA_OFF );
+    obj.insert("ResultMinMaxA_OFF", ResultMinMaxA_OFF );
+    obj.insert("ResultMinMinB_OFF", ResultMinMinB_OFF );
+    obj.insert("ResultMinMaxB_OFF", ResultMinMaxB_OFF );
+
+    obj.insert("ResultMaxMinA_OFF", ResultMaxMinA_OFF );
+    obj.insert("ResultMaxMaxA_OFF", ResultMaxMaxA_OFF );
+    obj.insert("ResultMaxMinB_OFF", ResultMaxMinB_OFF );
+    obj.insert("ResultMaxMaxB_OFF", ResultMaxMaxB_OFF );
+
+
     return obj;
 }
 bool PressureRange::Deserialize( QJsonObject const& obj )
@@ -75,6 +92,15 @@ bool PressureRange::Deserialize( QJsonObject const& obj )
     ResultMaxMinB = obj.value("ResultMaxMinB").toBool();
     ResultMaxMaxB = obj.value("ResultMaxMaxB").toBool();
 
+    ResultMinMinA_OFF = obj.value("ResultMinMinA_OFF").toBool();
+    ResultMinMaxA_OFF = obj.value("ResultMinMaxA_OFF").toBool();
+    ResultMinMinB_OFF = obj.value("ResultMinMinB_OFF").toBool();
+    ResultMinMaxB_OFF = obj.value("ResultMinMaxB_OFF").toBool();
+
+    ResultMaxMinA_OFF = obj.value("ResultMaxMinA_OFF").toBool();
+    ResultMaxMaxA_OFF = obj.value("ResultMaxMaxA_OFF").toBool();
+    ResultMaxMinB_OFF = obj.value("ResultMaxMinB_OFF").toBool();
+    ResultMaxMaxB_OFF = obj.value("ResultMaxMaxB_OFF").toBool();
     Test::Deserialize( obj );
     return true;
 }
@@ -208,7 +234,11 @@ bool PressureRange::Success() const
     if ( !params )
         return false;
     return ResultMinMinA && ResultMinMaxA && ResultMaxMinA && ResultMaxMaxA &&
-            ( params->ReelCount() == 2 ? ResultMinMinB && ResultMinMaxB && ResultMaxMinB && ResultMaxMaxB : true );
+           ResultMinMinA_OFF && ResultMinMaxA_OFF && ResultMaxMinA_OFF && ResultMaxMaxA_OFF &&
+            ( params->ReelCount() == 2 ?
+                  ResultMinMinB && ResultMinMaxB && ResultMaxMinB && ResultMaxMaxB &&
+                  ResultMinMinB_OFF && ResultMinMaxB_OFF && ResultMaxMinB_OFF && ResultMaxMaxB_OFF
+                : true );
 }
 }//namespace hydro
 

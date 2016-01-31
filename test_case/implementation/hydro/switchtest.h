@@ -26,6 +26,11 @@ private:
     bool ResultMaxA;
     bool ResultMinB;
     bool ResultMaxB;
+
+    bool ResultMinA_OFF;
+    bool ResultMaxA_OFF;
+    bool ResultMinB_OFF;
+    bool ResultMaxB_OFF;
 };
 
 
