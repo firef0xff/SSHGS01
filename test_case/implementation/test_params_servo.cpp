@@ -457,7 +457,7 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect, QString const& compar
     DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Тип управления"), test::ToShortString(mReelControl),str_e_rc, row_skale );
     if ( mReelControl == RC_CONTROL_BOX )
     {
-        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Напряжение питания"), test::ToString(mVoltage),str_e_vt, row_skale );
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Напряжение питания, В"), test::ToString(mVoltage),str_e_vt, row_skale );
     }
     DrawRowLeft( text_font, Qt::black, Qt::red, "Сигнал, соответствующий:", "" );
     QString ed_izm = (mControlSignal == ST_10_10_V || mControlSignal == ST_0_10_V) ? " В": " мА";
