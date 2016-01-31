@@ -22,6 +22,8 @@ private slots:
 private:
     void closeEvent(QCloseEvent *e);
 
+    bool accept = false;
+    int repats = 3;
     Ui::Login *ui;
     QMainWindow *mMainWindow;
 

@@ -184,7 +184,7 @@
          <number>501</number>
         </property>
         <property name="text">
-         <string>       </string>
+         <string/>
         </property>
        </widget>
       </item>
@@ -209,7 +209,7 @@
          <number>500</number>
         </property>
         <property name="text">
-         <string>       </string>
+         <string/>
         </property>
        </widget>
       </item>
@@ -234,7 +234,7 @@
          <number>500</number>
         </property>
         <property name="text">
-         <string>       </string>
+         <string/>
         </property>
        </widget>
       </item>
@@ -617,6 +617,7 @@ X</string>
     </widget>
     <addaction name="app_settings"/>
     <addaction name="device_list"/>
+    <addaction name="Users"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
@@ -678,6 +679,11 @@ X</string>
   <action name="LastTest">
    <property name="text">
     <string>Последнее испытание</string>
+   </property>
+  </action>
+  <action name="Users">
+   <property name="text">
+    <string>Пользователи</string>
    </property>
   </action>
  </widget>

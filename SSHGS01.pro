@@ -86,7 +86,8 @@ SOURCES += main.cpp\
     cpu/db60.cpp \
     manual_control.cpp \
     cpu/m1.cpp \
-    cpu/i1.cpp
+    cpu/i1.cpp \
+    users/users.cpp
 
 HEADERS  += mainwindow.h \
     test_case/test_case.h \
@@ -162,7 +163,8 @@ HEADERS  += mainwindow.h \
     cpu/db60.h \
     manual_control.h \
     cpu/m1.h \
-    cpu/i1.h
+    cpu/i1.h \
+    users/users.h
 
 FORMS    += mainwindow.ui \
     hydro_title_info.ui \
@@ -176,7 +178,8 @@ FORMS    += mainwindow.ui \
     hydro_cilinder_title_info.ui \
     viewer.ui \
     login.ui \
-    manual_control.ui
+    manual_control.ui \
+    users/users.ui
 
 OTHER_FILES += devices/*.json\
     тз/*\

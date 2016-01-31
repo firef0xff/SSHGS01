@@ -99,6 +99,7 @@ private slots:
 
     void onUpdateControls();
     void on_ManualControl_clicked();
+    void on_Users_triggered();
 };
 
 

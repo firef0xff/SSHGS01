@@ -6,6 +6,15 @@
 namespace app
 {
 
+class UserInfo
+{
+public:
+    QString Login;
+    QString pass_hash;
+    void SetPass( QString p );
+};
+typedef QVector< UserInfo > UserData;
+
 class Settings
 {
 public:
@@ -28,6 +37,11 @@ public:
 
     void User( QString u );
     QString User() const;
+
+    void Users( UserData const& u );
+    UserData Users() const;
+
+    bool CheckUser( QString const& user, QString const& pass );
 private:
     Settings();
     Settings( Settings const& ) = delete;

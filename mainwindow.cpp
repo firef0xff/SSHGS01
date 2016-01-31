@@ -10,6 +10,7 @@
 #include "settings/settings_wnd.h"
 #include <QFileDialog>
 #include "devices/device_collection_wnd.h"
+#include "users/users.h"
 
 #include "test_case/implementation/test_params_hydro.h"
 #include "test_case/implementation/test_params_servo.h"
@@ -357,6 +358,11 @@ void MainWindow::on_Open_results_triggered()
         test::DataFromFile( file_name );
         on_LastTest_triggered();
     }
+}
+
+void MainWindow::on_Users_triggered()
+{
+    ShowChildWindow( ChildPtr( new Users() ) );
 }
 
 void MainWindow::onUpdateControls()

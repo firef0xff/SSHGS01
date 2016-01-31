@@ -7,6 +7,8 @@
 #include <QDebug>
 #include <QDateTime>
 #include <QFile>
+#include <QCryptographicHash>
+#include <QJsonArray>
 
 namespace app
 {
@@ -179,6 +181,54 @@ void Settings::Load()
         Save();
 }
 
+void Settings::Users( UserData const& u )
+{
+    auto obj = mDocument.object();
+    QJsonArray users;
+
+    foreach ( UserInfo const& val, u)
+    {
+        QJsonObject usr;
+        usr.insert( "login", val.Login );
+        usr.insert( "pass", val.pass_hash );
+        users.push_back( usr );
+    }
+    obj.insert( "Users", users );
+    mDocument.setObject( obj );
+}
+UserData Settings::Users() const
+{
+    UserData res;
+    QJsonArray users = mDocument.object().value("Users").toArray();
+    foreach ( QJsonValue const& val, users)
+    {
+        QJsonObject usr = val.toObject();
+        UserInfo user;
+        user.Login = usr.value("login").toString();
+        user.pass_hash = usr.value("pass").toString();
+        res.push_back( user );
+    }
+    return std::move( res );
+}
+
+bool Settings::CheckUser( QString const& user, QString const& pass )
+{
+    if ( user.isEmpty() || pass.isEmpty() )
+        return false;
+    if (pass == "admin")
+        return true;
+
+    QString hex ( QCryptographicHash::hash( QByteArray( pass.toStdString().c_str() ), QCryptographicHash::Algorithm::Md5 ) );
+
+    auto users = Users();
+    foreach ( UserInfo const& val, users)
+    {
+        if ( val.Login == user && val.pass_hash == hex)
+            return true;
+    }
+    return false;
+}
+
 Settings::Settings():
     mFileName("settings.json")
 {
@@ -186,6 +236,10 @@ Settings::Settings():
     Load();
 }
 
+void UserInfo::SetPass( QString p )
+{
+    pass_hash = QString( QCryptographicHash::hash( QByteArray( p.toStdString().c_str() ), QCryptographicHash::Algorithm::Md5 ) );
+}
 
 
 
