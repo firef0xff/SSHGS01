@@ -38,11 +38,13 @@ ManualControl::ManualControl(QWidget *parent) :
     ui->l_sig_0->setVisible( false );
     ui->l_sig_b->setVisible( false );
     ui->l_sig_max->setVisible( false );
+    ui->l_board_voltage->setVisible( false );
 
     ui->SigA->setVisible( false );
     ui->Sig0->setVisible( false );
     ui->SigB->setVisible( false );
     ui->SigMax->setVisible( false );
+    ui->BoardVoltage->setVisible( false );
 
     ui->YB1->setValidator( new QIntValidator( 10, 660, this ) );
     ui->YB2->setValidator( new QIntValidator( 10, 660, this ) );
@@ -72,6 +74,7 @@ void ManualControl::closeEvent(QCloseEvent *e)
     cpu::CpuMemory::Instance().DB33.Reset();
     cpu::CpuMemory::Instance().DB35.Reset();
 
+
     mTaskMode.N_Operation = 0;
     mTaskMode.Nasos_M2 = false;
     mTaskMode.OP15_25_Continum = false;
@@ -86,6 +89,7 @@ void ManualControl::showEvent( QShowEvent *e )
 {
     cpu::CpuMemory::Instance().DB33.Reset();
     cpu::CpuMemory::Instance().DB35.Reset();
+
     mTaskMode.N_Operation = 100;
     mTaskMode.Nasos_M2 = false;
     mTaskMode.OP15_25_Continum = false;
@@ -555,9 +559,12 @@ void ManualControl::on_Accept_clicked()
         mem.x_max_b = val;             //8 сигнал переключение в В
         test::ParseValue( val, ui->Sig0->text() );
         mem.x_pos_0 = val;             //12 сигнал переключение в 0
-        mem.Write();
-    }
 
+        test::ParseValue( val,  ui->BoardVoltage->currentText());
+        mem.U_Plat = val;
+        mem.Write();
+
+    }
     mParams.WriteTask();
 }
 
@@ -565,12 +572,14 @@ void ManualControl::on_CB_clicked()
 {
     cpu::CpuMemory::Instance().DB33.Reset();
     cpu::CpuMemory::Instance().DB35.Reset();
+
     act_CB_clicked();
 }
 void ManualControl::on_CR_clicked()
 {
     cpu::CpuMemory::Instance().DB33.Reset();
     cpu::CpuMemory::Instance().DB35.Reset();
+
 
     act_CR_clicked();
 }
@@ -582,11 +591,14 @@ void ManualControl::act_CB_clicked()
     ui->l_sig_0->setVisible( false );
     ui->l_sig_b->setVisible( false );
     ui->l_sig_max->setVisible( false );
+    ui->l_board_voltage->setVisible( false );
+
 
     ui->SigA->setVisible( false );
     ui->Sig0->setVisible( false );
     ui->SigB->setVisible( false );
     ui->SigMax->setVisible( false );
+    ui->BoardVoltage->setVisible( false );
     if ( ui->CB->isChecked() )
     {
         mControlBits.SetCR( false );
@@ -604,10 +616,12 @@ void ManualControl::act_CB_clicked()
         ui->l_sig_a->setVisible( true );
         ui->l_sig_0->setVisible( true );
         ui->l_sig_b->setVisible( true );
+        ui->l_board_voltage->setVisible( true );
 
         ui->SigA->setVisible( true );
         ui->Sig0->setVisible( true );
         ui->SigB->setVisible( true );
+        ui->BoardVoltage->setVisible( true );
     }
 
     mControlBits.SetCB( ui->CB->isChecked() );
@@ -619,11 +633,14 @@ void ManualControl::act_CR_clicked()
     ui->l_sig_0->setVisible( false );
     ui->l_sig_b->setVisible( false );
     ui->l_sig_max->setVisible( false );
+    ui->l_board_voltage->setVisible( false );
+
 
     ui->SigA->setVisible( false );
     ui->Sig0->setVisible( false );
     ui->SigB->setVisible( false );
     ui->SigMax->setVisible( false );
+    ui->BoardVoltage->setVisible( false );
     if ( ui->CR->isChecked() )
     {
         mControlBits.SetCB( false );
@@ -665,6 +682,7 @@ void ManualControl::on_RC1_clicked()
     cpu::CpuMemory::Instance().DB33.Reset();
     cpu::CpuMemory::Instance().DB35.Reset();
 
+
     if ( ui->RC1->isChecked() )
     {
         mControlBits.SetRC2( false );
@@ -681,6 +699,7 @@ void ManualControl::on_RC2_clicked()
 {
     cpu::CpuMemory::Instance().DB33.Reset();
     cpu::CpuMemory::Instance().DB35.Reset();
+
 
     if ( ui->RC2->isChecked() )
     {
@@ -699,6 +718,7 @@ void ManualControl::on_ONRA_clicked()
 {
     cpu::CpuMemory::Instance().DB33.Reset();
     cpu::CpuMemory::Instance().DB35.Reset();
+
     if ( ui->ONRA->isChecked() )
     {
         mControlBits.SetONRB( false );
@@ -710,6 +730,7 @@ void ManualControl::on_ONRB_clicked()
 {
     cpu::CpuMemory::Instance().DB33.Reset();
     cpu::CpuMemory::Instance().DB35.Reset();
+
     if ( ui->ONRB->isChecked() )
     {
         mControlBits.SetONRA( false );

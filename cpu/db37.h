@@ -14,6 +14,7 @@ class DB37 : public Out
 public:
 
     void Write();
+    void Reset();
 
     bool& s4_20ma; //2.0 сигнал 4-20 мА
     bool& s0_20ma; //2.1 сигнал 0-20 мА
