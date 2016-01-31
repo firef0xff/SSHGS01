@@ -41,6 +41,12 @@ DB33::DB33():
     mGroupID = opc::miniOPC::Instance().AddGroup( L"DB33", mAdresses, BOOL_COUNT + FLOAT_COUNT );
 }
 
+void DB33::Reset()
+{
+    memset( mBoolData, 0, sizeof(mBoolData) );
+    memset( mFloatData, 0, sizeof(mFloatData) );
+    Write();
+}
 void DB33::Write()
 {
     HRESULT res = E_FAIL;

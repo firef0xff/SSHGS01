@@ -69,6 +69,9 @@ void ManualControl::closeEvent(QCloseEvent *e)
 {
     Updater.stop();
     mControlBits.Reset();
+    cpu::CpuMemory::Instance().DB33.Reset();
+    cpu::CpuMemory::Instance().DB35.Reset();
+
     mTaskMode.N_Operation = 0;
     mTaskMode.Nasos_M2 = false;
     mTaskMode.OP15_25_Continum = false;
@@ -81,6 +84,8 @@ void ManualControl::closeEvent(QCloseEvent *e)
 }
 void ManualControl::showEvent( QShowEvent *e )
 {
+    cpu::CpuMemory::Instance().DB33.Reset();
+    cpu::CpuMemory::Instance().DB35.Reset();
     mTaskMode.N_Operation = 100;
     mTaskMode.Nasos_M2 = false;
     mTaskMode.OP15_25_Continum = false;
@@ -558,6 +563,20 @@ void ManualControl::on_Accept_clicked()
 
 void ManualControl::on_CB_clicked()
 {
+    cpu::CpuMemory::Instance().DB33.Reset();
+    cpu::CpuMemory::Instance().DB35.Reset();
+    act_CB_clicked();
+}
+void ManualControl::on_CR_clicked()
+{
+    cpu::CpuMemory::Instance().DB33.Reset();
+    cpu::CpuMemory::Instance().DB35.Reset();
+
+    act_CR_clicked();
+}
+
+void ManualControl::act_CB_clicked()
+{
     ui->SigLevel->clear();
     ui->l_sig_a->setVisible( false );
     ui->l_sig_0->setVisible( false );
@@ -593,7 +612,7 @@ void ManualControl::on_CB_clicked()
 
     mControlBits.SetCB( ui->CB->isChecked() );
 }
-void ManualControl::on_CR_clicked()
+void ManualControl::act_CR_clicked()
 {
     ui->SigLevel->clear();
     ui->l_sig_a->setVisible( false );
@@ -639,11 +658,13 @@ void ManualControl::on_CR_clicked()
     }
 
     mControlBits.SetCR( ui->CR->isChecked() );
-
 }
 
 void ManualControl::on_RC1_clicked()
 {
+    cpu::CpuMemory::Instance().DB33.Reset();
+    cpu::CpuMemory::Instance().DB35.Reset();
+
     if ( ui->RC1->isChecked() )
     {
         mControlBits.SetRC2( false );
@@ -652,12 +673,15 @@ void ManualControl::on_RC1_clicked()
     mControlBits.SetRC1( ui->RC1->isChecked() );
 
     if ( mControlBits.CB)
-        on_CB_clicked();
+        act_CB_clicked();
     if ( mControlBits.CR)
-        on_CR_clicked();
+        act_CR_clicked();
 }
 void ManualControl::on_RC2_clicked()
 {
+    cpu::CpuMemory::Instance().DB33.Reset();
+    cpu::CpuMemory::Instance().DB35.Reset();
+
     if ( ui->RC2->isChecked() )
     {
         mControlBits.SetRC1( false );
@@ -666,13 +690,15 @@ void ManualControl::on_RC2_clicked()
     mControlBits.SetRC2( ui->RC2->isChecked() );
 
     if ( mControlBits.CB)
-        on_CB_clicked();
+        act_CB_clicked();
     if ( mControlBits.CR)
-        on_CR_clicked();
+        act_CR_clicked();
 }
 
 void ManualControl::on_ONRA_clicked()
 {
+    cpu::CpuMemory::Instance().DB33.Reset();
+    cpu::CpuMemory::Instance().DB35.Reset();
     if ( ui->ONRA->isChecked() )
     {
         mControlBits.SetONRB( false );
@@ -682,6 +708,8 @@ void ManualControl::on_ONRA_clicked()
 }
 void ManualControl::on_ONRB_clicked()
 {
+    cpu::CpuMemory::Instance().DB33.Reset();
+    cpu::CpuMemory::Instance().DB35.Reset();
     if ( ui->ONRB->isChecked() )
     {
         mControlBits.SetONRA( false );

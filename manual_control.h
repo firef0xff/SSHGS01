@@ -52,6 +52,9 @@ private:
 
     void UpdateMarks(); //обновление индикации
     void UpdateData();  //обновление данных на сетке
+
+    void act_CB_clicked();
+    void act_CR_clicked();
 signals:
     void closed();
 private slots:

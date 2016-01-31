@@ -32,6 +32,13 @@ DB35::DB35():
     mGroupID = opc::miniOPC::Instance().AddGroup( L"DB35", mAdresses, BOOL_COUNT + FLOAT_COUNT );
 }
 
+void DB35::Reset()
+{
+    memset( mBoolData, 0, sizeof(mBoolData) );
+    memset( mFloatData, 0, sizeof(mFloatData) );
+    Write();
+}
+
 void DB35::Write()
 {
     HRESULT res = E_FAIL;

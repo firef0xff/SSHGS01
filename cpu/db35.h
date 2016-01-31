@@ -14,6 +14,7 @@ class DB35 : public Out
 public:
 
     void Write();
+    void Reset();
 
     bool& channel_a;            //62.0 испытание канал А
     bool& channel_b;            //62.1 испытание канала В
