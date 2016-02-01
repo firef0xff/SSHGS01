@@ -5,7 +5,7 @@ namespace test
 {
 namespace servo
 {
-
+class Test;
 class Parameters : public test::CommonParameters
 {
 public:
@@ -81,8 +81,9 @@ public:
 
     bool SignalOnChannelB ( QString const& val );
     const CONTROL_SIGNAL &SignalOnChannelB() const;
-private:
+
     Parameters();
+private:
     Parameters( Parameters const& )  = delete;
     void operator = ( Parameters& ) = delete;
 

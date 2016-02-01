@@ -132,7 +132,6 @@ bool OutsideHermTest::Draw(QPainter& painter, QRect &free_rect , const QString &
         DrawRowLeft( rect, text_font, Qt::black, "прочности испытываемого аппарата перед проведением последующих испытаний." );
     }, 1.5 );
 
-
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font, &params ]( QRect const& rect )
     {
@@ -448,10 +447,15 @@ bool InsideHermTest::Draw(QPainter& painter, QRect &free_rect , const QString &c
     }, 1.5 );
 
 
+    test::servo::Parameters old;
+    QJsonObject f = test::ReadFromFile( compare_width ).value("Params").toObject();
+    old.Deserialize( f );
+    QString str_e_pn =          !compare_width.isEmpty() ? " (" +test::ToString(old.PressureTesting()) + ")" : QString();
+
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font, &params ]( QRect const& rect )
+    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font, &params, str_e_pn ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении испытаний, бар"), Qt::red, test::ToString( params->PressureTesting()) );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении испытаний, бар"), Qt::red, test::ToString( params->PressureTesting()) + str_e_pn );
     }, 2 );
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )

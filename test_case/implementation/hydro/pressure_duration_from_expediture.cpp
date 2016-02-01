@@ -296,7 +296,6 @@ bool PressureDurationFromExpenditure::Draw(QPainter& painter, QRect &free_rect ,
         return text + " ";
     };
 
-
     uint32_t num = 0;
     bool res = DrawLine( num, free_rect, header_font,
     [ this, &painter, &DrawRowCenter, &header_font ]( QRect const& rect )

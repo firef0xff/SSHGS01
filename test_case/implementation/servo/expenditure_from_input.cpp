@@ -540,6 +540,10 @@ bool ExpeditureFromInput::Draw(QPainter& painter, QRect &free_rect , const QStri
     };
 
 
+    test::servo::Parameters old;
+    QJsonObject f = test::ReadFromFile( compare_width ).value("Params").toObject();
+    old.Deserialize( f );
+
     uint32_t num = 0;
     bool res = DrawLine( num, free_rect, header_font,
     [ this, &painter, &DrawRowCenter, &header_font ]( QRect const& rect )
@@ -571,11 +575,11 @@ bool ExpeditureFromInput::Draw(QPainter& painter, QRect &free_rect , const QStri
     }, 1.5 );
 
 
-
+    QString str_e_pn =          !compare_width.isEmpty() ? " (" +test::ToString(old.PressureNominal()) + ")" : QString();
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font, &params ]( QRect const& rect )
+    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font, &params, str_e_pn ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении испытаний, бар"), Qt::red, test::ToString( params->PressureNominal() ) );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении испытаний, бар"), Qt::red, test::ToString( params->PressureNominal() ) + str_e_pn );
     }, 2 );
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )

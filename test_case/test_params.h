@@ -126,6 +126,7 @@ public:
     double const& DefaultExpenditure() const;
 
 protected:
+    friend class Test;
     TestsList mTestCase;        //набор тестов для выполнения
     QDateTime mDate;            //дата проведения испытаний
     QString   mUser;            //испытатель.

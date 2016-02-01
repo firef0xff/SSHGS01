@@ -1250,6 +1250,10 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
         return text + " ";
     };
 
+    test::servo::Parameters old;
+    QJsonObject f = test::ReadFromFile( compare_width ).value("Params").toObject();
+    old.Deserialize( f );
+
 
     uint32_t num = 0;
     bool res = DrawLine( num, free_rect, header_font,
@@ -1272,15 +1276,18 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
     }, 1.5 );
 
 
+    QString str_e_pn =          !compare_width.isEmpty() ? " (" +test::ToString(old.PressureNominal()) + ")" : QString();
+    QString str_e_dexp =        !compare_width.isEmpty() ? " (" +test::ToString(old.DefaultExpenditure()) + ")" : QString();
+
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font, &params ]( QRect const& rect )
+    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font, &params, str_e_pn ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении испытаний, бар"), Qt::red, test::ToString( params->PressureNominal() ) );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении испытаний, бар"), Qt::red, test::ToString( params->PressureNominal() ) + str_e_pn  );
     }, 2 );
     res = DrawLine( num, free_rect, text_font,
-    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font, &params ]( QRect const& rect )
+    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font, &params, str_e_dexp ]( QRect const& rect )
     {
-        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Расход при проведении испытаний, л/мин"), Qt::red, test::ToString( params->DefaultExpenditure() ) );
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Расход при проведении испытаний, л/мин"), Qt::red, test::ToString( params->DefaultExpenditure() ) + str_e_dexp );
     }, 2 );
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
