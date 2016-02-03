@@ -54,6 +54,7 @@ public:
     bool& CR;           //MX45.5 управление без карты
     bool& RC1;          //MX45.6 1 катушка
     bool& RC2;          //MX45.7 2 катушки
+    bool& Kvitir_Osch;  //MX58.2 подтверждение сообщения
 
     void SetYA1( bool v );          //MX40.0 Разгрузка управл.насоса для М1 м3
     void SetYA2( bool v );          //MX40.1 Разгрузка управл.насоса для М2 м3
@@ -99,6 +100,7 @@ public:
     void SetRC1( bool v );          //MX45.6 1 катушка
     void SetRC2( bool v );          //MX45.7 2 катушки
 
+    void SetKvitir_Osch( bool v );     //MX58.2 подтверждение сообщения
     void Reset();                   // сброс всех битов в контроллере
 
 private:
@@ -113,7 +115,7 @@ private:
 
     enum
     {
-        BOOL_COUNT = 42
+        BOOL_COUNT = 43
     };
 
     bool mBoolData[ BOOL_COUNT ];
@@ -163,7 +165,7 @@ private:
         L"CPU/M1.CR",    //MX45.5    управление без карты
         L"CPU/M1.RC1",    //MX45.6    1 катушка
         L"CPU/M1.RC2",    //MX45.7    2 катушки
-
+        L"CPU/M1.Kvitir_Osch", //MX58.2 подтверждение сообщения
     };
 };
 

@@ -54,6 +54,13 @@ public:
     bool& fault_m10;    //6.4 нет включения М10
     bool& fault_m12;    //6.5 нет включения М12
     bool& fault_phasing;    //6.6 не правильная фазировка
+    bool& p_no;         //X6.7    давление в системе не установилось
+    bool& p_upr_no;     //X7.0    давление в канале Х не установилось
+    bool& q_no;         //X7.1    расход не установился
+    bool& v_no;         //X7.2    Напряжение не в допуске
+    bool& fault_p_op12; //X7.3    Аварийное давление
+    bool& fault_p_op22; //X7.4    Аварийное давление
+
 
 private:
 
@@ -64,7 +71,7 @@ private:
 
     enum
     {
-        BOOL_COUNT = 39,
+        BOOL_COUNT = 45,
         FLOAT_COUNT = 0
     };
 
@@ -112,6 +119,13 @@ private:
         L"CPU/DB40.fault_m10",
         L"CPU/DB40.fault_m12",
         L"CPU/DB40.fault_phasing"
+        L"CPU/DB40.p_no",           //X6.7     давление в системе не установилось
+        L"CPU/DB40.p_upr_no",       //X7.0     давление в канале Х не установилось
+        L"CPU/DB40.q_no",           //X7.1     расход не установился
+        L"CPU/DB40.v_no",           //X7.2     Напряжение не в допуске
+        L"CPU/DB40.fault_p_op12",   //X7.3     Аварийное давление
+        L"CPU/DB40.fault_p_op22"    //X7.4     Аварийное давление
+
     };
 };
 

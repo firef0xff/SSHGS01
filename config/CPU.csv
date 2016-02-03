@@ -338,6 +338,12 @@ DB40.fault_m8;DB40,X6.3;RW;TST=;CMT=нет включения М8, М9
 DB40.fault_m10;DB40,X6.4;RW;TST=;CMT=нет включения М10, М11
 DB40.fault_m12;DB40,X6.5;RW;TST=;CMT=нет включения М12
 DB40.fault_phasing;DB40,X6.6;RW;TST=;CMT=не правильная фазировка
+DB40.p_no;DB40,X6.7;RW;TST=;CMT=давление в системе не установилось
+DB40.p_upr_no;DB40,X7.0;RW;TST=;CMT=давление в канале Х не установилось
+DB40.q_no;DB40,X7.1;RW;TST=;CMT=расход не установился
+DB40.v_no;DB40,X7.2;RW;TST=;CMT=Напряжение не в допуске
+DB40.fault_p_op12;DB40,X7.3;RW;TST=;CMT=Аварийное давление
+DB40.fault_p_op22;DB40,X7.4;RW;TST=;CMT=Аварийное давление
 DB50.ReadyToWork;MX49.0;RW;TST=;CMT=бит готовности системы к работе
 DB50.BP1;DB50,REAL2;RW;TST=;CMT=давление после М1/М2 (real)
 DB50.BP2;DB50,REAL6;RW;TST=;CMT=давление на сливе испытуемого аппарата (real)
@@ -430,6 +436,7 @@ M1.CB;MX45.4;RW;TST=;CMT=Управление от карты
 M1.CR;MX45.5;RW;TST=;CMT=управление без карты
 M1.RC1;MX45.6;RW;TST=;CMT=1 катушка
 M1.RC2;MX45.7;RW;TST=;CMT=2 катушки
+M1.Kvitir_Osch;MX58.2;RW;TST=;CMT=подтверждение сообщения
 I1.SQ1;IX0.0;RW;TST=;CMT=кран насоса М1
 I1.SQ3;IX0.2;RW;TST=;CMT=кран насоса М2
 I1.SQ5;IX0.4;RW;TST=;CMT=кран насоса М3.2

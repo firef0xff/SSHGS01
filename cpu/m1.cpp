@@ -42,13 +42,16 @@ M1::M1():
     KM7(mBoolData[32]),          //MX44.0 Вентилятор М8,М9
     KM8(mBoolData[33]),          //MX44.1 Вентилятор М10,М11
     KM10(mBoolData[34]),         //MX44.2 ТЭНы
-    Err_clear(mBoolData[35]),    //MX44.7 сброс не правильной комбинации...
     ONRA(mBoolData[36]),         //MX45.2 ВКЛ катушку А
     ONRB(mBoolData[37]),         //MX45.3 ВКЛ катушку В
     CB(mBoolData[38]),           //MX45.4 Управление от карты
     CR(mBoolData[39]),           //MX45.5 управление без карты
     RC1(mBoolData[40]),          //MX45.6 1 катушка
-    RC2(mBoolData[41])           //MX45.7 2 катушки
+    RC2(mBoolData[41]),          //MX45.7 2 катушки
+    Kvitir_Osch(mBoolData[42]),   //MX58.2 подтверждение сообщения
+
+
+    Err_clear(mBoolData[35])    //MX44.7 сброс не правильной комбинации...
 {
     memset( mBoolData, 0, sizeof(mBoolData) );
     mGroupID = opc::miniOPC::Instance().AddGroup( L"M1", mAdresses, BOOL_COUNT );
@@ -294,6 +297,11 @@ void M1::SetRC2( bool v )          //MX45.7 2 катушки
 {
     RC2 = v;
     SendBit( RC2, 41 );
+}
+void M1::SetKvitir_Osch( bool v )
+{
+    Kvitir_Osch = v;
+    SendBit( Kvitir_Osch, 42 );
 }
 
 }//namespace data

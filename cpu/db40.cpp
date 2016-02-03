@@ -44,7 +44,13 @@ DB40::DB40():
     fault_m8( mBoolData[35] ),
     fault_m10( mBoolData[36] ),
     fault_m12( mBoolData[37] ),
-    fault_phasing( mBoolData[38] )
+    fault_phasing( mBoolData[38] ),
+    p_no( mBoolData[39] ),         //X6.7    давление в системе не установилось
+    p_upr_no( mBoolData[40] ),     //X7.0    давление в канале Х не установилось
+    q_no( mBoolData[41] ),         //X7.1    расход не установился
+    v_no( mBoolData[42] ),         //X7.2    Напряжение не в допуске
+    fault_p_op12( mBoolData[43] ), //X7.3    Аварийное давление
+    fault_p_op22( mBoolData[44] ) //X7.4    Аварийное давление
 {
     memset( mBoolData, 0, sizeof(mBoolData) );
 //    memset( mFloatData, 0, sizeof(mFloatData) );
