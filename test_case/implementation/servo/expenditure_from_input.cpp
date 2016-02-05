@@ -634,7 +634,7 @@ bool ExpeditureFromInput::Draw(QPainter& painter, QRect &free_rect , const QStri
             double y_step = 0;
 
             ff0x::DataLength( mGrapfs->x_range_1, x_range, x_step );
-            ff0x::DataLength( mGrapfs->y_range_2, y_range, y_step );
+            ff0x::DataLength( mGrapfs->y_range_1, y_range, y_step );
 
             painter.drawPixmap( p1, builder.Draw( lines, x_range, y_range, x_step, y_step, "Опорный сигнал", "Расход (л/мин)", true ) );
         }

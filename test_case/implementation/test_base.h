@@ -22,10 +22,13 @@ protected:
 
     void Start();
     void Wait( bool& work, bool& done);
+    bool CheckErrors();
     virtual uint8_t CommandID();
     virtual void UpdateData(){}
     cpu::data::DB31& mCommand;
-//    cpu::data::DB40& Exceptions;
+    cpu::data::DB40& Exceptions;
+private:
+    void ShowErrors( QString const& err );
 };
 
 namespace hydro

@@ -45,7 +45,7 @@ public:
         double Leak;
     };
 
-    typedef QVector<Data> DataSet;
+    typedef std::vector<Data> DataSet;
 
     InsideHermTest();
     bool Run();

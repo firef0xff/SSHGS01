@@ -118,7 +118,7 @@ private:
         L"CPU/DB40.fault_m8",
         L"CPU/DB40.fault_m10",
         L"CPU/DB40.fault_m12",
-        L"CPU/DB40.fault_phasing"
+        L"CPU/DB40.fault_phasing",
         L"CPU/DB40.p_no",           //X6.7     давление в системе не установилось
         L"CPU/DB40.p_upr_no",       //X7.0     давление в канале Х не установилось
         L"CPU/DB40.q_no",           //X7.1     расход не установился

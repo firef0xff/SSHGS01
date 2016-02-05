@@ -577,6 +577,9 @@ typedef SinusAnaliser2 DefaultAnaliser;
 
 double CalckAmpl( FrequencyCharacteristics::DataSet const& data )
 {
+    if (data.empty())
+        return 0.0;
+
     double ampl = 0;
     std::vector< double > expenditure;
     for ( size_t i = 0; i < data.size(); ++i )
@@ -606,6 +609,9 @@ double CalckAmpl( FrequencyCharacteristics::DataSet const& data )
 }
 double CalckAmpl3( FrequencyCharacteristics::DataSet const& data )
 {
+    if (data.empty())
+        return 0.0;
+
     QVector< QPointF > pos;
     for ( size_t i = 0; i < data.size(); ++i )
     {
@@ -733,6 +739,8 @@ ff0x::NoAxisGraphBuilder::LinePoints ProcessAFC( FrequencyCharacteristics::Sourc
 
 double CalckFi( FrequencyCharacteristics::DataSet const& data, double frequency )
 {
+    if (data.empty())
+        return 0;
     QVector< QPointF > speed;
     QVector< QPointF > signal;
     for ( size_t i = 0; i < data.size(); ++i )
@@ -966,6 +974,8 @@ ff0x::NoAxisGraphBuilder::LinePoints ProcessDebug4( FrequencyCharacteristics::So
                 point.setY( lnk[j].position );
                 data.push_back( point );
             }
+            if (data.isEmpty())
+                continue;
 
             GrapfInfo inf( data, StepAnaliser() );
             for ( size_t j = 0; j < inf.GetInfo().size(); ++j )

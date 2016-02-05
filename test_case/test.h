@@ -50,6 +50,7 @@ protected:
 
 protected:
     uint8_t mId;
+    bool* mStopMarker;
 private:
     friend class TestCase;
     Test( Test const& );
@@ -60,7 +61,6 @@ private:
     uint8_t mNumber;
     TestCase *mCase;
 
-    bool* mStopMarker;
     mutable uint32_t mDrawLine; //отметка на которой остановилась печать
 };
 

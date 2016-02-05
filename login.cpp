@@ -37,7 +37,7 @@ void Login::on_buttonBox_accepted()
     {
         QMessageBox msg;
         msg.setWindowTitle( "Доспут запрещен" );
-        msg.setText( "Не вырное имя пользователя и/или пароль" );
+        msg.setText( "Не верное имя пользователя и/или пароль" );
         msg.setStandardButtons( QMessageBox::Ok );
         msg.setModal( true );
         msg.exec();
