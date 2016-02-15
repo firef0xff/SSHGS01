@@ -210,7 +210,7 @@ void ServoTitleInfo::FromParams()
     }
 
     ui->Frequency->setValue(  params.StartFrequency() );
-    ui->AmplInc->setValue( params->AmplInc() );
+    ui->AmplInc->setValue( params.AmplInc() );
 }
 
 void ServoTitleInfo::on_buttonBox_accepted()

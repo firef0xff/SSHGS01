@@ -38,6 +38,9 @@ private:
     Source mSource1;
     Source mSource2;
     Source mSource3;
+    double Ampl1;
+    double Ampl2;
+    double Ampl3;
     mutable GrapfData* mGrapfs1;
     mutable GrapfData* mGrapfs2;
     mutable GrapfData* mGrapfs3;

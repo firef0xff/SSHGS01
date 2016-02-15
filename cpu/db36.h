@@ -35,6 +35,9 @@ public:
     bool& op22_b_a_close;   //8.5   катушка б канал А закрыт
     bool& op24_ready;       // TODO
     float& op24_frequency;  //4.0   TODO
+    float& ampl1;           //16.0   амплитуда 1
+    float& ampl2;           //20.0   амплитуда 2
+    float& ampl3;           //24.0   амплитуда 3
 
 
 private:
@@ -47,7 +50,7 @@ private:
     enum
     {
         BOOL_COUNT = 19,
-        FLOAT_COUNT = 1
+        FLOAT_COUNT = 4
     };
 
     bool mBoolData[ BOOL_COUNT ];
@@ -75,6 +78,9 @@ private:
         L"CPU/DB36.op22_b_a_close",
         L"CPU/DB36.op24_ready",
         L"CPU/DB36.op24_frequency",
+        L"CPU/DB36.ampl1",
+        L"CPU/DB36.ampl2",
+        L"CPU/DB36.ampl3",
     };
 };
 

@@ -27,7 +27,10 @@ DB34::DB34():
     op12_b_close_b( mBoolData[16]),
     op12_a_close_b( mBoolData[17]),
     op14_ready( mBoolData[18] ),
-    op14_frequency( mFloatData[0] )
+    op14_frequency( mFloatData[0] ),
+    ampl1( mFloatData[1] ),           //16.0   амплитуда 1
+    ampl2( mFloatData[2] ),           //20.0   амплитуда 2
+    ampl3( mFloatData[3] )           //24.0   амплитуда 3
 {
     memset( mBoolData, 0, sizeof(mBoolData) );
     memset( mFloatData, 0, sizeof(mFloatData) );

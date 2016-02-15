@@ -1180,6 +1180,20 @@ bool FrequencyCharacteristics::Run()
     if ( IsStopped() )
         return false;
 
+
+    if ( ReelControl() )
+    {
+        Ampl1 = mControlReelBits.ampl1;
+        Ampl2 = mControlReelBits.ampl2;
+        Ampl3 = mControlReelBits.ampl3;
+    }
+    else
+    {
+        Ampl1 = mControlBoardBits.ampl1;
+        Ampl2 = mControlBoardBits.ampl2;
+        Ampl3 = mControlBoardBits.ampl3;
+    }
+
     OilTemp = round( mTemperature.T_oil *100)/100;
     return Success();
 }
@@ -1255,6 +1269,10 @@ QJsonObject FrequencyCharacteristics::Serialise() const
     obj.insert( "Source2", ToJson( mSource2 ) );
     obj.insert( "Source3", ToJson( mSource3 ) );
 
+    obj.insert( "Ampl1", Ampl1 );
+    obj.insert( "Ampl2", Ampl2 );
+    obj.insert( "Ampl3", Ampl3 );
+
     return obj;
 }
 bool FrequencyCharacteristics::Deserialize( QJsonObject const& obj )
@@ -1262,6 +1280,10 @@ bool FrequencyCharacteristics::Deserialize( QJsonObject const& obj )
     mSource1 = FromJson( obj.value("Source1").toArray() );
     mSource2 = FromJson( obj.value("Source2").toArray() );
     mSource3 = FromJson( obj.value("Source3").toArray() );
+
+    Ampl1 = obj.value("Ampl1").toDouble();
+    Ampl2 = obj.value("Ampl2").toDouble();
+    Ampl3 = obj.value("Ampl3").toDouble();
 
     Test::Deserialize( obj );
     return true;
@@ -1536,7 +1558,7 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
         QRect p1(rect.left(), rect.top(), w, h );
         QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
 
-        QString amp = test::ToString( params->Amplitudes()[0] );
+        QString amp = test::ToString( Ampl1 );
         DrawRowCenter( p1t, text_font, Qt::black, "АЧХ. Амплитуда " + amp + "%" );
         {
             QPointF x_range;
@@ -1574,7 +1596,7 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
         QRect p1(rect.left(), rect.top(), w, h );
         QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
 
-        QString amp = test::ToString( params->Amplitudes()[0] );
+        QString amp = test::ToString( Ampl1 );
         DrawRowCenter( p1t, text_font, Qt::black, "ФЧХ. Амплитуда " + amp + "%"  );
         {
             QPointF x_range;
@@ -1613,7 +1635,7 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
         QRect p1(rect.left(), rect.top(), w, h );
         QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
 
-        QString amp = test::ToString( params->Amplitudes()[1] );
+        QString amp = test::ToString( Ampl2 );
         DrawRowCenter( p1t, text_font, Qt::black, "АЧХ. Амплитуда " + amp + "%" );
         {
             QPointF x_range;
@@ -1651,7 +1673,7 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
         QRect p1(rect.left(), rect.top(), w, h );
         QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
 
-        QString amp = test::ToString( params->Amplitudes()[1] );
+        QString amp = test::ToString( Ampl2 );
         DrawRowCenter( p1t, text_font, Qt::black, "ФЧХ. Амплитуда " + amp + "%"  );
         {
             QPointF x_range;
@@ -1690,7 +1712,7 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
         QRect p1(rect.left(), rect.top(), w, h );
         QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
 
-        QString amp = test::ToString( params->Amplitudes()[2] );
+        QString amp = test::ToString( Ampl3 );
         DrawRowCenter( p1t, text_font, Qt::black, "АЧХ. Амплитуда " + amp + "%" );
         {
             QPointF x_range;
@@ -1728,7 +1750,7 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
         QRect p1(rect.left(), rect.top(), w, h );
         QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
 
-        QString amp = test::ToString( params->Amplitudes()[2] );
+        QString amp = test::ToString( Ampl3 );
         DrawRowCenter( p1t, text_font, Qt::black, "ФЧХ. Амплитуда " + amp + "%"  );
         {
             QPointF x_range;

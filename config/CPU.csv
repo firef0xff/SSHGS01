@@ -242,6 +242,9 @@ DB34.op12_a_close_b;DB34,X8.5;RW;TST=;CMT=Катушка б канал А закрыт
 DB34.op14_ready;DB34,X14.0;RW;TST=;CMT=бит готовности данных
 DB34.op14_number;DB34,REAL4;RW;TST=;CMT=Число ячеек блока DB10/23
 DB34.op14_frequency;DB34,REAL10;RW;TST=;CMT=частота на которой полчены данные
+DB34.ampl1;DB34,REAL16;RW;TST=;CMT=амплитуда 1
+DB34.ampl2;DB34,REAL20;RW;TST=;CMT=амплитуда 2
+DB34.ampl3;DB34,REAL24;RW;TST=;CMT=амплитуда 3
 DB35.channel_a;DB35,X62.0;RW;TST=;CMT=испытание канал А
 DB35.channel_b;DB35,X62.1;RW;TST=;CMT=испытание канала В
 DB35.channel_k_a;DB35,X62.2;RW;TST=;CMT=катушка на канале А( а-0 б-1)
@@ -280,6 +283,9 @@ DB36.op22_b_a_close;DB36,X8.5;RW;TST=;CMT=катушка б канал А закрыт
 DB36.op24_ready;DB36,X14.0;RW;TST=;CMT=бит готовности данных
 DB36.op24_number;DB36,REAL4;RW;TST=;CMT=Число ячеек блока DB20/24
 DB36.op24_frequency;DB36,REAL10;RW;TST=;CMT=частота на которой полчены данные
+DB36.ampl1;DB36,REAL16;RW;TST=;CMT=амплитуда 1
+DB36.ampl2;DB36,REAL20;RW;TST=;CMT=амплитуда 2
+DB36.ampl3;DB36,REAL24;RW;TST=;CMT=амплитуда 3
 DB37.s4_20ma;DB37,X2.0;RW;TST=;CMT=сигнал 4-20 мА
 DB37.s0_20ma;DB37,X2.1;RW;TST=;CMT=сигнал 0-20 мА
 DB37.s10v;DB37,X2.2;RW;TST=;CMT=синал +/-10 В

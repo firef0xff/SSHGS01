@@ -36,6 +36,9 @@ public:
     bool& op12_a_close_b;   //Катушка б канал А закрыт
     bool& op14_ready;       // TODO
     float& op14_frequency;  //4.0   TODO
+    float& ampl1;           //16.0   амплитуда 1
+    float& ampl2;           //20.0   амплитуда 2
+    float& ampl3;           //24.0   амплитуда 3
 
 private:
     friend class cpu::CpuMemory;
@@ -46,7 +49,7 @@ private:
     enum
     {
         BOOL_COUNT = 19,
-        FLOAT_COUNT = 1
+        FLOAT_COUNT = 4
     };
 
     bool mBoolData[ BOOL_COUNT ];
@@ -75,6 +78,9 @@ private:
         L"CPU/DB34.op12_a_close_b",
         L"CPU/DB34.op14_ready",
         L"CPU/DB34.op14_frequency",
+        L"CPU/DB34.ampl1",
+        L"CPU/DB34.ampl2",
+        L"CPU/DB34.ampl3",
     };
 };
 
