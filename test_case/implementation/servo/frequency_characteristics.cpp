@@ -614,8 +614,12 @@ typedef SinusAnaliser2 DefaultAnaliser;
 QJsonArray AFC_DEBUG;
 QJsonArray PFC_DEBUG;
 #endif
-double CalckAmpl( FrequencyCharacteristics::DataSet const& data )
+double CalckAmpl( FrequencyCharacteristics::DataSet const& data, double frequency = 0  )
 {
+#ifdef DEBUG
+    QJsonObject obj;
+    obj.insert( "частота", frequency );
+#endif
     if (data.empty())
         return 0.0;
 
@@ -642,6 +646,14 @@ double CalckAmpl( FrequencyCharacteristics::DataSet const& data )
         }
 
         ampl = expenditure[ max ] - expenditure[ min ];
+#ifdef DEBUG
+        obj.insert( "max", max );
+        obj.insert( "min", min );
+        obj.insert( "expenditure_max", expenditure[ max ] );
+        obj.insert( "expenditure_min", expenditure[ min ] );
+        obj.insert( "ampl", ampl );
+        AFC_DEBUG.push_back(obj);
+#endif
     }
 
     return ampl;
@@ -735,7 +747,7 @@ ff0x::NoAxisGraphBuilder::LinePoints ProcessAFC( FrequencyCharacteristics::Sourc
         if ( it->second.empty() )
             continue;
 
-        double ampl = CalckAmpl3( it->second, it->first ) *K / time_period;
+        double ampl = CalckAmpl( it->second, it->first ) *K / time_period;
         if ( it == src.begin() )
             min_ampl = ampl;
 
