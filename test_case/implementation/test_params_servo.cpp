@@ -46,7 +46,9 @@ Parameters::Parameters():
     mTestChannelA( false ),
     mTestChannelB( false ),
     mSignalOnChannelA( CS_UNKNOWN ),
-    mSignalOnChannelB( CS_UNKNOWN )
+    mSignalOnChannelB( CS_UNKNOWN ),
+    mStartFrequency( 0.0 ),
+    mAmplInc( 0.0 )
 {
     mAmplitudes[0] = 0;
     mAmplitudes[1] = 0;
@@ -83,6 +85,9 @@ void Parameters::Reset()
     mTestChannelB = false;
     mSignalOnChannelA = CS_UNKNOWN;
     mSignalOnChannelB = CS_UNKNOWN;
+
+    mStartFrequency = 0.0;
+    mAmplInc = 0.0;
 }
 QString Parameters::ToString() const
 {
@@ -97,6 +102,7 @@ QString Parameters::ToString() const
     res+= "  Минимальное давление управления, Бар: " + test::ToString( mMinControlPressure ) + "\n";
     res+= "  Уровень управляющих сигналов: " + test::ToString( mControlSignal ) + "\n";
     res+= "  Амплитуды: " + test::ToString( mAmplitudes[0] ) + " " + test::ToString( mAmplitudes[1] ) + " "  + test::ToString( mAmplitudes[2] ) + "\n";
+    res+= "  Инктемент амплитуды: " + test::ToString( mAmplInc ) + "\n";
     res+= "Парамеры для аппаратуры с типом управления: " + test::ToString( RC_CONTROL_BOX );
     res+= "  Напряжение на блоке управления: " + test::ToString( mVoltage ) + "\n";
     res+= "  Сигнал, соответствующий полному переключению в состояние А: " + test::ToString( mSignalStateA ) + "\n";
@@ -114,6 +120,7 @@ QString Parameters::ToString() const
     res+= "  Давления при испытании аппарата пробным давлением, Бар: " + test::ToString( mPressureTesting ) + "\n";
     res+= "  Максимальный расход в канале А, при следующем опорном сигнале, X_max_A, л/мин: " + test::ToString( mMaxExpenditureA ) + "\n";
     res+= "  Максимальный расход в канале Б, при следующем опорном сигнале, X_max_Б, л/мин: " + test::ToString( mMaxExpenditureB ) + "\n";
+    res+= "  Стартовая частота для построения частотных характеристик, Гц: " + test::ToString( mStartFrequency ) + "\n";
     res+= "  Инкремент частоты при построении частотных характеристик, Гц: " + test::ToString( mFrequencyInc ) + "\n";
     res+= "  Тестирование канала А: " + test::ToString( mTestChannelA ) + "\n";
     res+= "  Катушка для тестирования канала А: " + test::ToString( mSignalOnChannelA ) + "\n";
@@ -159,6 +166,8 @@ QJsonObject Parameters::Serialise() const
     servo.insert("SignalOnChannelA", mSignalOnChannelA);
     servo.insert("SignalOnChannelB", mSignalOnChannelB);
 
+    servo.insert( "StartFrequency", mStartFrequency );
+    servo.insert( "AmplInc", mAmplInc );
 
     res.insert("servo", servo);
     return res;
@@ -199,6 +208,9 @@ bool Parameters::Deserialize( QJsonObject const& obj )
         mTestChannelB = obj.value("TestChannelB").toBool();
         mSignalOnChannelA = static_cast<CONTROL_SIGNAL>( obj.value("SignalOnChannelA").toInt() );
         mSignalOnChannelB = static_cast<CONTROL_SIGNAL>( obj.value("SignalOnChannelB").toInt() );
+
+        mStartFrequency = obj.value("StartFrequency").toDouble();
+        mAmplInc = obj.value("AmplInc").toDouble();
         res = true;
     }
     else
@@ -254,7 +266,6 @@ void Parameters::WriteToController() const
             mem.x_max_a = mSignalStateA;             //4 сигнал переключение в А
             mem2.x_max_b = mSignalStateB;             //8 сигнал переключение в В
             mem2.x_pos_0 = mSignalState0;             //12 сигнал переключение в 0
-            mem2.Write();
         }
         else
         {
@@ -272,6 +283,10 @@ void Parameters::WriteToController() const
         mem.increment = mFrequencyInc;           //50 инкремент частоты
         mem.press_control_min = mMinControlPressure;   //54 мин давдение управления
         mem.press_control_max = mMaxControlPressure;   //58 макс давление управления
+        mem2.start_frequency = mStartFrequency;
+        mem2.ampl_inc = mAmplInc;
+
+        mem2.Write();
         mem.Write();
     }
     else
@@ -307,6 +322,9 @@ void Parameters::WriteToController() const
         mem.press_control_min = mMinControlPressure;   //52 мин. давление управления
         mem.press_control_max = mMaxControlPressure;   //56 макс. давление управления
         mem.U_Plat = mVoltage;
+        mem.start_frequency = mStartFrequency;
+        mem.ampl_inc = mAmplInc;
+
         mem.Write();
     }
     auto& mem1 = cpu::CpuMemory::Instance().DB30;
@@ -693,6 +711,25 @@ const CONTROL_SIGNAL &Parameters::SignalOnChannelB() const
 {
     return mSignalOnChannelB;
 }
+
+bool Parameters::StartFrequency ( QString const& val )
+{
+    return ParseValue( mStartFrequency, val );
+}
+const double &Parameters::StartFrequency() const
+{
+    return mStartFrequency;
+}
+
+bool Parameters::AmplInc ( QString const& val )
+{
+    return ParseValue( mAmplInc, val );
+}
+const double &Parameters::AmplInc() const
+{
+    return mAmplInc;
+}
+
 }//namespace servo
 
 }//namespace test

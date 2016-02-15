@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>657</width>
-    <height>521</height>
+    <width>834</width>
+    <height>778</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -82,14 +82,7 @@
        </property>
       </widget>
      </item>
-     <item row="14" column="2">
-      <widget class="QCheckBox" name="TestChB">
-       <property name="text">
-        <string>Испытание канала Б</string>
-       </property>
-      </widget>
-     </item>
-     <item row="14" column="1">
+     <item row="15" column="1">
       <widget class="QComboBox" name="ControlReelChA">
        <item>
         <property name="text">
@@ -103,7 +96,14 @@
        </item>
       </widget>
      </item>
-     <item row="14" column="3">
+     <item row="15" column="2">
+      <widget class="QCheckBox" name="TestChB">
+       <property name="text">
+        <string>Испытание канала Б</string>
+       </property>
+      </widget>
+     </item>
+     <item row="15" column="3">
       <widget class="QComboBox" name="ControlReelChB">
        <property name="maximumSize">
         <size>
@@ -132,6 +132,13 @@
         <string>Сигнал, соответствующий полному
 переключению аппарата в конечное
 состояние, X_max_mA</string>
+       </property>
+      </widget>
+     </item>
+     <item row="15" column="0">
+      <widget class="QCheckBox" name="TestChA">
+       <property name="text">
+        <string>Испытание канала А</string>
        </property>
       </widget>
      </item>
@@ -169,12 +176,8 @@
        </property>
       </widget>
      </item>
-     <item row="14" column="0">
-      <widget class="QCheckBox" name="TestChA">
-       <property name="text">
-        <string>Испытание канала А</string>
-       </property>
-      </widget>
+     <item row="9" column="1">
+      <widget class="QLineEdit" name="EndSgnal"/>
      </item>
      <item row="11" column="1">
       <widget class="QLineEdit" name="MaxExpenditure">
@@ -195,58 +198,12 @@
        </property>
       </widget>
      </item>
-     <item row="9" column="1">
-      <widget class="QLineEdit" name="EndSgnal"/>
-     </item>
      <item row="12" column="0">
       <widget class="QLabel" name="l_max_expenditure_a">
        <property name="text">
         <string>Максимальный расход в канале А,
 при следующем опорном сигнале,
 X_max_A, л/мин</string>
-       </property>
-      </widget>
-     </item>
-     <item row="13" column="3">
-      <widget class="QDoubleSpinBox" name="FrequencyInc">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>150</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string>0,1...20 ГЦ</string>
-       </property>
-       <property name="toolTipDuration">
-        <number>1000</number>
-       </property>
-       <property name="prefix">
-        <string/>
-       </property>
-       <property name="suffix">
-        <string> Гц</string>
-       </property>
-       <property name="decimals">
-        <number>1</number>
-       </property>
-       <property name="minimum">
-        <double>0.100000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>20.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>0.100000000000000</double>
-       </property>
-       <property name="value">
-        <double>1.000000000000000</double>
        </property>
       </widget>
      </item>
@@ -376,6 +333,13 @@ X_max_B, л/мин</string>
        </property>
       </widget>
      </item>
+     <item row="11" column="2">
+      <widget class="QLabel" name="l_def_expenditure">
+       <property name="text">
+        <string>Расход по умолчанию, л/мин</string>
+       </property>
+      </widget>
+     </item>
      <item row="2" column="1">
       <widget class="QComboBox" name="ControlSignal">
        <property name="enabled">
@@ -411,13 +375,6 @@ X_max_B, л/мин</string>
        </item>
       </widget>
      </item>
-     <item row="11" column="2">
-      <widget class="QLabel" name="l_def_expenditure">
-       <property name="text">
-        <string>Расход по умолчанию, л/мин</string>
-       </property>
-      </widget>
-     </item>
      <item row="5" column="3">
       <widget class="QComboBox" name="Voltage">
        <property name="maximumSize">
@@ -446,6 +403,23 @@ X_max_B, л/мин</string>
        </item>
       </widget>
      </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="l_signal_state_a">
+       <property name="text">
+        <string>Сигнал, соответствующий полному
+переключению аппарата в состояние
+«А»</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="2">
+      <widget class="QLabel" name="l_voltage">
+       <property name="text">
+        <string>Напряжение питания блока
+управления, В</string>
+       </property>
+      </widget>
+     </item>
      <item row="4" column="1">
       <widget class="QLineEdit" name="SignalStateA">
        <property name="sizePolicy">
@@ -465,35 +439,26 @@ X_max_B, л/мин</string>
        </property>
       </widget>
      </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="l_signal_state_a">
-       <property name="text">
-        <string>Сигнал, соответствующий полному
-переключению аппарата в состояние
-«А»</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="2">
-      <widget class="QLabel" name="l_voltage">
-       <property name="text">
-        <string>Напряжение питания блока
-управления, В</string>
-       </property>
-      </widget>
-     </item>
-     <item row="13" column="2">
-      <widget class="QLabel" name="l_frequency_inc">
-       <property name="text">
-        <string>Инкремент частоты при построении
-частотных зарактеристик</string>
-       </property>
-      </widget>
-     </item>
      <item row="2" column="2">
       <widget class="QLabel" name="l_raspred_control">
        <property name="text">
         <string>Тип управления распределителем</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="l_control_signal">
+       <property name="text">
+        <string>Уровень управляющих сигналов</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="2">
+      <widget class="QLabel" name="l_signal_state_b">
+       <property name="text">
+        <string>Сигнал, соответствующий полному
+переключению аппарата в состояние
+«В»</string>
        </property>
       </widget>
      </item>
@@ -516,22 +481,6 @@ X_max_B, л/мин</string>
        </property>
        <property name="clearButtonEnabled">
         <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="l_control_signal">
-       <property name="text">
-        <string>Уровень управляющих сигналов</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="2">
-      <widget class="QLabel" name="l_signal_state_b">
-       <property name="text">
-        <string>Сигнал, соответствующий полному
-переключению аппарата в состояние
-«В»</string>
        </property>
       </widget>
      </item>
@@ -619,6 +568,29 @@ X_max_B, л/мин</string>
        </property>
       </widget>
      </item>
+     <item row="2" column="3">
+      <widget class="QComboBox" name="RaspredControl">
+       <property name="maximumSize">
+        <size>
+         <width>150</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <item>
+        <property name="text">
+         <string>Электронное</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Электрогидравлическое</string>
+        </property>
+       </item>
+      </widget>
+     </item>
      <item row="12" column="3">
       <widget class="QLineEdit" name="MaxExpenditureB">
        <property name="sizePolicy">
@@ -681,27 +653,11 @@ X_max_B, л/мин</string>
        </item>
       </layout>
      </item>
-     <item row="2" column="3">
-      <widget class="QComboBox" name="RaspredControl">
-       <property name="maximumSize">
-        <size>
-         <width>150</width>
-         <height>16777215</height>
-        </size>
+     <item row="6" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Частота ШИМ, Гц</string>
        </property>
-       <property name="currentIndex">
-        <number>0</number>
-       </property>
-       <item>
-        <property name="text">
-         <string>Электронное</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Электрогидравлическое</string>
-        </property>
-       </item>
       </widget>
      </item>
      <item row="3" column="3">
@@ -741,13 +697,6 @@ X_max_B, л/мин</string>
        </property>
       </widget>
      </item>
-     <item row="6" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Частота ШИМ, Гц</string>
-       </property>
-      </widget>
-     </item>
      <item row="6" column="2">
       <widget class="QLabel" name="label_2">
        <property name="text">
@@ -778,6 +727,13 @@ X_max_B, л/мин</string>
        </property>
       </widget>
      </item>
+     <item row="7" column="2">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Амплитуда вибросигнала, В</string>
+       </property>
+      </widget>
+     </item>
      <item row="6" column="3">
       <widget class="QSpinBox" name="spinBox_2">
        <property name="toolTip">
@@ -791,26 +747,6 @@ X_max_B, л/мин</string>
        </property>
        <property name="maximum">
         <number>1000</number>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="2">
-      <widget class="QLabel" name="label_4">
-       <property name="text">
-        <string>Амплитуда вибросигнала, В</string>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="3">
-      <widget class="QSpinBox" name="spinBox_3">
-       <property name="toolTip">
-        <string>1...30 В.</string>
-       </property>
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>30</number>
        </property>
       </widget>
      </item>
@@ -828,6 +764,19 @@ X_max_B, л/мин</string>
        </item>
       </widget>
      </item>
+     <item row="7" column="3">
+      <widget class="QSpinBox" name="spinBox_3">
+       <property name="toolTip">
+        <string>1...30 В.</string>
+       </property>
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>30</number>
+       </property>
+      </widget>
+     </item>
      <item row="8" column="1">
       <widget class="QComboBox" name="comboBox_2">
        <item>
@@ -840,6 +789,94 @@ X_max_B, л/мин</string>
          <string>Биполярный</string>
         </property>
        </item>
+      </widget>
+     </item>
+     <item row="14" column="2">
+      <widget class="QLabel" name="l_frequency_inc">
+       <property name="text">
+        <string>Инкремент частоты при построении
+частотных зарактеристик</string>
+       </property>
+      </widget>
+     </item>
+     <item row="14" column="3">
+      <widget class="QDoubleSpinBox" name="FrequencyInc">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>150</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>0,1...20 ГЦ</string>
+       </property>
+       <property name="toolTipDuration">
+        <number>1000</number>
+       </property>
+       <property name="prefix">
+        <string/>
+       </property>
+       <property name="suffix">
+        <string> Гц</string>
+       </property>
+       <property name="decimals">
+        <number>1</number>
+       </property>
+       <property name="minimum">
+        <double>0.100000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>20.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>0.100000000000000</double>
+       </property>
+       <property name="value">
+        <double>1.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="13" column="2">
+      <widget class="QLabel" name="l_Frequency">
+       <property name="text">
+        <string>Стартовая частота</string>
+       </property>
+      </widget>
+     </item>
+     <item row="13" column="3">
+      <widget class="QSpinBox" name="Frequency">
+       <property name="suffix">
+        <string> Гц</string>
+       </property>
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+      </widget>
+     </item>
+     <item row="14" column="0">
+      <widget class="QLabel" name="l_Ampl_Inc">
+       <property name="text">
+        <string>Инкремент амплитуды, %</string>
+       </property>
+      </widget>
+     </item>
+     <item row="14" column="1">
+      <widget class="QSpinBox" name="AmplInc">
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
       </widget>
      </item>
     </layout>

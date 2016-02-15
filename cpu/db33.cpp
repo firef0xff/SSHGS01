@@ -34,7 +34,9 @@ DB33::DB33():
 	increment ( mFloatData[11] ),
 	press_control_min ( mFloatData[12] ),
     press_control_max ( mFloatData[13] ),
-    U_Plat( mFloatData[14] )
+    U_Plat( mFloatData[14] ),
+    start_frequency( mFloatData[15] ),
+    ampl_inc( mFloatData[16] )
 {
     memset( mBoolData, 0, sizeof(mBoolData) );
     memset( mFloatData, 0, sizeof(mFloatData) );

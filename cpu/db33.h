@@ -45,6 +45,8 @@ public:
     float& press_control_min;   //52 мин. давление управления       
     float& press_control_max;   //56 макс. давление управления 
     float& U_Plat;              //62 Напряжение на блоке управления
+    float& start_frequency;     //31.48 Стартовая частота
+    float& ampl_inc;            //31.52 Инкремент амплитуды
 private:
     friend class cpu::CpuMemory;
     DB33();
@@ -54,7 +56,7 @@ private:
     enum
     {
         BOOL_COUNT = 12,
-        FLOAT_COUNT = 15
+        FLOAT_COUNT = 17
     };
 
     bool mBoolData[ BOOL_COUNT ];
@@ -91,6 +93,8 @@ private:
         L"CPU/DB33.press_control_min",
         L"CPU/DB33.press_control_max",
         L"CPU/DB33.U_Plat",
+        L"CPU/DB31.start_frequency",
+        L"CPU/DB31.ampl_inc",
     };
 };
 

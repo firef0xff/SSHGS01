@@ -82,6 +82,12 @@ public:
     bool SignalOnChannelB ( QString const& val );
     const CONTROL_SIGNAL &SignalOnChannelB() const;
 
+    bool StartFrequency ( QString const& val );
+    const double &StartFrequency() const;
+
+    bool AmplInc ( QString const& val );
+    const double &AmplInc() const;
+
     Parameters();
 private:
     Parameters( Parameters const& )  = delete;
@@ -111,6 +117,9 @@ private:
     bool mTestChannelB;
     CONTROL_SIGNAL mSignalOnChannelA;
     CONTROL_SIGNAL mSignalOnChannelB;
+
+    double mStartFrequency;
+    double mAmplInc;
 };
 
 }//namespace servo

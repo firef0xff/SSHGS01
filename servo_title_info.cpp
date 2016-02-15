@@ -133,6 +133,9 @@ bool ServoTitleInfo::SaveInputParams()
         params.SignalOnChannelB( ui->ControlReelChB->currentText() );
     }
 
+    res *= ParamChecker( ui->l_Frequency,   params.StartFrequency( QString::number( ui->Frequency->value() ) ) );
+    res *= ParamChecker( ui->l_Ampl_Inc,    params.AmplInc( QString::number( ui->AmplInc->value() ) ) );
+
     return res;
 }
 void ServoTitleInfo::FromParams()
@@ -205,6 +208,9 @@ void ServoTitleInfo::FromParams()
         ui->TestChB->setChecked( Qt::Checked );
         ui->ControlReelChB->setCurrentIndex(ui->ControlReelChB->findText( test::ToString( params.SignalOnChannelB() ) ) );
     }
+
+    ui->Frequency->setValue(  params.StartFrequency() );
+    ui->AmplInc->setValue( params->AmplInc() );
 }
 
 void ServoTitleInfo::on_buttonBox_accepted()

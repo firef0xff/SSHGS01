@@ -739,14 +739,14 @@ ff0x::NoAxisGraphBuilder::LinePoints ProcessAFC( FrequencyCharacteristics::Sourc
         if ( it == src.begin() )
             min_ampl = ampl;
 
-        point.setY(ampl);
+//        point.setY(ampl);
 
-//        if ( min_ampl != 0 && ampl/min_ampl != 0 )
-//        {
-//            point.setY( 10.0*log10( ampl / min_ampl) );
-//        }
-//        else
-//            point.setY(0);
+        if ( min_ampl != 0 && ampl/min_ampl != 0 )
+        {
+            point.setY( 10.0*log10( ampl / min_ampl) );
+        }
+        else
+            point.setY(0);
 
         if ( it == src.begin() )
         {
