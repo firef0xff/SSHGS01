@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>902</width>
-    <height>597</height>
+    <width>1055</width>
+    <height>830</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -2031,7 +2031,7 @@
            <widget class="QComboBox" name="BoardVoltage">
             <item>
              <property name="text">
-              <string>15</string>
+              <string>+-15</string>
              </property>
             </item>
             <item>

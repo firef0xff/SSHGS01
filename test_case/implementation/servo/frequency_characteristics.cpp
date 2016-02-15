@@ -6,6 +6,11 @@
 #include "../test_params_servo.h"
 #include <thread>
 #define DEBUG
+
+#ifdef DEBUG
+#include <QJsonDocument>
+#include <QFile>
+#endif
 namespace test
 {
 namespace servo
@@ -80,6 +85,37 @@ FrequencyCharacteristics::Source FromJson( QJsonArray arr )
             ds.push_back( it );
         }
         res.insert( FrequencyCharacteristics::SourceItem( key, ds ) );
+    }
+    return std::move( res );
+}
+
+ff0x::NoAxisGraphBuilder::LinePoints Approximate( ff0x::NoAxisGraphBuilder::LinePoints const& r )
+{
+    if ( r.size() < 3 )
+        return r;
+
+    ff0x::NoAxisGraphBuilder::LinePoints res;
+    QPointF las_inserted;
+    for ( int i = 0; i < r.size(); ++i )
+    {
+        if ( i == 0 )
+        {
+            las_inserted = r[i];
+            res.push_back( r[i] );
+        }
+        else if  ( i < r.size() - 1 )
+        {
+            double a = atan( ( r[ i + 1 ].y() - las_inserted.y() ) / ( r[ i + 1 ].x() - las_inserted.x() ) );
+            double b = atan( ( r[ i ].y() - las_inserted.y() ) / ( r[ i ].x() - las_inserted.x() ) );
+            double g = ( b - a )/2 + a;
+            double y = tan( g ) * ( r[ i ].x() - las_inserted.x() ) + las_inserted.y();
+            res.push_back( QPointF( r[i].x(), y ) );
+        }
+        else
+        {
+            las_inserted = r[i];
+            res.push_back( r[i] );
+        }
     }
     return std::move( res );
 }
@@ -315,7 +351,7 @@ public:
                  fabs(inf[f_max].point.y() - inf[f_max-1].point.y()))
                 f_max = i;
         }
-        if (!inf.empty())
+        if (!inf.empty() && f_max )
         {
             Info.push_back( inf[f_max-1] );
             Info.push_back( inf[f_max] );
@@ -574,7 +610,10 @@ public:
 
 typedef SinusAnaliser2 DefaultAnaliser;
 
-
+#ifdef DEBUG
+QJsonArray AFC_DEBUG;
+QJsonArray PFC_DEBUG;
+#endif
 double CalckAmpl( FrequencyCharacteristics::DataSet const& data )
 {
     if (data.empty())
@@ -607,8 +646,12 @@ double CalckAmpl( FrequencyCharacteristics::DataSet const& data )
 
     return ampl;
 }
-double CalckAmpl3( FrequencyCharacteristics::DataSet const& data )
+double CalckAmpl3( FrequencyCharacteristics::DataSet const& data, double frequency = 0 )
 {
+#ifdef DEBUG
+    QJsonObject obj;
+    obj.insert( "частота", frequency );
+#endif
     if (data.empty())
         return 0.0;
 
@@ -644,34 +687,27 @@ double CalckAmpl3( FrequencyCharacteristics::DataSet const& data )
             i_max = i;
     }
     if ( !inf.empty() )
+    {
         sum_speed += fabs(inf[i_max].point.y() - inf[i_max-1].point.y()) / ( inf[i_max].point.x() - inf[i_max-1].point.x() );
-
-//    for ( int i = 0; i < inf.size(); ++i )
-//    {
-//        if ( !i )
-//            continue;
-
-//        if ( inf[ i ].type != GrapfInfo::PointInfo::Max ||
-//             inf[ i - 1 ].type != GrapfInfo::PointInfo::Min)
-//            continue;
-
-//        GrapfInfo::PointInfo const& point = inf[i];
-//        GrapfInfo::PointInfo const& prev = inf[i-1];
-//        double dx = ( point.point.x() - prev.point.x() );
-//        if ( dx )
-//        {
-//            sum_speed += fabs( point.point.y() - prev.point.y() )/ dx;
-//            ++count;
-//            break;
-//        }
-//    }
-
+#ifdef DEBUG
+        obj.insert( "x1", inf[i_max-1].point.x() );
+        obj.insert( "y1", inf[i_max-1].point.y() );
+        obj.insert( "x2", inf[i_max].point.x() );
+        obj.insert( "y2", inf[i_max].point.y() );
+        obj.insert( "sum_speed", sum_speed );
+        AFC_DEBUG.push_back(obj);
+#endif
+    }
     sum_speed = sum_speed / ( count ? count : 1 );
     return sum_speed;
 }
 
 ff0x::NoAxisGraphBuilder::LinePoints ProcessAFC( FrequencyCharacteristics::Source const& src, QPointF& x_range, QPointF& y_range )
 {
+#ifdef DEBUG
+    AFC_DEBUG = QJsonArray();
+#endif
+
     auto f_S = []( double expenditure )
     {
         double r1 = 0, r2 = 0;
@@ -696,17 +732,21 @@ ff0x::NoAxisGraphBuilder::LinePoints ProcessAFC( FrequencyCharacteristics::Sourc
     {
         QPointF point;
         point.setX( it->first );
+        if ( it->second.empty() )
+            continue;
 
-        double ampl = CalckAmpl3( it->second ) *K / time_period;
+        double ampl = CalckAmpl3( it->second, it->first ) *K / time_period;
         if ( it == src.begin() )
             min_ampl = ampl;
 
-        if ( min_ampl != 0 && ampl/min_ampl != 0 )
-        {
-            point.setY( 10.0*log10( ampl / min_ampl) );
-        }
-        else
-            point.setY(0);
+        point.setY(ampl);
+
+//        if ( min_ampl != 0 && ampl/min_ampl != 0 )
+//        {
+//            point.setY( 10.0*log10( ampl / min_ampl) );
+//        }
+//        else
+//            point.setY(0);
 
         if ( it == src.begin() )
         {
@@ -731,28 +771,36 @@ ff0x::NoAxisGraphBuilder::LinePoints ProcessAFC( FrequencyCharacteristics::Sourc
 #ifndef DEBUG
         if ( fabs( point.y() ) > 15 )
             break;
+#else
+    QFile f( "AFC_DEBUG" + QString::number( reinterpret_cast<long long>( &src ) ) );
+    f.open(QIODevice::WriteOnly);
+    QJsonDocument d;
+    d.setArray( AFC_DEBUG );
+    f.write( d.toJson() );
+    f.close();
 #endif
         result.push_back( point );
     }
-    return std::move( result );
+    return Approximate( result );
 }
 
 double CalckFi( FrequencyCharacteristics::DataSet const& data, double frequency )
 {
     if (data.empty())
         return 0;
+#ifdef DEBUG
+    QJsonObject obj;
+    obj.insert( "частота", frequency );
+#endif
     QVector< QPointF > speed;
     QVector< QPointF > signal;
     for ( size_t i = 0; i < data.size(); ++i )
     {
         signal.push_back( QPointF( i, data[i].signal ) );
-        if ( !i )
-            speed.push_back( QPointF( i, data[i + 1].position - data[i].position ) );
-        else
-            speed.push_back( QPointF( i, data[i].position - data[i-1].position ) );
+        speed.push_back( QPointF( i, data[i].position) );
     }
 
-    GrapfInfo info_speed( speed, DefaultAnaliser() );
+    GrapfInfo info_speed( speed, StepAnaliser() );
     GrapfInfo info_signal( signal, DefaultAnaliser() );
 
 //        ищем координату первого максимума сигнала
@@ -768,34 +816,57 @@ double CalckFi( FrequencyCharacteristics::DataSet const& data, double frequency 
         }
     }
 
-//        ищем координату первого максимума сигнала
+//вычисляем позицию максимума скорости
+    QPointF min;
+    QPointF max;
     GrapfInfo::Data const& inf_sg = info_speed.GetInfo();
-    double speed_max_time = 0;
     for ( int i = 0; i < inf_sg.size(); ++i )
     {
         GrapfInfo::PointInfo const& point = inf_sg[i];
-        if ( point.type == GrapfInfo::PointInfo::Max && point.point.x() >= signal_max_time )
+        if ( point.type == GrapfInfo::PointInfo::Max  )
         {
-            speed_max_time = point.point.x();
-            break;
+            max = point.point;
+        }
+        if ( point.type == GrapfInfo::PointInfo::Min  )
+        {
+            min = point.point;
         }
     }
-
+    double speed_max_time = min.x() + (max.x() - min.x())/2.0;
     double Tsm = speed_max_time - signal_max_time;
     double T = 1/frequency;
-    double fi = -Tsm/(1000*T)*360;
-
+    double fi = Tsm/(1000*T)*360;
+#ifdef DEBUG
+    obj.insert( "x1", max.x() );
+    obj.insert( "x2", min.x() );
+    obj.insert( "speed_max_time", speed_max_time );
+    obj.insert( "signal_max_time", signal_max_time );
+    obj.insert( "Tsm", Tsm );
+    obj.insert( "T", T );
+    obj.insert( "fi", fi );
+    PFC_DEBUG.push_back(obj);
+#endif
     return fi;
 }
 
 ff0x::NoAxisGraphBuilder::LinePoints ProcessPFC( FrequencyCharacteristics::Source const& src, QPointF& x_range, QPointF& y_range )
 {
+#ifdef DEBUG
+    PFC_DEBUG = QJsonArray();
+#endif
+
     ff0x::NoAxisGraphBuilder::LinePoints result;
     for ( auto it = src.begin(), end = src.end(); it != end; ++it  )
     {
         QPointF point;
         point.setX( it->first );
-        point.setY( CalckFi( it->second, it->first ) );
+        if ( it->second.empty() )
+            continue;
+
+        auto fi = CalckFi( it->second, it->first );
+        if ( fi <= 0.0 )
+            continue;
+        point.setY( fi );
 
         if ( it == src.begin() )
         {
@@ -819,10 +890,18 @@ ff0x::NoAxisGraphBuilder::LinePoints ProcessPFC( FrequencyCharacteristics::Sourc
 #ifndef DEBUG
         if ( fabs( point.y() ) > 90 )
             break;
+#else
+    QFile f( "PFC_DEBUG" + QString::number( reinterpret_cast<long long>( &src ) ) );
+    f.open(QIODevice::WriteOnly);
+    QJsonDocument d;
+    d.setArray( PFC_DEBUG );
+    f.write( d.toJson() );
+    f.close();
 #endif
+
         result.push_back( point );
     }
-    return std::move( result );
+    return Approximate( result );
 }
 
 ff0x::NoAxisGraphBuilder::LinePoints ProcessDebug1( FrequencyCharacteristics::Source const& src, int i , QPointF& x_range, QPointF& y_range )
@@ -1372,7 +1451,7 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
                 QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
                 QRect p2t(p2.left(), p2.bottom(), p2.width(), metrix.height());
 
-                DrawRowCenter( p1t, text_font, Qt::black, "результат " + QString::number( i + 1  ) );
+                DrawRowCenter( p1t, text_font, Qt::black, "результат: " + QString::number( i + 1  ) );
                 {
                     QPointF x_range;
                     QPointF y_range;
@@ -1394,7 +1473,20 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
                     }
                     painter.drawPixmap( p1, builder.Draw( lines1, x_range, y_range, x_step, y_step, "x", "y", true ) );
                 }
-                DrawRowCenter( p2t, text_font, Qt::black, "результат " + QString::number( i + 1  ) );
+
+                auto it2 = s.end();
+                int k = 0;
+                for ( auto it = s.begin(), end = s.end(); it != end; ++it  )
+                {
+                    if ( i == k )
+                    {
+                        it2 = it;
+                    }
+                    ++k;
+
+                }
+                if ( it2 != s.end() )
+                    DrawRowCenter( p2t, text_font, Qt::black, "результат: " + QString::number( it2->first ) );
                 {
                     QPointF x_range;
                     QPointF y_range;

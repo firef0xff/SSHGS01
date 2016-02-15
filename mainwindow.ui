@@ -573,7 +573,7 @@ X</string>
      <x>0</x>
      <y>0</y>
      <width>874</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -673,7 +673,7 @@ X</string>
   </action>
   <action name="control_panels_list">
    <property name="text">
-    <string>Контрольные панели</string>
+    <string>Карты управления</string>
    </property>
   </action>
   <action name="LastTest">
