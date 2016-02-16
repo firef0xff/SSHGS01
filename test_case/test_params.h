@@ -154,8 +154,8 @@ public:
     bool SerNo ( QString const& val );
     QString const& SerNo () const;
 //находится в DB30
-    bool ReelCount ( QString const& val );
-    qint32 const& ReelCount () const;
+    bool PosCount ( QString const& val );
+    qint32 const& PosCount () const;
 //находится в DB30
     bool MaxExpenditure ( QString const& val );
     const double &MaxExpenditure() const;
@@ -171,7 +171,7 @@ public:
 
 protected:
     QString mSerNo;             //Серийный номер
-    qint32 mReelCount;          //+Количество катушек питания
+    qint32 mPosCount;          //+Количество катушек питания
 
     double mMaxExpenditure;     //+максимальный расход
 

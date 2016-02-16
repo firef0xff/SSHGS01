@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>707</width>
-    <height>384</height>
+    <width>868</width>
+    <height>539</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -173,8 +173,7 @@
      <item row="4" column="0">
       <widget class="QLabel" name="l_reel_count">
        <property name="text">
-        <string>Количество катушек
- управления</string>
+        <string>Количество позиций</string>
        </property>
       </widget>
      </item>
@@ -201,15 +200,15 @@
       </widget>
      </item>
      <item row="4" column="1">
-      <widget class="QSpinBox" name="ReelCount">
+      <widget class="QSpinBox" name="PosCount">
        <property name="suffix">
-        <string> шт.</string>
+        <string/>
        </property>
        <property name="minimum">
-        <number>1</number>
+        <number>2</number>
        </property>
        <property name="maximum">
-        <number>2</number>
+        <number>3</number>
        </property>
       </widget>
      </item>

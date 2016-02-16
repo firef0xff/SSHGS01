@@ -24,7 +24,7 @@ HydroTitleInfo::HydroTitleInfo(bool new_mode, QWidget *parent) :
     ui->Lost->setValidator( new QDoubleValidator( 0.01, 10.0, 2, this ) );
 
     on_ControlType_activated( ui->ControlType->currentIndex() );
-    on_ReelCount_valueChanged( ui->ReelCount->value() );
+    on_PosCount_valueChanged( ui->PosCount->value() );
 
     if ( !mNewMode )
     {
@@ -81,7 +81,7 @@ bool HydroTitleInfo::SaveInputParams()
     res *= ParamChecker( ui->l_def_expenditure, params.DefaultExpenditure( ui->DefExpenditure->text() ) );
     res *= ParamChecker( ui->l_voltage,         params.Voltage( ui->Voltage->currentText() ) );
     res *= ParamChecker( ui->l_voltage_type,    params.VoltageType( ui->VoltageType->currentText() ) );
-    res *= ParamChecker( ui->l_reel_count,      params.ReelCount( QString::number( ui->ReelCount->value() ) ) );
+    res *= ParamChecker( ui->l_reel_count,      params.PosCount( QString::number( ui->PosCount->value() ) ) );
     res *= ParamChecker( ui->l_control_type,    params.ControlType( ui->ControlType->currentText() ) );
     if ( params.ControlType() == test::CT_HYDRO_ELECTRIC )
     {
@@ -113,8 +113,8 @@ void HydroTitleInfo::FromParams()
     ui->DefExpenditure->setValue( params.DefaultExpenditure() );
     ui->Voltage->setCurrentIndex( ui->Voltage->findText( test::ToString( params.Voltage()  ) ) );
     ui->VoltageType->setCurrentIndex( ui->VoltageType->findText( test::ToString( params.VoltageType() ) ) );
-    ui->ReelCount->setValue( params.ReelCount() );
-    on_ReelCount_valueChanged( ui->ReelCount->value() );
+    ui->PosCount->setValue( params.PosCount() );
+    on_PosCount_valueChanged( ui->PosCount->value() );
     ui->ControlType->setCurrentIndex( ui->ControlType->findText( test::ToString( params.ControlType() ) ) );
     on_ControlType_activated( ui->ControlType->currentIndex() );
     ui->MinControlPressure->setValue( params.MinControlPressure() );
@@ -295,16 +295,16 @@ void HydroTitleInfo::on_ControlType_activated(int index)
 }
 */
 
-void HydroTitleInfo::on_ReelCount_valueChanged(int arg1)
+void HydroTitleInfo::on_PosCount_valueChanged(int arg1)
 {
     switch ( arg1 )
     {
-    case 1:
+    case 2:
         ui->HermSignal->removeItem( 2 );
         ui->PABTSignal->removeItem( 2 );
         ui->PBATSignal->removeItem( 2 );
         break;
-    case 2:
+    case 3:
         if ( ui->HermSignal->findText( "Катушка Б" ) == -1 )
         {
             ui->HermSignal->insertItem( 2, "Катушка Б" );

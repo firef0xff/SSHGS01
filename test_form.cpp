@@ -18,9 +18,14 @@ TestForm::TestForm( bool new_mode, QWidget *parent) :
         ptr->setObjectName( QStringLiteral("TestBox") + QString::number( test_ptr->Number() ) );
         ptr->setProperty("object", QVariant::fromValue( test_ptr ) );
         ptr->setText( test_ptr->Name() );
+        if( test_ptr->Disabled() )
+        {
+            ptr->setChecked( false );
+            ptr->setEnabled( false );
+        }
 
-        bool check = true;
-        if ( !new_mode )
+        bool check = !test_ptr->Disabled();
+        if ( !new_mode && !test_ptr->Disabled() )
         {
             test::Parameters::TestsList const& lnk = test::CURRENT_PARAMS->TestCase();
             bool find = false;

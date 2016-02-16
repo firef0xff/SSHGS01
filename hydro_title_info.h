@@ -25,7 +25,7 @@ private slots:
 
 //    void on_GsType_activated(int index);
 
-    void on_ReelCount_valueChanged(int arg1);
+    void on_PosCount_valueChanged(int arg1);
 
 private:
     Ui::HydroTitleInfo *ui;

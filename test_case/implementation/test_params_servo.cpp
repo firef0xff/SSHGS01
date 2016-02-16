@@ -40,7 +40,6 @@ Parameters::Parameters():
     mSignalStateA(0),
     mSignalStateB(0),
     mSignalState0(0),
-    mEndSgnal(0),
     mControlReelResist(0),
     mVoltage(0),
     mTestChannelA( false ),
@@ -72,7 +71,6 @@ void Parameters::Reset()
     mSignalStateB = 0;
     mSignalState0 = 0;
 
-    mEndSgnal = 0;
     mControlReelResist = 0;
 
     mAmplitudes[0] = 0;
@@ -96,7 +94,7 @@ QString Parameters::ToString() const
     res+= "  Тип гидрораспределителя: " + mGsType +"\n" ;
     res+= "  Серийный номер: " + mSerNo +"\n" ;
     res+= "  Тип управления: " + test::ToString( mReelControl ) + "\n";
-    res+= "  Количество катушек питания: " + test::ToString( mReelCount ) + "\n";
+    res+= "  Количество позиций: " + test::ToString( mPosCount ) + "\n";
     res+= "  Тип управления распределителем: " + test::ToString( mControlType ) + "\n";
     res+= "  Максимальное давление управления, Бар: " + test::ToString( mMaxControlPressure ) + "\n";
     res+= "  Минимальное давление управления, Бар: " + test::ToString( mMinControlPressure ) + "\n";
@@ -109,7 +107,6 @@ QString Parameters::ToString() const
     res+= "  Сигнал, соответствующий полному переключению в состояние Б: " + test::ToString( mSignalStateB ) + "\n";
     res+= "  Сигнал, соответствующий нулевому положению: " + test::ToString( mSignalState0 ) + "\n";
     res+= "Парамеры для аппаратуры с типом управления: " + test::ToString( RC_REEL );
-    res+= "  Сигнал, соответствующий переключению аппарата в конечное состоние: " + test::ToString( mEndSgnal ) + "\n";
     res+= "  Сопротивление катушки управления, Ом: " + test::ToString( mControlReelResist ) + "\n";
     res+= "\n";
     res+= "Параметры стенда:\n";
@@ -152,7 +149,6 @@ QJsonObject Parameters::Serialise() const
     servo.insert("SignalStateB", mSignalStateB);
     servo.insert("SignalState0", mSignalState0);
 
-    servo.insert("EndSgnal", mEndSgnal);
     servo.insert("ControlReelResist", mControlReelResist);
 
     servo.insert("Amplitudes0", mAmplitudes[0]);
@@ -195,7 +191,6 @@ bool Parameters::Deserialize( QJsonObject const& obj )
         mSignalStateB = obj.value("SignalStateB").toDouble();
         mSignalState0 = obj.value("SignalState0").toDouble();
 
-        mEndSgnal = obj.value("EndSgnal").toDouble();
         mControlReelResist = obj.value("ControlReelResist").toDouble();
 
         mAmplitudes[0] = obj.value("Amplitudes0").toDouble();
@@ -261,15 +256,11 @@ void Parameters::WriteToController() const
         }
 
 
-        if ( mReelCount == 1 )
+        mem2.x_max_a = mSignalStateA;             //4 сигнал переключение в А
+        mem2.x_pos_0 = mSignalState0;             //12 сигнал переключение в 0
+        if ( mPosCount == 3 )
         {
-            mem.x_max_a = mSignalStateA;             //4 сигнал переключение в А
             mem2.x_max_b = mSignalStateB;             //8 сигнал переключение в В
-            mem2.x_pos_0 = mSignalState0;             //12 сигнал переключение в 0
-        }
-        else
-        {
-            mem.x_max_a = mEndSgnal;             //6 полное перключение в А
         }
 
         mem.test_press = mPressureTesting;          //18 испытание пробным давлением
@@ -307,8 +298,11 @@ void Parameters::WriteToController() const
         mem.channel_k_b = mSignalOnChannelB == CS_REEL_B ? 1: 0;
 
         mem.x_max_a = mSignalStateA;             //4 сигнал переключение в А
-        mem.x_max_b = mSignalStateB;             //8 сигнал переключение в В
         mem.x_pos_0 = mSignalState0;             //12 сигнал переключение в 0
+        if ( mPosCount == 3 )
+        {
+            mem.x_max_b = mSignalStateB;             //8 сигнал переключение в В
+        }
 
         mem.test_press = mPressureTesting;          //16 пробное давление
         mem.nominal_press = mPressureNominal;       //20 номинальное давление
@@ -329,7 +323,7 @@ void Parameters::WriteToController() const
     }
     auto& mem1 = cpu::CpuMemory::Instance().DB30;
     mem1.Clear();
-    mem1.Coil = mReelCount == 1 ? 0 : 1;
+    mem1.Coil = mPosCount == 2 ? 0 : 1;
     mem1.TypeControl = mControlType == CT_ELECTRIC ? 0: 1;
     mem1.Write();
     cpu::CpuMemory::Instance().DB31.Q_5_5ma = mDefaultExpenditure;
@@ -448,8 +442,6 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect, QString const& compar
     QString str_e_sa =          !compare_width.isEmpty() ? " (" +test::ToString(old.SignalStateA()) + ")" : QString();
     QString str_e_sb =          !compare_width.isEmpty() ? " (" +test::ToString(old.SignalStateB()) + ")" : QString();
     QString str_e_s0 =          !compare_width.isEmpty() ? " (" +test::ToString(old.SignalState0()) + ")" : QString();
-    QString str_e_se =          !compare_width.isEmpty() ? " (" +test::ToString(old.EndSgnal()) + ")" : QString();
-    QString str_e_se0 =          !compare_width.isEmpty() ? " (" +test::ToString(0) + ")" : QString();
 
     QString str_e_mea =          !compare_width.isEmpty() ? " (" +test::ToString(old.MaxExpenditureA()) + ")" : QString();
     QString str_e_meb =          !compare_width.isEmpty() ? " (" +test::ToString(old.MaxExpenditureB()) + ")" : QString();
@@ -480,17 +472,15 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect, QString const& compar
     DrawRowLeft( text_font, Qt::black, Qt::red, "Сигнал, соответствующий:", "" );
     QString ed_izm = (mControlSignal == ST_10_10_V || mControlSignal == ST_0_10_V) ? " В": " мА";
 
-    if ( mReelControl == RC_CONTROL_BOX )
+    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- нулевому положению"), test::ToString(mSignalState0) + ed_izm, str_e_s0, row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- полному переключению в положение А"), test::ToString(mSignalStateA) + ed_izm, str_e_sa, row_skale );
+    if ( mPosCount == 3 )
     {
-        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- полному переключению в положение А"), test::ToString(mSignalStateA) + ed_izm, str_e_sa, row_skale );
         DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- полному переключению в положение В"), test::ToString(mSignalStateB) + ed_izm, str_e_sb, row_skale );
-        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- нулевому положению"), test::ToString(mSignalState0) + ed_izm, str_e_s0, row_skale );
     }
     else
     {
-        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- полному переключению в положение А"), test::ToString(mEndSgnal) + ed_izm,str_e_se, row_skale );
-        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- полному переключению в положение В"), test::ToString(mEndSgnal) + ed_izm,str_e_se, row_skale );
-        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- нулевому положению"), test::ToString(0) + ed_izm,str_e_se0, row_skale );
+        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- полному переключению в положение В"), test::ToString(mSignalStateA) + ed_izm,str_e_sa, row_skale );
     }
     DrawRowLeft( text_font, Qt::black, Qt::red, "Максимальный задаваемый расход насоса:", "" );
     DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("- в канале А при максимально опорном сигнале, л/мин"), test::ToString(mMaxExpenditureA),str_e_mea, row_skale );
@@ -632,15 +622,6 @@ bool Parameters::SignalState0 ( QString const& val )
 const double &Parameters::SignalState0() const
 {
     return mSignalState0;
-}
-
-bool Parameters::EndSgnal ( QString const& val )
-{
-    return ParseValue( mEndSgnal, val );
-}
-const double &Parameters::EndSgnal() const
-{
-    return mEndSgnal;
 }
 
 bool Parameters::ControlReelResist ( QString const& val )

@@ -58,9 +58,6 @@ public:
     bool SignalState0 ( QString const& val );
     const double &SignalState0() const;
 
-    bool EndSgnal ( QString const& val );
-    const double &EndSgnal() const;
-
     bool ControlReelResist ( QString const& val );
     const double &ControlReelResist() const;
 
@@ -106,7 +103,6 @@ private:
     double mSignalStateB;
     double mSignalState0;
 
-    double mEndSgnal;
     double mControlReelResist;
 
     std::array< double, 3 > mAmplitudes;

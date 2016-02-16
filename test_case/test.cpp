@@ -6,7 +6,7 @@ namespace test
 
 Test::Test(TestCase *test_case, QString const& name, uint8_t number , uint8_t id)
     : mName(name), mId(id), mNumber(number), mCase(test_case),mStopMarker(nullptr),
-      mDrawLine( 0 )
+      mDrawLine( 0 ), mDisabled(false)
 {
     if (mCase)
         mCase -> Register( this );
@@ -21,6 +21,15 @@ Test::~Test()
 void Test::Free()
 {
     mCase = nullptr;
+}
+
+bool Test::Disabled() const
+{
+    return mDisabled;
+}
+void Test::Disabled( bool val )
+{
+    mDisabled = val;
 }
 
 QString const& Test::Name() const

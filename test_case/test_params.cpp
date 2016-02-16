@@ -473,7 +473,7 @@ QString Parameters::ModelId() const
 
 CommonParameters::CommonParameters():
     mSerNo(""),
-    mReelCount( 0 ),
+    mPosCount( 0 ),
     mMaxExpenditure ( 0.0 ),
     mControlType ( CT_UNKNOWN ),
     mMinControlPressure ( 0.0 ),
@@ -483,7 +483,7 @@ CommonParameters::CommonParameters():
 void CommonParameters::Reset()
 {
     mSerNo = "";
-    mReelCount =  0;
+    mPosCount =  0;
     mMaxExpenditure  =  0.0;
     mControlType  =  CT_UNKNOWN;
     mMinControlPressure  =  0.0;
@@ -500,13 +500,13 @@ QString const& CommonParameters::SerNo () const
     return mSerNo;
 }
 
-bool CommonParameters::ReelCount ( QString const& val )
+bool CommonParameters::PosCount ( QString const& val )
 {
-    return ParseValue( mReelCount, val );
+    return ParseValue( mPosCount, val );
 }
-qint32 const& CommonParameters::ReelCount () const
+qint32 const& CommonParameters::PosCount () const
 {
-    return mReelCount;
+    return mPosCount;
 }
 
 bool CommonParameters::MaxExpenditure ( QString const& val )
@@ -549,7 +549,7 @@ QJsonObject CommonParameters::Serialise() const
 {    
     QJsonObject obj = Parameters::Serialise();
     obj.insert("SerNo", mSerNo);
-    obj.insert("ReelCount", mReelCount);
+    obj.insert("PosCount", mPosCount);
     obj.insert("MaxExpenditure", mMaxExpenditure);
     obj.insert("ControlType",mControlType);
     obj.insert("MinControlPressure",mMinControlPressure);
@@ -562,7 +562,7 @@ bool CommonParameters::Deserialize(const QJsonObject &obj )
     Reset();
     bool res = Parameters::Deserialize( obj );
     mSerNo = obj.value("SerNo").toString();
-    mReelCount = obj.value("ReelCount").toInt();
+    mPosCount = obj.value("PosCount").toInt();
     mMaxExpenditure = obj.value("MaxExpenditure").toDouble();
     mControlType = static_cast<CONTROL_TYPE>( obj.value("ControlType").toInt() );
     mMinControlPressure = obj.value("MinControlPressure").toDouble();

@@ -37,6 +37,9 @@ public:
 
     virtual bool Success() const;
 
+    bool Disabled() const;
+    void Disabled( bool );
+
     void CompareWidth( QString const& f_name );
 
 protected:
@@ -62,6 +65,7 @@ private:
     TestCase *mCase;
 
     mutable uint32_t mDrawLine; //отметка на которой остановилась печать
+    bool mDisabled;
 };
 
 }//namespace test

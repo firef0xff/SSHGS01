@@ -112,7 +112,7 @@ QString Parameters::ToString() const
     res+= "  Тип питающего напряжения: " + test::ToString( mVoltageType ) + "\n";
     res+= "  Допустимое отклонение напрядения питания, %: " + test::ToString( mVoltageRange ) + "\n";
     res+= "  Допустимое значение утечки, %: " + test::ToString( mLost ) + "\n";
-    res+= "  Количество катушек питания: " + test::ToString( mReelCount ) + "\n";
+    res+= "  Количество позиций: " + test::ToString( mPosCount ) + "\n";
     res+= "  Тип управления: " + test::ToString( mControlType ) + "\n";
     res+= "  Максимальное давление управления, Бар: " + test::ToString( mMaxControlPressure ) + "\n";
     res+= "  Минимальное давление управления, Бар: " + test::ToString( mMinControlPressure ) + "\n";
@@ -256,7 +256,7 @@ void Parameters::WriteToController() const
     auto& mem = cpu::CpuMemory::Instance().DB30;
 
     mem.Current = mVoltageType == VT_DC ? 0: 1;
-    mem.Coil = mReelCount == 1 ? 0 : 1;
+    mem.Coil = mPosCount == 2 ? 0 : 1;
     mem.TypeControl = mControlType == CT_ELECTRIC ? 0: 1;
 
     mem.Voltage = mVoltage;

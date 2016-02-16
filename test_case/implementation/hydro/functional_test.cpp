@@ -197,7 +197,7 @@ bool FunctionalTest::Draw(QPainter& painter, QRect &free_rect , const QString &)
                         "<td>" + test::ToString(ReelA.R) + "</td>"
                         "<td>" + test::ToString(ReelA.P) + "</td>"
                     "</tr>";
-    if (params->ReelCount() == 2)
+    if (params->PosCount() == 2)
     {
         row +=  "<tr>"
                     "<td>Катушка b</td>"
@@ -243,7 +243,7 @@ bool FunctionalTest::Success() const
         return false;
 
     bool res = ReelA.work_on_max_pressure && ReelA.work_on_min_pressure;
-    if (params->ReelCount() == 2 )
+    if (params->PosCount() == 2 )
     {
         res &= ReelB.work_on_max_pressure && ReelB.work_on_min_pressure;
     }

@@ -3,6 +3,7 @@
 #include "test_form.h"
 #include <QMessageBox>
 #include "test_case/implementation/test_params_servo.h"
+#include "test_case/test.h"
 //#include <climits>
 
 ServoTitleInfo::ServoTitleInfo(bool new_mode, QWidget *parent) :
@@ -24,7 +25,7 @@ ServoTitleInfo::ServoTitleInfo(bool new_mode, QWidget *parent) :
     ui->ControlReelResist->setValidator( new QDoubleValidator( INT32_MIN, INT32_MAX , 2, this ) );
     on_RaspredControl_activated( ui->RaspredControl->currentIndex() );    
     on_ControlType_activated( ui->ControlType->currentIndex() );
-    on_ReelCount_valueChanged( ui->ReelCount->value() );
+    on_PosCount_valueChanged( ui->PosCount->value() );
 
     if ( !mNewMode )
         FromParams();
@@ -71,7 +72,7 @@ bool ServoTitleInfo::SaveInputParams()
     res *= ParamChecker( ui->l_ser_no,          params.SerNo( ui->SerNo->text() ) );
 //    res *= ParamChecker( ui->l_gs_type,         params.GsType( ui->GsType->currentText() ) && ui->GsType->currentIndex() >= 0 );
     res *= ParamChecker( ui->l_def_expenditure, params.DefaultExpenditure( ui->DefExpenditure->text() ) );
-    res *= ParamChecker( ui->l_reel_count,      params.ReelCount( ui->ReelCount->text() ) );
+    res *= ParamChecker( ui->l_reel_count,      params.PosCount( ui->PosCount->text() ) );
 
     res *= ParamChecker( ui->l_raspred_control,    params.ControlType( ui->RaspredControl->currentText() ) );
     if ( params.ControlType() == test::CT_HYDRO_ELECTRIC )
@@ -90,19 +91,14 @@ bool ServoTitleInfo::SaveInputParams()
     res *= ParamChecker( ui->l_control_signal,    params.ControlSignal( ui->ControlSignal->currentText() ) );
     res *= ParamChecker( ui->l_control_signal_ampl,    params.Amplitudes( ui->ControlSignalAmpl0->text(), ui->ControlSignalAmpl1->text(), ui->ControlSignalAmpl2->text() ) );
 
+    res *= ParamChecker( ui->l_signal_state_a,    ValidateRange( ui->SignalStateA, params.SignalStateA( ui->SignalStateA->text() ) ) );
+    res *= ParamChecker( ui->l_signal_state_0,    ValidateRange( ui->SignalState0, params.SignalState0( ui->SignalState0->text() ) ) );
+    if ( params.PosCount() == 3 )
+        res *= ParamChecker( ui->l_signal_state_b,    ValidateRange( ui->SignalStateB, params.SignalStateB( ui->SignalStateB->text() ) ) );
+
     if ( params.ReelControl() == test::RC_REEL )
     {
-        if ( params.ReelCount() == 1 )
-        {
-            res *= ParamChecker( ui->l_signal_state_a,    ValidateRange( ui->SignalStateA, params.SignalStateA( ui->SignalStateA->text() ) ) );
-            res *= ParamChecker( ui->l_signal_state_b,    ValidateRange( ui->SignalStateB, params.SignalStateB( ui->SignalStateB->text() ) ) );
-            res *= ParamChecker( ui->l_signal_state_0,    ValidateRange( ui->SignalState0, params.SignalState0( ui->SignalState0->text() ) ) );
-        }
-        else
-        {
-            res *= ParamChecker( ui->l_end_signal,          ValidateRange( ui->EndSgnal, params.EndSgnal( ui->EndSgnal->text() ) ) );
-            res *= ParamChecker( ui->l_control_reel_resist, ValidateRange( ui->ControlReelResist, params.ControlReelResist( ui->ControlReelResist->text() ) ) );
-        }
+        res *= ParamChecker( ui->l_control_reel_resist, ValidateRange( ui->ControlReelResist, params.ControlReelResist( ui->ControlReelResist->text() ) ) );
     }
     res *= ParamChecker( ui->l_max_expenditure_a,    ValidateRange( ui->MaxExpenditureA, params.MaxExpenditureA( ui->MaxExpenditureA->text() ) ) );
     res *= ParamChecker( ui->l_max_expenditure_b,    ValidateRange( ui->MaxExpenditureB, params.MaxExpenditureB( ui->MaxExpenditureB->text() ) ) );
@@ -110,9 +106,6 @@ bool ServoTitleInfo::SaveInputParams()
     if ( params.ReelControl() == test::RC_CONTROL_BOX )
     {
         res *= ParamChecker( ui->l_voltage,         params.Voltage( ui->Voltage->currentText() ) );
-        res *= ParamChecker( ui->l_signal_state_a,    ValidateRange( ui->SignalStateA, params.SignalStateA( ui->SignalStateA->text() ) ) );
-        res *= ParamChecker( ui->l_signal_state_b,    ValidateRange( ui->SignalStateB, params.SignalStateB( ui->SignalStateB->text() ) ) );
-        res *= ParamChecker( ui->l_signal_state_0,    ValidateRange( ui->SignalState0, params.SignalState0( ui->SignalState0->text() ) ) );
     }
 
     bool channel_a = ui->TestChA->checkState() == Qt::Checked;
@@ -145,8 +138,8 @@ void ServoTitleInfo::FromParams()
     ui->SerNo->setText( params.SerNo() );
 //    ui->GsType->setCurrentIndex( ui->GsType->findText( params.GsType() ) );
     ui->DefExpenditure->setValue( params.DefaultExpenditure() );
-    ui->ReelCount->setValue( params.ReelCount() );
-    on_ReelCount_valueChanged( ui->ReelCount->value() );
+    ui->PosCount->setValue( params.PosCount() );
+    on_PosCount_valueChanged( ui->PosCount->value() );
     ui->RaspredControl->setCurrentIndex( ui->RaspredControl->findText( test::ToString( params.ControlType() ) ) );
     on_RaspredControl_activated( ui->RaspredControl->currentIndex() );
     ui->MinControlPressure->setValue( params.MinControlPressure() );
@@ -169,20 +162,16 @@ void ServoTitleInfo::FromParams()
     ui->ControlSignalAmpl1->setText( test::ToString( params.Amplitudes()[1] ) );
     ui->ControlSignalAmpl2->setText( test::ToString( params.Amplitudes()[2] ) );
 
+    ui->SignalStateA->setText( test::ToString( params.SignalStateA() ) );
+    ui->SignalState0->setText( test::ToString( params.SignalState0() ) );
+    if (params.PosCount() == 3)
+    {
+        ui->SignalStateB->setText( test::ToString( params.SignalStateB() ) );
+    }
+
     if ( params.ReelControl() == test::RC_REEL )
     {
         ui->ControlReelResist->setText( test::ToString( params.ControlReelResist() ) );
-
-        if (params.ReelCount() == 1)
-        {
-            ui->SignalStateA->setText( test::ToString( params.SignalStateA() ) );
-            ui->SignalStateB->setText( test::ToString( params.SignalStateB() ) );
-            ui->SignalState0->setText( test::ToString( params.SignalState0() ) );
-        }
-        else
-        {
-            ui->EndSgnal->setText( test::ToString( params.EndSgnal() ) );
-        }
     }
 
     ui->MaxExpenditureA->setText( test::ToString( params.MaxExpenditureA() ) );
@@ -190,10 +179,6 @@ void ServoTitleInfo::FromParams()
     if ( params.ReelControl() == test::RC_CONTROL_BOX )
     {
         ui->Voltage->setCurrentIndex( ui->Voltage->findText( test::ToString( params.Voltage() ) ) );
-
-        ui->SignalStateA->setText( test::ToString( params.SignalStateA() ) );      
-        ui->SignalStateB->setText( test::ToString( params.SignalStateB() ) );
-        ui->SignalState0->setText( test::ToString( params.SignalState0() ) );
     }
 
     bool channel_a = params.TestChannelA();
@@ -253,6 +238,16 @@ void ServoTitleInfo::on_buttonBox_accepted()
     {
         if (!CheckPower())
             return;
+
+        if ( test::servo::Parameters::Instance().PosCount() == 2 )
+        {
+            foreach (auto test_ptr, test::servo::Parameters::Instance().TestCollection().Tests())
+            {
+                if ( test_ptr->ID() == 14 || test_ptr->ID() == 15 )
+                    test_ptr->Disabled( true );
+            }
+        }
+
         hide();
         if ( mChildWindow.get() )
             QObject::disconnect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
@@ -321,17 +316,14 @@ void ServoTitleInfo::on_ControlSignal_activated(int index)
     ui->SignalStateA->setEnabled(true);
     ui->SignalStateB->setEnabled(true);
     ui->SignalState0->setEnabled(true);
-    ui->EndSgnal->setEnabled(true);
 
     ui->SignalStateA->setText("");
     ui->SignalStateB->setText("");
-    ui->SignalState0->setText("");
-    ui->EndSgnal->setText("");
+    ui->SignalState0->setText("");    
 
     ui->SignalStateA->setToolTip( text );
     ui->SignalStateB->setToolTip( text );
-    ui->SignalState0->setToolTip( text );
-    ui->EndSgnal->setToolTip(text);
+    ui->SignalState0->setToolTip( text );    
 
     switch (s_type)
     {
@@ -375,50 +367,42 @@ void ServoTitleInfo::on_ControlSignal_activated(int index)
             ui->SignalStateB->setValidator( new QDoubleValidator( -40, 40, 2, this ) );
             ui->SignalState0->setValidator( new QDoubleValidator( -40, 40, 2, this ) );
             break;
-        case test::ST_100_mA:
-            ui->EndSgnal->setValidator( new QDoubleValidator( 0, 100, 2, this ) );
+        case test::ST_100_mA:            
             ui->SignalStateA->setValidator( new QDoubleValidator( 0, 100, 2, this ) );
             ui->SignalStateB->setValidator( new QDoubleValidator( 0, 100, 2, this ) );
             ui->SignalState0->setValidator( new QDoubleValidator( 0, 100, 2, this ) );
             break;
-        case test::ST_300_mA:
-            ui->EndSgnal->setValidator( new QDoubleValidator( 0, 300, 2, this ) );
+        case test::ST_300_mA:            
             ui->SignalStateA->setValidator( new QDoubleValidator( 0, 300, 2, this ) );
             ui->SignalStateB->setValidator( new QDoubleValidator( 0, 300, 2, this ) );
             ui->SignalState0->setValidator( new QDoubleValidator( 0, 300, 2, this ) );
             break;
-        case test::ST_600_mA:
-            ui->EndSgnal->setValidator( new QDoubleValidator( 0, 600, 2, this ) );
+        case test::ST_600_mA:           
             ui->SignalStateA->setValidator( new QDoubleValidator( 0, 600, 2, this ) );
             ui->SignalStateB->setValidator( new QDoubleValidator( 0, 600, 2, this ) );
             ui->SignalState0->setValidator( new QDoubleValidator( 0, 600, 2, this ) );
             break;
-        case test::ST_860_mA:
-            ui->EndSgnal->setValidator( new QDoubleValidator( 0, 860, 2, this ) );
+        case test::ST_860_mA:            
             ui->SignalStateA->setValidator( new QDoubleValidator( 0, 860, 2, this ) );
             ui->SignalStateB->setValidator( new QDoubleValidator( 0, 860, 2, this ) );
             ui->SignalState0->setValidator( new QDoubleValidator( 0, 860, 2, this ) );
             break;
-        case test::ST_1600_mA:
-            ui->EndSgnal->setValidator( new QDoubleValidator( 0, 1600, 2, this ) );
+        case test::ST_1600_mA:           
             ui->SignalStateA->setValidator( new QDoubleValidator( 0, 1600, 2, this ) );
             ui->SignalStateB->setValidator( new QDoubleValidator( 0, 1600, 2, this ) );
             ui->SignalState0->setValidator( new QDoubleValidator( 0, 1600, 2, this ) );
             break;
-        case test::ST_2500_mA:
-            ui->EndSgnal->setValidator( new QDoubleValidator( 0, 2500, 2, this ) );
+        case test::ST_2500_mA:            
             ui->SignalStateA->setValidator( new QDoubleValidator( 0, 2500, 2, this ) );
             ui->SignalStateB->setValidator( new QDoubleValidator( 0, 2500, 2, this ) );
             ui->SignalState0->setValidator( new QDoubleValidator( 0, 2500, 2, this ) );
             break;
-        case test::ST_3750_mA:
-            ui->EndSgnal->setValidator( new QDoubleValidator( 0, 3750, 2, this ) );
+        case test::ST_3750_mA:            
             ui->SignalStateA->setValidator( new QDoubleValidator( 0, 3750, 2, this ) );
             ui->SignalStateB->setValidator( new QDoubleValidator( 0, 3750, 2, this ) );
             ui->SignalState0->setValidator( new QDoubleValidator( 0, 3750, 2, this ) );
             break;
-        case test::ST_5000_mA:
-            ui->EndSgnal->setValidator( new QDoubleValidator( 0, 5000, 2, this ) );
+        case test::ST_5000_mA:            
             ui->SignalStateA->setValidator( new QDoubleValidator( 0, 5000, 2, this ) );
             ui->SignalStateB->setValidator( new QDoubleValidator( 0, 5000, 2, this ) );
             ui->SignalState0->setValidator( new QDoubleValidator( 0, 5000, 2, this ) );
@@ -426,8 +410,7 @@ void ServoTitleInfo::on_ControlSignal_activated(int index)
         default:
             ui->SignalStateA->setEnabled(false);
             ui->SignalStateB->setEnabled(false);
-            ui->SignalState0->setEnabled(false);
-            ui->EndSgnal->setEnabled(false);
+            ui->SignalState0->setEnabled(false);            
             break;
     }
 }
@@ -438,18 +421,15 @@ void ServoTitleInfo::on_ControlType_activated(int index)
     auto text = ui->ControlType->itemText( index );
     test::ParseValue( control, text );
 
-    ui->SignalStateA->setVisible( control == test::RC_CONTROL_BOX || ui->ReelCount->value() == 1);
-    ui->SignalStateB->setVisible( control == test::RC_CONTROL_BOX || ui->ReelCount->value() == 1);
-    ui->SignalState0->setVisible( control == test::RC_CONTROL_BOX || ui->ReelCount->value() == 1);
+    ui->SignalStateA->setVisible( ui->PosCount->value() >= 2);
+    ui->SignalStateB->setVisible( ui->PosCount->value() == 3);
+    ui->SignalState0->setVisible( ui->PosCount->value() >= 2);
     ui->Voltage->setVisible( control == test::RC_CONTROL_BOX );
 
-    ui->l_signal_state_a->setVisible( control == test::RC_CONTROL_BOX || ui->ReelCount->value() == 1);
-    ui->l_signal_state_b->setVisible( control == test::RC_CONTROL_BOX || ui->ReelCount->value() == 1);
-    ui->l_signal_state_0->setVisible( control == test::RC_CONTROL_BOX || ui->ReelCount->value() == 1);
+    ui->l_signal_state_a->setVisible( ui->PosCount->value() >= 2);
+    ui->l_signal_state_b->setVisible( ui->PosCount->value() == 3);
+    ui->l_signal_state_0->setVisible( ui->PosCount->value() >= 2);
     ui->l_voltage->setVisible( control == test::RC_CONTROL_BOX );
-
-    ui->EndSgnal->setVisible( control == test::RC_REEL && ui->ReelCount->value() != 1);
-    ui->l_end_signal->setVisible( control == test::RC_REEL && ui->ReelCount->value() != 1 );
 
     ui->ControlReelResist->setVisible( control == test::RC_REEL );
     ui->l_control_reel_resist->setVisible( control == test::RC_REEL );
@@ -479,26 +459,6 @@ void ServoTitleInfo::on_ControlType_activated(int index)
     }
     ui->ControlSignal->setCurrentIndex( -1 );
     on_ControlSignal_activated( ui->ControlSignal->currentIndex() );
-}
-
-void ServoTitleInfo::on_ReelCount_valueChanged( int arg1 )
-{
-    // когда меняется количество катушек происходит обновление комбобоксов назначения катушек на каналы испытания
-    ui->ControlReelChA->clear();
-    ui->ControlReelChA->addItem( test::ToString( test::CS_REEL_A ) );
-    ui->ControlReelChB->clear();
-    ui->ControlReelChB->addItem( test::ToString( test::CS_REEL_A ) );
-    if ( arg1 == 2 )
-    {
-        ui->ControlReelChA->addItem( test::ToString( test::CS_REEL_B ) );
-        ui->ControlReelChB->addItem( test::ToString( test::CS_REEL_B ) );
-    }
-    if ( arg1 == 1 )
-    {
-        ui->TestChA->setChecked( Qt::Unchecked );
-        ui->TestChB->setChecked( Qt::Unchecked );
-    }
-    on_ControlType_activated( ui->ControlType->currentIndex() );
 }
 
 void ServoTitleInfo::on_TestChA_clicked()
@@ -621,4 +581,24 @@ void ServoTitleInfo::on_ControlReelChB_activated(const QString &arg1)
         }
         //если канал A не кликнут то ничего не делаем
     }
+}
+
+void ServoTitleInfo::on_PosCount_valueChanged(int arg1)
+{
+    // когда меняется количество катушек происходит обновление комбобоксов назначения катушек на каналы испытания
+    ui->ControlReelChA->clear();
+    ui->ControlReelChA->addItem( test::ToString( test::CS_REEL_A ) );
+    ui->ControlReelChB->clear();
+    ui->ControlReelChB->addItem( test::ToString( test::CS_REEL_A ) );
+    if ( arg1 == 2 )
+    {
+        ui->ControlReelChA->addItem( test::ToString( test::CS_REEL_B ) );
+        ui->ControlReelChB->addItem( test::ToString( test::CS_REEL_B ) );
+    }
+    if ( arg1 == 1 )
+    {
+        ui->TestChA->setChecked( Qt::Unchecked );
+        ui->TestChB->setChecked( Qt::Unchecked );
+    }
+    on_ControlType_activated( ui->ControlType->currentIndex() );
 }
