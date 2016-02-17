@@ -15,17 +15,19 @@ DB35::DB35():
 
     s860ma( mFloatData[0] ),
     x_max_a( mFloatData[1] ),
-    test_press( mFloatData[2] ),
-    nominal_press( mFloatData[3] ),
-    q_max_a( mFloatData[4] ),
-    q_max_b( mFloatData[5] ),
-    q_max( mFloatData[6] ),
-    amp_1( mFloatData[7] ),
-    amp_2( mFloatData[8] ),
-    amp_3( mFloatData[9] ),
-    increment( mFloatData[10] ),
-    press_control_min( mFloatData[11] ),
-    press_control_max( mFloatData[12] )
+    x_max_b( mFloatData[2] ),
+    x_pos_0( mFloatData[3] ),
+    test_press( mFloatData[4] ),
+    nominal_press( mFloatData[5] ),
+    q_max_a( mFloatData[6] ),
+    q_max_b( mFloatData[7] ),
+    q_max( mFloatData[8] ),
+    amp_1( mFloatData[9] ),
+    amp_2( mFloatData[10] ),
+    amp_3( mFloatData[11] ),
+    increment( mFloatData[12] ),
+    press_control_min( mFloatData[13] ),
+    press_control_max( mFloatData[14] )
 {
     memset( mBoolData, 0, sizeof(mBoolData) );
     memset( mFloatData, 0, sizeof(mFloatData) );

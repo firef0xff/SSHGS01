@@ -519,20 +519,18 @@ void ManualControl::on_Accept_clicked()
                 break;
         }
 
-        auto& mem2 = cpu::CpuMemory::Instance().DB33;
+
         double val = 0;
         test::ParseValue( val, ui->Sig0->text() );
-        mem2.x_pos_0 = val;             //12 сигнал переключение в 0
+        mem.x_pos_0 = val;             //12 сигнал переключение в 0
         test::ParseValue( val, ui->SigA->text() );
-        mem2.x_max_a = val;             //4 сигнал переключение в А
+        mem.x_max_a = val;             //4 сигнал переключение в А
 
         if ( mControlBits.RC2 )
         {
             test::ParseValue( val, ui->SigB->text() );
-            mem2.x_max_b = val;             //8 сигнал переключение в В
-        }
-
-        mem2.Write();
+            mem.x_max_b = val;             //8 сигнал переключение в В
+        }        
         mem.Write();
     }
     if ( mControlBits.CB )//Управление от карты

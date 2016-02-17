@@ -23,6 +23,8 @@ public:
 
     float& s860ma;              //2 управляющий сигнал
     float& x_max_a;             //6 полное перключение в А
+    float& x_max_b;             //DB35,REAL10  полное перключение в Б
+    float& x_pos_0;             //DB35,REAL14  полное перключение в 0
     float& test_press;          //18 испытание пробным давлением
     float& nominal_press;       //22 номинальное давление
     float& q_max_a;             //26 макс расход в А
@@ -45,7 +47,7 @@ private:
     enum
     {
         BOOL_COUNT = 4,
-        FLOAT_COUNT = 13
+        FLOAT_COUNT = 15
     };
 
     bool mBoolData[ BOOL_COUNT ];
@@ -60,6 +62,8 @@ private:
 
         L"CPU/DB35.s860ma",
         L"CPU/DB35.x_max_a",
+        L"CPU/DB35.x_max_b",
+        L"CPU/DB35.x_pos_0",
         L"CPU/DB35.test_press",
         L"CPU/DB35.nominal_press",
         L"CPU/DB35.q_max_a",

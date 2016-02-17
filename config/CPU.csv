@@ -251,6 +251,8 @@ DB35.channel_k_a;DB35,X62.2;RW;TST=;CMT=катушка на канале А( а-0 б-1)
 DB35.channel_k_b;DB35,X62.3;RW;TST=;CMT=катушка на канале Б( а-0 б-1)
 DB35.s860ma;DB35,REAL2;RW;TST=;CMT=управляющий сигнал
 DB35.x_max_a;DB35,REAL6;RW;TST=;CMT=полное перключение в А
+DB35.x_max_b;DB35,REAL10;RW;TST=;CMT=полное перключение в Б
+DB35.x_pos_0;DB35,REAL14;RW;TST=;CMT=полное перключение в 0
 DB35.test_press;DB35,REAL18;RW;TST=;CMT=испытание пробным давлением
 DB35.nominal_press;DB35,REAL22;RW;TST=;CMT=номинальное давление
 DB35.q_max_a;DB35,REAL26;RW;TST=;CMT=макс расход в А

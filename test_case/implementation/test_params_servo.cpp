@@ -256,11 +256,11 @@ void Parameters::WriteToController() const
         }
 
 
-        mem2.x_max_a = mSignalStateA;             //4 сигнал переключение в А
-        mem2.x_pos_0 = mSignalState0;             //12 сигнал переключение в 0
+        mem.x_max_a = mSignalStateA;             //4 сигнал переключение в А
+        mem.x_pos_0 = mSignalState0;             //12 сигнал переключение в 0
         if ( mPosCount == 3 )
         {
-            mem2.x_max_b = mSignalStateB;             //8 сигнал переключение в В
+            mem.x_max_b = mSignalStateB;             //8 сигнал переключение в В
         }
 
         mem.test_press = mPressureTesting;          //18 испытание пробным давлением
