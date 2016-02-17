@@ -30,8 +30,6 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowTitle( windowTitle() + " DEMO" );
 #endif
 
-    ui->statusBar->showMessage("Текущий пользователь: " + app::Settings::Instance().User() );
-
     ui->TestCase1->setText( test::hydro::Parameters::Instance().TestCollection().Name() );
     ui->TestCase1->setDescription( test::hydro::Parameters::Instance().TestCollection().Descr() );
     ui->act_test_case1->setToolTip( test::hydro::Parameters::Instance().TestCollection().Name() );
@@ -161,6 +159,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QObject::connect( &Updater, SIGNAL(update()), this, SLOT(onUpdateControls()) );
     Updater.start();
+}
+
+void MainWindow::showEvent( QShowEvent *e )
+{
+    ui->statusBar->showMessage("Текущий пользователь: " + app::Settings::Instance().User() );
+    QMainWindow::showEvent( e );
 }
 
 MainWindow::~MainWindow()

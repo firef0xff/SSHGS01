@@ -40,6 +40,7 @@ public:
 private:
 
     void closeEvent(QCloseEvent *e);
+    void showEvent( QShowEvent *e );
 
     void StartHydroTest( bool new_test );
     void StartServoTest( bool new_test );
