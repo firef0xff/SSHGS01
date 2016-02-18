@@ -6,14 +6,23 @@
 namespace app
 {
 
+enum UserLevel
+{
+    User = 0,
+    Master = 1,
+    Admin = 2
+};
+
 class UserInfo
 {
 public:
     QString Login;
     QString pass_hash;
+    UserLevel level;
     void SetPass( QString p );
 };
 typedef QVector< UserInfo > UserData;
+
 
 class Settings
 {
@@ -42,6 +51,7 @@ public:
     UserData Users() const;
 
     bool CheckUser( QString const& user, QString const& pass );
+    UserLevel UserAccess() const;
 private:
     Settings();
     Settings( Settings const& ) = delete;
@@ -49,6 +59,7 @@ private:
 
     QJsonDocument mDocument;
     QString mFileName;
+    UserLevel mCurrentLevel;
 };
 
 

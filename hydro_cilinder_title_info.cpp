@@ -3,6 +3,7 @@
 #include "test_form.h"
 #include <QMessageBox>
 #include "test_case/implementation/test_params_hydro_cilinder.h"
+#include "settings/settings.h"
 
 HydroCilinderTitleInfo::HydroCilinderTitleInfo(bool new_mode, QWidget *parent) :
     QWidget(parent),
@@ -17,6 +18,8 @@ HydroCilinderTitleInfo::HydroCilinderTitleInfo(bool new_mode, QWidget *parent) :
 
     if ( !mNewMode )
         FromParams();
+
+    CheckRights();
 }
 
 HydroCilinderTitleInfo::~HydroCilinderTitleInfo()
@@ -139,4 +142,20 @@ void HydroCilinderTitleInfo::on_buttonBox_accepted()
 void HydroCilinderTitleInfo::on_buttonBox_rejected()
 {
     close();
+}
+
+void HydroCilinderTitleInfo::CheckRights()
+{
+    if ( app::Settings::Instance().UserAccess() == app::User )
+    {
+        ui->GsType->setEnabled( false );
+        ui->SerNo->setEnabled( false );
+        ui->DefExpenditure->setEnabled( false );
+        ui->GsType->setEnabled( false );
+        ui->MaxPressure->setEnabled( false );
+        ui->MoveTime->setEnabled( false );
+        ui->TestPressure->setEnabled( false );
+        ui->HermTestTime->setEnabled( false );
+        ui->Expenditure->setEnabled( false );
+    }
 }

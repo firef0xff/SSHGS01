@@ -5,6 +5,7 @@
 #include "test_runner.h"
 #include "test_case/test_params.h"
 #include <QCheckBox>
+#include "settings/settings.h"
 
 TestForm::TestForm( bool new_mode, QWidget *parent) :
     QWidget(parent),
@@ -43,14 +44,14 @@ TestForm::TestForm( bool new_mode, QWidget *parent) :
 
         ui->gridLayout->addWidget( ptr.get() , test_ptr->Number() - 1 , 0, 1, 1 );
         mControls.append( ptr );
-        mChilds.append( ptr );
     }
 
     mVertical = new QSpacerItem( 20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding );
     mHorisontal = new QSpacerItem( 40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
 
     ui->gridLayout->addItem( mVertical, ui->gridLayout->rowCount() + 1, 0, 1, 1 );
-    ui->gridLayout->addItem( mHorisontal, 0, ui->gridLayout->rowCount() + 1, 1, 1 );        
+    ui->gridLayout->addItem( mHorisontal, 0, ui->gridLayout->rowCount() + 1, 1, 1 );
+    CheckRights();
 }
 
 TestForm::~TestForm()
@@ -88,4 +89,15 @@ void TestForm::on_buttonBox_accepted()
 
     hide();
     mChildWindow->show();    
+}
+
+void TestForm::CheckRights()
+{
+    if ( app::Settings::Instance().UserAccess() == app::User )
+    {
+        foreach (ControlPtr check_box, mControls)
+        {
+            check_box->setEnabled( false );
+        }
+    }
 }

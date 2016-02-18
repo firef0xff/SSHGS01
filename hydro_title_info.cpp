@@ -3,7 +3,7 @@
 #include "stand_params.h"
 #include <QMessageBox>
 #include "test_case/implementation/test_params_hydro.h"
-
+#include "settings/settings.h"
 
 HydroTitleInfo::HydroTitleInfo(bool new_mode, QWidget *parent) :
     QWidget(parent),
@@ -37,6 +37,8 @@ HydroTitleInfo::HydroTitleInfo(bool new_mode, QWidget *parent) :
 
     ui->l_actuation_off_time->setVisible( false );
     ui->l_actuation_on_time->setVisible( false );
+
+    CheckRights();
 }
 
 HydroTitleInfo::~HydroTitleInfo()
@@ -314,5 +316,32 @@ void HydroTitleInfo::on_PosCount_valueChanged(int arg1)
         break;
     default:
         break;
+    }
+}
+
+void HydroTitleInfo::CheckRights()
+{
+    if ( app::Settings::Instance().UserAccess() == app::User )
+    {
+        ui->SerNo->setEnabled( false );
+        ui->DefExpenditure->setEnabled( false );
+        ui->Voltage->setEnabled( false );
+        ui->VoltageType->setEnabled( false );
+        ui->PosCount->setEnabled( false );
+        ui->ControlType->setEnabled( false );
+        ui->MinControlPressure->setEnabled( false );
+        ui->MaxControlPressure->setEnabled( false );
+        ui->TestControlPressure->setEnabled( false );
+        ui->VoltageRange->setEnabled( false );
+        ui->Lost->setEnabled( false );
+        ui->MaxExpenditure->setEnabled( false );
+        ui->MaxWorkPressure->setEnabled( false );
+        ui->MinPressure->setEnabled( false );
+        ui->HermPressure->setEnabled( false );
+        ui->HermSignal->setEnabled( false );
+        ui->PABTSignal->setEnabled( false );
+        ui->PBATSignal->setEnabled( false );
+        ui->ActuationOffTime->setEnabled( false );
+        ui->ActuationOnTime->setEnabled( false );
     }
 }

@@ -35,6 +35,7 @@ private:
 
     bool SaveInputParams();
     void FromParams();
+    void CheckRights();
 
 signals:
     void closed();

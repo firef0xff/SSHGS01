@@ -3,6 +3,7 @@
 #include "test_form.h"
 #include <QMessageBox>
 #include "test_case/implementation/test_params_control_panel.h"
+#include "settings/settings.h"
 
 ControlPanelsTitleInfo::ControlPanelsTitleInfo(bool new_mode, QWidget *parent) :
     QWidget(parent),
@@ -22,6 +23,8 @@ ControlPanelsTitleInfo::ControlPanelsTitleInfo(bool new_mode, QWidget *parent) :
 
     if ( !mNewMode )
         FromParams();
+
+    CheckRights();
 }
 
 ControlPanelsTitleInfo::~ControlPanelsTitleInfo()
@@ -114,4 +117,17 @@ void ControlPanelsTitleInfo::on_buttonBox_accepted()
 void ControlPanelsTitleInfo::on_buttonBox_rejected()
 {
     close();
+}
+
+void ControlPanelsTitleInfo::CheckRights()
+{
+    if ( app::Settings::Instance().UserAccess() == app::User )
+    {
+        ui->GsType->setEnabled( false );
+        ui->SerNo->setEnabled( false );
+        ui->SignalType->setEnabled( false );
+        ui->Voltage->setEnabled( false );
+        ui->MaxAmperage->setEnabled( false );
+        ui->ReelResist->setEnabled( false );
+    }
 }

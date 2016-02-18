@@ -22,6 +22,7 @@ private:
     void closeEvent(QCloseEvent *);
     bool SaveInputParams();
     void FromParams();
+    void CheckRights();
 
 signals:
     void closed();

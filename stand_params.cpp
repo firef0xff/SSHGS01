@@ -4,7 +4,7 @@
 #include "test_case/test_params.h"
 #include <QMessageBox>
 #include "test_case/implementation/test_params_hydro.h"
-
+#include "settings/settings.h"
 
 StandParams::StandParams(bool new_mode, QWidget *parent) :
     QWidget(parent),
@@ -30,6 +30,7 @@ StandParams::StandParams(bool new_mode, QWidget *parent) :
 
     if (!mNewMode)
         FromParams();
+    CheckRights();
 }
 
 StandParams::~StandParams()
@@ -156,4 +157,30 @@ void StandParams::on_buttonBox_rejected()
 void StandParams::SetCallback( std::function< void() > func  )
 {
     mCustomAction = func;
+}
+
+void StandParams::CheckRights()
+{
+    if ( app::Settings::Instance().UserAccess() == app::User )
+    {
+        ui->DD1A_ON->setEnabled( false );
+        ui->DD2A_ON->setEnabled( false );
+        ui->DD3A_ON->setEnabled( false );
+        ui->OnDynamic_1->setEnabled( false );
+
+        ui->DD1A_OFF->setEnabled( false );
+        ui->DD2A_OFF->setEnabled( false );
+        ui->DD3A_OFF->setEnabled( false );
+        ui->OffDynamic_1->setEnabled( false );
+
+        ui->DD1B_ON->setEnabled( false );
+        ui->DD2B_ON->setEnabled( false );
+        ui->DD3B_ON->setEnabled( false );
+        ui->OnDynamic_2->setEnabled( false );
+
+        ui->DD1B_OFF->setEnabled( false );
+        ui->DD2B_OFF->setEnabled( false );
+        ui->DD3B_OFF->setEnabled( false );
+        ui->OffDynamic_2->setEnabled( false );
+    }
 }

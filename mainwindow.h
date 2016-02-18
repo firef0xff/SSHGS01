@@ -50,6 +50,7 @@ private:
     void DeviceLists( examinee::DeviceCollection& devices );
 
     void ShowChildWindow( ChildPtr child, bool maximized = false );
+    void CheckRights();
 
 
     Ui::MainWindow *ui;

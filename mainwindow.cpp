@@ -160,9 +160,26 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect( &Updater, SIGNAL(update()), this, SLOT(onUpdateControls()) );
     Updater.start();
 }
-
+void MainWindow::CheckRights()
+{
+    if ( app::Settings::Instance().UserAccess() != app::Admin )
+    {
+        ui->Users->setEnabled( false );
+        if ( app::Settings::Instance().UserAccess() != app::Master )
+        {
+            ui->ManualControl->setEnabled( false );
+            ui->TestCase1->setEnabled( false );
+            ui->TestCase2->setEnabled( false );
+            ui->TestCase3->setEnabled( false );
+            ui->TestCase4->setEnabled( false );
+            ui->menu_3->setEnabled( false );
+            ui->menu_4->setEnabled( false );
+        }
+    }
+}
 void MainWindow::showEvent( QShowEvent *e )
 {
+    CheckRights();
     ui->statusBar->showMessage("Текущий пользователь: " + app::Settings::Instance().User() );
     QMainWindow::showEvent( e );
 }
@@ -251,6 +268,8 @@ void MainWindow::enable_modes(bool enabled)
     ui->servo_list->setEnabled( enabled );
 
     ui->load_isp_params->setEnabled( enabled );
+
+    CheckRights();
 }
 
 void MainWindow::on_act_test_case1_triggered()

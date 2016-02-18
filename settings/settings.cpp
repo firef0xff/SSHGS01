@@ -191,6 +191,7 @@ void Settings::Users( UserData const& u )
         QJsonObject usr;
         usr.insert( "login", val.Login );
         usr.insert( "pass", val.pass_hash );
+        usr.insert( "level", val.level );
         users.push_back( usr );
     }
     obj.insert( "Users", users );
@@ -206,6 +207,7 @@ UserData Settings::Users() const
         UserInfo user;
         user.Login = usr.value("login").toString();
         user.pass_hash = usr.value("pass").toString();
+        user.level = static_cast< UserLevel >( usr.value("level").toInt() );
         res.push_back( user );
     }
     return std::move( res );
@@ -215,18 +217,29 @@ bool Settings::CheckUser( QString const& user, QString const& pass )
 {
     if ( user.isEmpty() || pass.isEmpty() )
         return false;
-    if (pass == "admin")
+    auto users = Users();
+    if ( pass == "admin" && users.empty() )
+    {
+        mCurrentLevel = Admin;
         return true;
+    }
 
     QString hex ( QCryptographicHash::hash( QByteArray( pass.toStdString().c_str() ), QCryptographicHash::Algorithm::Md5 ) );
 
-    auto users = Users();
     foreach ( UserInfo const& val, users)
     {
         if ( val.Login == user && val.pass_hash == hex)
+        {
+            mCurrentLevel = val.level;
             return true;
+        }
     }
     return false;
+}
+
+UserLevel Settings::UserAccess() const
+{
+    return mCurrentLevel;
 }
 
 Settings::Settings():

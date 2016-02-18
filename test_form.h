@@ -30,12 +30,13 @@ private:
     typedef QLayoutItem* SpaserPtr;
     Ui::TestForm *ui;
     QList< ControlPtr > mControls;
-    QList< ControlPtr > mChilds;
     SpaserPtr mHorisontal;
     SpaserPtr mVertical;
     std::unique_ptr< QWidget > mChildWindow;
 
     void closeEvent(QCloseEvent *e);
+    void CheckRights();
+
 
 signals:
     void closed();

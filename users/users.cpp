@@ -1,6 +1,32 @@
 #include "users.h"
 #include "ui_users.h"
 
+
+QString CastToCombo( app::UserLevel lvl )
+{
+    switch (lvl)
+    {
+        case app::Admin:
+            return "Администратор";
+        case app::Master:
+            return "Мастер";
+        case app::User:
+            return "Пользователь";
+    }
+    return "Пользователь";
+}
+
+app::UserLevel CastToLevel( QString const& str )
+{
+    if ( !str.compare( "Администратор", Qt::CaseInsensitive ) )
+        return app::Admin;
+    else if ( !str.compare( "Мастер", Qt::CaseInsensitive ) )
+        return app::Master;
+    else if ( !str.compare( "Пользователь", Qt::CaseInsensitive ) )
+        return app::User;
+    return app::User;
+}
+
 Users::Users(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Users)
@@ -56,6 +82,7 @@ void Users::ShowData()
     mUpdateGreed = false;
     ui->Pass->setText("");
     ui->UserName->setText("");
+    ui->UserLevel->setCurrentIndex( -1 );
     on_UsersGreed_itemSelectionChanged();
 }
 
@@ -76,6 +103,7 @@ void Users::on_UsersGreed_itemSelectionChanged()
         app::UserInfo* user = mCurrentItem->data(Qt::UserRole).value< app::UserInfo* >();
         ui->UserName->setText( user->Login );
         ui->Pass->setText("");
+        ui->UserLevel->setCurrentText( CastToCombo( user->level ) );
     }
 }
 
@@ -86,6 +114,7 @@ void Users::on_Add_clicked()
         app::UserInfo u;
         u.Login = ui->UserName->text();
         u.SetPass( ui->Pass->text() );
+        u.level = CastToLevel( ui->UserLevel->currentText() );
         mUsers.push_back( u );
         ShowData();
     }
@@ -121,6 +150,7 @@ void Users::on_Edit_clicked()
         {
             user->SetPass( ui->Pass->text() );
         }
+        user->level = CastToLevel( ui->UserLevel->currentText() );
         ShowData();
     }
 }

@@ -45,6 +45,32 @@
      <item row="1" column="1">
       <widget class="QLineEdit" name="Pass"/>
      </item>
+     <item row="2" column="1">
+      <widget class="QComboBox" name="UserLevel">
+       <item>
+        <property name="text">
+         <string>Администратор</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Мастер</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Пользователь</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Уровень доступа</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>

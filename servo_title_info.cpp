@@ -4,6 +4,7 @@
 #include <QMessageBox>
 #include "test_case/implementation/test_params_servo.h"
 #include "test_case/test.h"
+#include "settings/settings.h"
 //#include <climits>
 
 ServoTitleInfo::ServoTitleInfo(bool new_mode, QWidget *parent) :
@@ -29,6 +30,7 @@ ServoTitleInfo::ServoTitleInfo(bool new_mode, QWidget *parent) :
 
     if ( !mNewMode )
         FromParams();
+    CheckRights();
 }
 
 ServoTitleInfo::~ServoTitleInfo()
@@ -601,4 +603,39 @@ void ServoTitleInfo::on_PosCount_valueChanged(int arg1)
         ui->TestChB->setChecked( Qt::Unchecked );
     }
     on_ControlType_activated( ui->ControlType->currentIndex() );
+}
+
+void ServoTitleInfo::CheckRights()
+{
+    if ( app::Settings::Instance().UserAccess() == app::User )
+    {
+        ui->SerNo->setEnabled( false );
+        ui->DefExpenditure->setEnabled( false );
+        ui->PosCount->setEnabled( false );
+        ui->RaspredControl->setEnabled( false );
+        ui->MinControlPressure->setEnabled( false );
+        ui->MaxControlPressure->setEnabled( false );
+        ui->MaxExpenditure->setEnabled( false );
+        ui->ControlType->setEnabled( false );
+        ui->PressureTesting->setEnabled( false );
+        ui->FrequencyInc->setEnabled( false );
+        ui->PressureNominal->setEnabled( false );
+        ui->ControlSignal->setEnabled( false );
+        ui->ControlSignalAmpl0->setEnabled( false );
+        ui->ControlSignalAmpl1->setEnabled( false );
+        ui->ControlSignalAmpl2->setEnabled( false );
+        ui->SignalStateA->setEnabled( false );
+        ui->SignalState0->setEnabled( false );
+        ui->SignalStateB->setEnabled( false );
+        ui->ControlReelResist->setEnabled( false );
+        ui->MaxExpenditureA->setEnabled( false );
+        ui->MaxExpenditureB->setEnabled( false );
+        ui->Voltage->setEnabled( false );
+        ui->TestChA->setEnabled( false );
+        ui->ControlReelChA->setEnabled( false );
+        ui->TestChB->setEnabled( false );
+        ui->ControlReelChB->setEnabled( false );
+        ui->Frequency->setEnabled( false );
+        ui->AmplInc->setEnabled( false );
+    }
 }
