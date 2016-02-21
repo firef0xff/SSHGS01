@@ -5,7 +5,6 @@
 #include "test_case/test_params.h"
 #include "../test_params_servo.h"
 #include <thread>
-#define DEBUG
 
 #ifdef DEBUG
 #include <QJsonDocument>
@@ -714,7 +713,7 @@ double CalckAmpl3( FrequencyCharacteristics::DataSet const& data, double frequen
     return sum_speed;
 }
 
-ff0x::NoAxisGraphBuilder::LinePoints ProcessAFC( FrequencyCharacteristics::Source const& src, QPointF& x_range, QPointF& y_range )
+ff0x::Log10GraphBuilder::LinePoints ProcessAFC( FrequencyCharacteristics::Source const& src, QPointF& x_range, QPointF& y_range )
 {
 #ifdef DEBUG
     AFC_DEBUG = QJsonArray();
@@ -861,7 +860,7 @@ double CalckFi( FrequencyCharacteristics::DataSet const& data, double frequency 
     return fi;
 }
 
-ff0x::NoAxisGraphBuilder::LinePoints ProcessPFC( FrequencyCharacteristics::Source const& src, QPointF& x_range, QPointF& y_range )
+ff0x::Log10GraphBuilder::LinePoints ProcessPFC( FrequencyCharacteristics::Source const& src, QPointF& x_range, QPointF& y_range )
 {
 #ifdef DEBUG
     PFC_DEBUG = QJsonArray();
@@ -1561,11 +1560,11 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
         int w = (rect.width())*0.98;
         int h = (rect.height() - metrix.height())*0.98;
 
-        ff0x::NoAxisGraphBuilder builder ( w, h, f );
-        ff0x::NoAxisGraphBuilder::GraphDataLine lines;
-        lines.push_back( ff0x::NoAxisGraphBuilder::Line(mGrapfs1->data1, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
+        ff0x::Log10GraphBuilder builder ( w, h, f );
+        ff0x::Log10GraphBuilder::GraphDataLine lines;
+        lines.push_back( ff0x::Log10GraphBuilder::Line(mGrapfs1->data1, ff0x::Log10GraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
         if ( !mGrapfs1->data1_e2.empty() )
-            lines.push_back( ff0x::NoAxisGraphBuilder::Line(mGrapfs1->data1_e2, ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
+            lines.push_back( ff0x::Log10GraphBuilder::Line(mGrapfs1->data1_e2, ff0x::Log10GraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
 
         QRect p1(rect.left(), rect.top(), w, h );
         QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
@@ -1573,19 +1572,15 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
         QString amp = test::ToString( Ampl1 );
         DrawRowCenter( p1t, text_font, Qt::black, "АЧХ. Амплитуда " + amp + "%" );
         {
-            QPointF x_range;
             QPointF y_range;
-            double x_step = 0;
             double y_step = 0;            
-
-            ff0x::DataLength( mGrapfs1->x_range_1,x_range, x_step );
             ff0x::DataLength( mGrapfs1->y_range_1,y_range, y_step );
             if ( y_range.x() - y_range.y() == 0 )
             {
                 y_range.setX( 1 );
                 y_range.setY( -1 );
             }
-            painter.drawPixmap( p1, builder.Draw( lines, x_range, y_range, x_step, y_step, "Частота (Гц)", "Дб", true ) );
+            painter.drawPixmap( p1, builder.Draw( lines, mGrapfs1->x_range_1, y_range, y_step, "Частота (Гц)", "Дб", true ) );
         }
         painter.restore();
     }, 1, 480  );
@@ -1599,11 +1594,11 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
         int w = (rect.width())*0.98;
         int h = (rect.height() - metrix.height())*0.98;
 
-        ff0x::NoAxisGraphBuilder builder ( w, h, f );
-        ff0x::NoAxisGraphBuilder::GraphDataLine lines;
-        lines.push_back( ff0x::NoAxisGraphBuilder::Line(mGrapfs1->data2, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
+        ff0x::Log10GraphBuilder builder ( w, h, f );
+        ff0x::Log10GraphBuilder::GraphDataLine lines;
+        lines.push_back( ff0x::Log10GraphBuilder::Line(mGrapfs1->data2, ff0x::Log10GraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
         if ( !mGrapfs1->data2_e2.empty() )
-            lines.push_back( ff0x::NoAxisGraphBuilder::Line(mGrapfs1->data2_e2, ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
+            lines.push_back( ff0x::Log10GraphBuilder::Line(mGrapfs1->data2_e2, ff0x::Log10GraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
 
         QRect p1(rect.left(), rect.top(), w, h );
         QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
@@ -1611,18 +1606,15 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
         QString amp = test::ToString( Ampl1 );
         DrawRowCenter( p1t, text_font, Qt::black, "ФЧХ. Амплитуда " + amp + "%"  );
         {
-            QPointF x_range;
             QPointF y_range;
-            double x_step = 0;
             double y_step = 0;
-            ff0x::DataLength( mGrapfs1->x_range_2,x_range, x_step );
             ff0x::DataLength( mGrapfs1->y_range_2,y_range, y_step );
             if ( y_range.x() - y_range.y() == 0 )
             {
                 y_range.setX( 1 );
                 y_range.setY( -1 );
             }
-            painter.drawPixmap( p1, builder.Draw( lines, x_range, y_range, x_step, y_step, "Частота (Гц)", "φ (гр.)", true ) );
+            painter.drawPixmap( p1, builder.Draw( lines, mGrapfs1->x_range_2, y_range, y_step, "Частота (Гц)", "φ (гр.)", true ) );
         }
         painter.restore();
     }, 1, 480  );
@@ -1638,11 +1630,11 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
         int w = (rect.width())*0.98;
         int h = (rect.height() - metrix.height())*0.98;
 
-        ff0x::NoAxisGraphBuilder builder ( w, h, f );
-        ff0x::NoAxisGraphBuilder::GraphDataLine lines;
-        lines.push_back( ff0x::NoAxisGraphBuilder::Line(mGrapfs2->data1, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
+        ff0x::Log10GraphBuilder builder ( w, h, f );
+        ff0x::Log10GraphBuilder::GraphDataLine lines;
+        lines.push_back( ff0x::Log10GraphBuilder::Line(mGrapfs2->data1, ff0x::Log10GraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
         if ( !mGrapfs2->data1_e2.empty() )
-            lines.push_back( ff0x::NoAxisGraphBuilder::Line(mGrapfs2->data1_e2, ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
+            lines.push_back( ff0x::Log10GraphBuilder::Line(mGrapfs2->data1_e2, ff0x::Log10GraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
 
         QRect p1(rect.left(), rect.top(), w, h );
         QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
@@ -1650,19 +1642,16 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
         QString amp = test::ToString( Ampl2 );
         DrawRowCenter( p1t, text_font, Qt::black, "АЧХ. Амплитуда " + amp + "%" );
         {
-            QPointF x_range;
             QPointF y_range;
-            double x_step = 0;
             double y_step = 0;
 
-            ff0x::DataLength( mGrapfs2->x_range_1,x_range, x_step );
             ff0x::DataLength( mGrapfs2->y_range_1,y_range, y_step );
             if ( y_range.x() - y_range.y() == 0 )
             {
                 y_range.setX( 1 );
                 y_range.setY( -1 );
             }
-            painter.drawPixmap( p1, builder.Draw( lines, x_range, y_range, x_step, y_step, "Частота (Гц)", "Дб", true ) );
+            painter.drawPixmap( p1, builder.Draw( lines, mGrapfs2->x_range_1, y_range, y_step, "Частота (Гц)", "Дб", true ) );
         }
         painter.restore();
     }, 1, 480  );
@@ -1676,11 +1665,11 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
         int w = (rect.width())*0.98;
         int h = (rect.height() - metrix.height())*0.98;
 
-        ff0x::NoAxisGraphBuilder builder ( w, h, f );
-        ff0x::NoAxisGraphBuilder::GraphDataLine lines;
-        lines.push_back( ff0x::NoAxisGraphBuilder::Line(mGrapfs2->data2, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
+        ff0x::Log10GraphBuilder builder ( w, h, f );
+        ff0x::Log10GraphBuilder::GraphDataLine lines;
+        lines.push_back( ff0x::Log10GraphBuilder::Line(mGrapfs2->data2, ff0x::Log10GraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
         if ( !mGrapfs2->data2_e2.empty() )
-            lines.push_back( ff0x::NoAxisGraphBuilder::Line(mGrapfs2->data2_e2, ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
+            lines.push_back( ff0x::Log10GraphBuilder::Line(mGrapfs2->data2_e2, ff0x::Log10GraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
 
         QRect p1(rect.left(), rect.top(), w, h );
         QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
@@ -1688,18 +1677,15 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
         QString amp = test::ToString( Ampl2 );
         DrawRowCenter( p1t, text_font, Qt::black, "ФЧХ. Амплитуда " + amp + "%"  );
         {
-            QPointF x_range;
             QPointF y_range;
-            double x_step = 0;
             double y_step = 0;
-            ff0x::DataLength( mGrapfs2->x_range_2,x_range, x_step );
             ff0x::DataLength( mGrapfs2->y_range_2,y_range, y_step );
             if ( y_range.x() - y_range.y() == 0 )
             {
                 y_range.setX( 1 );
                 y_range.setY( -1 );
             }
-            painter.drawPixmap( p1, builder.Draw( lines, x_range, y_range, x_step, y_step, "Частота (Гц)", "φ (гр.)", true ) );
+            painter.drawPixmap( p1, builder.Draw( lines, mGrapfs2->x_range_2, y_range, y_step, "Частота (Гц)", "φ (гр.)", true ) );
         }
         painter.restore();
     }, 1, 480  );
@@ -1715,11 +1701,11 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
         int w = (rect.width())*0.98;
         int h = (rect.height() - metrix.height())*0.98;
 
-        ff0x::NoAxisGraphBuilder builder ( w, h, f );
-        ff0x::NoAxisGraphBuilder::GraphDataLine lines;
-        lines.push_back( ff0x::NoAxisGraphBuilder::Line(mGrapfs3->data1, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
+        ff0x::Log10GraphBuilder builder ( w, h, f );
+        ff0x::Log10GraphBuilder::GraphDataLine lines;
+        lines.push_back( ff0x::Log10GraphBuilder::Line(mGrapfs3->data1, ff0x::Log10GraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
         if ( !mGrapfs3->data1_e2.empty() )
-            lines.push_back( ff0x::NoAxisGraphBuilder::Line(mGrapfs3->data1_e2, ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
+            lines.push_back( ff0x::Log10GraphBuilder::Line(mGrapfs3->data1_e2, ff0x::Log10GraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
 
         QRect p1(rect.left(), rect.top(), w, h );
         QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
@@ -1727,19 +1713,16 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
         QString amp = test::ToString( Ampl3 );
         DrawRowCenter( p1t, text_font, Qt::black, "АЧХ. Амплитуда " + amp + "%" );
         {
-            QPointF x_range;
             QPointF y_range;
-            double x_step = 0;
             double y_step = 0;
 
-            ff0x::DataLength( mGrapfs3->x_range_1,x_range, x_step );
             ff0x::DataLength( mGrapfs3->y_range_1,y_range, y_step );
             if ( y_range.x() - y_range.y() == 0 )
             {
                 y_range.setX( 1 );
                 y_range.setY( -1 );
             }
-            painter.drawPixmap( p1, builder.Draw( lines, x_range, y_range, x_step, y_step, "Частота (Гц)", "Дб", true ) );
+            painter.drawPixmap( p1, builder.Draw( lines, mGrapfs3->x_range_1, y_range, y_step, "Частота (Гц)", "Дб", true ) );
         }
         painter.restore();
     }, 1, 480  );
@@ -1753,11 +1736,11 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
         int w = (rect.width())*0.98;
         int h = (rect.height() - metrix.height())*0.98;
 
-        ff0x::NoAxisGraphBuilder builder ( w, h, f );
-        ff0x::NoAxisGraphBuilder::GraphDataLine lines;
-        lines.push_back( ff0x::NoAxisGraphBuilder::Line(mGrapfs3->data2, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
+        ff0x::Log10GraphBuilder builder ( w, h, f );
+        ff0x::Log10GraphBuilder::GraphDataLine lines;
+        lines.push_back( ff0x::Log10GraphBuilder::Line(mGrapfs3->data2, ff0x::Log10GraphBuilder::LabelInfo( "Испытуемый аппарат", Qt::blue ) ) );
         if ( !mGrapfs3->data2_e2.empty() )
-            lines.push_back( ff0x::NoAxisGraphBuilder::Line(mGrapfs3->data2_e2, ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
+            lines.push_back( ff0x::Log10GraphBuilder::Line(mGrapfs3->data2_e2, ff0x::Log10GraphBuilder::LabelInfo( "Предыдущий результат", Qt::gray ) ) );
 
         QRect p1(rect.left(), rect.top(), w, h );
         QRect p1t(p1.left(), p1.bottom(), p1.width(), metrix.height());
@@ -1765,18 +1748,15 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
         QString amp = test::ToString( Ampl3 );
         DrawRowCenter( p1t, text_font, Qt::black, "ФЧХ. Амплитуда " + amp + "%"  );
         {
-            QPointF x_range;
             QPointF y_range;
-            double x_step = 0;
             double y_step = 0;
-            ff0x::DataLength( mGrapfs3->x_range_2,x_range, x_step );
             ff0x::DataLength( mGrapfs3->y_range_2,y_range, y_step );
             if ( y_range.x() - y_range.y() == 0 )
             {
                 y_range.setX( 1 );
                 y_range.setY( -1 );
             }
-            painter.drawPixmap( p1, builder.Draw( lines, x_range, y_range, x_step, y_step, "Частота (Гц)", "φ (гр.)", true ) );
+            painter.drawPixmap( p1, builder.Draw( lines, mGrapfs3->x_range_2, y_range, y_step, "Частота (Гц)", "φ (гр.)", true ) );
         }
         painter.restore();
     }, 1, 480  );
