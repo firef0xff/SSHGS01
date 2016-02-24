@@ -21,8 +21,8 @@ ServoTitleInfo::ServoTitleInfo(bool new_mode, QWidget *parent) :
 
     ui->PressureNominal->setValidator( new QIntValidator( 10, 315, this ) );
     ui->MaxExpenditure->setValidator( new QIntValidator( 1, 660, this ) );
-    ui->MaxExpenditureA->setValidator( new QIntValidator( 1, 660, this ) );
-    ui->MaxExpenditureB->setValidator( new QIntValidator( 1, 660, this ) );
+    ui->MaxExpenditureA->setValidator( new QIntValidator( -660, 660, this ) );
+    ui->MaxExpenditureB->setValidator( new QIntValidator( -660, 660, this ) );
     ui->ControlReelResist->setValidator( new QDoubleValidator( INT32_MIN, INT32_MAX , 2, this ) );
     on_RaspredControl_activated( ui->RaspredControl->currentIndex() );    
     on_ControlType_activated( ui->ControlType->currentIndex() );
@@ -592,12 +592,12 @@ void ServoTitleInfo::on_PosCount_valueChanged(int arg1)
     ui->ControlReelChA->addItem( test::ToString( test::CS_REEL_A ) );
     ui->ControlReelChB->clear();
     ui->ControlReelChB->addItem( test::ToString( test::CS_REEL_A ) );
-    if ( arg1 == 2 )
+    if ( arg1 == 3 )
     {
         ui->ControlReelChA->addItem( test::ToString( test::CS_REEL_B ) );
         ui->ControlReelChB->addItem( test::ToString( test::CS_REEL_B ) );
     }
-    if ( arg1 == 1 )
+    if ( arg1 == 2 )
     {
         ui->TestChA->setChecked( Qt::Unchecked );
         ui->TestChB->setChecked( Qt::Unchecked );

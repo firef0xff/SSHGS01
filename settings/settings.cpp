@@ -218,7 +218,11 @@ bool Settings::CheckUser( QString const& user, QString const& pass )
     if ( user.isEmpty() || pass.isEmpty() )
         return false;
     auto users = Users();
-    if ( pass == "admin" && users.empty() )
+    if ( pass == "admin"
+#ifndef DEMO
+         && users.empty()
+#endif
+         )
     {
         mCurrentLevel = Admin;
         return true;

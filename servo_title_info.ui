@@ -500,7 +500,7 @@ X_max_B, л/мин</string>
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>1...660 л/мин</string>
+        <string>-660...660 л/мин</string>
        </property>
        <property name="toolTipDuration">
         <number>1000</number>
@@ -576,7 +576,7 @@ X_max_B, л/мин</string>
         </size>
        </property>
        <property name="toolTip">
-        <string>1...660 л/мин</string>
+        <string>-660...660 л/мин</string>
        </property>
        <property name="toolTipDuration">
         <number>1000</number>
