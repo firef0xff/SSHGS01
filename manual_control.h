@@ -48,7 +48,7 @@ private:
     void SynkControls();
 
     void UpdateButton( QAbstractButton *btn, bool checked );    
-    void UpdateValue  ( QLCDNumber *ctrl, float const& value );
+    void UpdateValue  ( QLCDNumber *ctrl, float const& value, bool disable_negative = true );
 
     void UpdateMarks(); //обновление индикации
     void UpdateData();  //обновление данных на сетке

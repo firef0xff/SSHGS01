@@ -233,9 +233,9 @@ void ManualControl::UpdateMarks()
     UpdateMark( ui->ErrorMark, mErrorBits.Error, Qt::red    );   //MX44.6 не правильная комбинация вкл клапанов
 }
 
-void ManualControl::UpdateValue  ( QLCDNumber *ctrl, float const& value )
+void ManualControl::UpdateValue  ( QLCDNumber *ctrl, float const& value, bool disable_negative )
 {    
-    ctrl->display( value > 0 ? value : 0 );
+    ctrl->display( ( disable_negative || value > 0 ) ? value : 0 );
 }
 
 void ManualControl::UpdateData()
@@ -265,7 +265,7 @@ void ManualControl::UpdateData()
     UpdateValue( ui->I_AC, round( mParams.A2 *100 )/100 );
     UpdateValue( ui->POS1, round( mParams.POS_1_REAL *100 )/100 );
     UpdateValue( ui->POS2, round( mParams.POS_2_REAL *100 )/100 );
-    UpdateValue( ui->POS3, round( mParams.POS_3_REAL *100 )/100 );
+    UpdateValue( ui->POS3, round( mParams.POS_3_REAL *100 )/100, false );
 }
 
 void ManualControl::on_KM1_clicked()
