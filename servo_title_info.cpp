@@ -433,6 +433,18 @@ void ServoTitleInfo::on_ControlType_activated(int index)
     ui->SignalState0->setVisible( ui->PosCount->value() >= 2);
     ui->Voltage->setVisible( control == test::RC_CONTROL_BOX );
 
+    ui->label->setVisible( control == test::RC_REEL );
+    ui->label_2->setVisible( control == test::RC_REEL );
+    ui->label_3->setVisible( control == test::RC_REEL );
+    ui->label_4->setVisible( control == test::RC_REEL );
+    ui->label_5->setVisible( control == test::RC_REEL );
+
+    ui->spinBox->setVisible( control == test::RC_REEL );
+    ui->spinBox_2->setVisible( control == test::RC_REEL );
+    ui->spinBox_3->setVisible( control == test::RC_REEL );
+    ui->comboBox->setVisible( control == test::RC_REEL );
+    ui->comboBox_2->setVisible( control == test::RC_REEL );
+
     ui->l_signal_state_a->setVisible( ui->PosCount->value() >= 2);
     ui->l_signal_state_b->setVisible( ui->PosCount->value() == 3);
     ui->l_signal_state_0->setVisible( ui->PosCount->value() >= 2);
