@@ -553,7 +553,10 @@ void ManualControl::on_Accept_clicked()
         test::ParseValue( val, ui->Sig0->text() );
         mem.x_pos_0 = val;             //12 сигнал переключение в 0
 
-        test::ParseValue( val,  ui->BoardVoltage->currentText());
+        QString t_val = ui->BoardVoltage->currentText();
+        if ( t_val.left(2) == "+-" )
+            t_val = t_val.mid( 2 );
+        test::ParseValue( val, t_val );
         mem.U_Plat = val;
         mem.Write();
 

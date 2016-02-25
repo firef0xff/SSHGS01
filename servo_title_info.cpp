@@ -107,6 +107,9 @@ bool ServoTitleInfo::SaveInputParams()
 
     if ( params.ReelControl() == test::RC_CONTROL_BOX )
     {
+        QString t_val = ui->Voltage->currentText();
+        if ( t_val.left(2) == "+-" )
+            t_val = t_val.mid( 2 );
         res *= ParamChecker( ui->l_voltage,         params.Voltage( ui->Voltage->currentText() ) );
     }
 
@@ -181,6 +184,8 @@ void ServoTitleInfo::FromParams()
     if ( params.ReelControl() == test::RC_CONTROL_BOX )
     {
         ui->Voltage->setCurrentIndex( ui->Voltage->findText( test::ToString( params.Voltage() ) ) );
+        if ( ui->Voltage->currentIndex() == -1 )
+            ui->Voltage->setCurrentIndex( ui->Voltage->findText( "+-" + test::ToString( params.Voltage() ) ) );
     }
 
     bool channel_a = params.TestChannelA();
