@@ -1770,7 +1770,7 @@
            <number>500</number>
           </property>
           <property name="text">
-           <string>2 канала</string>
+           <string>2 позиции</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -1786,7 +1786,7 @@
            <number>500</number>
           </property>
           <property name="text">
-           <string>3 канала</string>
+           <string>3 позиции</string>
           </property>
           <property name="checkable">
            <bool>true</bool>

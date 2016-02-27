@@ -226,8 +226,8 @@ void ManualControl::UpdateMarks()
         UpdateMark( ui->SL3, err, c );     //IX4.2    уровень масла - авария
     }
 
-    UpdateMark( ui->SL4, mErrorBits.SL4, Qt::red    );     //IX4.3    уровень масла верхний (поддон)
-    UpdateMark( ui->SL5, mErrorBits.SL5, Qt::green  );     //IX4.4    уровень масла нижний (поддон)
+    UpdateMark( ui->SL4, !mErrorBits.SL4, Qt::red    );     //IX4.3    уровень масла верхний (поддон)
+    UpdateMark( ui->SL5, !mErrorBits.SL5, Qt::green  );     //IX4.4    уровень масла нижний (поддон)
 
     ui->ErrorMark->setVisible( mErrorBits.Error );
     UpdateMark( ui->ErrorMark, mErrorBits.Error, Qt::red    );   //MX44.6 не правильная комбинация вкл клапанов
@@ -265,7 +265,7 @@ void ManualControl::UpdateData()
     UpdateValue( ui->I_AC, round( mParams.A2 *100 )/100 );
     UpdateValue( ui->POS1, round( mParams.POS_1_REAL *100 )/100 );
     UpdateValue( ui->POS2, round( mParams.POS_2_REAL *100 )/100 );
-    UpdateValue( ui->POS3, round( mParams.POS_3_REAL *100 )/100, false );
+    UpdateValue( ui->POS3, round( mParams.POS_3_REAL *100 )/100, true );
 }
 
 void ManualControl::on_KM1_clicked()
