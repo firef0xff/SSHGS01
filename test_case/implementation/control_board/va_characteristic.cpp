@@ -3,6 +3,7 @@
 #include <QJsonArray>
 #include "../../../../mylib/Widgets/GraphBuilder/graph_builder.h"
 #include "test_case/test_params.h"
+#include <thread>
 namespace test
 {
 namespace control_board
@@ -118,6 +119,8 @@ bool VACharacteristic::Run()
     if ( IsStopped() )
         return false;
 
+    std::this_thread::sleep_for( std::chrono::seconds( 5 ) );
+    UpdateData();
     for ( size_t i = 0; i < m31Results.SIGNAL_COUNT; ++i )
     {
         Data d;

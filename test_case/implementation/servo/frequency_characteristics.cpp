@@ -1232,11 +1232,13 @@ void FrequencyCharacteristics::UpdateData()
 
     if ( ReelControl() )
     {
+        mControlReelBits.Read();
         ready = &mControlReelBits.op24_ready;
         frequency = &mControlReelBits.op24_frequency;
     }
     else
     {
+        mControlBoardBits.Read();
         ready = &mControlBoardBits.op14_ready;
         frequency = &mControlBoardBits.op14_frequency;
     }
@@ -1270,7 +1272,7 @@ void FrequencyCharacteristics::UpdateData()
         data.push_back( item );
     }
 
-#ifndef DEBUG
+#ifndef DEBUG1
     if ( fabs( CalckFi( data, *frequency ) ) > 90.0 || fabs( CalckAmpl( data ) ) < 0.01 )
         cpu::CpuMemory::Instance().DB31.SendNextAmp();
     else

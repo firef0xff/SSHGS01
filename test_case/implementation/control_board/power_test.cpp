@@ -1,6 +1,7 @@
 #include "power_test.h"
 #include <QJsonObject>
-
+#include <QMessageBox>
+#include <QPushButton>
 
 namespace test
 {
@@ -21,9 +22,33 @@ bool PowerTest::Run()
         return false;
 
     OilTemp = round( mTemperature.T_oil *100)/100;
-    Result = false;
-    return Success();
+
+    std::mutex mutex;
+    std::unique_lock< std::mutex > lock( mutex );
+    Launcher( std::bind( &PowerTest::Question, this ) );
+
+    mCondVar.wait( lock );
+
+    bool res = Success();
+    if ( !res && mStopMarker )
+        *mStopMarker = true;
+    return res;
 }
+void PowerTest::Question()
+{
+    QMessageBox msg;
+    msg.setWindowTitle( "Визуальный контроль" );
+    msg.setText( "Заметна ли течь по резьбам и стыкам,\nпотение наружных поверхностей гидрораспределителя" );
+    QPushButton *no = msg.addButton("Течь не обнаружена", QMessageBox::NoRole );
+    QPushButton *yes = msg.addButton("Течь обнаружена", QMessageBox::YesRole );
+    msg.setModal( true );
+    no->setDefault( false );
+    yes->setDefault( false );
+    msg.exec();
+    Result = msg.clickedButton() == yes;
+    mCondVar.notify_one();
+}
+
 
 QJsonObject PowerTest::Serialise() const
 {
