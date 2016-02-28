@@ -10,6 +10,8 @@
 #include <QJsonDocument>
 #include <QFile>
 #endif
+
+#define APPROXIMATE_LVL 3
 namespace test
 {
 namespace servo
@@ -632,7 +634,7 @@ double CalckAmpl( FrequencyCharacteristics::DataSet const& data, double frequenc
             expenditure.push_back( QPointF( i, (data[i].position - data[i-1].position) ) );
     }
 
-    for ( int i = 0; i <7; ++i )
+    for ( int i = 0; i <APPROXIMATE_LVL; ++i )
     {
         expenditure = Approximate( expenditure );
     }
@@ -1050,7 +1052,7 @@ ff0x::NoAxisGraphBuilder::LinePoints ProcessDebug3( FrequencyCharacteristics::So
         ++k;
     }
 
-    for ( int i = 0; i <7; ++i )
+    for ( int i = 0; i <APPROXIMATE_LVL; ++i )
     {
         result = Approximate( result );
     }
