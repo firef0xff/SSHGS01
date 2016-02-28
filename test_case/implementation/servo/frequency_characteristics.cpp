@@ -632,7 +632,7 @@ double CalckAmpl( FrequencyCharacteristics::DataSet const& data, double frequenc
             expenditure.push_back( QPointF( i, (data[i].position - data[i-1].position) ) );
     }
 
-    for ( int i = 0; i <7; ++i )
+    for ( int i = 0; i <0; ++i )
     {
         expenditure = Approximate( expenditure );
     }
@@ -1050,7 +1050,7 @@ ff0x::NoAxisGraphBuilder::LinePoints ProcessDebug3( FrequencyCharacteristics::So
         ++k;
     }
 
-    for ( int i = 0; i <7; ++i )
+    for ( int i = 0; i <0; ++i )
     {
         result = Approximate( result );
     }
@@ -1230,11 +1230,13 @@ void FrequencyCharacteristics::UpdateData()
 
     if ( ReelControl() )
     {
+        mControlReelBits.Read();
         ready = &mControlReelBits.op24_ready;
         frequency = &mControlReelBits.op24_frequency;
     }
     else
     {
+        mControlBoardBits.Read();
         ready = &mControlBoardBits.op14_ready;
         frequency = &mControlBoardBits.op14_frequency;
     }
@@ -1268,7 +1270,7 @@ void FrequencyCharacteristics::UpdateData()
         data.push_back( item );
     }
 
-#ifndef DEBUG
+#ifndef DEBUG1
     if ( fabs( CalckFi( data, *frequency ) ) > 90.0 || fabs( CalckAmpl( data ) ) < 0.01 )
         cpu::CpuMemory::Instance().DB31.SendNextAmp();
     else
