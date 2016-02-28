@@ -7,6 +7,8 @@
 namespace test
 {
 
+QString ErrMsg();
+
 class TestCommonData : public test::Test
 {
 public:
@@ -26,7 +28,6 @@ protected:
     virtual uint8_t CommandID();
     virtual void UpdateData(){}
     cpu::data::DB31& mCommand;
-    cpu::data::DB40& Exceptions;
 private:
     void ShowErrors( QString const& err );
 };

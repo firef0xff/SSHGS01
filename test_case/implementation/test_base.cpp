@@ -9,75 +9,10 @@
 namespace test
 {
 
-std::condition_variable CondVar;
-
-TestCommonData::TestCommonData( TestCase* test_case, QString const& name, uint8_t number, uint8_t id ):
-    test::Test( test_case, name, number, id ),
-    OilTemp(0),
-    mCommand( cpu::CpuMemory::Instance().DB31 ),
-    Exceptions( cpu::CpuMemory::Instance().DB40 )
-{}
-
-QJsonObject TestCommonData::Serialise() const
+QString ErrMsg()
 {
-    QJsonObject obj;
-    obj.insert("OilTemp", OilTemp );
-    obj.insert("TestingTime", TestingTime );
-
-    return obj;
-}
-bool TestCommonData::Deserialize( QJsonObject const& obj )
-{
-    OilTemp = obj.value("OilTemp").toDouble();
-    TestingTime = obj.value("TestingTime").toInt();
-    return true;
-}
-
-uint8_t TestCommonData::CommandID()
-{
-    return mId;
-}
-void TestCommonData::Start()
-{
-    mCommand.N_Operation = CommandID();
-    mCommand.Start_Oper = true;
-    mCommand.Stop_Oper = false;
-    mCommand.Nasos_M2 = app::Settings::Instance().MainPupm() == "M2";
-    mCommand.OP15_25_Continum = false;
-    mCommand.Next_Amp = false;
-    mCommand.Write();
-    StartTime.start();
-}
-void TestCommonData::Wait( bool& work, bool& done)
-{
-    work = false;
-    done = false;
-    bool started = false;
-    while( !done || !started )
-    {
-        if (work)
-            started = true;
-        UpdateData();
-        if ( IsStopped() )
-        {            
-            mCommand.Start_Oper = false;
-            mCommand.Stop_Oper = true;
-            mCommand.Nasos_M2 = app::Settings::Instance().MainPupm() == "M2";
-            mCommand.OP15_25_Continum = false;
-            mCommand.Next_Amp = false;
-            mCommand.Write();
-            Log( "Испытание прервано" );
-            return;
-        }
-    }
-    TestingTime = StartTime.elapsed()/1000;    
-    *mStopMarker = !CheckErrors();
-}
-bool TestCommonData::CheckErrors()
-{
-//    Exceptions.Read();
-    auto& errs = Exceptions;
-    auto& mem = cpu::CpuMemory::Instance().M1;
+    auto& errs = cpu::CpuMemory::Instance().DB40;
+    errs.Read();
 
     QString str_errs;
     if (errs.sl1)
@@ -171,6 +106,78 @@ bool TestCommonData::CheckErrors()
     if (errs.fault_p_op22)
         str_errs += "Аварийное давление\n";
 
+    return str_errs;
+}
+
+std::condition_variable CondVar;
+
+TestCommonData::TestCommonData( TestCase* test_case, QString const& name, uint8_t number, uint8_t id ):
+    test::Test( test_case, name, number, id ),
+    OilTemp(0),
+    mCommand( cpu::CpuMemory::Instance().DB31 )
+{}
+
+QJsonObject TestCommonData::Serialise() const
+{
+    QJsonObject obj;
+    obj.insert("OilTemp", OilTemp );
+    obj.insert("TestingTime", TestingTime );
+
+    return obj;
+}
+bool TestCommonData::Deserialize( QJsonObject const& obj )
+{
+    OilTemp = obj.value("OilTemp").toDouble();
+    TestingTime = obj.value("TestingTime").toInt();
+    return true;
+}
+
+uint8_t TestCommonData::CommandID()
+{
+    return mId;
+}
+void TestCommonData::Start()
+{
+    mCommand.N_Operation = CommandID();
+    mCommand.Start_Oper = true;
+    mCommand.Stop_Oper = false;
+    mCommand.Nasos_M2 = app::Settings::Instance().MainPupm() == "M2";
+    mCommand.OP15_25_Continum = false;
+    mCommand.Next_Amp = false;
+    mCommand.Write();
+    StartTime.start();
+}
+void TestCommonData::Wait( bool& work, bool& done)
+{
+    work = false;
+    done = false;
+    bool started = false;
+    while( !done || !started )
+    {
+        if (work)
+            started = true;
+        UpdateData();
+        if ( IsStopped() )
+        {            
+            mCommand.Start_Oper = false;
+            mCommand.Stop_Oper = true;
+            mCommand.Nasos_M2 = app::Settings::Instance().MainPupm() == "M2";
+            mCommand.OP15_25_Continum = false;
+            mCommand.Next_Amp = false;
+            mCommand.Write();
+            Log( "Испытание прервано" );
+            return;
+        }
+    }
+    TestingTime = StartTime.elapsed()/1000;    
+    *mStopMarker = !CheckErrors();
+}
+bool TestCommonData::CheckErrors()
+{
+//    Exceptions.Read();
+    auto& mem = cpu::CpuMemory::Instance().M1;
+
+    QString str_errs = ErrMsg();
 
     if ( str_errs.isEmpty() )
         return true;

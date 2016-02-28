@@ -19,6 +19,7 @@
 #include "test_case/test.h"
 #include "viewer.h"
 #include "cpu/cpu_memory.h"
+#include "test_case/implementation/test_base.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -454,8 +455,15 @@ void MainWindow::onUpdateControls()
     ready *= table.ReadyToWork;
     ready *= table.BT1 > 25.0;     //температура масла должна быть больше 25
 
+    QString temp_err;
+    if ( table.BT1 <= 25.0 )
+        temp_err += "холодное масло\n";
     UpdateMark( ui->l_Ready_To_Work, true , ready ? Qt::green : Qt::red );
 
+    if ( ready )
+        ui->l_Ready_To_Work->setToolTip( "" );
+    else
+        ui->l_Ready_To_Work->setToolTip( temp_err + test::ErrMsg() );
 }
 
 
