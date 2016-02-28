@@ -15,16 +15,16 @@ QString ErrMsg()
     errs.Read();
 
     QString str_errs;
-    if (errs.sl1)
-        str_errs += "уровень масла в норме\n";
+//    if (errs.sl1)
+//        str_errs += "уровень масла в норме\n";
     if (errs.sl2)
         str_errs += "пониженный уровень масла\n";
     if (errs.sl3)
         str_errs += "аварийный уровень масла\n";
     if (errs.sl4)
         str_errs += "верхний уровень перелив\n";
-    if (errs.sl5)
-        str_errs += "нижний уровень перелив\n";
+//    if (errs.sl5)
+//        str_errs += "нижний уровень перелив\n";
     if (errs.sp1)
         str_errs += "фильтр всасывающий М1 загрязнен\n";
     if (errs.sp2)

@@ -78,6 +78,8 @@ private:
     //Поток обновления данных датчиков
     ControlsUpdater Updater;
 
+    QString LastErrs;
+
 private slots:
 
 

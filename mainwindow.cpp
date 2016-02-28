@@ -455,15 +455,16 @@ void MainWindow::onUpdateControls()
     ready *= table.ReadyToWork;
     ready *= table.BT1 > 25.0;     //температура масла должна быть больше 25
 
-    QString temp_err;
+    QString st_err = test::ErrMsg();
     if ( table.BT1 <= 25.0 )
-        temp_err += "холодное масло\n";
+        st_err += "холодное масло\n";
     UpdateMark( ui->l_Ready_To_Work, true , ready ? Qt::green : Qt::red );
 
-    if ( ready )
-        ui->l_Ready_To_Work->setToolTip( "" );
-    else
-        ui->l_Ready_To_Work->setToolTip( temp_err + test::ErrMsg() );
+    if ( LastErrs != st_err )
+    {
+        LastErrs = st_err;
+        ui->l_Ready_To_Work->setToolTip( LastErrs );
+    }
 }
 
 
