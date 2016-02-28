@@ -87,7 +87,9 @@ SOURCES += main.cpp\
     manual_control.cpp \
     cpu/m1.cpp \
     cpu/i1.cpp \
-    users/users.cpp
+    users/users.cpp \
+    ../mylib/COMPort/ComPort.cpp \
+    board/custom_control_board.cpp
 
 HEADERS  += mainwindow.h \
     test_case/test_case.h \
@@ -164,7 +166,9 @@ HEADERS  += mainwindow.h \
     manual_control.h \
     cpu/m1.h \
     cpu/i1.h \
-    users/users.h
+    users/users.h \
+    ../mylib/COMPort/ComPort.h \
+    board/custom_control_board.h
 
 FORMS    += mainwindow.ui \
     hydro_title_info.ui \
@@ -207,6 +211,6 @@ release {
     DEFINES -= DEBUG
 }
 #DEFINES += WINDOWS
-#DEFINES += DEMO
+DEFINES += DEMO
 DEFINES += DEBUG
 

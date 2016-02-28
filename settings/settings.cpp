@@ -157,6 +157,7 @@ void Settings::Save()
         TestPath( "test_cases" );
         LogLevel( "Ошибки" );
         MainPupm( "M1" );
+        ComAddr( "COM1" );
     }
     f.open(QIODevice::WriteOnly);
     f.write( mDocument.toJson() );
@@ -211,6 +212,17 @@ UserData Settings::Users() const
         res.push_back( user );
     }
     return std::move( res );
+}
+
+void Settings::ComAddr( QString const& v)
+{
+    auto obj = mDocument.object();
+    obj.insert( "ComAddr", v );
+    mDocument.setObject( obj );
+}
+QString Settings::ComAddr() const
+{
+    return mDocument.object().value("ComAddr").toString();
 }
 
 bool Settings::CheckUser( QString const& user, QString const& pass )

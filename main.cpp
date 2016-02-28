@@ -4,6 +4,7 @@
 #include <QDir>
 #include "settings/settings.h"
 #include "login.h"
+#include "board/custom_control_board.h"
 
 
 int main(int argc, char *argv[])
@@ -17,6 +18,8 @@ int main(int argc, char *argv[])
     MainWindow w;
     Login l ( &w );
     l.show();
+
+//    control_board::CustomControlBoard::test();
 
     return a.exec();
 }

@@ -52,6 +52,9 @@ public:
 
     bool CheckUser( QString const& user, QString const& pass );
     UserLevel UserAccess() const;
+
+    void ComAddr( QString const& v);
+    QString ComAddr() const;
 private:
     Settings();
     Settings( Settings const& ) = delete;

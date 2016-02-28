@@ -623,13 +623,18 @@ double CalckAmpl( FrequencyCharacteristics::DataSet const& data, double frequenc
         return 0.0;
 
     double ampl = 0;
-    std::vector< double > expenditure;
+    ff0x::NoAxisGraphBuilder::LinePoints expenditure;
     for ( size_t i = 0; i < data.size(); ++i )
-    {
+    {        
         if ( !i )
-            expenditure.push_back(0);
+            expenditure.push_back( QPointF( i, 0 ) );
         else
-            expenditure.push_back( (data[i].position - data[i-1].position) );
+            expenditure.push_back( QPointF( i, (data[i].position - data[i-1].position) ) );
+    }
+
+    for ( int i = 0; i <7; ++i )
+    {
+        expenditure = Approximate( expenditure );
     }
 
     if ( !expenditure.empty() )
@@ -638,18 +643,18 @@ double CalckAmpl( FrequencyCharacteristics::DataSet const& data, double frequenc
         int min = 0;
         for ( size_t i = 0; i < expenditure.size(); ++i )
         {
-            if ( expenditure[ max ] < expenditure[i] )
+            if ( expenditure[ max ].y() < expenditure[i].y() )
                 max = i;
-            if ( expenditure[ min ] > expenditure[i] )
+            if ( expenditure[ min ].y() > expenditure[i].y() )
                 min = i;
         }
 
-        ampl = expenditure[ max ] - expenditure[ min ];
+        ampl = 2*expenditure[ max ].y();// - expenditure[ min ];
 #ifdef DEBUG
         obj.insert( "max", max );
         obj.insert( "min", min );
-        obj.insert( "expenditure_max", expenditure[ max ] );
-        obj.insert( "expenditure_min", expenditure[ min ] );
+        obj.insert( "expenditure_max", expenditure[ max ].y() );
+        obj.insert( "expenditure_min", expenditure[ min ].y() );
         obj.insert( "ampl", ampl );
         AFC_DEBUG.push_back(obj);
 #endif
@@ -1044,7 +1049,13 @@ ff0x::NoAxisGraphBuilder::LinePoints ProcessDebug3( FrequencyCharacteristics::So
         }
         ++k;
     }
-    return std::move( result );
+
+    for ( int i = 0; i <7; ++i )
+    {
+        result = Approximate( result );
+    }
+
+    return result;
 }
 
 ff0x::NoAxisGraphBuilder::LinePoints ProcessDebug4( FrequencyCharacteristics::Source const& src, int i , QPointF& x_range, QPointF& y_range )
