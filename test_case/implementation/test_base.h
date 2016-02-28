@@ -92,7 +92,6 @@ public:
     Test( QString const& name, uint8_t id );
 protected:
     void UpdateData();
-#warning partial implemented
     cpu::data::DB39& mBits;
     cpu::data::DB32& mTemperature;
     cpu::data::DB22& m31Results;

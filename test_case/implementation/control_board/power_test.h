@@ -1,5 +1,6 @@
 #pragma once
 #include "../test_base.h"
+#include <condition_variable>
 
 namespace test
 {
@@ -21,7 +22,10 @@ public:
     bool Success() const;
 
 private:
+    std::condition_variable mCondVar;
     bool Result; ///если ошибка не выполнять следующий тест
+
+    void Question();
 };
 
 
