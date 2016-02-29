@@ -173,6 +173,8 @@ void Viewer::on_SavePDF_clicked()
                 rc = PreparePage( painter, printer.paperRect() );
                 test::CURRENT_PARAMS->DrawResults( painter, rc );
             }
+            printer.newPage();
+            rc = PreparePage( painter, printer.paperRect() );
         }
         painter.end();
     }

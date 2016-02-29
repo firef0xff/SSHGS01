@@ -130,7 +130,7 @@ double CalckNonlinearity( ExpeditureFromInput::DataSet const& data )
         else if ( r > max_r )
             max_r = r;
     }
-    return max_r / q_max * 100;
+    return fabs(max_r / q_max * 100);
 }
 double CalckHysteresis( ExpeditureFromInput::DataSet const& data1, ExpeditureFromInput::DataSet const& data2 )
 {

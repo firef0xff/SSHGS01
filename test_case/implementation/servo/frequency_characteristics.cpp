@@ -11,7 +11,7 @@
 #include <QFile>
 #endif
 
-#define APPROXIMATE_LVL 3
+#define APPROXIMATE_LVL 0
 namespace test
 {
 namespace servo
@@ -626,12 +626,17 @@ double CalckAmpl( FrequencyCharacteristics::DataSet const& data, double frequenc
 
     double ampl = 0;
     ff0x::NoAxisGraphBuilder::LinePoints expenditure;
+//    for ( size_t i = 0; i < data.size(); ++i )
+//    {
+//        if ( !i )
+//            expenditure.push_back( QPointF( i, 0 ) );
+//        else
+//            expenditure.push_back( QPointF( i, (data[i].position - data[i-1].position) ) );
+//    }
+
     for ( size_t i = 0; i < data.size(); ++i )
-    {        
-        if ( !i )
-            expenditure.push_back( QPointF( i, 0 ) );
-        else
-            expenditure.push_back( QPointF( i, (data[i].position - data[i-1].position) ) );
+    {
+        expenditure.push_back( QPointF( i, data[i].position ) );
     }
 
     for ( int i = 0; i <APPROXIMATE_LVL; ++i )
@@ -651,7 +656,7 @@ double CalckAmpl( FrequencyCharacteristics::DataSet const& data, double frequenc
                 min = i;
         }
 
-        ampl = 2*expenditure[ max ].y();// - expenditure[ min ];
+        ampl = expenditure[ max ].y() - expenditure[ min ].y();
 #ifdef DEBUG
         obj.insert( "max", max );
         obj.insert( "min", min );

@@ -38,14 +38,14 @@ void PowerTest::Question()
 {
     QMessageBox msg;
     msg.setWindowTitle( "Визуальный контроль" );
-    msg.setText( "Заметна ли течь по резьбам и стыкам,\nпотение наружных поверхностей гидрораспределителя" );
-    QPushButton *no = msg.addButton("Течь не обнаружена", QMessageBox::NoRole );
-    QPushButton *yes = msg.addButton("Течь обнаружена", QMessageBox::YesRole );
+    msg.setText( "Ошибки обнаружены?" );
+    QPushButton *no = msg.addButton("Нет", QMessageBox::NoRole );
+    QPushButton *yes = msg.addButton("Да", QMessageBox::YesRole );
     msg.setModal( true );
     no->setDefault( false );
     yes->setDefault( false );
     msg.exec();
-    Result = msg.clickedButton() == yes;
+    Result = !(msg.clickedButton() == yes);
     mCondVar.notify_one();
 }
 
