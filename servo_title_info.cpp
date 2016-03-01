@@ -86,17 +86,22 @@ bool ServoTitleInfo::SaveInputParams()
 
     res *= ParamChecker( ui->l_control_type,        params.ReelControl( ui->ControlType->currentText() ) );
     res *= ParamChecker( ui->l_pressure_testing,    params.PressureTesting( QString::number( ui->PressureTesting->value() ) ) );
-    res *= ParamChecker( ui->l_frequency_inc,       params.FrequencyInc( QString::number( ui->FrequencyInc->value() ) ) );
 
     res *= ParamChecker( ui->l_nominal_pressure,     ValidateRange( ui->PressureNominal, params.PressureNominal( ui->PressureNominal->text() ) ) );
 
     res *= ParamChecker( ui->l_control_signal,    params.ControlSignal( ui->ControlSignal->currentText() ) );
-    res *= ParamChecker( ui->l_control_signal_ampl,    params.Amplitudes( ui->ControlSignalAmpl0->text(), ui->ControlSignalAmpl1->text(), ui->ControlSignalAmpl2->text() ) );
+
 
     res *= ParamChecker( ui->l_signal_state_a,    ValidateRange( ui->SignalStateA, params.SignalStateA( ui->SignalStateA->text() ) ) );
     res *= ParamChecker( ui->l_signal_state_0,    ValidateRange( ui->SignalState0, params.SignalState0( ui->SignalState0->text() ) ) );
     if ( params.PosCount() == 3 )
+    {
         res *= ParamChecker( ui->l_signal_state_b,    ValidateRange( ui->SignalStateB, params.SignalStateB( ui->SignalStateB->text() ) ) );
+        res *= ParamChecker( ui->l_frequency_inc,       params.FrequencyInc( QString::number( ui->FrequencyInc->value() ) ) );
+        res *= ParamChecker( ui->l_control_signal_ampl,    params.Amplitudes( ui->ControlSignalAmpl0->text(), ui->ControlSignalAmpl1->text(), ui->ControlSignalAmpl2->text() ) );
+        res *= ParamChecker( ui->l_Frequency,   params.StartFrequency( QString::number( ui->Frequency->value() ) ) );
+        res *= ParamChecker( ui->l_Ampl_Inc,    params.AmplInc( QString::number( ui->AmplInc->value() ) ) );
+    }
 
     if ( params.ReelControl() == test::RC_REEL )
     {
@@ -110,7 +115,7 @@ bool ServoTitleInfo::SaveInputParams()
         QString t_val = ui->Voltage->currentText();
         if ( t_val.left(2) == "+-" )
             t_val = t_val.mid( 2 );
-        res *= ParamChecker( ui->l_voltage,         params.Voltage( ui->Voltage->currentText() ) );
+        res *= ParamChecker( ui->l_voltage,         params.Voltage( t_val ) );
     }
 
     bool channel_a = ui->TestChA->checkState() == Qt::Checked;
@@ -130,9 +135,6 @@ bool ServoTitleInfo::SaveInputParams()
         params.SignalOnChannelA( ui->ControlReelChA->currentText() );
         params.SignalOnChannelB( ui->ControlReelChB->currentText() );
     }
-
-    res *= ParamChecker( ui->l_Frequency,   params.StartFrequency( QString::number( ui->Frequency->value() ) ) );
-    res *= ParamChecker( ui->l_Ampl_Inc,    params.AmplInc( QString::number( ui->AmplInc->value() ) ) );
 
     return res;
 }
@@ -449,6 +451,17 @@ void ServoTitleInfo::on_ControlType_activated(int index)
     ui->l_signal_state_b->setVisible( ui->PosCount->value() == 3);
     ui->l_signal_state_0->setVisible( ui->PosCount->value() >= 2);
     ui->l_voltage->setVisible( control == test::RC_CONTROL_BOX );
+
+    ui->l_control_signal_ampl->setVisible( ui->PosCount->value() == 3);
+    ui->l_Frequency->setVisible( ui->PosCount->value() == 3);
+    ui->l_frequency_inc->setVisible( ui->PosCount->value() == 3);
+    ui->l_Ampl_Inc->setVisible( ui->PosCount->value() == 3);
+    ui->ControlSignalAmpl0->setVisible( ui->PosCount->value() == 3);
+    ui->ControlSignalAmpl1->setVisible( ui->PosCount->value() == 3);
+    ui->ControlSignalAmpl2->setVisible( ui->PosCount->value() == 3);
+    ui->Frequency->setVisible( ui->PosCount->value() == 3);
+    ui->AmplInc->setVisible( ui->PosCount->value() == 3);
+    ui->FrequencyInc->setVisible( ui->PosCount->value() == 3);
 
     ui->ControlReelResist->setVisible( control == test::RC_REEL );
     ui->l_control_reel_resist->setVisible( control == test::RC_REEL );
