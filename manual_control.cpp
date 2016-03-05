@@ -381,9 +381,7 @@ void ManualControl::on_YA11_clicked()
 }
 void ManualControl::on_YA7_clicked()
 {
-    if ( mParams.YB1 + mParams.YB2 < 65 && ui->YA7->isChecked() )
-        mControlBits.SetYA7( ui->YA7->isChecked() );
-    else
+    if ( mParams.YB1 + mParams.YB2 > 65 && ui->YA7->isChecked() )
     {
         QMessageBox msg;
         msg.setWindowTitle( "Превышение допустимого расхода" );
@@ -391,7 +389,10 @@ void ManualControl::on_YA7_clicked()
         msg.setStandardButtons( QMessageBox::Ok );
         msg.setModal( true );
         msg.exec();
+        ui->YA7->setChecked( mControlBits.YA7 );
+        return;
     }
+    mControlBits.SetYA7( ui->YA7->isChecked() );
 }
 
 
@@ -465,7 +466,7 @@ void ManualControl::on_Accept_clicked()
     mParams.man_zol_v = ui->man_zol_v->text().toDouble( &s );
     mParams.man_tupe_sign = ui->man_tupe_sign->currentIndex();
 
-    if ( mControlBits.YA7 && mParams.YB1 + mParams.YB2 < 65 )
+    if ( mControlBits.YA7 && mParams.YB1 + mParams.YB2 > 65 )
     {
         QMessageBox msg;
         msg.setWindowTitle( "Превышение допустимого расхода" );

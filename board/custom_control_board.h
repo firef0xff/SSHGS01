@@ -4,6 +4,13 @@
 namespace control_board
 {
 
+class COMError : public std::runtime_error
+{
+public:
+    COMError ( std::string const& err ):
+        std::runtime_error( err )
+    {}
+};
 class CustomControlBoard
 {
 public:

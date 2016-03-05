@@ -31,7 +31,7 @@ void CustomControlBoard::Init()
     settings->Parity = COMPort::Paritys::NOparity;
     settings->StopBits = COMPort::StopBits::ONE;
     settings->fAbortOnError = FALSE;
-    settings->fDtrControl = DTR_CONTROL_ENABLE;
+    settings->fDtrControl = DTR_CONTROL_DISABLE;
     settings->fRtsControl = RTS_CONTROL_DISABLE;
     settings->fBinary = TRUE;
     settings->fParity = COMPort::fParitys::OFF;
@@ -64,7 +64,10 @@ void CustomControlBoard::Command::SetValue( int val, COMPort& port )
     std::stringstream cmd;
     cmd << Prefix << mAddr << " " << val << Postfix;
     Send( cmd.str(), port );
-    Receive( port );
+    auto answ = Receive( port );
+    if ( answ != "*DONE!\r\n" )
+        throw COMError( answ );
+
 }
 int CustomControlBoard::Command::GetValue( COMPort& port ) const
 {
@@ -74,8 +77,18 @@ int CustomControlBoard::Command::GetValue( COMPort& port ) const
     cmd << Prefix << mAddr << Postfix;    
     Send( cmd.str(), port );
 
-    std::string answer = Receive( port );
-    return 0;
+    auto answer = Receive( port );
+    auto addtr = answer.substr( 1, 3);
+    auto mark = answer.substr( 5, 1);
+    auto ending = answer.substr( answer.length() - 3, 3);
+    auto value = answer.substr( 7, answer.length() - 3 - 7 );
+    if ( answer[0] != '*' ||
+         addtr != mAddr ||
+         mark != "=" ||
+         ending != Postfix )
+        throw COMError( answer );
+
+    return stoi( value );
 }
 
 void CustomControlBoard::Command::Send( std::string const& cmd, COMPort& port ) const
@@ -84,14 +97,11 @@ void CustomControlBoard::Command::Send( std::string const& cmd, COMPort& port ) 
 }
 std::string CustomControlBoard::Command::Receive( COMPort& port ) const
 {
-    typedef std::vector< std::pair< size_t, size_t > > Messages;
     char buff[4096] = {0};
     const int len = 4096;
 
     char* p_buff = &buff[0];
     size_t remain_len = len;
-
-    const char header[] = "ASCII Table ~ Character Map\r\n";
 
     bool end = false;
     do
@@ -99,12 +109,8 @@ std::string CustomControlBoard::Command::Receive( COMPort& port ) const
         size_t readed = port.Read( reinterpret_cast<BYTE*>( p_buff ), remain_len );
         remain_len -= std::min( readed, remain_len );
         p_buff += readed;
-
-        if ( buff[0] != '*' )
-            throw std::runtime_error( "Ошибка при передаче данных: " + std::string( buff ) );
-
         char end_symbol = *(p_buff - 1);
-        end = end_symbol == '!' || end_symbol == '#';
+        end = end_symbol == '\n';
     }
     while( !end && remain_len );
     *p_buff = 0;
@@ -124,9 +130,12 @@ void CustomControlBoard::test()
 //    # Постфикс.
 
     CustomControlBoard cb;
-
-    cb.RUN_STOP.SetValue( 2, *cb.mPort );
-    cb.RUN_STOP.GetValue( *cb.mPort );
+    int val = 200;
+    int ret_val = 0;
+    cb.V_AMP.SetValue( val, *cb.mPort );
+    ret_val = cb.V_AMP.GetValue( *cb.mPort );
+    if ( ret_val != val )
+        throw COMError("wrong val");
 }
 
 }//namespace control_board

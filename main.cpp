@@ -19,7 +19,5 @@ int main(int argc, char *argv[])
     Login l ( &w );
     l.show();
 
-//    control_board::CustomControlBoard::test();
-
     return a.exec();
 }
