@@ -1,5 +1,7 @@
 #pragma once
 #include "../../mylib/COMPort/ComPort.h"
+#include <stdexcept>
+#include <memory>
 
 namespace control_board
 {

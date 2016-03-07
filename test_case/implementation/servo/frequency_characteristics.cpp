@@ -267,16 +267,30 @@ public:
         int old_way = 0;
         QPointF curr_p;
         GrapfInfo::Data inf;
-        int i_max = 0, i_min = 0;
+        int i_max = 0, i_min1 = 0;
+        int /*i_max2 = data.size() / 2,*/ i_min2 = data.size() / 2;
         for ( int i = 0; i < data.size(); ++i )
         {
             curr_p = data[i];
-            if ( curr_p.y() < data[i_min].y() )
-                i_min = i;
-            if ( curr_p.y() > data[i_max].y() )
-                i_max = i;
+            if ( i < data.size() / 2 )
+            {
+                if ( curr_p.y() < data[i_min1].y() )
+                    i_min1 = i;
+                if ( curr_p.y() > data[i_max].y() )
+                    i_max = i;
+            }
+            else
+            {
+                if ( curr_p.y() < data[i_min2].y() )
+                    i_min2 = i;
+                if ( curr_p.y() > data[i_max].y() )
+                    i_max = i;
+            }
         }
-        double range = data[i_max].y() - data[i_min].y();
+        if ( data[i_min1].y() < data[i_min2].y() )
+            i_min2 = i_min1;
+        double range = data[i_max].y() - data[i_min1].y();
+        double range2 = data[i_max].y() - data[i_min2].y();
 //        double zero_lvl = data[i_min].y() + (data[i_max].y() - data[i_min].y())/2;
 
         QPointF start_p;
@@ -289,12 +303,27 @@ public:
                 start_p = curr_p;
                 continue;
             }
+            double* rng = nullptr;
+            int* pos_max = nullptr;
+            int* pos_min = nullptr;
+            if ( i < data.size() / 2 )
+            {
+                rng = &range;
+                pos_max = &i_max;
+                pos_min = &i_min1;
+            }
+            else
+            {
+                rng = &range2;
+                pos_max = &i_max;
+                pos_min = &i_min2;
+            }
 
-            double dist_top = fabs( data[i].y() - data[ i_max ].y() );
-            double dist_bottom = fabs(data[i].y() - data[ i_min ].y() );
+            double dist_top = fabs( data[i].y() - data[ *pos_max ].y() );
+            double dist_bottom = fabs(data[i].y() - data[ *pos_min ].y() );
             int way = 0;
-            if ( dist_top <= range / 100 * 15 ||
-                 dist_bottom <= range / 100 * 15 )
+            if ( dist_top <= *(rng) / 100 * 15 ||
+                 dist_bottom <= (*rng) / 100 * 15 )
             {
                 //зона не чувствительности
                 way = 1;
