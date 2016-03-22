@@ -4,6 +4,7 @@
 #include <QMessageBox>
 #include "test_case/implementation/test_params_hydro.h"
 #include "settings/settings.h"
+#include "test_case/test.h"
 
 HydroTitleInfo::HydroTitleInfo(bool new_mode, QWidget *parent) :
     QWidget(parent),
@@ -89,7 +90,7 @@ bool HydroTitleInfo::SaveInputParams()
     {
         res *= ParamChecker( ui->l_min_control_pressure, params.MinControlPressure( QString::number( ui->MinControlPressure->value() ) ) );
         res *= ParamChecker( ui->l_max_control_pressure, params.MaxControlPressure( QString::number( ui->MaxControlPressure->value() ) ) );
-        res *= ParamChecker( ui->l_test_control_Pressure, params.TestControlPressure( QString::number( ui->TestControlPressure->value() ) ) );
+//        res *= ParamChecker( ui->l_test_control_Pressure, params.TestControlPressure( QString::number( ui->TestControlPressure->value() ) ) );
     }
     res *= ParamChecker( ui->l_voltage_range,      params.VoltageRange( QString::number( ui->VoltageRange->value() ) ) );
     res *= ParamChecker( ui->l_lost,  ValidateRange( ui->Lost, params.Lost( ui->Lost->text() ) ) );
@@ -121,7 +122,7 @@ void HydroTitleInfo::FromParams()
     on_ControlType_activated( ui->ControlType->currentIndex() );
     ui->MinControlPressure->setValue( params.MinControlPressure() );
     ui->MaxControlPressure->setValue( params.MaxControlPressure() );
-    ui->TestControlPressure->setValue( params.TestControlPressure() );
+//    ui->TestControlPressure->setValue( params.TestControlPressure() );
 
     ui->VoltageRange->setValue( params.VoltageRange() );
     ui->Lost->setText( test::ToString( params.Lost() ) );
@@ -181,6 +182,16 @@ void HydroTitleInfo::on_buttonBox_accepted()
     {
         if (!CheckPower())
             return;
+
+        if ( test::hydro::Parameters::Instance().ControlType() == test::CT_ELECTRIC )
+        {
+            foreach (auto test_ptr, test::hydro::Parameters::Instance().TestCollection().Tests())
+            {
+                if ( test_ptr->ID() == 6 )
+                    test_ptr->Disabled( true );
+            }
+        }
+
         hide();
         if ( mChildWindow.get() )
             QObject::disconnect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
@@ -216,11 +227,11 @@ void HydroTitleInfo::on_ControlType_activated(int index)
     {
         ui->l_min_control_pressure->setVisible( visible );
         ui->l_max_control_pressure->setVisible( visible );
-        ui->l_test_control_Pressure->setVisible( visible );
+        ui->l_test_control_Pressure->setVisible( false );
 
         ui->MinControlPressure->setVisible( visible );
         ui->MaxControlPressure->setVisible( visible );
-        ui->TestControlPressure->setVisible( visible );
+        ui->TestControlPressure->setVisible( false );
     };
 
     switch (index)
@@ -331,7 +342,7 @@ void HydroTitleInfo::CheckRights()
         ui->ControlType->setEnabled( false );
         ui->MinControlPressure->setEnabled( false );
         ui->MaxControlPressure->setEnabled( false );
-        ui->TestControlPressure->setEnabled( false );
+//        ui->TestControlPressure->setEnabled( false );
         ui->VoltageRange->setEnabled( false );
         ui->Lost->setEnabled( false );
         ui->MaxExpenditure->setEnabled( false );

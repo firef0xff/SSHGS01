@@ -81,8 +81,7 @@ bool ServoTitleInfo::SaveInputParams()
     {
         res *= ParamChecker( ui->l_min_control_pressure, params.MinControlPressure( QString::number( ui->MinControlPressure->value() ) ) );
         res *= ParamChecker( ui->l_max_control_pressure, params.MaxControlPressure( QString::number( ui->MaxControlPressure->value() ) ) );
-    }
-    res *= ParamChecker( ui->l_max_expenditure,    ValidateRange( ui->MaxExpenditure, params.MaxExpenditure( ui->MaxExpenditure->text() ) ) );
+    }    
 
     res *= ParamChecker( ui->l_control_type,        params.ReelControl( ui->ControlType->currentText() ) );
     res *= ParamChecker( ui->l_pressure_testing,    params.PressureTesting( QString::number( ui->PressureTesting->value() ) ) );
@@ -101,6 +100,7 @@ bool ServoTitleInfo::SaveInputParams()
         res *= ParamChecker( ui->l_control_signal_ampl,    params.Amplitudes( ui->ControlSignalAmpl0->text(), ui->ControlSignalAmpl1->text(), ui->ControlSignalAmpl2->text() ) );
         res *= ParamChecker( ui->l_Frequency,   params.StartFrequency( QString::number( ui->Frequency->value() ) ) );
         res *= ParamChecker( ui->l_Ampl_Inc,    params.AmplInc( QString::number( ui->AmplInc->value() ) ) );
+        res *= ParamChecker( ui->l_max_expenditure,    ValidateRange( ui->MaxExpenditure, params.MaxExpenditure( ui->MaxExpenditure->text() ) ) );
     }
 
     if ( params.ReelControl() == test::RC_REEL )
@@ -152,7 +152,7 @@ void ServoTitleInfo::FromParams()
     ui->MinControlPressure->setValue( params.MinControlPressure() );
     ui->MaxControlPressure->setValue( params.MaxControlPressure() );
 
-    ui->MaxExpenditure->setText( test::ToString( params.MaxExpenditure() ) );
+
 
     ui->ControlType->setCurrentIndex( ui->ControlType->findText( test::ToString( params.ReelControl() ) ) );
     on_ControlType_activated( ui->ControlType->currentIndex() );
@@ -174,6 +174,7 @@ void ServoTitleInfo::FromParams()
     if (params.PosCount() == 3)
     {
         ui->SignalStateB->setText( test::ToString( params.SignalStateB() ) );
+        ui->MaxExpenditure->setText( test::ToString( params.MaxExpenditure() ) );
     }
 
     if ( params.ReelControl() == test::RC_REEL )
@@ -432,6 +433,7 @@ void ServoTitleInfo::on_ControlType_activated(int index)
 
     ui->SignalStateA->setVisible( ui->PosCount->value() >= 2);
     ui->SignalStateB->setVisible( ui->PosCount->value() == 3);
+    ui->MaxExpenditure->setVisible( ui->PosCount->value() == 3);
     ui->SignalState0->setVisible( ui->PosCount->value() >= 2);
     ui->Voltage->setVisible( control == test::RC_CONTROL_BOX );
 
@@ -449,6 +451,7 @@ void ServoTitleInfo::on_ControlType_activated(int index)
 
     ui->l_signal_state_a->setVisible( ui->PosCount->value() >= 2);
     ui->l_signal_state_b->setVisible( ui->PosCount->value() == 3);
+    ui->l_max_expenditure->setVisible( ui->PosCount->value() == 3);
     ui->l_signal_state_0->setVisible( ui->PosCount->value() >= 2);
     ui->l_voltage->setVisible( control == test::RC_CONTROL_BOX );
 
