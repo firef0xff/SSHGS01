@@ -1,6 +1,7 @@
 #include "custom_control_board.h"
 #include "../settings/settings.h"
 #include <sstream>
+#include <chrono>
 
 namespace control_board
 {
@@ -48,6 +49,171 @@ void CustomControlBoard::Init()
     settings->fDsrSensitivity=FALSE;
     mPort->Set_DCB_Settings( std::move( settings ) );
 }
+
+
+void CustomControlBoard::SetRUN_STOP( int v )
+{
+    A01.SetValue( v, *mPort );
+}
+int  CustomControlBoard::GetRUN_STOP()
+{
+    return A01.GetValue( *mPort );
+}
+
+void CustomControlBoard::SetMIN_CUR( int v )
+{
+    A02.SetValue( v, *mPort );
+}
+int  CustomControlBoard::GetMIN_CUR()
+{
+    return A02.GetValue( *mPort );
+}
+
+void CustomControlBoard::SetMAX_CUR( int  v)
+{
+    A03.SetValue( v, *mPort );
+}
+int  CustomControlBoard::GetMAX_CUR()
+{
+    return A03.GetValue( *mPort );
+}
+
+void CustomControlBoard::SetV_AMP( int v)
+{
+    A04.SetValue( v, *mPort );
+}
+int  CustomControlBoard::GetV_AMP()
+{
+    return A04.GetValue( *mPort );
+}
+
+void CustomControlBoard::SetV_FREQ( int v)
+{
+    A05.SetValue( v, *mPort );
+}
+int  CustomControlBoard::GetV_FREQ()
+{
+    return A05.GetValue( *mPort );
+}
+
+void CustomControlBoard::SetPOLARITY_A( int v)
+{
+    A06.SetValue( v, *mPort );
+}
+int  CustomControlBoard::GetPOLARITY_A()
+{
+    return A06.GetValue( *mPort );
+}
+
+void CustomControlBoard::SetPOLARITY_B( int v)
+{
+    A07.SetValue( v, *mPort );
+}
+int  CustomControlBoard::GetPOLARITY_B()
+{
+    return A07.GetValue( *mPort );
+}
+
+void CustomControlBoard::SetInput( int v)
+{
+    A10.SetValue( v, *mPort );
+}
+int  CustomControlBoard::GetInput()
+{
+    return A10.GetValue( *mPort );
+}
+
+void CustomControlBoard::SetOutA( int v)
+{
+    A11.SetValue( v, *mPort );
+}
+int  CustomControlBoard::GetOutA()
+{
+    return A11.GetValue( *mPort );
+}
+
+void CustomControlBoard::SetOutB( int v)
+{
+    A12.SetValue( v, *mPort );
+}
+int  CustomControlBoard::GetOutB()
+{
+    return A12.GetValue( *mPort );
+}
+
+void CustomControlBoard::SetA21( int v)
+{
+    A21.SetValue( v, *mPort );
+}
+int  CustomControlBoard::GetA21()
+{
+    return A21.GetValue( *mPort );
+}
+
+void CustomControlBoard::SetA22( int v )
+{
+    A22.SetValue( v, *mPort );
+}
+int  CustomControlBoard::GetA22()
+{
+    return A22.GetValue( *mPort );
+}
+
+void CustomControlBoard::SetA23( int v )
+{
+    A23.SetValue( v, *mPort );
+}
+int  CustomControlBoard::GetA23()
+{
+    return A23.GetValue( *mPort );
+}
+
+void CustomControlBoard::SetA24( int v )
+{
+    A24.SetValue( v, *mPort );
+}
+int  CustomControlBoard::GetA24()
+{
+    return A24.GetValue( *mPort );
+}
+
+void CustomControlBoard::SetA25( int v )
+{
+    A25.SetValue( v, *mPort );
+}
+int  CustomControlBoard::GetA25()
+{
+    return A25.GetValue( *mPort );
+}
+
+
+void CustomControlBoard::SetA26( int v )
+{
+    A26.SetValue( v, *mPort );
+}
+int  CustomControlBoard::GetA26()
+{
+    return A26.GetValue( *mPort );
+}
+
+void CustomControlBoard::SetA30( int v )
+{
+    A30.SetValue( v, *mPort );
+}
+int  CustomControlBoard::GetA30()
+{
+    return A30.GetValue( *mPort );
+}
+
+void CustomControlBoard::SetA31( int v )
+{
+    A31.SetValue( v, *mPort );
+}
+int  CustomControlBoard::GetA31()
+{
+    return A31.GetValue( *mPort );
+}
+
 
 CustomControlBoard::Command::Command( std::string const& addr, int def_val, int min_val, int max_val):
     mAddr( addr ),
@@ -104,6 +270,8 @@ std::string CustomControlBoard::Command::Receive( COMPort& port ) const
     size_t remain_len = len;
 
     bool end = false;
+
+    auto start = std::chrono::system_clock::now();
     do
     {
         size_t readed = port.Read( reinterpret_cast<BYTE*>( p_buff ), remain_len );
@@ -111,6 +279,9 @@ std::string CustomControlBoard::Command::Receive( COMPort& port ) const
         p_buff += readed;
         char end_symbol = *(p_buff - 1);
         end = end_symbol == '\n';
+
+        if ( (std::chrono::system_clock::now() - start) > std::chrono::seconds(10) )
+            throw COMError("Read tineout");
     }
     while( !end && remain_len );
     *p_buff = 0;
@@ -132,8 +303,8 @@ void CustomControlBoard::test()
     CustomControlBoard cb;
     int val = 200;
     int ret_val = 0;
-    cb.V_AMP.SetValue( val, *cb.mPort );
-    ret_val = cb.V_AMP.GetValue( *cb.mPort );
+    cb.A04.SetValue( val, *cb.mPort );
+    ret_val = cb.A04.GetValue( *cb.mPort );
     if ( ret_val != val )
         throw COMError("wrong val");
 }
