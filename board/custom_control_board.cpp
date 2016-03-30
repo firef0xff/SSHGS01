@@ -10,6 +10,16 @@ CustomControlBoard::CustomControlBoard()
 {
     Init();
 }
+CustomControlBoard::~CustomControlBoard()
+{
+    try
+    {
+        SetRUN_STOP( 0 );
+        SetA21( 0 );
+    }
+    catch(...)
+    {}
+}
 
 void CustomControlBoard::Init()
 {
@@ -232,7 +242,7 @@ void CustomControlBoard::Command::SetValue( int val, COMPort& port )
     Send( cmd.str(), port );
     auto answ = Receive( port );
     if ( answ != "*DONE!\r\n" )
-        throw COMError( answ );
+        throw COMError( mAddr + " set: " + answ );
 
 }
 int CustomControlBoard::Command::GetValue( COMPort& port ) const
@@ -252,7 +262,7 @@ int CustomControlBoard::Command::GetValue( COMPort& port ) const
          addtr != mAddr ||
          mark != "=" ||
          ending != Postfix )
-        throw COMError( answer );
+        throw COMError( mAddr + " get: " + answer );
 
     return stoi( value );
 }
@@ -286,27 +296,6 @@ std::string CustomControlBoard::Command::Receive( COMPort& port ) const
     while( !end && remain_len );
     *p_buff = 0;
     return std::string( buff, len - remain_len );
-}
-
-
-void CustomControlBoard::test()
-{
-//     Запись в плату
-//     *S A01 3#
-
-//    * Префикс команды
-//    S SET – задать значение
-//    A01 Имя парамтера
-//    3 Значение (signed int) -32767 to 32767
-//    # Постфикс.
-
-    CustomControlBoard cb;
-    int val = 200;
-    int ret_val = 0;
-    cb.A04.SetValue( val, *cb.mPort );
-    ret_val = cb.A04.GetValue( *cb.mPort );
-    if ( ret_val != val )
-        throw COMError("wrong val");
 }
 
 }//namespace control_board

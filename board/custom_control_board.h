@@ -17,7 +17,7 @@ class CustomControlBoard
 {
 public:
     CustomControlBoard();
-
+    ~CustomControlBoard();
 
     void SetRUN_STOP( int );
     int  GetRUN_STOP();
@@ -72,7 +72,6 @@ public:
 
     void SetA31( int );
     int  GetA31();
-    static void test();
 private:
     class Command
     {

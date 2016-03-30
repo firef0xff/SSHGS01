@@ -97,6 +97,8 @@ public:
     virtual QJsonObject Serialise() const;
     virtual bool Deserialize( QJsonObject const& obj );
 
+    virtual void StendInit() const;
+    virtual void StendDeInit() const;
     virtual void WriteToController() const = 0;
 
     virtual bool Draw(QPainter &painter, QRect &free_rect , const QString &compare_width) const;

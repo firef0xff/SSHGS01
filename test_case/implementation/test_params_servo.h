@@ -1,11 +1,36 @@
 #pragma once
 #include "../test_params.h"
 #include <array>
+#include "board/custom_control_board.h"
+
 namespace test
 {
+
+enum BOARD_CONTROL_TYPE
+{
+    BCT_UNKNOWN = -1,
+    BCT_SHIM = 0,
+    BCT_SUBDUED = 1
+};
+
+enum BOARD_CONTROL_CASE
+{
+    BCC_UNKNOWN = -1,
+    BCC_UNIPOLAR = 0,
+    BCC_BIPOLAR = 1
+};
+
+QString ToString( BOARD_CONTROL_TYPE const& val );
+QString ToString( BOARD_CONTROL_CASE const& val );
+
+bool ParseValue ( BOARD_CONTROL_TYPE& sig, QString const& val );
+bool ParseValue ( BOARD_CONTROL_CASE& sig, QString const& val );
+
 namespace servo
 {
 class Test;
+
+
 class Parameters : public test::CommonParameters
 {
 public:
@@ -19,6 +44,8 @@ public:
     virtual QJsonObject Serialise() const;
     virtual bool Deserialize( QJsonObject const& obj );
 
+    virtual void StendInit() const;
+    virtual void StendDeInit() const;
     virtual void WriteToController() const;
 
     bool Draw(QPainter &painter, QRect &free_rect, QString const& compare_width ) const;
@@ -85,6 +112,24 @@ public:
     bool AmplInc ( QString const& val );
     const double &AmplInc() const;
 
+    bool MinAmperage ( QString const& val );
+    const int &MinAmperage() const;
+
+    bool MaxAmperage ( QString const& val );
+    const int &MaxAmperage() const;
+
+    bool VSigAmpl ( QString const& val );
+    const int &VSigAmpl() const;
+
+    bool VSigFreq ( QString const& val );
+    const int &VSigFreq() const;
+
+    bool OutputType ( QString const& val );
+    const BOARD_CONTROL_TYPE &OutputType() const;
+
+    bool OutputCase ( QString const& val );
+    const BOARD_CONTROL_CASE &OutputCase() const;
+
     Parameters();
 private:
     Parameters( Parameters const& )  = delete;
@@ -116,6 +161,16 @@ private:
 
     double mStartFrequency;
     double mAmplInc;
+
+
+    int mMinAmperage;
+    int mMaxAmperage;
+    int mVSigAmpl;
+    int mVSigFreq;
+    BOARD_CONTROL_TYPE mOutputType;
+    BOARD_CONTROL_CASE mOutputCase;
+
+    mutable ::control_board::CustomControlBoard mBoard;
 };
 
 }//namespace servo

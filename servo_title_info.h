@@ -39,6 +39,7 @@ private slots:
     void on_ControlReelChA_activated(const QString &arg1);
     void on_ControlReelChB_activated(const QString &arg1);
     void on_PosCount_valueChanged(int arg1);
+    void on_OutputType_activated(int index);
 };
 
 #endif // SERVO_TITLE_INFO_H

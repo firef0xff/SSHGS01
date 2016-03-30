@@ -26,6 +26,7 @@
 
 #include "m1.h"
 #include "i1.h"
+#include "boardctrl.h"
 
 namespace cpu
 {

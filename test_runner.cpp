@@ -141,7 +141,7 @@ Worker::Worker(/* bool etalone */):
 void Worker::run()
 {
     mStopSignal = false;
-    test::CURRENT_PARAMS->WriteToController();
+    test::CURRENT_PARAMS->StendInit();
     foreach (test::Test* to_run, test::CURRENT_PARAMS->TestCase())
     {
         if (mStopSignal)
@@ -157,6 +157,7 @@ void Worker::run()
             LogIt( "Тест не пройден" );
         LogIt( QString() );
     }
+    test::CURRENT_PARAMS->StendDeInit();
 
     /*if (mEtalone)
     {

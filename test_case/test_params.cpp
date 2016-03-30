@@ -444,6 +444,13 @@ bool Parameters::Deserialize(const QJsonObject &obj )
     return res;
 }
 
+void Parameters::StendInit() const
+{
+    WriteToController();
+}
+void Parameters::StendDeInit() const
+{}
+
 bool Parameters::Draw(QPainter &painter, QRect &free_rect, QString const& compare_width ) const
 {
     QFont text_font = painter.font();

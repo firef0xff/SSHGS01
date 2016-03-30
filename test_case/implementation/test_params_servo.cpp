@@ -7,6 +7,66 @@
 namespace test
 {
 
+QString ToString( BOARD_CONTROL_TYPE const& val )
+{
+    switch (val)
+    {
+        case BCT_UNKNOWN:
+            return "Не задано";
+        case BCT_SHIM:
+            return "ШИМ";
+        case BCT_SUBDUED:
+            return "Сглаженный";
+    default:
+        return "Неизвестное значение";
+    }
+}
+QString ToString( BOARD_CONTROL_CASE const& val )
+{
+    switch (val)
+    {
+        case BCC_UNKNOWN:
+            return "Не задано";
+        case BCC_UNIPOLAR:
+            return "Униполярный";
+        case BCC_BIPOLAR:
+            return "Биполярный";
+    default:
+        return "Неизвестное значение";
+    }
+}
+
+bool ParseValue ( BOARD_CONTROL_TYPE& param, QString const& val )
+{
+    if ( !val.compare( "ШИМ", Qt::CaseInsensitive ) )
+    {
+        param = BCT_SHIM;
+        return true;
+    }
+    else if ( !val.compare( "Сглаженный", Qt::CaseInsensitive ) )
+    {
+        param = BCT_SUBDUED;
+        return true;
+    }
+    else
+        return false;
+}
+bool ParseValue ( BOARD_CONTROL_CASE& param, QString const& val )
+{
+    if ( !val.compare( "Униполярный", Qt::CaseInsensitive ) )
+    {
+        param = BCC_UNIPOLAR;
+        return true;
+    }
+    else if ( !val.compare( "Биполярный", Qt::CaseInsensitive ) )
+    {
+        param = BCC_BIPOLAR;
+        return true;
+    }
+    else
+        return false;
+}
+
 namespace servo
 {
 
@@ -47,7 +107,13 @@ Parameters::Parameters():
     mSignalOnChannelA( CS_UNKNOWN ),
     mSignalOnChannelB( CS_UNKNOWN ),
     mStartFrequency( 0.0 ),
-    mAmplInc( 0.0 )
+    mAmplInc( 0.0 ),
+    mMinAmperage(0),
+    mMaxAmperage(0),
+    mVSigAmpl(0),
+    mVSigFreq(0),
+    mOutputType(BCT_UNKNOWN),
+    mOutputCase(BCC_UNKNOWN)
 {
     mAmplitudes[0] = 0;
     mAmplitudes[1] = 0;
@@ -86,6 +152,13 @@ void Parameters::Reset()
 
     mStartFrequency = 0.0;
     mAmplInc = 0.0;
+
+    mMinAmperage = 0;
+    mMaxAmperage = 0;
+    mVSigAmpl = 0;
+    mVSigFreq = 0;
+    mOutputType = BCT_UNKNOWN;
+    mOutputCase = BCC_UNKNOWN;
 }
 QString Parameters::ToString() const
 {
@@ -124,6 +197,14 @@ QString Parameters::ToString() const
     res+= "  Тестирование канала Б " + test::ToString( mTestChannelB ) + "\n";
     res+= "  Катушка для тестирования канала Б: " + test::ToString( mSignalOnChannelB ) + "\n";
 
+    if ( mReelControl == RC_REEL )
+    {
+        res += "Параметры карты уравления:\n";
+        res += "  Тип сигнала: " + test::ToString( mOutputType ) + " - " + test::ToString( mOutputCase ) + "\n";
+        res += "  Диапазон тока, мА: " + test::ToString( mMinAmperage ) + " - " + test::ToString( mMaxAmperage ) + "\n";
+        res += "  Амплитуда сигнала: " + test::ToString( mVSigAmpl ) + "\n";
+        res += "  Частота сигнала: " + test::ToString( mVSigAmpl ) + "\n";
+    }
     return res;
 }
 
@@ -164,6 +245,13 @@ QJsonObject Parameters::Serialise() const
 
     servo.insert( "StartFrequency", mStartFrequency );
     servo.insert( "AmplInc", mAmplInc );
+
+    servo.insert( "MinAmperage", mMinAmperage );
+    servo.insert( "MaxAmperage", mMaxAmperage );
+    servo.insert( "VSigAmpl", mVSigAmpl );
+    servo.insert( "VSigFreq", mVSigFreq );
+    servo.insert( "OutputType", mOutputType );
+    servo.insert( "OutputCase", mOutputCase );
 
     res.insert("servo", servo);
     return res;
@@ -206,6 +294,14 @@ bool Parameters::Deserialize( QJsonObject const& obj )
 
         mStartFrequency = obj.value("StartFrequency").toDouble();
         mAmplInc = obj.value("AmplInc").toDouble();
+
+        mMinAmperage = obj.value("MinAmperage").toInt();
+        mMaxAmperage = obj.value("MaxAmperage").toInt();
+        mVSigAmpl = obj.value("VSigAmpl").toInt();
+        mVSigFreq = obj.value("VSigFreq").toInt();
+        mOutputType = static_cast<BOARD_CONTROL_TYPE>(obj.value("OutputType").toInt());
+        mOutputCase = static_cast<BOARD_CONTROL_CASE>(obj.value("OutputCase").toInt());
+
         res = true;
     }
     else
@@ -214,6 +310,68 @@ bool Parameters::Deserialize( QJsonObject const& obj )
     return res;
 }
 
+int EnumToVal( SIGNAL_TYPE sig )
+{
+    switch (sig)
+    {
+    case ST_100_mA:
+        return 100;
+    case ST_300_mA:
+        return 300;
+    case ST_600_mA:
+        return 600;
+    case ST_860_mA:
+        return 860;
+    case ST_1600_mA:
+        return 1600;
+    case ST_2500_mA:
+        return 2500;
+    case ST_3750_mA:
+        return 3750;
+    case ST_5000_mA:
+        return 5000;
+    default:
+        return 0;
+    }
+}
+void Parameters::StendInit() const
+{
+    if ( mReelControl == RC_REEL )
+    {
+        if ( mOutputType == BCT_SHIM )
+        {
+            mBoard.SetRUN_STOP( mPosCount == 3 ? 2 : mPosCount == 2 ? 1 : 0 );//А01 - 0 выкл. Для включения что задавать сюда? 1 2 или 3
+            mBoard.SetMIN_CUR( mMinAmperage );//А02 - Минимальный ток. 0, 5000
+            mBoard.SetMAX_CUR( mMaxAmperage );//А03 - Максимальный ток. 0, 5000
+            mBoard.SetV_AMP( mVSigAmpl ); //А04 - Амплитуда вибрационного сигнала мА 0, 200
+            mBoard.SetV_FREQ( mVSigFreq ); //А05 - Частота вибрационного сигнала, Гц 1, 200
+
+            if ( mOutputCase != BCC_UNKNOWN )
+            {
+                mBoard.SetPOLARITY_A( mOutputCase == BCC_BIPOLAR? 0 : mSignalStateA > 0? 1 : 2 );//А06 - Полярность сигнала А 0 1 2                params
+                mBoard.SetPOLARITY_B( mOutputCase == BCC_BIPOLAR? 0 : mSignalStateB > 0? 1 : 2);//А07 - Полярность сигнала B                      params
+            }
+        }
+        else
+        {
+            mBoard.SetA21( 1 );// А21 - 1 вкл, 0 выкл
+            mBoard.SetA22( mMinAmperage );// А22 - Минимальный ток. 0, 200
+            mBoard.SetA23( mMaxAmperage );// А23 - Максимальный ток. 0, 200
+            mBoard.SetA24( mVSigAmpl );// A24 - Амплитуда вибрационного сигнала мА, Гц 0, 20    params
+            mBoard.SetA25( mVSigFreq );// A25 - Частота вибрационного сигнала 1, 200            params
+            mBoard.SetA26( mOutputCase == BCC_BIPOLAR? 0 : mSignalStateA > 0? 1 : 2 );// A26 - Полярность сигнала 0 1 2                        params
+        }
+    }
+    test::CommonParameters::StendInit();
+}
+void Parameters::StendDeInit() const
+{
+    if ( mReelControl == RC_REEL )
+    {
+        mBoard.SetRUN_STOP( 0 );
+        mBoard.SetA21( 0 );
+    }
+}
 void Parameters::WriteToController() const
 {
     if ( test::servo::Parameters::Instance().ReelControl() == RC_REEL )
@@ -711,6 +869,60 @@ const double &Parameters::AmplInc() const
     return mAmplInc;
 }
 
+
+bool Parameters::MinAmperage ( QString const& val )
+{
+    return ParseValue( mMinAmperage, val );
+}
+const int &Parameters::MinAmperage() const
+{
+    return mMinAmperage;
+}
+
+bool Parameters::MaxAmperage ( QString const& val )
+{
+    return ParseValue( mMaxAmperage, val );
+}
+const int &Parameters::MaxAmperage() const
+{
+    return mMaxAmperage;
+}
+
+bool Parameters::VSigAmpl ( QString const& val )
+{
+    return ParseValue( mVSigAmpl, val );
+}
+const int &Parameters::VSigAmpl() const
+{
+    return mVSigAmpl;
+}
+
+bool Parameters::VSigFreq ( QString const& val )
+{
+    return ParseValue( mVSigFreq, val );
+}
+const int &Parameters::VSigFreq() const
+{
+    return mVSigFreq;
+}
+
+bool Parameters::OutputType ( QString const& val )
+{
+    return ParseValue( mOutputType, val );
+}
+const BOARD_CONTROL_TYPE &Parameters::OutputType() const
+{
+    return mOutputType;
+}
+
+bool Parameters::OutputCase ( QString const& val )
+{
+    return ParseValue( mOutputCase, val );
+}
+const BOARD_CONTROL_CASE &Parameters::OutputCase() const
+{
+    return mOutputCase;
+}
 }//namespace servo
 
 }//namespace test
