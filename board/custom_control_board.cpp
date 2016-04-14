@@ -241,7 +241,7 @@ void CustomControlBoard::Command::SetValue( int val, COMPort& port )
     cmd << Prefix << mAddr << " " << val << Postfix;
     Send( cmd.str(), port );
     auto answ = Receive( port );
-    if ( answ != "*DONE!\r\n" )
+    if ( answ != "*DONE!\r\n" && answ != "*DONE#\n\r" )
         throw COMError( mAddr + " set: " + answ );
 
 }
@@ -261,8 +261,16 @@ int CustomControlBoard::Command::GetValue( COMPort& port ) const
     if ( answer[0] != '*' ||
          addtr != mAddr ||
          mark != "=" ||
-         ending != Postfix )
-        throw COMError( mAddr + " get: " + answer );
+         (ending != Postfix && ending != "#\n\r") )
+    {
+        addtr = answer.substr( 1, 2);
+        mark = answer.substr( 4, 1);
+        ending = answer.substr( answer.length() - 3, 3);
+        value = answer.substr( 6, answer.length() - 3 - 6 );
+        if (mark != "=" ||
+            ending != "#\n\r")
+            throw COMError( mAddr + " get: " + answer );
+    }
 
     return stoi( value );
 }
@@ -288,10 +296,12 @@ std::string CustomControlBoard::Command::Receive( COMPort& port ) const
         remain_len -= std::min( readed, remain_len );
         p_buff += readed;
         char end_symbol = *(p_buff - 1);
-        end = end_symbol == '\n';
+        char prev_symbol = *(p_buff - 2);
+        end = ( ( prev_symbol =='\r' && end_symbol == '\n' ) ||
+                ( prev_symbol =='\n' && end_symbol == '\r') );
 
         if ( (std::chrono::system_clock::now() - start) > std::chrono::seconds(10) )
-            throw COMError("Read tineout");
+            throw COMError("Read timeout");
     }
     while( !end && remain_len );
     *p_buff = 0;

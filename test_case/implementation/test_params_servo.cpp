@@ -336,32 +336,61 @@ int EnumToVal( SIGNAL_TYPE sig )
 }
 void Parameters::StendInit() const
 {
+    bool inited = false;
     if ( mReelControl == RC_REEL )
     {
         if ( mOutputType == BCT_SHIM )
         {
-            mBoard.SetRUN_STOP( mPosCount == 3 ? 2 : mPosCount == 2 ? 1 : 0 );//А01 - 0 выкл. Для включения что задавать сюда? 1 2 или 3
             mBoard.SetMIN_CUR( mMinAmperage );//А02 - Минимальный ток. 0, 5000
             mBoard.SetMAX_CUR( mMaxAmperage );//А03 - Максимальный ток. 0, 5000
             mBoard.SetV_AMP( mVSigAmpl ); //А04 - Амплитуда вибрационного сигнала мА 0, 200
             mBoard.SetV_FREQ( mVSigFreq ); //А05 - Частота вибрационного сигнала, Гц 1, 200
 
+            int sa = 0;
+            int sb = 0;
             if ( mOutputCase != BCC_UNKNOWN )
             {
-                mBoard.SetPOLARITY_A( mOutputCase == BCC_BIPOLAR? 0 : mSignalStateA > 0? 1 : 2 );//А06 - Полярность сигнала А 0 1 2                params
-                mBoard.SetPOLARITY_B( mOutputCase == BCC_BIPOLAR? 0 : mSignalStateB > 0? 1 : 2);//А07 - Полярность сигнала B                      params
+                sa = mOutputCase == BCC_BIPOLAR? 0 : mSignalStateA > 0? 1 : 2;
+                sb = mOutputCase == BCC_BIPOLAR? 0 : mSignalStateB > 0? 1 : 2;
+                mBoard.SetPOLARITY_A( sa );//А06 - Полярность сигнала А 0 1 2                params
+                mBoard.SetPOLARITY_B( sb );//А07 - Полярность сигнала B                      params
             }
+
+            if ( mMinAmperage == mBoard.GetMIN_CUR() &&
+                 mMaxAmperage == mBoard.GetMAX_CUR() &&
+                 mVSigAmpl == mBoard.GetV_AMP() &&
+                 mVSigFreq == mBoard.GetV_FREQ() &&
+                 sa == mBoard.GetPOLARITY_A() &&
+                 sb == mBoard.GetPOLARITY_B() )
+            {
+                int sig = mPosCount == 3 ? 2 : mPosCount == 2 ? 1 : 0;
+                mBoard.SetRUN_STOP( sig );//А01 - 0 выкл. Для включения что задавать сюда? 1 2 или 3
+                inited = sig == mBoard.GetRUN_STOP();
+            }
+
         }
         else
         {
-            mBoard.SetA21( 1 );// А21 - 1 вкл, 0 выкл
             mBoard.SetA22( mMinAmperage );// А22 - Минимальный ток. 0, 200
             mBoard.SetA23( mMaxAmperage );// А23 - Максимальный ток. 0, 200
             mBoard.SetA24( mVSigAmpl );// A24 - Амплитуда вибрационного сигнала мА, Гц 0, 20    params
             mBoard.SetA25( mVSigFreq );// A25 - Частота вибрационного сигнала 1, 200            params
-            mBoard.SetA26( mOutputCase == BCC_BIPOLAR? 0 : mSignalStateA > 0? 1 : 2 );// A26 - Полярность сигнала 0 1 2                        params
+            int sc = mOutputCase == BCC_BIPOLAR? 0 : mSignalStateA > 0? 1 : 2;
+            mBoard.SetA26( sc );// A26 - Полярность сигнала 0 1 2                        params
+
+            if ( mMinAmperage == mBoard.GetA22() &&
+                 mMaxAmperage == mBoard.GetA23() &&
+                 mVSigAmpl == mBoard.GetA24() &&
+                 mVSigFreq == mBoard.GetA25() &&
+                 sc == mBoard.GetA26())
+            {
+                mBoard.SetA21( 1 );// А21 - 1 вкл, 0 выкл
+                inited = 1 == mBoard.GetA21();
+            }
         }
     }
+    if ( !inited )
+        throw ::control_board::COMError( "Ошибка запуска платы управления" );
     test::CommonParameters::StendInit();
 }
 void Parameters::StendDeInit() const
@@ -370,6 +399,10 @@ void Parameters::StendDeInit() const
     {
         mBoard.SetRUN_STOP( 0 );
         mBoard.SetA21( 0 );
+
+        if ( 0 != mBoard.GetRUN_STOP() ||
+             0 != mBoard.GetA21())
+            throw ::control_board::COMError( "Ошибка останова платы управления" );
     }
 }
 void Parameters::WriteToController() const

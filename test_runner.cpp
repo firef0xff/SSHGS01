@@ -141,7 +141,14 @@ Worker::Worker(/* bool etalone */):
 void Worker::run()
 {
     mStopSignal = false;
-    test::CURRENT_PARAMS->StendInit();
+    try
+    {
+        test::CURRENT_PARAMS->StendInit();
+    }catch( std::exception const& e )
+    {
+        LogIt( e.what() );
+        return;
+    }
     foreach (test::Test* to_run, test::CURRENT_PARAMS->TestCase())
     {
         if (mStopSignal)
