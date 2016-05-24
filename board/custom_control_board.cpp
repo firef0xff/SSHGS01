@@ -124,10 +124,10 @@ int  CustomControlBoard::GetPOLARITY_B()
     return A07.GetValue( *mPort );
 }
 
-void CustomControlBoard::SetInput( int v)
-{
-    A10.SetValue( v, *mPort );
-}
+//void CustomControlBoard::SetInput( int v)
+//{
+//    A10.SetValue( v, *mPort );
+//}
 int  CustomControlBoard::GetInput()
 {
     return A10.GetValue( *mPort );
@@ -149,6 +149,24 @@ void CustomControlBoard::SetOutB( int v)
 int  CustomControlBoard::GetOutB()
 {
     return A12.GetValue( *mPort );
+}
+
+int  CustomControlBoard::GetOverLoadA()
+{
+    return A13.GetValue( *mPort );
+}
+int  CustomControlBoard::GetOverLoadB()
+{
+    return A14.GetValue( *mPort );
+}
+int  CustomControlBoard::GetOverLoadC()
+{
+    return A32.GetValue( *mPort );
+}
+
+void CustomControlBoard::SetListenParam( int v )
+{
+    A20.SetValue( v, *mPort );
 }
 
 void CustomControlBoard::SetA21( int v)
@@ -206,10 +224,10 @@ int  CustomControlBoard::GetA26()
     return A26.GetValue( *mPort );
 }
 
-void CustomControlBoard::SetA30( int v )
-{
-    A30.SetValue( v, *mPort );
-}
+//void CustomControlBoard::SetA30( int v )
+//{
+//    A30.SetValue( v, *mPort );
+//}
 int  CustomControlBoard::GetA30()
 {
     return A30.GetValue( *mPort );
@@ -224,6 +242,53 @@ int  CustomControlBoard::GetA31()
     return A31.GetValue( *mPort );
 }
 
+void CustomControlBoard::Load( int v )
+{
+    A39.SetValue( v, *mPort );
+}
+void CustomControlBoard::Save( int v )
+{
+    A40.SetValue( v, *mPort );
+}
+
+std::string CustomControlBoard::TestRanges()
+{
+    std::stringstream res;
+    auto Test = [ &res, this ]( Command& cmd )
+    {
+        std::string addr;
+        int min_val = 0;
+        int max_val = 0;
+        std::string r = cmd.TestRange(addr, min_val, max_val, *mPort)?"ОК":"ER";
+        res << r <<" " << addr << " min:"<<min_val<<" max:"<<max_val<<"\n";
+    };
+
+    Test(A01);
+    Test(A02);
+    Test(A03);
+    Test(A04);
+    Test(A05);
+    Test(A06);
+    Test(A07);
+    Test(A10);
+    Test(A11);
+    Test(A12);
+    Test(A13);
+    Test(A14);
+//    Test(A20);
+    Test(A21);
+    Test(A22);
+    Test(A23);
+    Test(A24);
+    Test(A25);
+    Test(A26);
+    Test(A30);
+    Test(A31);
+    Test(A32);
+    Test(A39);
+    Test(A40);
+    return res.str();
+}
 
 CustomControlBoard::Command::Command( std::string const& addr, int def_val, int min_val, int max_val):
     mAddr( addr ),
@@ -274,6 +339,39 @@ int CustomControlBoard::Command::GetValue( COMPort& port ) const
 
     return stoi( value );
 }
+bool CustomControlBoard::Command::TestRange(string &addr, int& min, int&max, COMPort& port )
+{
+    addr = mAddr;
+    //ищем минимальное значение
+    for ( int i = mMinVal; i <= mMaxVal; )
+    {
+        try
+        {
+            SetValue( i, port );
+            min = i;
+            break;
+        }
+        catch( COMError const& )
+        {
+            ++i;
+        }
+    }
+    for ( int i = mMaxVal; i >= mMinVal; )
+    {
+        try
+        {
+            SetValue( i, port );
+            max = i;
+            break;
+        }
+        catch( COMError const& )
+        {
+            --i;
+        }
+    }
+    return mMinVal == min && mMaxVal == max;
+}
+
 
 void CustomControlBoard::Command::Send( std::string const& cmd, COMPort& port ) const
 {
