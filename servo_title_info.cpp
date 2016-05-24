@@ -464,6 +464,8 @@ void ServoTitleInfo::on_ControlType_activated(int index)
     ui->VSigAmpl->setVisible( control == test::RC_REEL );
     ui->VSigFreq->setVisible( control == test::RC_REEL );
     ui->OutputType->setVisible( control == test::RC_REEL );
+    if ( control == test::RC_REEL )
+        on_OutputType_activated( ui->OutputType->currentIndex() );
     ui->OutputCase->setVisible( control == test::RC_REEL );
 
     ui->l_signal_state_a->setVisible( ui->PosCount->value() >= 2);
@@ -696,18 +698,24 @@ void ServoTitleInfo::on_OutputType_activated(int index)
     {
     case 0:
     {
-        ui->MinAmperage->setRange(0, 5000);
+        ui->MinAmperage->setRange(-5000, 0);
         ui->MaxAmperage->setRange(0, 5000);
-        ui->VSigAmpl->setRange(0, 200);
+        ui->VSigAmpl->setRange(0, 500);
         ui->VSigFreq->setRange(1, 200);
+        ui->l_min_amperage->setText("Минимальный ток, мА");
+        ui->l_max_amperage->setText("Максимальный ток, мА");
+        ui->l_v_sig_ampl->setText("Амплитуда вибросигнала, мА");
         break;
     }
     case 1:
     {
-        ui->MinAmperage->setRange(0, 200);
-        ui->MaxAmperage->setRange(0, 200);
-        ui->VSigAmpl->setRange(0, 20);
+        ui->MinAmperage->setRange(-2000, 0);
+        ui->MaxAmperage->setRange(0, 2000);
+        ui->VSigAmpl->setRange(0, 200);
         ui->VSigFreq->setRange(1, 200);
+        ui->l_min_amperage->setText("Минимальный ток, мА*10");
+        ui->l_max_amperage->setText("Максимальный ток, мА*10");
+        ui->l_v_sig_ampl->setText("Амплитуда вибросигнала, мА*10");
         break;
     }
     default:

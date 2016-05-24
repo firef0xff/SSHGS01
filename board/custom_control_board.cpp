@@ -70,23 +70,24 @@ int  CustomControlBoard::GetRUN_STOP()
     return A01.GetValue( *mPort );
 }
 
-void CustomControlBoard::SetMIN_CUR( int v )
+void CustomControlBoard::SetMAX_CUR( int  v)
 {
     A02.SetValue( v, *mPort );
 }
-int  CustomControlBoard::GetMIN_CUR()
+int  CustomControlBoard::GetMAX_CUR()
 {
     return A02.GetValue( *mPort );
 }
 
-void CustomControlBoard::SetMAX_CUR( int  v)
+void CustomControlBoard::SetMIN_CUR( int v )
 {
     A03.SetValue( v, *mPort );
 }
-int  CustomControlBoard::GetMAX_CUR()
+int  CustomControlBoard::GetMIN_CUR()
 {
     return A03.GetValue( *mPort );
 }
+
 
 void CustomControlBoard::SetV_AMP( int v)
 {
@@ -124,10 +125,10 @@ int  CustomControlBoard::GetPOLARITY_B()
     return A07.GetValue( *mPort );
 }
 
-void CustomControlBoard::SetInput( int v)
-{
-    A10.SetValue( v, *mPort );
-}
+//void CustomControlBoard::SetInput( int v)
+//{
+//    A10.SetValue( v, *mPort );
+//}
 int  CustomControlBoard::GetInput()
 {
     return A10.GetValue( *mPort );
@@ -151,6 +152,24 @@ int  CustomControlBoard::GetOutB()
     return A12.GetValue( *mPort );
 }
 
+int  CustomControlBoard::GetOverLoadA()
+{
+    return A13.GetValue( *mPort );
+}
+int  CustomControlBoard::GetOverLoadB()
+{
+    return A14.GetValue( *mPort );
+}
+int  CustomControlBoard::GetOverLoadC()
+{
+    return A32.GetValue( *mPort );
+}
+
+void CustomControlBoard::SetListenParam( int v )
+{
+    A20.SetValue( v, *mPort );
+}
+
 void CustomControlBoard::SetA21( int v)
 {
     A21.SetValue( v, *mPort );
@@ -160,20 +179,20 @@ int  CustomControlBoard::GetA21()
     return A21.GetValue( *mPort );
 }
 
-void CustomControlBoard::SetA22( int v )
+void CustomControlBoard::SetMaxCur2( int v )
 {
     A22.SetValue( v, *mPort );
 }
-int  CustomControlBoard::GetA22()
+int  CustomControlBoard::GetMaxCur2()
 {
     return A22.GetValue( *mPort );
 }
 
-void CustomControlBoard::SetA23( int v )
+void CustomControlBoard::SetMinCur2( int v )
 {
     A23.SetValue( v, *mPort );
 }
-int  CustomControlBoard::GetA23()
+int  CustomControlBoard::GetMinCur2()
 {
     return A23.GetValue( *mPort );
 }
@@ -206,10 +225,10 @@ int  CustomControlBoard::GetA26()
     return A26.GetValue( *mPort );
 }
 
-void CustomControlBoard::SetA30( int v )
-{
-    A30.SetValue( v, *mPort );
-}
+//void CustomControlBoard::SetA30( int v )
+//{
+//    A30.SetValue( v, *mPort );
+//}
 int  CustomControlBoard::GetA30()
 {
     return A30.GetValue( *mPort );
@@ -224,6 +243,53 @@ int  CustomControlBoard::GetA31()
     return A31.GetValue( *mPort );
 }
 
+void CustomControlBoard::Load( int v )
+{
+    A39.SetValue( v, *mPort );
+}
+void CustomControlBoard::Save( int v )
+{
+    A40.SetValue( v, *mPort );
+}
+
+std::string CustomControlBoard::TestRanges()
+{
+    std::stringstream res;
+    auto Test = [ &res, this ]( Command& cmd )
+    {
+        std::string addr;
+        int min_val = 0;
+        int max_val = 0;
+        std::string r = cmd.TestRange(addr, min_val, max_val, *mPort)?"ОК":"ER";
+        res << r <<" " << addr << " min:"<<min_val<<" max:"<<max_val<<"\n";
+    };
+
+    Test(A01);
+    Test(A02);
+    Test(A03);
+    Test(A04);
+    Test(A05);
+    Test(A06);
+    Test(A07);
+    Test(A10);
+    Test(A11);
+    Test(A12);
+    Test(A13);
+    Test(A14);
+//    Test(A20);
+    Test(A21);
+    Test(A22);
+    Test(A23);
+    Test(A24);
+    Test(A25);
+    Test(A26);
+    Test(A30);
+    Test(A31);
+    Test(A32);
+    Test(A39);
+    Test(A40);
+    return res.str();
+}
 
 CustomControlBoard::Command::Command( std::string const& addr, int def_val, int min_val, int max_val):
     mAddr( addr ),
@@ -241,7 +307,7 @@ void CustomControlBoard::Command::SetValue( int val, COMPort& port )
     cmd << Prefix << mAddr << " " << val << Postfix;
     Send( cmd.str(), port );
     auto answ = Receive( port );
-    if ( answ != "*DONE!\r\n" )
+    if ( answ != "*DONE!\r\n" && answ != "*DONE#\n\r" )
         throw COMError( mAddr + " set: " + answ );
 
 }
@@ -261,11 +327,52 @@ int CustomControlBoard::Command::GetValue( COMPort& port ) const
     if ( answer[0] != '*' ||
          addtr != mAddr ||
          mark != "=" ||
-         ending != Postfix )
-        throw COMError( mAddr + " get: " + answer );
+         (ending != Postfix && ending != "#\n\r") )
+    {
+        addtr = answer.substr( 1, 2);
+        mark = answer.substr( 4, 1);
+        ending = answer.substr( answer.length() - 3, 3);
+        value = answer.substr( 6, answer.length() - 3 - 6 );
+        if (mark != "=" ||
+            ending != "#\n\r")
+            throw COMError( mAddr + " get: " + answer );
+    }
 
     return stoi( value );
 }
+bool CustomControlBoard::Command::TestRange(string &addr, int& min, int&max, COMPort& port )
+{
+    addr = mAddr;
+    //ищем минимальное значение
+    for ( int i = mMinVal; i <= mMaxVal; )
+    {
+        try
+        {
+            SetValue( i, port );
+            min = i;
+            break;
+        }
+        catch( COMError const& )
+        {
+            ++i;
+        }
+    }
+    for ( int i = mMaxVal; i >= mMinVal; )
+    {
+        try
+        {
+            SetValue( i, port );
+            max = i;
+            break;
+        }
+        catch( COMError const& )
+        {
+            --i;
+        }
+    }
+    return mMinVal == min && mMaxVal == max;
+}
+
 
 void CustomControlBoard::Command::Send( std::string const& cmd, COMPort& port ) const
 {
@@ -288,10 +395,12 @@ std::string CustomControlBoard::Command::Receive( COMPort& port ) const
         remain_len -= std::min( readed, remain_len );
         p_buff += readed;
         char end_symbol = *(p_buff - 1);
-        end = end_symbol == '\n';
+        char prev_symbol = *(p_buff - 2);
+        end = ( ( prev_symbol =='\r' && end_symbol == '\n' ) ||
+                ( prev_symbol =='\n' && end_symbol == '\r') );
 
         if ( (std::chrono::system_clock::now() - start) > std::chrono::seconds(10) )
-            throw COMError("Read tineout");
+            throw COMError("Read timeout");
     }
     while( !end && remain_len );
     *p_buff = 0;
