@@ -700,16 +700,22 @@ void ServoTitleInfo::on_OutputType_activated(int index)
     {
         ui->MinAmperage->setRange(-5000, 0);
         ui->MaxAmperage->setRange(0, 5000);
-        ui->VSigAmpl->setRange(0, 200);
+        ui->VSigAmpl->setRange(0, 500);
         ui->VSigFreq->setRange(1, 200);
+        ui->l_min_amperage->setText("Минимальный ток, мА");
+        ui->l_max_amperage->setText("Максимальный ток, мА");
+        ui->l_v_sig_ampl->setText("Амплитуда вибросигнала, мА");
         break;
     }
     case 1:
     {
-        ui->MinAmperage->setRange(-200, 0);
-        ui->MaxAmperage->setRange(0, 200);
-        ui->VSigAmpl->setRange(0, 20);
+        ui->MinAmperage->setRange(-2000, 0);
+        ui->MaxAmperage->setRange(0, 2000);
+        ui->VSigAmpl->setRange(0, 200);
         ui->VSigFreq->setRange(1, 200);
+        ui->l_min_amperage->setText("Минимальный ток, мА*10");
+        ui->l_max_amperage->setText("Максимальный ток, мА*10");
+        ui->l_v_sig_ampl->setText("Амплитуда вибросигнала, мА*10");
         break;
     }
     default:

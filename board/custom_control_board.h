@@ -22,11 +22,11 @@ public:
     void SetRUN_STOP( int );
     int  GetRUN_STOP();
 
-    void SetMIN_CUR( int );
-    int  GetMIN_CUR();
-
     void SetMAX_CUR( int );
     int  GetMAX_CUR();
+
+    void SetMIN_CUR( int );
+    int  GetMIN_CUR();
 
     void SetV_AMP( int );
     int  GetV_AMP();
@@ -58,11 +58,11 @@ public:
     void SetA21( int );
     int  GetA21();
 
-    void SetA22( int );
-    int  GetA22();
+    void SetMaxCur2( int );
+    int  GetMaxCur2();
 
-    void SetA23( int );
-    int  GetA23();
+    void SetMinCur2( int );
+    int  GetMinCur2();
 
     void SetA24( int );
     int  GetA24();

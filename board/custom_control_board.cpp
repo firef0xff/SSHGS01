@@ -70,23 +70,24 @@ int  CustomControlBoard::GetRUN_STOP()
     return A01.GetValue( *mPort );
 }
 
-void CustomControlBoard::SetMIN_CUR( int v )
+void CustomControlBoard::SetMAX_CUR( int  v)
 {
     A02.SetValue( v, *mPort );
 }
-int  CustomControlBoard::GetMIN_CUR()
+int  CustomControlBoard::GetMAX_CUR()
 {
     return A02.GetValue( *mPort );
 }
 
-void CustomControlBoard::SetMAX_CUR( int  v)
+void CustomControlBoard::SetMIN_CUR( int v )
 {
     A03.SetValue( v, *mPort );
 }
-int  CustomControlBoard::GetMAX_CUR()
+int  CustomControlBoard::GetMIN_CUR()
 {
     return A03.GetValue( *mPort );
 }
+
 
 void CustomControlBoard::SetV_AMP( int v)
 {
@@ -178,20 +179,20 @@ int  CustomControlBoard::GetA21()
     return A21.GetValue( *mPort );
 }
 
-void CustomControlBoard::SetA22( int v )
+void CustomControlBoard::SetMaxCur2( int v )
 {
     A22.SetValue( v, *mPort );
 }
-int  CustomControlBoard::GetA22()
+int  CustomControlBoard::GetMaxCur2()
 {
     return A22.GetValue( *mPort );
 }
 
-void CustomControlBoard::SetA23( int v )
+void CustomControlBoard::SetMinCur2( int v )
 {
     A23.SetValue( v, *mPort );
 }
-int  CustomControlBoard::GetA23()
+int  CustomControlBoard::GetMinCur2()
 {
     return A23.GetValue( *mPort );
 }

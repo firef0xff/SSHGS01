@@ -341,8 +341,8 @@ void Parameters::StendInit() const
     {
         if ( mOutputType == BCT_SHIM )
         {
-            mBoard.SetMIN_CUR( mMinAmperage );//А02 - Минимальный ток. 0, 5000
-            mBoard.SetMAX_CUR( mMaxAmperage );//А03 - Максимальный ток. 0, 5000
+            mBoard.SetMIN_CUR( mMinAmperage );//А03 - Минимальный ток. 0, 5000
+            mBoard.SetMAX_CUR( mMaxAmperage );//А02 - Максимальный ток. 0, 5000
             mBoard.SetV_AMP( mVSigAmpl ); //А04 - Амплитуда вибрационного сигнала мА 0, 200
             mBoard.SetV_FREQ( mVSigFreq ); //А05 - Частота вибрационного сигнала, Гц 1, 200
 
@@ -350,8 +350,8 @@ void Parameters::StendInit() const
             int sb = 0;
             if ( mOutputCase != BCC_UNKNOWN )
             {
-                sa = mOutputCase == BCC_BIPOLAR? 0 : mSignalStateA > 0? 1 : 2;
-                sb = mOutputCase == BCC_BIPOLAR? 0 : mSignalStateB > 0? 1 : 2;
+                sa = mOutputCase == BCC_BIPOLAR? 0 : mSignalStateA > 0? 1 : -1;
+                sb = mOutputCase == BCC_BIPOLAR? 0 : mSignalStateB > 0? 1 : -1;
                 mBoard.SetPOLARITY_A( sa );//А06 - Полярность сигнала А 0 1 2                params
                 mBoard.SetPOLARITY_B( sb );//А07 - Полярность сигнала B                      params
             }
@@ -371,15 +371,15 @@ void Parameters::StendInit() const
         }
         else
         {
-            mBoard.SetA22( mMinAmperage );// А22 - Минимальный ток. 0, 200
-            mBoard.SetA23( mMaxAmperage );// А23 - Максимальный ток. 0, 200
+            mBoard.SetMaxCur2( mMaxAmperage );// А22 - Минимальный ток.
+            mBoard.SetMinCur2( mMinAmperage );// А23 - Максимальный ток.
             mBoard.SetA24( mVSigAmpl );// A24 - Амплитуда вибрационного сигнала мА, Гц 0, 20    params
             mBoard.SetA25( mVSigFreq );// A25 - Частота вибрационного сигнала 1, 200            params
-            int sc = mOutputCase == BCC_BIPOLAR? 0 : mSignalStateA > 0? 1 : 2;
+            int sc = mOutputCase == BCC_BIPOLAR? 0 : mSignalStateA > 0? 1 : -1;
             mBoard.SetA26( sc );// A26 - Полярность сигнала 0 1 2                        params
 
-            if ( mMinAmperage == mBoard.GetA22() &&
-                 mMaxAmperage == mBoard.GetA23() &&
+            if ( mMaxAmperage == mBoard.GetMaxCur2() &&
+                 mMinAmperage == mBoard.GetMinCur2() &&
                  mVSigAmpl == mBoard.GetA24() &&
                  mVSigFreq == mBoard.GetA25() &&
                  sc == mBoard.GetA26())
