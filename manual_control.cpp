@@ -785,44 +785,44 @@ void ManualControl::on_SigLevel_currentIndexChanged(const QString &arg1)
             ui->Sig0->setValidator( new QIntValidator( -40, 40, this ) );
             break;
         case test::ST_100_mA:
-            ui->SigA->setValidator( new QIntValidator( 0, 100, this ) );
-            ui->SigB->setValidator( new QIntValidator( 0, 100, this ) );
-            ui->Sig0->setValidator( new QIntValidator( 0, 100, this ) );
+            ui->SigA->setValidator( new QIntValidator( -100, 100, this ) );
+            ui->SigB->setValidator( new QIntValidator( -100, 100, this ) );
+            ui->Sig0->setValidator( new QIntValidator( -100, 100, this ) );
             break;
         case test::ST_300_mA:
-            ui->SigA->setValidator( new QIntValidator( 0, 300, this ) );
-            ui->SigB->setValidator( new QIntValidator( 0, 300, this ) );
-            ui->Sig0->setValidator( new QIntValidator( 0, 300, this ) );
+            ui->SigA->setValidator( new QIntValidator( -300, 300, this ) );
+            ui->SigB->setValidator( new QIntValidator( -300, 300, this ) );
+            ui->Sig0->setValidator( new QIntValidator( -300, 300, this ) );
             break;
         case test::ST_600_mA:
-            ui->SigA->setValidator( new QIntValidator( 0, 600, this ) );
-            ui->SigB->setValidator( new QIntValidator( 0, 600, this ) );
-            ui->Sig0->setValidator( new QIntValidator( 0, 600, this ) );
+            ui->SigA->setValidator( new QIntValidator( -600, 600, this ) );
+            ui->SigB->setValidator( new QIntValidator( -600, 600, this ) );
+            ui->Sig0->setValidator( new QIntValidator( -600, 600, this ) );
             break;
         case test::ST_860_mA:
-            ui->SigA->setValidator( new QIntValidator( 0, 860, this ) );
-            ui->SigB->setValidator( new QIntValidator( 0, 860, this ) );
-            ui->Sig0->setValidator( new QIntValidator( 0, 860, this ) );
+            ui->SigA->setValidator( new QIntValidator( -860, 860, this ) );
+            ui->SigB->setValidator( new QIntValidator( -860, 860, this ) );
+            ui->Sig0->setValidator( new QIntValidator( -860, 860, this ) );
             break;
         case test::ST_1600_mA:
-            ui->SigA->setValidator( new QIntValidator( 0, 1600, this ) );
-            ui->SigB->setValidator( new QIntValidator( 0, 1600, this ) );
-            ui->Sig0->setValidator( new QIntValidator( 0, 1600, this ) );
+            ui->SigA->setValidator( new QIntValidator( -1600, 1600, this ) );
+            ui->SigB->setValidator( new QIntValidator( -1600, 1600, this ) );
+            ui->Sig0->setValidator( new QIntValidator( -1600, 1600, this ) );
             break;
         case test::ST_2500_mA:
-            ui->SigA->setValidator( new QIntValidator( 0, 2500, this ) );
-            ui->SigB->setValidator( new QIntValidator( 0, 2500, this ) );
-            ui->Sig0->setValidator( new QIntValidator( 0, 2500, this ) );
+            ui->SigA->setValidator( new QIntValidator( -2500, 2500, this ) );
+            ui->SigB->setValidator( new QIntValidator( -2500, 2500, this ) );
+            ui->Sig0->setValidator( new QIntValidator( -2500, 2500, this ) );
             break;
         case test::ST_3750_mA:
-            ui->SigA->setValidator( new QIntValidator( 0, 3750, this ) );
-            ui->SigB->setValidator( new QIntValidator( 0, 3750, this ) );
-            ui->Sig0->setValidator( new QIntValidator( 0, 3750, this ) );
+            ui->SigA->setValidator( new QIntValidator( -3750, 3750, this ) );
+            ui->SigB->setValidator( new QIntValidator( -3750, 3750, this ) );
+            ui->Sig0->setValidator( new QIntValidator( -3750, 3750, this ) );
             break;
         case test::ST_5000_mA:
-            ui->SigA->setValidator( new QIntValidator( 0, 5000, this ) );
-            ui->SigB->setValidator( new QIntValidator( 0, 5000, this ) );
-            ui->Sig0->setValidator( new QIntValidator( 0, 5000, this ) );
+            ui->SigA->setValidator( new QIntValidator( -5000, 5000, this ) );
+            ui->SigB->setValidator( new QIntValidator( -5000, 5000, this ) );
+            ui->Sig0->setValidator( new QIntValidator( -5000, 5000, this ) );
             break;
         default:
             ui->SigA->setEnabled(false);

@@ -35,6 +35,8 @@ QtMsgType ToMsgType ( QString const& level )
 
 void myLogHandler(QtMsgType type, const QMessageLogContext &where, const QString &msg)
 {
+    (void)type; (void)where; (void)msg;
+#ifdef DEBUG
     if ( ToMsgType( Settings::Instance().LogLevel() ) < type )
         return;
 
@@ -71,6 +73,7 @@ void myLogHandler(QtMsgType type, const QMessageLogContext &where, const QString
     f<< "]" << localMsg.constData() << std::endl;
     f.flush();
     f.close();
+#endif
 }
 
 

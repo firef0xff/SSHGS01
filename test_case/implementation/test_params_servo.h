@@ -170,7 +170,8 @@ private:
     BOARD_CONTROL_TYPE mOutputType;
     BOARD_CONTROL_CASE mOutputCase;
 
-    mutable ::control_board::CustomControlBoard mBoard;
+    typedef ::control_board::CustomControlBoard CustomBoard;
+    mutable std::unique_ptr<CustomBoard> mBoard;
 };
 
 }//namespace servo

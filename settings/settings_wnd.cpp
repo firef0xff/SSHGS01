@@ -9,6 +9,10 @@ settings_wnd::settings_wnd(QWidget *parent) :
 {
     ui->setupUi(this);
 
+#ifndef DEBUG
+    ui->label_3->setVisible(false);
+    ui->LogLevel->setVisible(false);
+#endif
     auto index = ui->LogLevel->findText( app::Settings::Instance().LogLevel() );
     if ( index > 0 )
         ui->LogLevel->setCurrentIndex( index );
