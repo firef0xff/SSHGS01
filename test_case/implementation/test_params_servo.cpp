@@ -418,7 +418,7 @@ void Parameters::WriteToController() const
         mem.channel_b = mTestChannelB; //62.1 испытание канала В
         mem.channel_k_a = mSignalOnChannelA == CS_REEL_B ? 1: 0;
         mem.channel_k_b = mSignalOnChannelB == CS_REEL_B ? 1: 0;
-        switch (mControlSignal)                   //2 управляющий сигнал
+        /*switch (mControlSignal)                   //2 управляющий сигнал
         {
             case ST_100_mA:
                 mem.s860ma = 100;
@@ -447,9 +447,9 @@ void Parameters::WriteToController() const
             default:
                 mem.s860ma = 0;
                 break;
-        }
+        }*/
 
-
+        mem.s860ma = mMaxAmperage;
         mem.x_max_a = mSignalStateA;             //4 сигнал переключение в А
         mem.x_pos_0 = mSignalState0;             //12 сигнал переключение в 0
         if ( mPosCount == 3 )

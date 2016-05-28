@@ -451,6 +451,7 @@ void ServoTitleInfo::on_ControlType_activated(int index)
     ui->MaxExpenditure->setVisible( ui->PosCount->value() == 3);
     ui->SignalState0->setVisible( ui->PosCount->value() >= 2);
     ui->Voltage->setVisible( control == test::RC_CONTROL_BOX );
+    ui->ControlSignal->setVisible( control == test::RC_CONTROL_BOX );
 
     ui->l_min_amperage->setVisible( control == test::RC_REEL );
     ui->l_max_amperage->setVisible( control == test::RC_REEL );
@@ -473,6 +474,7 @@ void ServoTitleInfo::on_ControlType_activated(int index)
     ui->l_max_expenditure->setVisible( ui->PosCount->value() == 3);
     ui->l_signal_state_0->setVisible( ui->PosCount->value() >= 2);
     ui->l_voltage->setVisible( control == test::RC_CONTROL_BOX );
+    ui->l_control_signal->setVisible( control == test::RC_CONTROL_BOX );
 
     ui->l_control_signal_ampl->setVisible( ui->PosCount->value() == 3);
     ui->l_Frequency->setVisible( ui->PosCount->value() == 3);
