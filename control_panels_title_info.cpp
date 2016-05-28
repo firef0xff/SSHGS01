@@ -76,7 +76,7 @@ bool ControlPanelsTitleInfo::SaveInputParams()
     res *= ParamChecker( ui->l_signal_type,  params.SignalType( ui->SignalType->currentText() ) );
     res *= ParamChecker( ui->l_voltage,      ValidateRange( ui->Voltage, params.Voltage( ui->Voltage->text() ) ) );
     res *= ParamChecker( ui->l_max_amperage, ValidateRange( ui->MaxAmperage, params.MaxAmperage( ui->MaxAmperage->text() ) ) );
-    res *= ParamChecker( ui->l_reel_resist,  params.ReelResist( ui->ReelResist->currentText() ) );
+    res *= ParamChecker( ui->l_reel_resist,  params.ReelResist( ui->ReelResist->text() ) );
 
     return res;
 }
@@ -89,7 +89,7 @@ void ControlPanelsTitleInfo::FromParams()
     ui->SignalType->setCurrentIndex( ui->SignalType->findText( test::ToString( params.SignalType() ) ) );
     ui->Voltage->setText( test::ToString( params.Voltage() ) );
     ui->MaxAmperage->setText( test::ToString( params.MaxAmperage() ) );
-    ui->ReelResist->setCurrentIndex( ui->ReelResist->findText( test::ToString( params.ReelResist() ) ) );
+    ui->ReelResist->setValue( params.ReelResist() );
 }
 
 void ControlPanelsTitleInfo::on_buttonBox_accepted()

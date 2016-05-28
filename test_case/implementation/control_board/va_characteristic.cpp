@@ -114,6 +114,7 @@ VACharacteristic::VACharacteristic():
 
 bool VACharacteristic::Run()
 {
+    Graph.clear();
     Start();
     Wait( mBits.op31_ok, mBits.op31_end );
     if ( IsStopped() )

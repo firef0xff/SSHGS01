@@ -87,20 +87,21 @@
          <string>+-20 мА</string>
         </property>
        </item>
-       <item>
-        <property name="text">
-         <string>+-40 мА</string>
-        </property>
-       </item>
       </widget>
      </item>
      <item row="1" column="3">
       <widget class="QLineEdit" name="Voltage">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="toolTip">
         <string>1..40 VDC</string>
        </property>
        <property name="toolTipDuration">
         <number>1000</number>
+       </property>
+       <property name="text">
+        <string>24</string>
        </property>
       </widget>
      </item>
@@ -127,23 +128,6 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="3">
-      <widget class="QComboBox" name="ReelResist">
-       <property name="currentIndex">
-        <number>-1</number>
-       </property>
-       <item>
-        <property name="text">
-         <string>8,65</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>17,6</string>
-        </property>
-       </item>
-      </widget>
-     </item>
      <item row="0" column="2">
       <widget class="QLabel" name="l_ser_no">
        <property name="text">
@@ -153,6 +137,13 @@
      </item>
      <item row="0" column="3">
       <widget class="QLineEdit" name="SerNo"/>
+     </item>
+     <item row="2" column="3">
+      <widget class="QDoubleSpinBox" name="ReelResist">
+       <property name="maximum">
+        <double>10000000000.000000000000000</double>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
