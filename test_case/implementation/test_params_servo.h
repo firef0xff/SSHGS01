@@ -1,7 +1,6 @@
 #pragma once
 #include "../test_params.h"
 #include <array>
-#include "board/custom_control_board.h"
 
 namespace test
 {
@@ -13,18 +12,9 @@ enum BOARD_CONTROL_TYPE
     BCT_SUBDUED = 1
 };
 
-enum BOARD_CONTROL_CASE
-{
-    BCC_UNKNOWN = -1,
-    BCC_UNIPOLAR = 0,
-    BCC_BIPOLAR = 1
-};
-
 QString ToString( BOARD_CONTROL_TYPE const& val );
-QString ToString( BOARD_CONTROL_CASE const& val );
 
 bool ParseValue ( BOARD_CONTROL_TYPE& sig, QString const& val );
-bool ParseValue ( BOARD_CONTROL_CASE& sig, QString const& val );
 
 namespace servo
 {
@@ -127,8 +117,8 @@ public:
     bool OutputType ( QString const& val );
     const BOARD_CONTROL_TYPE &OutputType() const;
 
-    bool OutputCase ( QString const& val );
-    const BOARD_CONTROL_CASE &OutputCase() const;
+    bool OutputChannels ( QString const& val );
+    const int &OutputChannels() const;
 
     Parameters();
 private:
@@ -168,10 +158,7 @@ private:
     int mVSigAmpl;
     int mVSigFreq;
     BOARD_CONTROL_TYPE mOutputType;
-    BOARD_CONTROL_CASE mOutputCase;
-
-    typedef ::control_board::CustomControlBoard CustomBoard;
-    mutable std::unique_ptr<CustomBoard> mBoard;
+    int mOutputChannels;
 };
 
 }//namespace servo

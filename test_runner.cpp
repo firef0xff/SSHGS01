@@ -164,7 +164,14 @@ void Worker::run()
             LogIt( "Тест не пройден" );
         LogIt( QString() );
     }
-    test::CURRENT_PARAMS->StendDeInit();
+    try
+    {
+        test::CURRENT_PARAMS->StendDeInit();
+    }catch( std::exception const& e )
+    {
+        LogIt( e.what() );
+        return;
+    }
 
     /*if (mEtalone)
     {

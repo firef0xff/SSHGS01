@@ -427,7 +427,7 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect, QString const& compar
         DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Минимальное давление управления*, бар"), test::ToString(mMinControlPressure), str_e_mncp, row_skale );
     }
     DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Напряжение пинания, В"), "="+test::ToString( mVoltage )+" (~220)",str_e_vt, row_skale );
-    DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Тонкость фильтрации рабочей жидкости, мкм"), test::ToString(3), "", row_skale );
+    DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Тонкость фильтрации рабочей жидкости, мкм"), "________", "", row_skale );
     DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Тип масла"), "Лукой Гейзер HLP32", "", row_skale );
     DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Вязкость масла (при 40˚С), сСт"), test::ToString(32), "", row_skale );
 

@@ -26,6 +26,7 @@
 
 #include "m1.h"
 #include "i1.h"
+#include "board_memory.h"
 
 namespace cpu
 {
@@ -35,10 +36,6 @@ class CpuMemory
 public:
     ~CpuMemory();
     static CpuMemory& Instance();
-
-    void Syncronise();
-    void ReadAll();
-    void WriteAll();
 
     data::DB30 DB30;    //параметры для испытания гидроаппарутуры
     data::DB31 DB31;    //диспетчер запуска
@@ -71,6 +68,7 @@ public:
     data::M1   M1;      //управляющие биты ручного режима
     data::I1   I1;      //контрольные биты ручного режима
 
+    data::BoardMem Board; //параметры карты управления
 private:
     CpuMemory();
     CpuMemory( CpuMemory const& ) = delete;

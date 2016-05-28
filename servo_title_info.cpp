@@ -112,7 +112,7 @@ bool ServoTitleInfo::SaveInputParams()
         res *= ParamChecker( ui->l_v_sig_ampl,    params.VSigAmpl   ( QString::number( ui->VSigAmpl->value() ) ) );
         res *= ParamChecker( ui->l_v_sig_freq,    params.VSigFreq   ( QString::number( ui->VSigFreq->value() ) ) );
         res *= ParamChecker( ui->l_output_type,   params.OutputType ( ui->OutputType->currentText() ) );
-        res *= ParamChecker( ui->l_OutputCase,    params.OutputCase ( ui->OutputCase->currentText() ) );
+        res *= ParamChecker( ui->l_OutputChannels,    params.OutputChannels ( ui->OutputChannels->text() ) );
     }
     res *= ParamChecker( ui->l_max_expenditure_a,    ValidateRange( ui->MaxExpenditureA, params.MaxExpenditureA( ui->MaxExpenditureA->text() ) ) );
     res *= ParamChecker( ui->l_max_expenditure_b,    ValidateRange( ui->MaxExpenditureB, params.MaxExpenditureB( ui->MaxExpenditureB->text() ) ) );
@@ -194,7 +194,7 @@ void ServoTitleInfo::FromParams()
         ui->VSigFreq->setValue( params.VSigFreq() );
 
         ui->OutputType->setCurrentIndex( ui->OutputType->findText(test::ToString( params.OutputType()) ) );
-        ui->OutputCase->setCurrentIndex( ui->OutputType->findText(test::ToString( params.OutputCase()) ) );
+        ui->OutputChannels->setValue( params.OutputChannels() );
     }
 
     ui->MaxExpenditureA->setText( test::ToString( params.MaxExpenditureA() ) );
@@ -458,7 +458,7 @@ void ServoTitleInfo::on_ControlType_activated(int index)
     ui->l_v_sig_ampl->setVisible( control == test::RC_REEL );
     ui->l_v_sig_freq->setVisible( control == test::RC_REEL );
     ui->l_output_type->setVisible( control == test::RC_REEL );
-    ui->l_OutputCase->setVisible( control == test::RC_REEL );
+    ui->l_OutputChannels->setVisible( control == test::RC_REEL );
 
     ui->MinAmperage->setVisible( control == test::RC_REEL );
     ui->MaxAmperage->setVisible( control == test::RC_REEL );
@@ -467,7 +467,7 @@ void ServoTitleInfo::on_ControlType_activated(int index)
     ui->OutputType->setVisible( control == test::RC_REEL );
     if ( control == test::RC_REEL )
         on_OutputType_activated( ui->OutputType->currentIndex() );
-    ui->OutputCase->setVisible( control == test::RC_REEL );
+    ui->OutputChannels->setVisible( control == test::RC_REEL );
 
     ui->l_signal_state_a->setVisible( ui->PosCount->value() >= 2);
     ui->l_signal_state_b->setVisible( ui->PosCount->value() == 3);
@@ -707,6 +707,7 @@ void ServoTitleInfo::on_OutputType_activated(int index)
         ui->l_min_amperage->setText("Минимальный ток, мА");
         ui->l_max_amperage->setText("Максимальный ток, мА");
         ui->l_v_sig_ampl->setText("Амплитуда вибросигнала, мА");
+        ui->OutputChannels->setRange(1, 2);
         break;
     }
     case 1:
@@ -718,6 +719,7 @@ void ServoTitleInfo::on_OutputType_activated(int index)
         ui->l_min_amperage->setText("Минимальный ток, мА*10");
         ui->l_max_amperage->setText("Максимальный ток, мА*10");
         ui->l_v_sig_ampl->setText("Амплитуда вибросигнала, мА*10");
+        ui->OutputChannels->setRange(1, 1);
         break;
     }
     default:

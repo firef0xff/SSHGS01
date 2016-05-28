@@ -44,6 +44,8 @@ ManualControl::ManualControl(QWidget *parent) :
     ui->SigB->setVisible( false );
     ui->BoardVoltage->setVisible( false );
 
+    ui->CustomBoardControl->setVisible(false);
+
     ui->YB1->setValidator( new QIntValidator( 10, 660, this ) );
     ui->YB2->setValidator( new QIntValidator( 10, 660, this ) );
     ui->YB3->setValidator( new QIntValidator( 10, 315, this ) );
@@ -71,8 +73,12 @@ void ManualControl::closeEvent(QCloseEvent *e)
     mControlBits.Reset();
     cpu::CpuMemory::Instance().DB33.Reset();
     cpu::CpuMemory::Instance().DB35.Reset();
-
-
+    try
+    {
+        cpu::CpuMemory::Instance().Board.Stop();
+    }catch( std::exception const& e )
+    {
+    }
     mTaskMode.N_Operation = 0;
     mTaskMode.Nasos_M2 = false;
     mTaskMode.OP15_25_Continum = false;
@@ -176,6 +182,12 @@ void ManualControl::onUpdateControls()
     UpdateData();
 }
 
+void ManualControl::ShowError( QString const& err, bool show )
+{
+    ui->ErrorMark->setVisible( show );
+    ui->ErrorMark->setText( err );
+    UpdateMark( ui->ErrorMark, show, Qt::red    );
+}
 void ManualControl::UpdateMarks()
 {
     //краны 0 - красный 1 - зеленый
@@ -229,8 +241,10 @@ void ManualControl::UpdateMarks()
     UpdateMark( ui->SL4, !mErrorBits.SL4, Qt::red    );     //IX4.3    уровень масла верхний (поддон)
     UpdateMark( ui->SL5, !mErrorBits.SL5, Qt::green  );     //IX4.4    уровень масла нижний (поддон)
 
-    ui->ErrorMark->setVisible( mErrorBits.Error );
-    UpdateMark( ui->ErrorMark, mErrorBits.Error, Qt::red    );   //MX44.6 не правильная комбинация вкл клапанов
+    if ( (err_state && !mErrorBits.Error) || mErrorBits.Error )
+        ShowError( "Введена не верная комбинация открытых клапанов" , mErrorBits.Error ); //MX44.6 не правильная комбинация вкл клапанов
+    err_state = mErrorBits.Error;
+
 }
 
 void ManualControl::UpdateValue  ( QLCDNumber *ctrl, float const& value, bool disable_negative )
@@ -489,7 +503,36 @@ void ManualControl::on_Accept_clicked()
     if ( mControlBits.CR )//управление без карты
     {
         auto& mem = cpu::CpuMemory::Instance().DB35;
-        switch (s_type)                   //2 управляющий сигнал
+        auto& board = cpu::CpuMemory::Instance().Board;
+        try
+        {
+            board.Stop();
+            ShowError( "", false );
+        }catch( std::exception const& e )
+        {
+            ShowError( QString("Ошибка платы управления: ") + e.what(), true );
+            return;
+        }
+
+        board.IsShim = ui->OutputType->currentIndex() == 0;
+        board.mOutputChannels = ui->OutputChannels->value();
+
+        board.mMaxAmperage = ui->MaxAmperage->value();
+        board.mMinAmperage = ui->MinAmperage->value();
+        board.mVSigAmpl = ui->VSigAmpl->value();
+        board.mVSigFreq = ui->VSigFreq->value();
+        try
+        {
+            board.Start();
+            ShowError( "", false );
+        }catch( std::exception const& e )
+        {
+            ShowError( QString("Ошибка платы управления: ") + e.what(), true );
+            return;
+        }
+
+
+/*        switch (s_type)                   //2 управляющий сигнал
         {
             case test::ST_100_mA:
                 mem.s860ma = 100;
@@ -518,8 +561,8 @@ void ManualControl::on_Accept_clicked()
             default:
                 mem.s860ma = 0;
                 break;
-        }
-
+        }*/
+        mem.s860ma = board.mMaxAmperage;
 
         double val = 0;
         test::ParseValue( val, ui->Sig0->text() );
@@ -569,6 +612,16 @@ void ManualControl::on_CB_clicked()
 {
     cpu::CpuMemory::Instance().DB33.Reset();
     cpu::CpuMemory::Instance().DB35.Reset();
+    try
+    {
+        cpu::CpuMemory::Instance().Board.Stop();
+        ShowError( "", false );
+    }catch( std::exception const& e )
+    {
+        ShowError( QString("Ошибка платы управления: ") + e.what(), true );
+        return;
+    }
+    ui->CustomBoardControl->setVisible(false);
 
     act_CB_clicked();
 }
@@ -576,6 +629,17 @@ void ManualControl::on_CR_clicked()
 {
     cpu::CpuMemory::Instance().DB33.Reset();
     cpu::CpuMemory::Instance().DB35.Reset();
+    try
+    {
+        cpu::CpuMemory::Instance().Board.Stop();
+        ShowError( "", false );
+    }catch( std::exception const& e )
+    {
+        ShowError( QString("Ошибка платы управления: ") + e.what(), true );
+        return;
+    }
+    ui->CustomBoardControl->setVisible(true);
+    on_OutputType_activated( ui->OutputType->currentIndex() );
 
 
     act_CR_clicked();
@@ -830,4 +894,44 @@ void ManualControl::on_SigLevel_currentIndexChanged(const QString &arg1)
             ui->Sig0->setEnabled(false);
             break;
     }
+}
+
+void ManualControl::on_OutputType_activated(int index)
+{
+    switch (index)
+    {
+    case 0:
+    {
+        ui->MinAmperage->setRange(-5000, 0);
+        ui->MaxAmperage->setRange(0, 5000);
+        ui->VSigAmpl->setRange(0, 500);
+        ui->VSigFreq->setRange(5, 200);
+        ui->VSigFreq->setValue( 50 );
+        ui->l_min_amperage->setText("Минимальный\nток, мА");
+        ui->l_max_amperage->setText("Максимальный\nток, мА");
+        ui->l_v_sig_ampl->setText("Амплитуда\nвибросигнала, мА");
+        ui->OutputChannels->setRange(1, 2);
+        break;
+    }
+    case 1:
+    {
+        ui->MinAmperage->setRange(-2000, 0);
+        ui->MaxAmperage->setRange(0, 2000);
+        ui->VSigAmpl->setRange(0, 200);
+        ui->VSigFreq->setRange(10, 200);
+        ui->VSigFreq->setValue( 50 );
+        ui->l_min_amperage->setText("Минимальный\nток, мА*10");
+        ui->l_max_amperage->setText("Максимальный\nток, мА*10");
+        ui->l_v_sig_ampl->setText("Амплитуда\nвибросигнала, мА*10");
+        ui->OutputChannels->setRange(1, 1);
+        break;
+    }
+    default:
+        break;
+    }
+
+    ui->MinAmperage->setToolTip( QString::number(ui->MinAmperage->minimum()) + ".." + QString::number(ui->MinAmperage->maximum()));
+    ui->MaxAmperage->setToolTip( QString::number(ui->MaxAmperage->minimum()) + ".." + QString::number(ui->MaxAmperage->maximum()));
+    ui->VSigAmpl->setToolTip( QString::number(ui->VSigAmpl->minimum()) + ".." + QString::number(ui->VSigAmpl->maximum()));
+    ui->VSigFreq->setToolTip( QString::number(ui->VSigFreq->minimum()) + ".." + QString::number(ui->VSigFreq->maximum()));
 }

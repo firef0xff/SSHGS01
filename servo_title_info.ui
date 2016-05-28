@@ -510,9 +510,9 @@ X_max_A, л/мин</string>
       </layout>
      </item>
      <item row="8" column="2">
-      <widget class="QLabel" name="l_OutputCase">
+      <widget class="QLabel" name="l_OutputChannels">
        <property name="text">
-        <string>Режим выхода</string>
+        <string>Число активных выходов</string>
        </property>
       </widget>
      </item>
@@ -671,20 +671,6 @@ X_max_A, л/мин</string>
          <height>16777215</height>
         </size>
        </property>
-      </widget>
-     </item>
-     <item row="8" column="3">
-      <widget class="QComboBox" name="OutputCase">
-       <item>
-        <property name="text">
-         <string>Униполярный</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Биполярный</string>
-        </property>
-       </item>
       </widget>
      </item>
      <item row="9" column="0">
@@ -872,6 +858,16 @@ X_max_A, л/мин</string>
       <widget class="QSpinBox" name="MaxAmperage">
        <property name="toolTipDuration">
         <number>500</number>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="3">
+      <widget class="QSpinBox" name="OutputChannels">
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>2</number>
        </property>
       </widget>
      </item>

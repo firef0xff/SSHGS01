@@ -21,20 +21,6 @@ QString ToString( BOARD_CONTROL_TYPE const& val )
         return "Неизвестное значение";
     }
 }
-QString ToString( BOARD_CONTROL_CASE const& val )
-{
-    switch (val)
-    {
-        case BCC_UNKNOWN:
-            return "Не задано";
-        case BCC_UNIPOLAR:
-            return "Униполярный";
-        case BCC_BIPOLAR:
-            return "Биполярный";
-    default:
-        return "Неизвестное значение";
-    }
-}
 
 bool ParseValue ( BOARD_CONTROL_TYPE& param, QString const& val )
 {
@@ -46,21 +32,6 @@ bool ParseValue ( BOARD_CONTROL_TYPE& param, QString const& val )
     else if ( !val.compare( "Сглаженный", Qt::CaseInsensitive ) )
     {
         param = BCT_SUBDUED;
-        return true;
-    }
-    else
-        return false;
-}
-bool ParseValue ( BOARD_CONTROL_CASE& param, QString const& val )
-{
-    if ( !val.compare( "Униполярный", Qt::CaseInsensitive ) )
-    {
-        param = BCC_UNIPOLAR;
-        return true;
-    }
-    else if ( !val.compare( "Биполярный", Qt::CaseInsensitive ) )
-    {
-        param = BCC_BIPOLAR;
         return true;
     }
     else
@@ -113,7 +84,7 @@ Parameters::Parameters():
     mVSigAmpl(0),
     mVSigFreq(0),
     mOutputType(BCT_UNKNOWN),
-    mOutputCase(BCC_UNKNOWN)
+    mOutputChannels(0)
 {
     mAmplitudes[0] = 0;
     mAmplitudes[1] = 0;
@@ -158,7 +129,7 @@ void Parameters::Reset()
     mVSigAmpl = 0;
     mVSigFreq = 0;
     mOutputType = BCT_UNKNOWN;
-    mOutputCase = BCC_UNKNOWN;
+    mOutputChannels = 0;
 }
 QString Parameters::ToString() const
 {
@@ -200,7 +171,7 @@ QString Parameters::ToString() const
     if ( mReelControl == RC_REEL )
     {
         res += "Параметры карты уравления:\n";
-        res += "  Тип сигнала: " + test::ToString( mOutputType ) + " - " + test::ToString( mOutputCase ) + "\n";
+        res += "  Тип количество каналов управления: " + test::ToString( mOutputType ) + " - " + test::ToString( mOutputChannels ) + "\n";
         res += "  Диапазон тока, мА: " + test::ToString( mMinAmperage ) + " - " + test::ToString( mMaxAmperage ) + "\n";
         res += "  Амплитуда сигнала: " + test::ToString( mVSigAmpl ) + "\n";
         res += "  Частота сигнала: " + test::ToString( mVSigAmpl ) + "\n";
@@ -251,7 +222,7 @@ QJsonObject Parameters::Serialise() const
     servo.insert( "VSigAmpl", mVSigAmpl );
     servo.insert( "VSigFreq", mVSigFreq );
     servo.insert( "OutputType", mOutputType );
-    servo.insert( "OutputCase", mOutputCase );
+    servo.insert( "mOutputChannels", mOutputChannels );
 
     res.insert("servo", servo);
     return res;
@@ -300,7 +271,7 @@ bool Parameters::Deserialize( QJsonObject const& obj )
         mVSigAmpl = obj.value("VSigAmpl").toInt();
         mVSigFreq = obj.value("VSigFreq").toInt();
         mOutputType = static_cast<BOARD_CONTROL_TYPE>(obj.value("OutputType").toInt());
-        mOutputCase = static_cast<BOARD_CONTROL_CASE>(obj.value("OutputCase").toInt());
+        mOutputChannels = obj.value("mOutputChannels").toInt();
 
         res = true;
     }
@@ -338,57 +309,15 @@ void Parameters::StendInit() const
 {
     if ( mReelControl == RC_REEL )
     {
-        bool inited = false;
-        if (!mBoard)
-            mBoard.reset( new CustomBoard() );
-        mBoard->SetRUN_STOP(0);
-        mBoard->SetA21(0);
-        if ( mOutputType == BCT_SHIM )
-        {
-            mBoard->SetMIN_CUR( mMinAmperage );//А03 - Минимальный ток. 0, 5000
-            mBoard->SetMAX_CUR( mMaxAmperage );//А02 - Максимальный ток. 0, 5000
-            mBoard->SetV_AMP( mVSigAmpl ); //А04 - Амплитуда вибрационного сигнала мА 0, 200
-            mBoard->SetV_FREQ( mVSigFreq ); //А05 - Частота вибрационного сигнала, Гц 1, 200
+        auto& board = cpu::CpuMemory::Instance().Board;
+        board.IsShim = mOutputType == BCT_SHIM ;
+        board.mOutputChannels = mOutputChannels;
 
-            if ( mOutputCase != BCC_UNKNOWN )
-            {
-                mBoard->SetPOLARITY_A( 1 );//А06 - Полярность сигнала А 0 1 2                params
-                mBoard->SetPOLARITY_B( 1 );//А07 - Полярность сигнала B                      params
-            }
-
-            if ( mMinAmperage == mBoard->GetMIN_CUR() &&
-                 mMaxAmperage == mBoard->GetMAX_CUR() &&
-                 mVSigAmpl == mBoard->GetV_AMP() &&
-                 mVSigFreq == mBoard->GetV_FREQ() &&
-                 1 == mBoard->GetPOLARITY_A() &&
-                 1 == mBoard->GetPOLARITY_B() )
-            {
-                int sig = mPosCount == 3 ? 3 : mPosCount == 2 ? 1 : 0;
-                mBoard->SetRUN_STOP( sig );//А01 - 0 выкл. Для включения что задавать сюда? 1 2 или 3
-                inited = sig == mBoard->GetRUN_STOP();
-            }
-
-        }
-        else
-        {
-            mBoard->SetMaxCur2( mMaxAmperage );// А22 - Минимальный ток.
-            mBoard->SetMinCur2( mMinAmperage );// А23 - Максимальный ток.
-            mBoard->SetA24( mVSigAmpl );// A24 - Амплитуда вибрационного сигнала мА, Гц 0, 20    params
-            mBoard->SetA25( mVSigFreq );// A25 - Частота вибрационного сигнала 1, 200            params            
-            mBoard->SetA26( 1 );// A26 - Полярность сигнала 0 1 2                        params
-
-            if ( mMaxAmperage == mBoard->GetMaxCur2() &&
-                 mMinAmperage == mBoard->GetMinCur2() &&
-                 mVSigAmpl == mBoard->GetA24() &&
-                 mVSigFreq == mBoard->GetA25() &&
-                 1 == mBoard->GetA26())
-            {
-                mBoard->SetA21( 1 );// А21 - 1 вкл, 0 выкл
-                inited = 1 == mBoard->GetA21();
-            }
-        }
-        if ( !inited )
-            throw ::control_board::COMError( "Ошибка запуска платы управления" );
+        board.mMaxAmperage = mMaxAmperage;
+        board.mMinAmperage = mMinAmperage;
+        board.mVSigAmpl = mVSigAmpl;
+        board.mVSigFreq = mVSigFreq;
+        board.Start();
     }
 
     test::CommonParameters::StendInit();
@@ -397,12 +326,7 @@ void Parameters::StendDeInit() const
 {
     if ( mReelControl == RC_REEL )
     {
-        mBoard->SetRUN_STOP( 0 );
-        mBoard->SetA21( 0 );
-
-        if ( 0 != mBoard->GetRUN_STOP() ||
-             0 != mBoard->GetA21())
-            throw ::control_board::COMError( "Ошибка останова платы управления" );
+        cpu::CpuMemory::Instance().Board.Stop();
     }
 }
 void Parameters::WriteToController() const
@@ -948,13 +872,13 @@ const BOARD_CONTROL_TYPE &Parameters::OutputType() const
     return mOutputType;
 }
 
-bool Parameters::OutputCase ( QString const& val )
+bool Parameters::OutputChannels ( QString const& val )
 {
-    return ParseValue( mOutputCase, val );
+    return ParseValue( mOutputChannels, val );
 }
-const BOARD_CONTROL_CASE &Parameters::OutputCase() const
+const int &Parameters::OutputChannels() const
 {
-    return mOutputCase;
+    return mOutputChannels;
 }
 }//namespace servo
 

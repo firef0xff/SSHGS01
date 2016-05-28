@@ -40,6 +40,7 @@ private:
     cpu::data::M1     &mControlBits;
     cpu::data::I1     &mErrorBits;
     ManualControlUpdater Updater;
+    bool err_state = false;
 
     void closeEvent( QCloseEvent *e );
     void showEvent ( QShowEvent *e );
@@ -49,6 +50,7 @@ private:
 
     void UpdateButton( QAbstractButton *btn, bool checked );    
     void UpdateValue  ( QLCDNumber *ctrl, float const& value, bool disable_negative = false );
+    void ShowError( QString const& err, bool show );
 
     void UpdateMarks(); //обновление индикации
     void UpdateData();  //обновление данных на сетке
@@ -102,4 +104,5 @@ private slots:
     void on_ONRA_clicked();
     void on_ONRB_clicked();
     void on_SigLevel_currentIndexChanged(const QString &arg1);
+    void on_OutputType_activated(int index);
 };

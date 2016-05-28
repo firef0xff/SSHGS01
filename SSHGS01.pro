@@ -89,7 +89,8 @@ SOURCES += main.cpp\
     cpu/i1.cpp \
     users/users.cpp \
     ../mylib/COMPort/ComPort.cpp \
-    board/custom_control_board.cpp
+    board/custom_control_board.cpp \
+    cpu/board_memory.cpp
 
 HEADERS  += mainwindow.h \
     test_case/test_case.h \
@@ -168,7 +169,8 @@ HEADERS  += mainwindow.h \
     cpu/i1.h \
     users/users.h \
     ../mylib/COMPort/ComPort.h \
-    board/custom_control_board.h
+    board/custom_control_board.h \
+    cpu/board_memory.h
 
 FORMS    += mainwindow.ui \
     hydro_title_info.ui \
