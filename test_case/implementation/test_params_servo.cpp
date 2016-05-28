@@ -341,6 +341,8 @@ void Parameters::StendInit() const
         bool inited = false;
         if (!mBoard)
             mBoard.reset( new CustomBoard() );
+        mBoard->SetRUN_STOP(0);
+        mBoard->SetA21(0);
         if ( mOutputType == BCT_SHIM )
         {
             mBoard->SetMIN_CUR( mMinAmperage );//А03 - Минимальный ток. 0, 5000
@@ -348,24 +350,20 @@ void Parameters::StendInit() const
             mBoard->SetV_AMP( mVSigAmpl ); //А04 - Амплитуда вибрационного сигнала мА 0, 200
             mBoard->SetV_FREQ( mVSigFreq ); //А05 - Частота вибрационного сигнала, Гц 1, 200
 
-            int sa = 0;
-            int sb = 0;
             if ( mOutputCase != BCC_UNKNOWN )
             {
-                sa = mOutputCase == BCC_BIPOLAR? 0 : mSignalStateA > 0? 1 : -1;
-                sb = mOutputCase == BCC_BIPOLAR? 0 : mSignalStateB > 0? 1 : -1;
-                mBoard->SetPOLARITY_A( sa );//А06 - Полярность сигнала А 0 1 2                params
-                mBoard->SetPOLARITY_B( sb );//А07 - Полярность сигнала B                      params
+                mBoard->SetPOLARITY_A( 1 );//А06 - Полярность сигнала А 0 1 2                params
+                mBoard->SetPOLARITY_B( 1 );//А07 - Полярность сигнала B                      params
             }
 
             if ( mMinAmperage == mBoard->GetMIN_CUR() &&
                  mMaxAmperage == mBoard->GetMAX_CUR() &&
                  mVSigAmpl == mBoard->GetV_AMP() &&
                  mVSigFreq == mBoard->GetV_FREQ() &&
-                 sa == mBoard->GetPOLARITY_A() &&
-                 sb == mBoard->GetPOLARITY_B() )
+                 1 == mBoard->GetPOLARITY_A() &&
+                 1 == mBoard->GetPOLARITY_B() )
             {
-                int sig = mPosCount == 3 ? 2 : mPosCount == 2 ? 1 : 0;
+                int sig = mPosCount == 3 ? 3 : mPosCount == 2 ? 1 : 0;
                 mBoard->SetRUN_STOP( sig );//А01 - 0 выкл. Для включения что задавать сюда? 1 2 или 3
                 inited = sig == mBoard->GetRUN_STOP();
             }
@@ -376,15 +374,14 @@ void Parameters::StendInit() const
             mBoard->SetMaxCur2( mMaxAmperage );// А22 - Минимальный ток.
             mBoard->SetMinCur2( mMinAmperage );// А23 - Максимальный ток.
             mBoard->SetA24( mVSigAmpl );// A24 - Амплитуда вибрационного сигнала мА, Гц 0, 20    params
-            mBoard->SetA25( mVSigFreq );// A25 - Частота вибрационного сигнала 1, 200            params
-            int sc = mOutputCase == BCC_BIPOLAR? 0 : mSignalStateA > 0? 1 : -1;
-            mBoard->SetA26( sc );// A26 - Полярность сигнала 0 1 2                        params
+            mBoard->SetA25( mVSigFreq );// A25 - Частота вибрационного сигнала 1, 200            params            
+            mBoard->SetA26( 1 );// A26 - Полярность сигнала 0 1 2                        params
 
             if ( mMaxAmperage == mBoard->GetMaxCur2() &&
                  mMinAmperage == mBoard->GetMinCur2() &&
                  mVSigAmpl == mBoard->GetA24() &&
                  mVSigFreq == mBoard->GetA25() &&
-                 sc == mBoard->GetA26())
+                 1 == mBoard->GetA26())
             {
                 mBoard->SetA21( 1 );// А21 - 1 вкл, 0 выкл
                 inited = 1 == mBoard->GetA21();
