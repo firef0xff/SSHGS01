@@ -908,9 +908,10 @@ void ManualControl::on_OutputType_activated(int index)
     {
     case 0:
     {
-        ui->MinAmperage->setRange(-5000, 0);
-        ui->MaxAmperage->setRange(0, 5000);
+        ui->MinAmperage->setRange(-5500, 0);
+        ui->MaxAmperage->setRange(0, 5500);
         ui->VSigAmpl->setRange(0, 500);
+        ui->VSigAmpl->setValue( 20 );
         ui->VSigFreq->setRange(5, 200);
         ui->VSigFreq->setValue( 50 );
         ui->l_min_amperage->setText("Минимальный\nток, мА");
@@ -924,6 +925,7 @@ void ManualControl::on_OutputType_activated(int index)
         ui->MinAmperage->setRange(-200, 0);
         ui->MaxAmperage->setRange(0, 200);
         ui->VSigAmpl->setRange(0, 20);
+        ui->VSigAmpl->setValue( 5 );
         ui->VSigFreq->setRange(10, 200);
         ui->VSigFreq->setValue( 50 );
         ui->l_min_amperage->setText("Минимальный\nток, мА");

@@ -80,7 +80,7 @@ bool StandParams::SaveInputParams()
     res *= ParamChecker( ui->l_h1b,             params.OffDD3A ( ui->DD3A_OFF->checkState() ) );
     res *= ParamChecker( ui->l_h2b,             params.OffDynamic_1( ui->OffDynamic_1->currentText() ) );
 
-    if ( params.PosCount() == 2 )
+    if ( params.PosCount() == 3 )
     {        
         res *= ParamChecker( ui->l_h1t,         params.OnDD1B ( ui->DD1B_ON->checkState() ) );
         res *= ParamChecker( ui->l_h1t,         params.OnDD2B ( ui->DD2B_ON->checkState() ) );
