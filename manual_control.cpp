@@ -921,14 +921,14 @@ void ManualControl::on_OutputType_activated(int index)
     }
     case 1:
     {
-        ui->MinAmperage->setRange(-2000, 0);
-        ui->MaxAmperage->setRange(0, 2000);
-        ui->VSigAmpl->setRange(0, 200);
+        ui->MinAmperage->setRange(-200, 0);
+        ui->MaxAmperage->setRange(0, 200);
+        ui->VSigAmpl->setRange(0, 20);
         ui->VSigFreq->setRange(10, 200);
         ui->VSigFreq->setValue( 50 );
-        ui->l_min_amperage->setText("Минимальный\nток, мА*10");
-        ui->l_max_amperage->setText("Максимальный\nток, мА*10");
-        ui->l_v_sig_ampl->setText("Амплитуда\nвибросигнала, мА*10");
+        ui->l_min_amperage->setText("Минимальный\nток, мА");
+        ui->l_max_amperage->setText("Максимальный\nток, мА");
+        ui->l_v_sig_ampl->setText("Амплитуда\nвибросигнала, мА");
         ui->OutputChannels->setRange(1, 1);
         break;
     }

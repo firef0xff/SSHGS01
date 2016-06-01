@@ -557,12 +557,12 @@ X_max_A, л/мин</string>
       <widget class="QComboBox" name="OutputType">
        <item>
         <property name="text">
-         <string>ШИМ</string>
+         <string>-5000..5000</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Сглаженный</string>
+         <string>-200..200</string>
         </property>
        </item>
       </widget>

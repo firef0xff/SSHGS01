@@ -14,9 +14,9 @@ QString ToString( BOARD_CONTROL_TYPE const& val )
         case BCT_UNKNOWN:
             return "Не задано";
         case BCT_SHIM:
-            return "ШИМ";
+            return "-5000..5000";
         case BCT_SUBDUED:
-            return "Сглаженный";
+            return "-200..200";
     default:
         return "Неизвестное значение";
     }
@@ -24,12 +24,12 @@ QString ToString( BOARD_CONTROL_TYPE const& val )
 
 bool ParseValue ( BOARD_CONTROL_TYPE& param, QString const& val )
 {
-    if ( !val.compare( "ШИМ", Qt::CaseInsensitive ) )
+    if ( !val.compare( "-5000..5000", Qt::CaseInsensitive ) )
     {
         param = BCT_SHIM;
         return true;
     }
-    else if ( !val.compare( "Сглаженный", Qt::CaseInsensitive ) )
+    else if ( !val.compare( "-200..200", Qt::CaseInsensitive ) )
     {
         param = BCT_SUBDUED;
         return true;
@@ -610,7 +610,8 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect, QString const& compar
 
     if ( !compare_width.isEmpty() )
     {        
-        DrawRowLeft( text_font, Qt::black, Qt::red, "Аппарат для сравнения характеристик: ", old.SerNo(), "", row_skale );
+        DrawRowLeft( text_font, Qt::black, Qt::red, "Аппарат для сравнения характеристик: ", "", "", row_skale );
+        DrawRowLeft( text_font, Qt::black, Qt::red, "", old.SerNo(), "", row_skale );
         DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Дата испытания сравниваемого аппарата"), old.Date().toString("dd MMMM yyyy г. hh:mm"), "", row_skale );
         DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Сравнение с эталоном"), old.ReportType().compare("Эталон", Qt::CaseInsensitive) == 0? "Да": "Нет", "", row_skale );
     }
