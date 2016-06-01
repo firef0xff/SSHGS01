@@ -208,13 +208,13 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect, QString const& compar
 
     if ( !compare_width.isEmpty() )
     {       
-        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Аппарат для сравнения характеристик"), old.SerNo(), "", row_skale );
+        DrawRowLeft( text_font, Qt::black, Qt::red, "Аппарат для сравнения характеристик: ", old.SerNo(), "", row_skale );
         DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Дата испытания сравниваемого аппарата"), old.Date().toString("dd MMMM yyyy г. hh:mm"), "", row_skale );
         DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Сравнение с эталоном"), old.ReportType().compare("Эталон", Qt::CaseInsensitive) == 0? "Да": "Нет", "", row_skale );
     }
     else
     {
-        DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Аппарат для сравнения характеристик"), "-", "", row_skale );
+        DrawRowLeft( text_font, Qt::black, Qt::red, "Аппарат для сравнения характеристик: ", "-", "", row_skale );
         DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Дата испытания сравниваемого аппарата"), "-", "", row_skale );
         DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Сравнение с эталоном"), "-", "", row_skale );
     }

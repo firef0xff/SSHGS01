@@ -329,6 +329,11 @@ bool ExpeditureFromPressureDuration::Draw(QPainter& painter, QRect &free_rect , 
     {
         DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, сек"), Qt::red, test::ToString( TestingTime ) );
     }, 2 );
+    res = DrawLine( num, free_rect, text_font,
+    [ this, &painter, &DrawRowLeft, &FillToSize, &text_font ]( QRect const& rect )
+    {
+        DrawRowLeft( rect, text_font, Qt::black, FillToSize("Испытание проводилось при подаче 50% управляющего сигнала"), Qt::red, "" );
+    }, 2 );
 
 
     //----------------

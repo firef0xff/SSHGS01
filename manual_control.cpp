@@ -647,7 +647,8 @@ void ManualControl::on_CR_clicked()
 
 void ManualControl::act_CB_clicked()
 {
-    ui->SigLevel->clear();
+    ui->SigLevel->clear();    
+    ui->SigLevel->setVisible( false );
     ui->l_sig_a->setVisible( false );
     ui->l_sig_0->setVisible( false );
     ui->l_sig_b->setVisible( false );
@@ -667,10 +668,11 @@ void ManualControl::act_CB_clicked()
         ui->SigLevel->addItem( test::ToString( test::ST_10_10_mA ) );
 //        ui->SigLevel->addItem( test::ToString( test::ST_15_15_mA ) );
         ui->SigLevel->addItem( test::ToString( test::ST_20_20_mA ) );
-        ui->SigLevel->addItem( test::ToString( test::ST_40_40_mA ) );
+//        ui->SigLevel->addItem( test::ToString( test::ST_40_40_mA ) );
         ui->SigLevel->addItem( test::ToString( test::ST_10_10_V ) );
         ui->SigLevel->addItem( test::ToString( test::ST_0_10_V ) );
         ui->SigLevel->setCurrentIndex( -1 );
+        ui->SigLevel->setVisible( true );
 
         ui->l_sig_a->setVisible( true );
         ui->l_sig_0->setVisible( true );
@@ -692,6 +694,7 @@ void ManualControl::act_CB_clicked()
 void ManualControl::act_CR_clicked()
 {
     ui->SigLevel->clear();
+    ui->SigLevel->setVisible( false );
     ui->l_sig_a->setVisible( false );
     ui->l_sig_0->setVisible( false );
     ui->l_sig_b->setVisible( false );
@@ -706,16 +709,16 @@ void ManualControl::act_CR_clicked()
     {
         mControlBits.SetCB( false );
         UpdateButton( ui->CB, mControlBits.CB );         //MX45.4 Управление от карты
-        ui->SigLevel->addItem( test::ToString( test::ST_100_mA ) );
-        ui->SigLevel->addItem( test::ToString( test::ST_300_mA ) );
-        ui->SigLevel->addItem( test::ToString( test::ST_600_mA ) );
-        ui->SigLevel->addItem( test::ToString( test::ST_860_mA ) );
-        ui->SigLevel->addItem( test::ToString( test::ST_1600_mA ) );
-        ui->SigLevel->addItem( test::ToString( test::ST_2500_mA ) );
-        ui->SigLevel->addItem( test::ToString( test::ST_3750_mA ) );
-        ui->SigLevel->addItem( test::ToString( test::ST_5000_mA ) );
 
-        ui->SigLevel->setCurrentIndex( -1 );
+        ui->SigA->setText("");
+        ui->SigB->setText("");
+        ui->Sig0->setText("");
+        ui->SigA->setValidator( new QIntValidator( -5000, 5000, this ) );
+        ui->SigB->setValidator( new QIntValidator( -5000, 5000, this ) );
+        ui->Sig0->setValidator( new QIntValidator( -5000, 5000, this ) );
+        ui->SigA->setEnabled(true);
+        ui->SigB->setEnabled(true);
+        ui->Sig0->setEnabled(true);
 
         ui->l_sig_a->setVisible( true );
         ui->l_sig_0->setVisible( true );
@@ -796,6 +799,9 @@ void ManualControl::on_ONRB_clicked()
 
 void ManualControl::on_SigLevel_currentIndexChanged(const QString &arg1)
 {
+    if (ui->CR->isChecked())
+        return ;
+
     test::SIGNAL_TYPE s_type = test::ST_UNKNOWN;
     test::ParseValue( s_type, arg1 );
 

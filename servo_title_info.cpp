@@ -88,7 +88,8 @@ bool ServoTitleInfo::SaveInputParams()
 
     res *= ParamChecker( ui->l_nominal_pressure,     ValidateRange( ui->PressureNominal, params.PressureNominal( ui->PressureNominal->text() ) ) );
 
-    res *= ParamChecker( ui->l_control_signal,    params.ControlSignal( ui->ControlSignal->currentText() ) );
+    if (params.ReelControl()==test::RC_CONTROL_BOX)
+        res *= ParamChecker( ui->l_control_signal,    params.ControlSignal( ui->ControlSignal->currentText() ) );
 
 
     res *= ParamChecker( ui->l_signal_state_a,    ValidateRange( ui->SignalStateA, params.SignalStateA( ui->SignalStateA->text() ) ) );
@@ -169,8 +170,11 @@ void ServoTitleInfo::FromParams()
 
     ui->PressureNominal->setText( test::ToString( params.PressureNominal() ) );
 
-    ui->ControlSignal->setCurrentIndex( ui->ControlSignal->findText( test::ToString( params.ControlSignal() ) ) );
-    on_ControlSignal_activated( ui->ControlSignal->currentIndex() );
+    if (params.ReelControl()==test::RC_CONTROL_BOX)
+    {
+        ui->ControlSignal->setCurrentIndex( ui->ControlSignal->findText( test::ToString( params.ControlSignal() ) ) );
+        on_ControlSignal_activated( ui->ControlSignal->currentIndex() );
+    }
 
     ui->ControlSignalAmpl0->setText( test::ToString( params.Amplitudes()[0] ) );
     ui->ControlSignalAmpl1->setText( test::ToString( params.Amplitudes()[1] ) );
@@ -335,6 +339,11 @@ void ServoTitleInfo::on_RaspredControl_activated(int index)
 
 void ServoTitleInfo::on_ControlSignal_activated(int index)
 {
+    test::RELL_CONTROL control = test::RC_UNKNOWN;
+    test::ParseValue( control, ui->ControlType->currentText() );
+    if (control == test::RC_REEL)
+        return ;
+
     test::SIGNAL_TYPE s_type = test::ST_UNKNOWN;
     auto text = ui->ControlSignal->itemText( index );
     test::ParseValue( s_type, text );
@@ -498,20 +507,27 @@ void ServoTitleInfo::on_ControlType_activated(int index)
         ui->ControlSignal->addItem( test::ToString( test::ST_10_10_mA ) );
 //        ui->ControlSignal->addItem( test::ToString( test::ST_15_15_mA ) );
         ui->ControlSignal->addItem( test::ToString( test::ST_20_20_mA ) );
-        ui->ControlSignal->addItem( test::ToString( test::ST_40_40_mA ) );
+//        ui->ControlSignal->addItem( test::ToString( test::ST_40_40_mA ) );
         ui->ControlSignal->addItem( test::ToString( test::ST_10_10_V ) );
         ui->ControlSignal->addItem( test::ToString( test::ST_0_10_V ) );
     }
     else if ( control == test::RC_REEL )
     {
-        ui->ControlSignal->addItem( test::ToString( test::ST_100_mA ) );
-        ui->ControlSignal->addItem( test::ToString( test::ST_300_mA ) );
-        ui->ControlSignal->addItem( test::ToString( test::ST_600_mA ) );
-        ui->ControlSignal->addItem( test::ToString( test::ST_860_mA ) );
-        ui->ControlSignal->addItem( test::ToString( test::ST_1600_mA ) );
-        ui->ControlSignal->addItem( test::ToString( test::ST_2500_mA ) );
-        ui->ControlSignal->addItem( test::ToString( test::ST_3750_mA ) );
-        ui->ControlSignal->addItem( test::ToString( test::ST_5000_mA ) );
+        ui->SignalStateA->setText("");
+        ui->SignalStateB->setText("");
+        ui->SignalState0->setText("");
+
+        ui->SignalStateA->setValidator( new QIntValidator( -5000, 5000, this ) );
+        ui->SignalStateB->setValidator( new QIntValidator( -5000, 5000, this ) );
+        ui->SignalState0->setValidator( new QIntValidator( -5000, 5000, this ) );
+
+        ui->SignalStateA->setToolTip( "-5000..5000" );
+        ui->SignalStateB->setToolTip( "-5000..5000" );
+        ui->SignalState0->setToolTip( "-5000..5000" );
+
+        ui->SignalStateA->setEnabled(true);
+        ui->SignalStateB->setEnabled(true);
+        ui->SignalState0->setEnabled(true);
     }
     ui->ControlSignal->setCurrentIndex( -1 );
     on_ControlSignal_activated( ui->ControlSignal->currentIndex() );
