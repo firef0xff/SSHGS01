@@ -13,7 +13,7 @@ StandParams::StandParams(bool new_mode, QWidget *parent) :
 {
     ui->setupUi(this);
 
-    if ( test::hydro::Parameters::Instance().PosCount() < 2 )
+    if ( test::hydro::Parameters::Instance().PosCount() < 3 )
     {
         ui->l_tr->setVisible( false );
         ui->DD1B_ON->setVisible( false );

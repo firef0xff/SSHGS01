@@ -212,7 +212,7 @@ bool SwitchTest::Success() const
         return false;
     return ResultMinA && ResultMaxA &&
             ResultMinA_OFF && ResultMaxA_OFF &&
-            ( params->PosCount() == 2 ?
+            ( params->PosCount() == 3?
                   ResultMinB && ResultMaxB &&
                   ResultMinB_OFF && ResultMaxB_OFF
                 : true );

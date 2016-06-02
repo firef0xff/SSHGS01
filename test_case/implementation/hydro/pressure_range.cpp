@@ -235,7 +235,7 @@ bool PressureRange::Success() const
         return false;
     return ResultMinMinA && ResultMinMaxA && ResultMaxMinA && ResultMaxMaxA &&
            ResultMinMinA_OFF && ResultMinMaxA_OFF && ResultMaxMinA_OFF && ResultMaxMaxA_OFF &&
-            ( params->PosCount() == 2 ?
+            ( params->PosCount() == 3 ?
                   ResultMinMinB && ResultMinMaxB && ResultMaxMinB && ResultMaxMaxB &&
                   ResultMinMinB_OFF && ResultMinMaxB_OFF && ResultMaxMinB_OFF && ResultMaxMaxB_OFF
                 : true );

@@ -212,7 +212,7 @@ bool ActivationTime::Success() const
     if ( !params )
         return false;
     return ReelA.InTimeOn && ReelA.InTimeOff && ReelA.IsOn && ReelA.IsOff &&
-            ( params->PosCount() == 2 ? ReelB.InTimeOn && ReelB.InTimeOff && ReelB.IsOn && ReelB.IsOff : true );
+            ( params->PosCount() == 3 ? ReelB.InTimeOn && ReelB.InTimeOff && ReelB.IsOn && ReelB.IsOff : true );
 }
 
 void ActivationTime::SetParams()
