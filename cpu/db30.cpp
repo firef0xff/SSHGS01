@@ -1,5 +1,5 @@
 #include "db30.h"
-#include "../myOPC/miniOPC.h"
+#include "miniOPC.h"
 #include "memory.h"
 namespace cpu
 {

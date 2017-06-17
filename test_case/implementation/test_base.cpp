@@ -200,6 +200,7 @@ void TestCommonData::ShowErrors( QString const& err )
     msg.exec();
     CondVar.notify_one();
 }
+
 namespace hydro
 {
 

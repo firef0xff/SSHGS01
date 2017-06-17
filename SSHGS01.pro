@@ -15,6 +15,7 @@ TARGET = SSHGS01
 TEMPLATE = app
 
 INCLUDEPATH += ../mylib/Widgets\
+               ../mylib/OPC\
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -61,11 +62,11 @@ SOURCES += main.cpp\
     cpu/db30.cpp \
     cpu/db32.cpp \
     cpu/db31.cpp \
-    myOPC/opc_i.c \
-    myOPC/impl/demo_mode.cpp \
-    myOPC/impl/cache/memory.cpp \
-    myOPC/impl/win_ole_mode.cpp \
-    myOPC/impl/sync_thread.cpp \
+    ../mylib/OPC/opc_i.c \
+    ../mylib/OPC/impl/demo_mode.cpp \
+    ../mylib/OPC/impl/cache/memory.cpp \
+    ../mylib/OPC/impl/win_ole_mode.cpp \
+    ../mylib/OPC/impl/sync_thread.cpp \
     login.cpp \
     cpu/db2.cpp \
     cpu/db3.cpp \
@@ -137,15 +138,15 @@ HEADERS  += mainwindow.h \
     cpu/db30.h \
     cpu/db32.h \
     cpu/db31.h \
-    myOPC/miniOPC.h \
-    myOPC/opc.h \
-    myOPC/impl/demo_mode.h \
-    myOPC/impl/types.h \
-    myOPC/impl/cache/cache.h \
-    myOPC/impl/cache/def.h \
-    myOPC/impl/cache/memory.h \
-    myOPC/impl/win_ole_mode.h \
-    myOPC/impl/sync_thread.h \
+    ../mylib/OPC/miniOPC.h \
+    ../mylib/OPC/opc.h \
+    ../mylib/OPC/impl/demo_mode.h \
+    ../mylib/OPC/impl/types.h \
+    ../mylib/OPC/impl/cache/cache.h \
+    ../mylib/OPC/impl/cache/def.h \
+    ../mylib/OPC/impl/cache/memory.h \
+    ../mylib/OPC/impl/win_ole_mode.h \
+    ../mylib/OPC/impl/sync_thread.h \
     login.h \
     cpu/db2.h \
     cpu/db3.h \
