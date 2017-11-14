@@ -46,6 +46,7 @@ private:
     void StartServoTest( bool new_test );
     void StartControlPanelsTest( bool new_test );
     void StartHydroCilinderTest( bool new_test );
+    void StartHydroPumpsTest( bool new_test );
     void AppSettrings ();
     void DeviceLists( examinee::DeviceCollection& devices );
 
@@ -104,6 +105,8 @@ private slots:
     void onUpdateControls();
     void on_ManualControl_clicked();
     void on_Users_triggered();
+    void on_TestCase5_clicked();
+    void on_act_test_case5_triggered();
 };
 
 

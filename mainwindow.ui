@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>874</width>
+    <width>1084</width>
     <height>286</height>
    </rect>
   </property>
@@ -97,6 +97,13 @@
       </item>
       <item>
        <widget class="QCommandLinkButton" name="TestCase4">
+        <property name="text">
+         <string>CommandLinkButton</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCommandLinkButton" name="TestCase5">
         <property name="text">
          <string>CommandLinkButton</string>
         </property>
@@ -578,8 +585,8 @@ X</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>874</width>
-     <height>21</height>
+     <width>1084</width>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -595,6 +602,7 @@ X</string>
      <addaction name="act_test_case2"/>
      <addaction name="act_test_case3"/>
      <addaction name="act_test_case4"/>
+     <addaction name="act_test_case5"/>
     </widget>
     <addaction name="menu_3"/>
     <addaction name="load_isp_params"/>
@@ -690,6 +698,11 @@ X</string>
   <action name="Users">
    <property name="text">
     <string>Пользователи</string>
+   </property>
+  </action>
+  <action name="act_test_case5">
+   <property name="text">
+    <string>isp_5</string>
    </property>
   </action>
  </widget>

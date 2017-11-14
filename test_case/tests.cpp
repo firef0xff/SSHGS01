@@ -149,6 +149,19 @@ static FunctionalTest t1;
 }//namespace test_case
 }//namespace hydro_cylinder
 
+
+TestCase Pumps( "Гидронасосы",
+                "",
+                "Испытание гидронасосов" );
+
+namespace pumps
+{
+namespace test_case
+{
+
+}//namespace test_case
+}//namespace pumps
+
 }
 
 

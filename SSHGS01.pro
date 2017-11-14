@@ -42,6 +42,7 @@ SOURCES += main.cpp\
     test_case/implementation/test_params_servo.cpp \
     test_case/implementation/test_params_control_panel.cpp \
     test_case/implementation/test_params_hydro_cilinder.cpp \
+    test_case/implementation/test_params_pumps.cpp \
     test_case/implementation/hydro/herm_test.cpp \
     test_case/implementation/hydro/pressure_duration_from_expediture.cpp \
     test_case/implementation/hydro/max_expenditure.cpp \
@@ -91,7 +92,8 @@ SOURCES += main.cpp\
     users/users.cpp \
     ../mylib/COMPort/ComPort.cpp \
     board/custom_control_board.cpp \
-    cpu/board_memory.cpp
+    cpu/board_memory.cpp \
+
 
 HEADERS  += mainwindow.h \
     test_case/test_case.h \
@@ -117,6 +119,7 @@ HEADERS  += mainwindow.h \
     test_case/implementation/test_params_servo.h \
     test_case/implementation/test_params_control_panel.h \
     test_case/implementation/test_params_hydro_cilinder.h \
+    test_case/implementation/test_params_pumps.h \
     test_case/implementation/hydro/herm_test.h \
     test_case/implementation/hydro/pressure_duration_from_expediture.h \
     test_case/implementation/hydro/max_expenditure.h \
@@ -171,7 +174,7 @@ HEADERS  += mainwindow.h \
     users/users.h \
     ../mylib/COMPort/ComPort.h \
     board/custom_control_board.h \
-    cpu/board_memory.h
+    cpu/board_memory.h \
 
 FORMS    += mainwindow.ui \
     hydro_title_info.ui \
@@ -189,8 +192,10 @@ FORMS    += mainwindow.ui \
     users/users.ui
 
 OTHER_FILES += devices/*.json\
-    тз/*\
-    config/*\
+   тз/*\
+   тз/st1/*\
+   тз/st2/*\
+   config/*\
 
 DISTFILES += \
     тз/ячейки

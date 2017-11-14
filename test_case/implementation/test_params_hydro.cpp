@@ -67,7 +67,7 @@ Parameters::Parameters():
 
 void Parameters::Reset()
 {
-    test::Parameters::Reset();
+    test::CommonParameters::Reset();
     mGsType = "";
     mVoltage =  0.0;
     mVoltageRange =  0.0;

@@ -11,6 +11,7 @@ extern TestCase HydroTests;
 extern TestCase ServoTests;
 extern TestCase ControlBoardTests;
 extern TestCase HydroCylinder;
+extern TestCase Pumps;
 
 }//namespace test
 

@@ -11,6 +11,7 @@
 #include "test_case/implementation/test_params_servo.h"
 #include "test_case/implementation/test_params_control_panel.h"
 #include "test_case/implementation/test_params_hydro_cilinder.h"
+#include "test_case/implementation/test_params_pumps.h"
 #include <QTextDocument>
 
 namespace test
@@ -495,6 +496,7 @@ void CommonParameters::Reset()
     mControlType  =  CT_UNKNOWN;
     mMinControlPressure  =  0.0;
     mMaxControlPressure  =  0.0;
+    Parameters::Reset();
 }
 
 bool CommonParameters::SerNo ( QString const& val )
@@ -612,6 +614,8 @@ Parameters* ParamsFromFile( QString fname )
             ret = &hydro_cylinder::Parameters::Instance();
         else if ( control_board::Parameters::Instance().Deserialize( obj ) )
             ret = &control_board::Parameters::Instance();
+        else if ( pump::Parameters::Instance().Deserialize( obj ) )
+            ret = &pump::Parameters::Instance();
         f.close();
     }
 
@@ -648,6 +652,8 @@ bool DataFromFile( QString fname )
             ret = &hydro_cylinder::Parameters::Instance();
         else if ( control_board::Parameters::Instance().Deserialize( params ) )
             ret = &control_board::Parameters::Instance();
+        else if ( pump::Parameters::Instance().Deserialize( params ) )
+            ret = &pump::Parameters::Instance();
 
         if ( ret )
         {

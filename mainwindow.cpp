@@ -16,6 +16,7 @@
 #include "test_case/implementation/test_params_servo.h"
 #include "test_case/implementation/test_params_control_panel.h"
 #include "test_case/implementation/test_params_hydro_cilinder.h"
+#include "test_case/implementation/test_params_pumps.h"
 #include "test_case/test.h"
 #include "viewer.h"
 #include "cpu/cpu_memory.h"
@@ -55,6 +56,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->act_test_case4->setToolTip( test::hydro_cylinder::Parameters::Instance().TestCollection().Name() );
     ui->act_test_case4->setText( test::hydro_cylinder::Parameters::Instance().TestCollection().Name() );
     ui->act_test_case4->setIconText( test::hydro_cylinder::Parameters::Instance().TestCollection().Name() );
+
+    ui->TestCase5->setText( test::pump::Parameters::Instance().TestCollection().Name() );
+    ui->TestCase5->setDescription( test::pump::Parameters::Instance().TestCollection().Descr() );
+    ui->act_test_case5->setToolTip( test::pump::Parameters::Instance().TestCollection().Name() );
+    ui->act_test_case5->setText( test::pump::Parameters::Instance().TestCollection().Name() );
+    ui->act_test_case5->setIconText( test::pump::Parameters::Instance().TestCollection().Name() );
 
 
     auto addRoundControl = [&]( ff0x::RoundDial** control, QString const& name, QLayout* place)
@@ -238,6 +245,10 @@ void MainWindow::StartHydroCilinderTest( bool new_test )
 {
     ShowChildWindow( ChildPtr( new HydroCilinderTitleInfo( new_test ) ) );
 }
+void MainWindow::StartHydroPumpsTest( bool new_test )
+{
+   //TODO
+}
 
 void MainWindow::AppSettrings ()
 {
@@ -309,6 +320,15 @@ void MainWindow::on_TestCase4_clicked()
     StartHydroCilinderTest( true );
 }
 
+void MainWindow::on_act_test_case5_triggered()
+{
+   on_TestCase5_clicked();
+}
+void MainWindow::on_TestCase5_clicked()
+{
+    StartHydroPumpsTest( true );
+}
+
 void MainWindow::on_ManualControl_clicked()
 {
     ShowChildWindow( ChildPtr( new ManualControl() ) );
@@ -343,6 +363,10 @@ void MainWindow::on_load_isp_params_triggered()
     else if ( ptr == &test::hydro_cylinder::Parameters::Instance() )
     {
         StartHydroCilinderTest( false );
+    }
+    else if ( ptr == &test::pump::Parameters::Instance() )
+    {
+       StartHydroPumpsTest( false );
     }
 }
 
