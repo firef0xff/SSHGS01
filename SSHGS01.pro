@@ -93,6 +93,7 @@ SOURCES += main.cpp\
     ../mylib/COMPort/ComPort.cpp \
     board/custom_control_board.cpp \
     cpu/board_memory.cpp \
+    pump_title_info.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -175,6 +176,7 @@ HEADERS  += mainwindow.h \
     ../mylib/COMPort/ComPort.h \
     board/custom_control_board.h \
     cpu/board_memory.h \
+    pump_title_info.h
 
 FORMS    += mainwindow.ui \
     hydro_title_info.ui \
@@ -189,7 +191,8 @@ FORMS    += mainwindow.ui \
     viewer.ui \
     login.ui \
     manual_control.ui \
-    users/users.ui
+    users/users.ui \
+    pump_title_info.ui
 
 OTHER_FILES += devices/*.json\
    тз/*\

@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Pump_title_info</class>
+ <widget class="QWidget" name="Pump_title_info">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>588</width>
+    <height>597</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="3">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Модель гидронасоса</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLineEdit" name="lineEdit"/>
+     </item>
+     <item row="5" column="1" colspan="2">
+      <widget class="QGroupBox" name="groupBox_6">
+       <property name="title">
+        <string>Секция №1</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_11">
+          <property name="text">
+           <string>Рабочий объем</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QSpinBox" name="spinBox"/>
+        </item>
+        <item row="1" column="0" colspan="2">
+         <widget class="QGroupBox" name="groupBox_3">
+          <property name="title">
+           <string>Давление в напорной полости:</string>
+          </property>
+          <layout class="QFormLayout" name="formLayout_3">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_21">
+             <property name="text">
+              <string>Минимальное</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_30">
+             <property name="text">
+              <string>Номинальное</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_31">
+             <property name="text">
+              <string>Максимальное</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QSpinBox" name="spinBox_10"/>
+           </item>
+           <item row="2" column="1">
+            <widget class="QSpinBox" name="spinBox_11"/>
+           </item>
+           <item row="0" column="1">
+            <widget class="QSpinBox" name="spinBox_14"/>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="2" column="4">
+      <widget class="QComboBox" name="comboBox"/>
+     </item>
+     <item row="4" column="1" colspan="2">
+      <widget class="QGroupBox" name="groupBox_4">
+       <property name="title">
+        <string>Электронное управление</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+       <layout class="QFormLayout" name="formLayout_4">
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_28">
+          <property name="text">
+           <string>Тип тока</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_27">
+          <property name="text">
+           <string>Напряжение питания, В</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QSpinBox" name="spinBox_15"/>
+        </item>
+        <item row="2" column="1">
+         <widget class="QSpinBox" name="spinBox_16"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="5" column="3" colspan="2">
+      <widget class="QGroupBox" name="groupBox_7">
+       <property name="title">
+        <string>Секция №2</string>
+       </property>
+       <property name="flat">
+        <bool>false</bool>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_13">
+          <property name="text">
+           <string>Рабочий объем</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QSpinBox" name="spinBox_7"/>
+        </item>
+        <item row="1" column="0" colspan="2">
+         <widget class="QGroupBox" name="groupBox_8">
+          <property name="title">
+           <string>Давление в напорной полости:</string>
+          </property>
+          <layout class="QFormLayout" name="formLayout_6">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_32">
+             <property name="text">
+              <string>Минимальное</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_33">
+             <property name="text">
+              <string>Номинальное</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_34">
+             <property name="text">
+              <string>Максимальное</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QSpinBox" name="spinBox_8"/>
+           </item>
+           <item row="1" column="1">
+            <widget class="QSpinBox" name="spinBox_12"/>
+           </item>
+           <item row="2" column="1">
+            <widget class="QSpinBox" name="spinBox_13"/>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Ответственный</string>
+       </property>
+      </widget>
+     </item>
+     <item row="11" column="1">
+      <widget class="QLabel" name="label_8">
+       <property name="text">
+        <string>Продолжительность испытаний
+функционирования</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1" rowspan="4" colspan="2">
+      <widget class="QGroupBox" name="groupBox">
+       <property name="title">
+        <string>Частота вращения насоса(ов):</string>
+       </property>
+       <property name="flat">
+        <bool>false</bool>
+       </property>
+       <property name="checkable">
+        <bool>false</bool>
+       </property>
+       <layout class="QFormLayout" name="formLayout">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_22">
+          <property name="text">
+           <string>Минимальная</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_23">
+          <property name="text">
+           <string>Номинальная</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_24">
+          <property name="text">
+           <string>Максимальная</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QSpinBox" name="spinBox_18"/>
+        </item>
+        <item row="1" column="1">
+         <widget class="QSpinBox" name="spinBox_20"/>
+        </item>
+        <item row="2" column="1">
+         <widget class="QSpinBox" name="spinBox_21"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QLineEdit" name="lineEdit_2"/>
+     </item>
+     <item row="2" column="3">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>Направление вращения</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="3" colspan="2">
+      <widget class="QGroupBox" name="groupBox_5">
+       <property name="title">
+        <string>Гидравлическое управление</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+       <layout class="QFormLayout" name="formLayout_5">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_29">
+          <property name="text">
+           <string>Максимальное давление
+в канале управления, бар</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QSpinBox" name="spinBox_17"/>
+        </item>
+        <item row="1" column="0">
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Серийный номер</string>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="3">
+      <widget class="QLabel" name="label_10">
+       <property name="text">
+        <string>Продолжительность испытаний
+наружной герметичности </string>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="1">
+      <widget class="QLabel" name="label_9">
+       <property name="text">
+        <string>Продолжительность испытаний
+на прочность</string>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="2">
+      <widget class="QSpinBox" name="spinBox_4"/>
+     </item>
+     <item row="10" column="4">
+      <widget class="QSpinBox" name="spinBox_3"/>
+     </item>
+     <item row="0" column="4">
+      <widget class="QLineEdit" name="lineEdit_3"/>
+     </item>
+     <item row="11" column="2">
+      <widget class="QSpinBox" name="spinBox_2"/>
+     </item>
+     <item row="6" column="3">
+      <widget class="QLabel" name="label_25">
+       <property name="text">
+        <string>Объемный КПД насоса</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="4">
+      <widget class="QSpinBox" name="spinBox_5"/>
+     </item>
+     <item row="7" column="3">
+      <widget class="QLabel" name="label_26">
+       <property name="text">
+        <string>Дренаж насоса при
+номинальном давлении и
+номинальном расходе</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="4">
+      <widget class="QSpinBox" name="spinBox_6"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
