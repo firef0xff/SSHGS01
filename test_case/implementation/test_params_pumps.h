@@ -4,15 +4,18 @@
 namespace test
 {
 
-namespace pump
-{
-
 enum SPIN
 {
    spUnknown,
    spLeft,
    spRight
 };
+
+bool ParseValue ( SPIN& sig, QString const& val );
+QString ToString( SPIN const& v );
+
+namespace pump
+{
 
 class Parameters : public test::Parameters
 {
@@ -37,6 +40,59 @@ public:
    {
        return true;
    }
+
+   bool SerianNo( QString const& val );
+   const QString &SerianNo();
+   bool Model( QString const& val );
+   const QString &Model();
+  //Ответственный User()
+   bool SectionsCount( qint32 val );
+   qint32 SectionsCount();
+   bool Spin( QString const& val );
+   SPIN Spin();
+
+   bool ElektrikControl( bool val );
+   bool ElektrikControl();
+   bool Voltage( QString const& val );
+   double Voltage();
+   bool VoltageType( QString const& val );
+   VOLTAGE_TYPE VoltageType();
+
+   bool HydroControl( bool val );
+   bool HydroControl();
+   bool MaxControlPressure( QString const& val );
+   double MaxControlPressure();
+
+   bool     WorkVolume1( QString const& val );
+   double   WorkVolume1();
+   bool     PressureMin1( QString const& val );
+   double   PressureMin1();
+   bool     PressureNom1( QString const& val );
+   double   PressureNom1();
+   bool     PressureMax1( QString const& val );
+   double   PressureMax1();
+
+   bool     WorkVolume2( QString const& val );
+   double   WorkVolume2();
+   bool     PressureMin2( QString const& val );
+   double   PressureMin2();
+   bool     PressureNom2( QString const& val );
+   double   PressureNom2();
+   bool     PressureMax2( QString const& val );
+   double   PressureMax2();
+
+   bool     FrequencyMin( QString const& val );
+   qint32   FrequencyMin();
+   bool     FrequencyNom( QString const& val );
+   qint32   FrequencyNom();
+   bool     FrequencyMax( QString const& val );
+   qint32   FrequencyMax();
+
+   bool     VolumeKPD( QString const& val );
+   double   VolumeKPD();
+   bool     Expenditure( QString const& val );
+   double   Expenditure();
+
 private:
     Parameters();
     Parameters( Parameters const& ) = delete;
@@ -56,10 +112,6 @@ private:
    bool mHydroControl = false; //Наличие гидравлического управления
    double mMaxControlPressure = 0; //Максимальное давление в канале управления, бар
 
-   qint32 mFuncTestTime = 0; //Продолжительность испытаний функционирования
-   qint32 mStrongTestTime = 0; //Продолжительность испытаний на прочность
-   qint32 mHermTestTime = 0; //Продолжительность испытаний наружной герметичности
-
    double mWorkVolume1 = 0.0; //Рабочий объем насоса №1
 
    //Давление в напорной полости насоса №1:
@@ -75,21 +127,25 @@ private:
    double mPressureMax2 = 0.0; //максимальное
 
    //Частота вращения насоса(ов):
-   qint32 mSpinSpeedMin = 0; //Минимальная
-   qint32 mSpinSpeedNom = 0; //Номинальная
-   qint32 mSpinSpeedMax = 0; //Максимальная
+   qint32 mFrequencyMin = 0; //Минимальная
+   qint32 mFrequencyNom = 0; //Номинальная
+   qint32 mFrequencyMax = 0; //Максимальная
 
    double mVolumeKPD = 0.0; //Объемный кпд насоса
    double mExpenditure = 0.0; //Дренаж насоса при номинальном давлении и номинальном расходе л/мин
 
    //Сервисные настройки для испытания насосов:
-   double mX;//Время набора требуемого давления, сек (X)
-   double mY;//Время набора требуемой частоты вращения, сек (Y)
-   double mZ;//Время стабилизации потока, сек (Z)
-   double mA;//Коэффициент функционирования, % (А)
-   double mA1;//Коэффициент функционирования для дренажа, % (А1)
-   double mE;//Точность для испытаний функциональные зависимости, сек (Е)
-   double mB;//Продолжительность испытаний функциональные зависимости, сек (В)
+   qint32 mFuncTestTime = 0; //Продолжительность испытаний функционирования
+   qint32 mStrongTestTime = 0; //Продолжительность испытаний на прочность
+   qint32 mHermTestTime = 0; //Продолжительность испытаний наружной герметичности
+
+   double mX = 0.0;//Время набора требуемого давления, сек (X)
+   double mY = 0.0;//Время набора требуемой частоты вращения, сек (Y)
+   double mZ = 0.0;//Время стабилизации потока, сек (Z)
+   double mA = 0.0;//Коэффициент функционирования, % (А)
+   double mA1 = 0.0;//Коэффициент функционирования для дренажа, % (А1)
+   double mE = 0.0;//Точность для испытаний функциональные зависимости, сек (Е)
+   double mB = 0.0;//Продолжительность испытаний функциональные зависимости, сек (В)
 };
 
 }

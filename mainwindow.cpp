@@ -5,6 +5,7 @@
 #include "servo_title_info.h"
 #include "control_panels_title_info.h"
 #include "hydro_cilinder_title_info.h"
+#include "pump_title_info.h"
 
 #include "settings/settings.h"
 #include "settings/settings_wnd.h"
@@ -247,7 +248,7 @@ void MainWindow::StartHydroCilinderTest( bool new_test )
 }
 void MainWindow::StartHydroPumpsTest( bool new_test )
 {
-   //TODO
+   ShowChildWindow( ChildPtr( new PumpTitleInfo( new_test ) ) );
 }
 
 void MainWindow::AppSettrings ()
