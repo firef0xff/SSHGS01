@@ -300,23 +300,6 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect, QString const& compar
        painter.restore();
    };
 
-   auto DrawLastRow = [ &painter, &free_rect ]( QFont font, QColor color, QString text, double spase = 1 )
-   {
-       painter.save();
-       QFontMetrics metrix( font );
-       QRect place;
-       QRect draw_place;
-       while ( AllocatePlace( place, metrix.height()*spase ,free_rect ) )
-       {
-           draw_place = place;
-       }
-       QPoint start_point( place.left() , place.center().y()+metrix.height()/2 );
-       painter.setFont( font );
-       painter.setPen( color );
-       painter.drawText( start_point, text );
-       painter.restore();
-   };
-
    QFontMetrics m(text_font);
    int width = m.width("12345678901234567890123456789012345678901234567890");
    char symbol = '.';
@@ -351,26 +334,24 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect, QString const& compar
       return base + " (" + old + ")";
    };
 
+   bool use_second_section = mSectionsCount > 1;
+   auto MakeSektion = [use_second_section]( double f, double s )
+   {
+      if ( !use_second_section )
+         return test::ToString(f);
+      return test::ToString(f) + ", " + test::ToString(s);
+   };
+
    DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Направление вращения"),         MakeCompare( test::ToString(mSpin), test::ToString(old.mSpin) ), "", row_skale );
 
 //   DrawRowLeft( text_font, Qt::black, Qt::black, "Секция №1:", "", "", row_skale );
-   DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Рабочий объем, см³/об"),        MakeCompare( test::ToString( mWorkVolume1 ), test::ToString( old.mWorkVolume1 ) ), "", row_skale );
+   DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Рабочий объем, см³/об"),        MakeCompare( MakeSektion( mWorkVolume1, mWorkVolume2 ), MakeSektion( old.mWorkVolume1, old.mWorkVolume2 ) ), "", row_skale );
    DrawRowLeft( text_font, Qt::black, Qt::black, "Давление:", "", "", row_skale );
-   DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("- минимальное, бар"),           MakeCompare( test::ToString( mPressureMin1 ), test::ToString( old.mPressureMin1 ) ), "", row_skale );
-   DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("- номинальное (рабочее), бар"), MakeCompare( test::ToString( mPressureNom1 ), test::ToString( old.mPressureNom1 ) ), "", row_skale );
-   DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("- максимальное, бар"),          MakeCompare( test::ToString( mPressureMax1 ), test::ToString( old.mPressureMax1 ) ), "", row_skale );
+   DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("- минимальное, бар"),           MakeCompare( MakeSektion( mPressureMin1, mPressureMin2 ), MakeSektion( old.mPressureMin1, old.mPressureMin2 ) ), "", row_skale );
+   DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("- номинальное (рабочее), бар"), MakeCompare( MakeSektion( mPressureNom1, mPressureNom2 ), MakeSektion( old.mPressureNom1, old.mPressureNom2 ) ), "", row_skale );
+   DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("- максимальное, бар"),          MakeCompare( MakeSektion( mPressureMax1, mPressureMax2 ), MakeSektion( old.mPressureMax1, old.mPressureMax2 ) ), "", row_skale );
 
-//   if ( mSectionsCount > 1)
-//   {
-//      DrawRowLeft( text_font, Qt::black, Qt::black, "Секция №2:", "", "", row_skale );
-//      DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Рабочий объем, см³/об"),  MakeCompare( test::ToString( mWorkVolume2 ), test::ToString( old.mWorkVolume2 ) ), "", row_skale );
-//      DrawRowLeft( text_font, Qt::black, Qt::black, "Давление:", "", "", row_skale );
-//      DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("- минимальное, бар"),     MakeCompare( test::ToString( mPressureMin2 ), test::ToString( old.mPressureMin2 ) ), "", row_skale );
-//      DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("- номинальное, бар"),     MakeCompare( test::ToString( mPressureNom2 ), test::ToString( old.mPressureNom2 ) ), "", row_skale );
-//      DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("- максимальное, бар"),    MakeCompare( test::ToString( mPressureMax2 ), test::ToString( old.mPressureMax2 ) ), "", row_skale );
-//   }
-
-   DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Частота вращения приводного вала:"), "", "", row_skale );
+   DrawRowLeft( text_font, Qt::black, Qt::black, "Частота вращения приводного вала:", "", "", row_skale );
    DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("- минимальная, бар"),        MakeCompare( test::ToString( mFrequencyMin ), test::ToString( old.mFrequencyMin ) ), "", row_skale );
    DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("- номинальная, бар"),        MakeCompare( test::ToString( mFrequencyNom ), test::ToString( old.mFrequencyNom ) ), "", row_skale );
    DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("- максимальная, бар"),       MakeCompare( test::ToString( mFrequencyMax ), test::ToString( old.mFrequencyMax ) ), "", row_skale );
@@ -405,6 +386,7 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect, QString const& compar
    DrawRowLeft( text_font, Qt::black, Qt::red, "Испытания проводил: ", mUser, "", row_skale );
    DrawRowLeft( text_font, Qt::black, Qt::red, "Дата проведения испытаний: ", mDate.toString("dd MMMM yyyy г. hh:mm"), "", row_skale );
 
+   free_rect.setHeight(0);
    return true;
 }
 

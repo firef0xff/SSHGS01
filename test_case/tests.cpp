@@ -18,6 +18,12 @@
 #include "implementation/control_board/va_characteristic.h"
 
 #include "implementation/hydro_cylinder/cylinder_test.h"
+
+#include "implementation/pump/pump_test_1.h"
+#include "implementation/pump/pump_test_2.h"
+#include "implementation/pump/pump_test_3.h"
+#include "implementation/pump/pump_test_4.h"
+
 namespace fake
 {
 using namespace test;
@@ -154,13 +160,16 @@ TestCase Pumps( "Гидронасосы",
                 "",
                 "Испытание гидронасосов" );
 
-namespace pumps
+namespace pump
 {
 namespace test_case
 {
-
+static PumpTest1 t1;
+static PumpTest2 t2;
+static PumpTest3 t3;
+static PumpTest4 t4;
 }//namespace test_case
-}//namespace pumps
+}//namespace pump
 
 }
 

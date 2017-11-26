@@ -57,6 +57,10 @@ SOURCES += main.cpp\
     test_case/implementation/control_board/power_test.cpp \
     test_case/implementation/control_board/va_characteristic.cpp \
     test_case/implementation/hydro_cylinder/cylinder_test.cpp \
+    test_case/implementation/pump/pump_test_1.cpp\
+    test_case/implementation/pump/pump_test_2.cpp\
+    test_case/implementation/pump/pump_test_3.cpp\
+    test_case/implementation/pump/pump_test_4.cpp\
     ../mylib/Widgets/GraphBuilder/graph_builder.cpp \
     viewer.cpp \
     cpu/cpu_memory.cpp \
@@ -95,7 +99,7 @@ SOURCES += main.cpp\
     cpu/board_memory.cpp \
     pump_title_info.cpp \
     pump_test_info.cpp \
-    functions.cpp
+    functions.cpp \
 
 
 HEADERS  += mainwindow.h \
@@ -137,6 +141,10 @@ HEADERS  += mainwindow.h \
     test_case/implementation/control_board/power_test.h \
     test_case/implementation/control_board/va_characteristic.h \
     test_case/implementation/hydro_cylinder/cylinder_test.h \
+    test_case/implementation/pump/pump_test_1.h\
+    test_case/implementation/pump/pump_test_2.h\
+    test_case/implementation/pump/pump_test_3.h\
+    test_case/implementation/pump/pump_test_4.h\
     ../mylib/Widgets/GraphBuilder/graph_builder.h \
     viewer.h \
     cpu/cpu_memory.h \
@@ -180,7 +188,8 @@ HEADERS  += mainwindow.h \
     cpu/board_memory.h \
     pump_title_info.h \
     pump_test_info.h \
-    functions.h
+    functions.h \
+
 
 FORMS    += mainwindow.ui \
     hydro_title_info.ui \

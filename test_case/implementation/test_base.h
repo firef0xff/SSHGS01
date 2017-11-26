@@ -117,5 +117,18 @@ private:
 };
 }//namespace hydro_cylinder
 
+namespace pump
+{
+class Test :public test::TestCommonData
+{
+public:
+    Test( QString const& name, uint8_t id );
+protected:
+    void UpdateData();
+
+private:
+    static uint8_t mTestsCount;
+};
+}//namespace pump
 
 }//namespace test

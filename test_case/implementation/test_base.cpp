@@ -301,7 +301,20 @@ void Test::UpdateData()
 
 }//namespace hydro_cylinder
 
+namespace pump
+{
+uint8_t Test::mTestsCount = 1;
+Test::Test( QString const& name, uint8_t id ):
+    test::TestCommonData( &Pumps, name, mTestsCount, id )
+{
+    ++mTestsCount;
+}
 
+void Test::UpdateData()
+{
+}
+
+}
 
 }//namespace test
 
