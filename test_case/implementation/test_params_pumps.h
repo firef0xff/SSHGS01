@@ -41,6 +41,7 @@ public:
        return true;
    }
 
+   //Параметры насоса
    bool SerianNo( QString const& val );
    const QString &SerianNo();
    bool Model( QString const& val );
@@ -93,6 +94,29 @@ public:
    bool     Expenditure( QString const& val );
    double   Expenditure();
 
+   //параметры испытания
+   bool FuncTestTime( QString const& val );
+   qint32 FuncTestTime();
+   bool StrongTestTime( QString const& val );
+   qint32 StrongTestTime();
+   bool HermTestTime( QString const& val );
+   qint32 HermTestTime();
+
+   bool X( QString const& val );
+   qint32 X();
+   bool Y( QString const& val );
+   qint32 Y();
+   bool Z( QString const& val );
+   qint32 Z();
+   bool A( QString const& val );
+   double A();
+   bool A1( QString const& val );
+   double A1();
+   bool E( QString const& val );
+   double E();
+   bool B( QString const& val );
+   qint32 B();
+
 private:
     Parameters();
     Parameters( Parameters const& ) = delete;
@@ -139,13 +163,13 @@ private:
    qint32 mStrongTestTime = 0; //Продолжительность испытаний на прочность
    qint32 mHermTestTime = 0; //Продолжительность испытаний наружной герметичности
 
-   double mX = 0.0;//Время набора требуемого давления, сек (X)
-   double mY = 0.0;//Время набора требуемой частоты вращения, сек (Y)
-   double mZ = 0.0;//Время стабилизации потока, сек (Z)
+   qint32 mX = 0;//Время набора требуемого давления, сек (X)
+   qint32 mY = 0;//Время набора требуемой частоты вращения, сек (Y)
+   qint32 mZ = 0;//Время стабилизации потока, сек (Z)
    double mA = 0.0;//Коэффициент функционирования, % (А)
    double mA1 = 0.0;//Коэффициент функционирования для дренажа, % (А1)
    double mE = 0.0;//Точность для испытаний функциональные зависимости, сек (Е)
-   double mB = 0.0;//Продолжительность испытаний функциональные зависимости, сек (В)
+   qint32 mB = 0;//Продолжительность испытаний функциональные зависимости, сек (В)
 };
 
 }

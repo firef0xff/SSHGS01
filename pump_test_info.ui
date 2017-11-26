@@ -17,7 +17,7 @@
    <item>
     <layout class="QGridLayout" name="gridLayout">
      <item row="9" column="0">
-      <widget class="QLabel" name="label_9">
+      <widget class="QLabel" name="l_e">
        <property name="text">
         <string>Точность для испытаний
 функциональные зависимости, сек (Е)</string>
@@ -25,7 +25,7 @@
       </widget>
      </item>
      <item row="0" column="0">
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="l_func_test_time">
        <property name="text">
         <string>Продолжительность испытаний
 функционирования, сек</string>
@@ -33,7 +33,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QSpinBox" name="spinBox">
+      <widget class="QSpinBox" name="FuncTestTime">
        <property name="toolTip">
         <string>0...360 сек</string>
        </property>
@@ -49,7 +49,7 @@
       </widget>
      </item>
      <item row="4" column="0">
-      <widget class="QLabel" name="label_5">
+      <widget class="QLabel" name="l_y">
        <property name="text">
         <string>Время набора требуемой
 частоты вращения, сек (Y)</string>
@@ -57,7 +57,7 @@
       </widget>
      </item>
      <item row="2" column="0">
-      <widget class="QLabel" name="label_3">
+      <widget class="QLabel" name="l_herm_test_time">
        <property name="text">
         <string>Продолжительность испытаний
 наружной герметичности, сек</string>
@@ -65,7 +65,7 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QSpinBox" name="spinBox_3">
+      <widget class="QSpinBox" name="HermTestTime">
        <property name="toolTip">
         <string>0...360 сек</string>
        </property>
@@ -81,7 +81,7 @@
       </widget>
      </item>
      <item row="6" column="0">
-      <widget class="QLabel" name="label_10">
+      <widget class="QLabel" name="l_b">
        <property name="text">
         <string>Продолжительность испытаний
 функциональные зависимости, сек (В)</string>
@@ -89,7 +89,7 @@
       </widget>
      </item>
      <item row="7" column="1">
-      <widget class="QDoubleSpinBox" name="doubleSpinBox">
+      <widget class="QDoubleSpinBox" name="A">
        <property name="toolTip">
         <string>0...1</string>
        </property>
@@ -111,7 +111,7 @@
       </widget>
      </item>
      <item row="4" column="1">
-      <widget class="QSpinBox" name="spinBox_5">
+      <widget class="QSpinBox" name="Y">
        <property name="toolTip">
         <string>1...60 сек</string>
        </property>
@@ -130,7 +130,7 @@
       </widget>
      </item>
      <item row="9" column="1">
-      <widget class="QDoubleSpinBox" name="doubleSpinBox_3">
+      <widget class="QDoubleSpinBox" name="E">
        <property name="toolTip">
         <string>0.5...60 сек</string>
        </property>
@@ -152,14 +152,14 @@
       </widget>
      </item>
      <item row="7" column="0">
-      <widget class="QLabel" name="label_7">
+      <widget class="QLabel" name="l_a">
        <property name="text">
         <string>Коэффициент функционирования, % (А)</string>
        </property>
       </widget>
      </item>
      <item row="6" column="1">
-      <widget class="QSpinBox" name="spinBox_7">
+      <widget class="QSpinBox" name="B">
        <property name="toolTip">
         <string>1...360 сек</string>
        </property>
@@ -178,7 +178,7 @@
       </widget>
      </item>
      <item row="0" column="2">
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel" name="l_strong_test_time">
        <property name="text">
         <string>Продолжительность испытаний
 на прочность, мин</string>
@@ -186,7 +186,7 @@
       </widget>
      </item>
      <item row="0" column="3">
-      <widget class="QSpinBox" name="spinBox_2">
+      <widget class="QSpinBox" name="StrongTestTime">
        <property name="toolTip">
         <string>1...10 мин</string>
        </property>
@@ -202,7 +202,7 @@
       </widget>
      </item>
      <item row="2" column="3">
-      <widget class="QSpinBox" name="spinBox_4">
+      <widget class="QSpinBox" name="X">
        <property name="toolTip">
         <string>1...60 сек</string>
        </property>
@@ -221,7 +221,7 @@
       </widget>
      </item>
      <item row="2" column="2">
-      <widget class="QLabel" name="label_4">
+      <widget class="QLabel" name="l_x">
        <property name="text">
         <string>Время набора требуемого
 давления, сек (X)</string>
@@ -229,7 +229,7 @@
       </widget>
      </item>
      <item row="4" column="3">
-      <widget class="QSpinBox" name="spinBox_6">
+      <widget class="QSpinBox" name="Z">
        <property name="toolTip">
         <string>1...600</string>
        </property>
@@ -248,14 +248,14 @@
       </widget>
      </item>
      <item row="4" column="2">
-      <widget class="QLabel" name="label_6">
+      <widget class="QLabel" name="l_z">
        <property name="text">
         <string>Время стабилизации потока, сек (Z)</string>
        </property>
       </widget>
      </item>
      <item row="7" column="3">
-      <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
+      <widget class="QDoubleSpinBox" name="A1">
        <property name="toolTip">
         <string>0...1</string>
        </property>
@@ -274,7 +274,7 @@
       </widget>
      </item>
      <item row="7" column="2">
-      <widget class="QLabel" name="label_8">
+      <widget class="QLabel" name="l_a1">
        <property name="text">
         <string>Коэффициент функционирования
 для дренажа, % (А1)</string>

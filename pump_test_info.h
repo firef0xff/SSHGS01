@@ -27,6 +27,9 @@ private:
 
 signals:
     void closed();
+private slots:
+    void on_buttonBox_accepted();
+    void on_buttonBox_rejected();
 };
 
 #endif // PUMP_TEST_INFO_H

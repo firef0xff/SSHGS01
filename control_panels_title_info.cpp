@@ -4,6 +4,7 @@
 #include <QMessageBox>
 #include "test_case/implementation/test_params_control_panel.h"
 #include "settings/settings.h"
+#include "functions.h"
 
 ControlPanelsTitleInfo::ControlPanelsTitleInfo(bool new_mode, QWidget *parent) :
     QWidget(parent),
@@ -47,29 +48,6 @@ bool ControlPanelsTitleInfo::SaveInputParams()
         params.Reset();
 
     bool res = true;
-
-    auto ParamChecker = []( QLabel* control, bool r ) -> bool
-    {
-        QPalette palette = control->palette();
-
-        if ( !r )
-        {
-            palette.setColor( control->backgroundRole(), Qt::red );
-            control->setAutoFillBackground( true );
-        }
-        else
-        {
-            control->setAutoFillBackground( false );
-        }
-        control->setPalette( palette );
-        return r;
-    };
-    auto ValidateRange = []( QLineEdit* control, bool r ) -> bool
-    {
-        QString text = control->text();
-        int pos = control->cursorPosition();
-        return std::min( control->validator()->validate( text, pos ) == QValidator::Acceptable , r );
-    };
 
     res *= ParamChecker( ui->l_gs_type, params.GsType( ui->GsType->currentText() ) );
     res *= ParamChecker( ui->l_ser_no, params.SerNo( ui->SerNo->text() ) );

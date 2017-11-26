@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include "test_case/implementation/test_params_hydro.h"
 #include "settings/settings.h"
+#include "functions.h"
 
 StandParams::StandParams(bool new_mode, QWidget *parent) :
     QWidget(parent),
@@ -51,24 +52,6 @@ bool StandParams::SaveInputParams()
     test::hydro::Parameters& params = test::hydro::Parameters::Instance();
 
     bool res = true;
-
-    auto ParamChecker = []( QLabel* control, bool r ) -> bool
-    {
-        QPalette palette = control->palette();
-
-        if ( !r )
-        {
-            palette.setColor( control->backgroundRole(), Qt::red );
-            control->setAutoFillBackground( true );
-        }
-        else
-        {
-            control->setAutoFillBackground( false );
-        }
-        control->setPalette( palette );
-        return r;
-    };
-
 
     res *= ParamChecker( ui->l_h1t,             params.OnDD1A ( ui->DD1A_ON->checkState() ) );
     res *= ParamChecker( ui->l_h1t,             params.OnDD2A ( ui->DD2A_ON->checkState() ) );

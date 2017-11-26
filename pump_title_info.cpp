@@ -3,8 +3,7 @@
 #include "pump_test_info.h"
 #include <QMessageBox>
 #include "test_case/implementation/test_params_pumps.h"
-#include "settings/settings.h"
-#include "test_case/test.h"
+#include "functions.h"
 
 PumpTitleInfo::PumpTitleInfo(bool new_mode, QWidget *parent) :
    QWidget(parent),
@@ -13,33 +12,33 @@ PumpTitleInfo::PumpTitleInfo(bool new_mode, QWidget *parent) :
 {
    ui->setupUi(this);
 
-       foreach ( examinee::Device const* device, test::pump::Parameters::Instance().TestCollection().Devices().Get() )
-       {
-           ui->Model->addItem( device->Name() + " " + device->Manufacturer(), QVariant::fromValue( device ) );
-       }
-       ui->Model->setCurrentIndex( -1 );
+   foreach ( examinee::Device const* device, test::pump::Parameters::Instance().TestCollection().Devices().Get() )
+   {
+      ui->Model->addItem( device->Name() + " " + device->Manufacturer(), QVariant::fromValue( device ) );
+   }
+   ui->Model->setCurrentIndex( -1 );
 
-       auto *val1 = new QIntValidator( 0, 355, this );
-       ui->WorkVolume->setValidator( val1 );
-       ui->WorkVolume_2->setValidator( val1 );
+   auto *val1 = new QIntValidator( 0, 355, this );
+   ui->WorkVolume->setValidator( val1 );
+   ui->WorkVolume_2->setValidator( val1 );
 
-       auto *val2 = new QIntValidator( 0, 450, this );
-       ui->MinPressure->setValidator( val2 );
-       ui->NomPressure->setValidator( val2 );
-       ui->MaxPressure->setValidator( val2 );
+   auto *val2 = new QIntValidator( 0, 450, this );
+   ui->MinPressure->setValidator( val2 );
+   ui->NomPressure->setValidator( val2 );
+   ui->MaxPressure->setValidator( val2 );
 
-       ui->MinPressure_2->setValidator( val2 );
-       ui->NomPressure_2->setValidator( val2 );
-       ui->MaxPressure_2->setValidator( val2 );
+   ui->MinPressure_2->setValidator( val2 );
+   ui->NomPressure_2->setValidator( val2 );
+   ui->MaxPressure_2->setValidator( val2 );
 
-       auto *val3 = new QIntValidator( 0, 4000, this );
-       ui->MinFrequency->setValidator( val3 );
-       ui->NomFrequency->setValidator( val3 );
-       ui->MaxFrequency->setValidator( val3 );
+   auto *val3 = new QIntValidator( 0, 4000, this );
+   ui->MinFrequency->setValidator( val3 );
+   ui->NomFrequency->setValidator( val3 );
+   ui->MaxFrequency->setValidator( val3 );
 
 
-       auto *val4 = new QDoubleValidator( 0.7, 90, 2, this );
-       ui->Drainage->setValidator( val4 );
+   auto *val4 = new QDoubleValidator( 0.7, 90, 2, this );
+   ui->Drainage->setValidator( val4 );
 
    if ( !mNewMode )
    {
@@ -93,30 +92,6 @@ bool PumpTitleInfo::SaveInputParams()
        params.Reset();
 
    bool res = true;
-
-   auto ParamChecker = []( QLabel* control, bool r ) -> bool
-   {
-       QPalette palette = control->palette();
-
-       if ( !r )
-       {
-           palette.setColor( control->backgroundRole(), Qt::red );
-           control->setAutoFillBackground( true );
-       }
-       else
-       {
-           control->setAutoFillBackground( false );
-       }
-       control->setPalette( palette );
-       return r;
-   };
-   auto ValidateRange = []( QLineEdit* control, bool r ) -> bool
-   {
-       QString text = control->text();
-       int pos = control->cursorPosition();
-       return std::min( control->validator()->validate( text, pos ) == QValidator::Acceptable , r );
-   };
-
 
    res *= ParamChecker( ui->l_ser_no,  params.SerianNo( ui->SerNo->text() ) );
    res *= ParamChecker( ui->l_model,  params.Model( ui->Model->currentText() ) );
@@ -179,7 +154,7 @@ void PumpTitleInfo::FromParams()
       ui->AcDc->setCurrentText( test::ToString( params.VoltageType() ) );
    }
 
-   params.HydroControl( ui->HydroControl->isChecked() );
+   ui->HydroControl->setChecked( params.HydroControl() );
    if ( params.HydroControl() )
    {
       ui->MaxControlPressure->setValue( params.MaxControlPressure() );

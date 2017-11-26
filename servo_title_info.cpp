@@ -5,6 +5,7 @@
 #include "test_case/implementation/test_params_servo.h"
 #include "test_case/test.h"
 #include "settings/settings.h"
+#include "functions.h"
 //#include <climits>
 
 ServoTitleInfo::ServoTitleInfo(bool new_mode, QWidget *parent) :
@@ -47,29 +48,6 @@ bool ServoTitleInfo::SaveInputParams()
         params.Reset();
 
     bool res = true;
-
-    auto ParamChecker = []( QWidget* control, bool r ) -> bool
-    {
-        QPalette palette = control->palette();
-
-        if ( !r )
-        {
-            palette.setColor( control->backgroundRole(), Qt::red );
-            control->setAutoFillBackground( true );
-        }
-        else
-        {
-            control->setAutoFillBackground( false );
-        }
-        control->setPalette( palette );
-        return r;
-    };
-    auto ValidateRange = []( QLineEdit* control, bool r ) -> bool
-    {
-        QString text = control->text();
-        int pos = control->cursorPosition();
-        return std::min( control->validator()->validate( text, pos ) == QValidator::Acceptable , r );
-    };
 
     res *= ParamChecker( ui->l_ser_no,          params.SerNo( ui->SerNo->text() ) );
 //    res *= ParamChecker( ui->l_gs_type,         params.GsType( ui->GsType->currentText() ) && ui->GsType->currentIndex() >= 0 );
