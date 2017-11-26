@@ -237,8 +237,175 @@ void Parameters::WriteToController() const
 
 bool Parameters::Draw(QPainter &painter, QRect &free_rect, QString const& compare_width ) const
 {
-   //TODO
-    return true;
+   QFont title_font = painter.font();
+   title_font.setFamily("Arial");
+   title_font.setPointSize(18);
+
+   QFont level_font = title_font;
+   level_font.setPointSize( 14 );
+
+   QFont text_font = title_font;
+   text_font.setPointSize( 12 );
+
+   DrawHelper drw( painter, free_rect );
+   auto DrawRowCenter = [ &painter, &free_rect ]( QFont font, QColor color, QString text, double spase = 1 )
+   {
+       painter.save();
+       QFontMetrics metrix( font );
+       QRect place;
+       AllocatePlace( place, metrix.height()*spase ,free_rect );
+       QPoint start_point( place.center().x() - metrix.width( text ) / 2, place.center().y() +metrix.height()/2);
+       painter.setFont( font );
+       painter.setPen( color );
+       painter.drawText( start_point, text );
+       painter.restore();
+   };
+
+   auto DrawRowCenter2 = [ &painter, &free_rect ]( QFont font, QColor color, QString text,  QColor color2, QString text2, double spase = 1 )
+   {
+       painter.save();
+       QFontMetrics metrix( font );
+       QRect place;
+       AllocatePlace( place, metrix.height()*spase ,free_rect );
+       QPoint start_point( place.center().x() - metrix.width( text + text2 ) / 2, place.center().y() +metrix.height()/2);
+       painter.setFont( font );
+       painter.setPen( color );
+       painter.drawText( start_point, text );
+       QPoint start_point2( place.center().x() - metrix.width( text + text2 ) / 2 + metrix.width( text ) , place.center().y() +metrix.height()/2);
+       painter.setPen( color2 );
+       painter.drawText( start_point2, text2 );
+       painter.restore();
+   };
+
+
+   auto DrawRowLeft = [ &painter, &free_rect ]( QFont font,
+           QColor color1, QColor color2,
+           QString label, QString value,
+           QString value2 = "", double spase = 1 )
+   {
+       painter.save();
+       QFontMetrics metrix( font );
+       QRect place;
+       AllocatePlace( place, metrix.height()*spase, free_rect );
+       QPoint start_point( place.left() , place.center().y()+metrix.height()/2 );
+       QPoint start_point2( place.left() + metrix.width(label), place.center().y() +metrix.height()/2);
+       QPoint start_point3( place.left() + metrix.width(label + value), place.center().y() +metrix.height()/2);
+       painter.setFont( font );
+       painter.setPen( color1 );
+       painter.drawText( start_point, label );
+       painter.setPen( color2 );
+       painter.drawText( start_point2, value );
+       painter.setPen( Qt::gray );
+       painter.drawText( start_point3, value2 );
+       painter.restore();
+   };
+
+   auto DrawLastRow = [ &painter, &free_rect ]( QFont font, QColor color, QString text, double spase = 1 )
+   {
+       painter.save();
+       QFontMetrics metrix( font );
+       QRect place;
+       QRect draw_place;
+       while ( AllocatePlace( place, metrix.height()*spase ,free_rect ) )
+       {
+           draw_place = place;
+       }
+       QPoint start_point( place.left() , place.center().y()+metrix.height()/2 );
+       painter.setFont( font );
+       painter.setPen( color );
+       painter.drawText( start_point, text );
+       painter.restore();
+   };
+
+   QFontMetrics m(text_font);
+   int width = m.width("12345678901234567890123456789012345678901234567890");
+   char symbol = '.';
+   auto FillToSize = [ width, &m, symbol ]( QString text )
+   {
+       while( m.width( text + symbol ) < width )
+           text += symbol;
+       return text + " ";
+   };
+
+
+   double row_skale = 2;
+
+   DrawRowCenter2( title_font, Qt::black, "ОТЧЕТ", Qt::red, " ( " + mReportType + " ) ", row_skale);
+   DrawRowCenter( level_font, Qt::black, "Испытания гидронасоса", row_skale );
+   DrawRowCenter( level_font, Qt::red, mModel, row_skale );
+
+   DrawRowLeft( text_font, Qt::black, Qt::red, "Идентификационный номер: ", mSerianNo, "", row_skale);
+
+   test::pump::Parameters old;
+   bool compare = !compare_width.isEmpty();
+   if ( compare )
+   {
+      QJsonObject f = test::ReadFromFile( compare_width ).value("Params").toObject();
+      old.Deserialize( f );
+   }
+
+   auto MakeCompare = [compare]( QString base, QString old )
+   {
+      if ( !compare )
+         return base;
+      return base + " (" + old + ")";
+   };
+
+   DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Направление вращения"),         MakeCompare( test::ToString(mSpin), test::ToString(old.mSpin) ), "", row_skale );
+
+//   DrawRowLeft( text_font, Qt::black, Qt::black, "Секция №1:", "", "", row_skale );
+   DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Рабочий объем, см³/об"),        MakeCompare( test::ToString( mWorkVolume1 ), test::ToString( old.mWorkVolume1 ) ), "", row_skale );
+   DrawRowLeft( text_font, Qt::black, Qt::black, "Давление:", "", "", row_skale );
+   DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("- минимальное, бар"),           MakeCompare( test::ToString( mPressureMin1 ), test::ToString( old.mPressureMin1 ) ), "", row_skale );
+   DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("- номинальное (рабочее), бар"), MakeCompare( test::ToString( mPressureNom1 ), test::ToString( old.mPressureNom1 ) ), "", row_skale );
+   DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("- максимальное, бар"),          MakeCompare( test::ToString( mPressureMax1 ), test::ToString( old.mPressureMax1 ) ), "", row_skale );
+
+//   if ( mSectionsCount > 1)
+//   {
+//      DrawRowLeft( text_font, Qt::black, Qt::black, "Секция №2:", "", "", row_skale );
+//      DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Рабочий объем, см³/об"),  MakeCompare( test::ToString( mWorkVolume2 ), test::ToString( old.mWorkVolume2 ) ), "", row_skale );
+//      DrawRowLeft( text_font, Qt::black, Qt::black, "Давление:", "", "", row_skale );
+//      DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("- минимальное, бар"),     MakeCompare( test::ToString( mPressureMin2 ), test::ToString( old.mPressureMin2 ) ), "", row_skale );
+//      DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("- номинальное, бар"),     MakeCompare( test::ToString( mPressureNom2 ), test::ToString( old.mPressureNom2 ) ), "", row_skale );
+//      DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("- максимальное, бар"),    MakeCompare( test::ToString( mPressureMax2 ), test::ToString( old.mPressureMax2 ) ), "", row_skale );
+//   }
+
+   DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Частота вращения приводного вала:"), "", "", row_skale );
+   DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("- минимальная, бар"),        MakeCompare( test::ToString( mFrequencyMin ), test::ToString( old.mFrequencyMin ) ), "", row_skale );
+   DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("- номинальная, бар"),        MakeCompare( test::ToString( mFrequencyNom ), test::ToString( old.mFrequencyNom ) ), "", row_skale );
+   DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("- максимальная, бар"),       MakeCompare( test::ToString( mFrequencyMax ), test::ToString( old.mFrequencyMax ) ), "", row_skale );
+
+   DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Объемный КПД насоса, %"),    MakeCompare( test::ToString( mVolumeKPD ), test::ToString( old.mVolumeKPD ) ), "", row_skale );
+   DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Дренаж насоса при номинальном режиме, л/мин"), MakeCompare( test::ToString( mExpenditure ), test::ToString( old.mExpenditure ) ), "", row_skale );
+
+
+
+   DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Тонкость фильтрации рабочей жидкости, мкм"), "________", "", row_skale );
+   DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Тип масла"), "Лукой Гейзер HLP32", "", row_skale );
+   DrawRowLeft( text_font, Qt::black, Qt::black, FillToSize("Вязкость масла (при 40˚С), сСт"), test::ToString(32), "", row_skale );
+
+//   if ( compare )
+//   {
+//       DrawRowLeft( text_font, Qt::black, Qt::red, "Аппарат для сравнения характеристик: ", "", "", row_skale );
+//       DrawRowLeft( text_font, Qt::black, Qt::red, "", old.SerianNo(), "", row_skale );
+//       DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Дата испытания сравниваемого аппарата"), old.Date().toString("dd MMMM yyyy г. hh:mm"), "", row_skale );
+//       DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Сравнение с эталоном"), old.ReportType().compare("Эталон", Qt::CaseInsensitive) == 0? "Да": "Нет", "", row_skale );
+//   }
+//   else
+//   {
+//       DrawRowLeft( text_font, Qt::black, Qt::red, "Аппарат для сравнения характеристик: ", "-", "", row_skale );
+//       DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Дата испытания сравниваемого аппарата"), "-", "", row_skale );
+//       DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Сравнение с эталоном"), "-", "", row_skale );
+//   }
+
+   DrawRowLeft( text_font, Qt::black, Qt::red, FillToSize("Класс чистоты жидкости (по ISO 4406)"), "________", "", row_skale );
+
+   DrawRowCenter( text_font, Qt::black, "", row_skale );
+
+   DrawRowLeft( text_font, Qt::black, Qt::red, "Испытания проводил: ", mUser, "", row_skale );
+   DrawRowLeft( text_font, Qt::black, Qt::red, "Дата проведения испытаний: ", mDate.toString("dd MMMM yyyy г. hh:mm"), "", row_skale );
+
+   return true;
 }
 
 bool Parameters::DrawResults(QPainter &painter, QRect &free_rect ) const
