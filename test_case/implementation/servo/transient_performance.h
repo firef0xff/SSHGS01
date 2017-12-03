@@ -26,6 +26,7 @@ public:
     typedef QVector<Data> Source;
 
     TransientPerformance();
+    ~TransientPerformance();
     bool Run();
     bool Success() const;
     QJsonObject Serialise() const;
@@ -40,7 +41,7 @@ private:
     Source Graph1;
     Source Graph2;
     Source Graph3;
-    mutable GrapfData* mGrapfs;
+    mutable std::unique_ptr<GrapfData> mGrapfs;
 };
 
 }//namespace servo

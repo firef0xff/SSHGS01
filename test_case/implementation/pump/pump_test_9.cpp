@@ -1,4 +1,4 @@
-#include "pump_test_4.h"
+#include "pump_test_9.h"
 #include <QJsonObject>
 #include "../test_params_pumps.h"
 
@@ -7,13 +7,13 @@ namespace test
 namespace pump
 {
 
-PumpTest4::PumpTest4():
-    test::pump::Test( "Расчет КПД", 43 ),
+PumpTest9::PumpTest9():
+    test::pump::Test( "Расход в дренаже", 48 ),
     mResult(false),
-    mData(0.0)
+    mExp(0.0)
 {}
 
-bool PumpTest4::Run()
+bool PumpTest9::Run()
 {
     Start();
 //    Wait( mBits.op32_ok, mBits.op32_end );
@@ -25,27 +25,27 @@ bool PumpTest4::Run()
     return Success();
 }
 
-QJsonObject PumpTest4::Serialise() const
+QJsonObject PumpTest9::Serialise() const
 {
     QJsonObject obj = Test::Serialise();
     obj.insert("mResult",            mResult );
-    obj.insert("mData",              mData );
+    obj.insert("mExp",               mExp );
 
     return obj;
 }
-bool PumpTest4::Deserialize( QJsonObject const& obj )
+bool PumpTest9::Deserialize( QJsonObject const& obj )
 {
     mResult = obj.value("mResult").toBool();
-    mData = obj.value("mData").toDouble();
+    mExp = obj.value("mExp").toDouble();
     Test::Deserialize( obj );
     return true;
 }
 
-bool PumpTest4::Success() const
+bool PumpTest9::Success() const
 {
     return mResult;
 }
-bool PumpTest4::Draw(QPainter& painter, QRect &free_rect , const QString &) const
+bool PumpTest9::Draw(QPainter& painter, QRect &free_rect , const QString &) const
 {
    test::pump::Parameters *params = static_cast< test::pump::Parameters * >( CURRENT_PARAMS );
    if ( !params )
@@ -76,7 +76,7 @@ bool PumpTest4::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
    bool res = DrawLine( num, free_rect, header_font,
    [ this, &drw, &header_font ]( QRect const& rect )
    {
-      drw.DrawRowCenter( rect, header_font, Qt::black, "4."+mName );
+      drw.DrawRowCenter( rect, header_font, Qt::black, "9."+mName );
    }, 1.5 );
 
    res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
@@ -84,7 +84,12 @@ bool PumpTest4::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
    [ this, &drw, &text_font ]( QRect const& rect )
    {
       QRect r(rect.left() + 76, rect.top(), rect.width() - 76, rect.height() );
-      drw.DrawRowLeft( r, text_font, Qt::black, "Данное испытание предназначено для определения КПД насоса." );
+      drw.DrawRowLeft( r, text_font, Qt::black, "Цель данного испытания - определение расхода в дренажном канале при" );
+   }, 1.5 );
+   res = DrawLine( num, free_rect, result_font,
+   [ this, &drw, &text_font ]( QRect const& rect )
+   {
+     drw.DrawRowLeft( rect, text_font, Qt::black, "при номинальном давлении и расходе, и сравнение его с исходным значением." );
    }, 1.5 );
 
    res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
@@ -95,26 +100,20 @@ bool PumpTest4::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
      drw.DrawRowLeft( rect, result_font, Qt::black, "Параметры во время испытаний:" );
    }, 1.5 );
 
-
    res = DrawLine( num, free_rect, text_font,
-   [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
+   [ this, &drw, &FillToSize, &text_font, &params ]( QRect const& rect )
    {
-     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении тспытаний, бар"), Qt::red, "N/A" );
+     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Частота вращения номинальная, об/мин"), Qt::red, test::ToString( params->FrequencyNom() ) );
    }, 1.5 );
    res = DrawLine( num, free_rect, text_font,
-   [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
+   [ this, &drw, &FillToSize, &text_font, &params ]( QRect const& rect )
    {
-     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Подача насоса при проведении испытания, л/мин"), Qt::red, "N/A" );
+     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Подача насоса, л/мин"), Qt::red, "N/A" );
    }, 1.5 );
    res = DrawLine( num, free_rect, text_font,
-   [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
+   [ this, &drw, &FillToSize, &text_font, &params ]( QRect const& rect )
    {
-     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Крутящий момент при проведении испытания, Нм"), Qt::red, "N/A" );
-   }, 1.5 );
-   res = DrawLine( num, free_rect, text_font,
-   [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
-   {
-     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Частота вращения при проведении испытания, об/мин"), Qt::red, "N/A" );
+     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Рабочее давление, бар"), Qt::red, "N/A" );
    }, 1.5 );
    res = DrawLine( num, free_rect, text_font,
    [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
@@ -136,7 +135,9 @@ bool PumpTest4::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
    res = DrawLine( num, free_rect, text_font,
    [ this, &drw, &text_font, params ]( QRect const& rect )
    {
-      drw.DrawRowLeft( rect, text_font,   Qt::black, "КПД насоса, %: ",   Qt::red, test::ToString(mData));
+      drw.DrawRowLeft( rect, text_font,   Qt::black, "Дренаж ",
+                                          Qt::red, Success()? QString(" соответсвует ") : QString(" не соответсвует "),
+                                          Qt::black, "заявленным данным");
    }, 1.5 );
 
    if ( res )

@@ -73,12 +73,27 @@ class DrawHelper
 public:
     DrawHelper( QPainter& , QRect& );
     void DrawRowCenter( QRect const& place, QFont const& font, QColor const& color, QString const& text );
+
+    void DrawRowLeft( QRect const& place,
+                      QFont const& font,
+                      QColor const& color1,
+                      QString const& label);
+
     void DrawRowLeft( QRect const& place,
                       QFont const& font,
                       QColor const& color1,
                       QString const& label,
-                      QColor const& color2 = Qt::black,
-                      QString const& value = "" );
+                      QColor const& color2,
+                      QString const& value);
+
+    void DrawRowLeft( QRect const& place,
+                      QFont const& font,
+                      QColor const& color1,
+                      QString const& label,
+                      QColor const& color2,
+                      QString const& value,
+                      QColor const& color3,
+                      QString const& value3);
 private:
     QPainter& painter;
     QRect &free_rect;

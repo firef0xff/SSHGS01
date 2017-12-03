@@ -23,6 +23,12 @@
 #include "implementation/pump/pump_test_2.h"
 #include "implementation/pump/pump_test_3.h"
 #include "implementation/pump/pump_test_4.h"
+#include "implementation/pump/pump_test_5.h"
+#include "implementation/pump/pump_test_6.h"
+#include "implementation/pump/pump_test_7.h"
+#include "implementation/pump/pump_test_8.h"
+#include "implementation/pump/pump_test_9.h"
+#include "implementation/pump/pump_test_10.h"
 
 namespace fake
 {
@@ -168,6 +174,12 @@ static PumpTest1 t1;
 static PumpTest2 t2;
 static PumpTest3 t3;
 static PumpTest4 t4;
+static PumpTest5 t5;
+static PumpTest6 t6;
+static PumpTest7 t7;
+static PumpTest8 t8;
+static PumpTest9 t9;
+static PumpTest10 t10;
 }//namespace test_case
 }//namespace pump
 

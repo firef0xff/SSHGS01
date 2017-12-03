@@ -35,7 +35,7 @@ bool PumpTest3::Run()
 
 QJsonObject PumpTest3::Serialise() const
 {
-    QJsonObject obj;
+    QJsonObject obj = Test::Serialise();
     obj.insert("mResult",            mResult );
 
     return obj;
@@ -43,6 +43,7 @@ QJsonObject PumpTest3::Serialise() const
 bool PumpTest3::Deserialize( QJsonObject const& obj )
 {
     mResult = obj.value("mResult").toBool();
+    Test::Deserialize( obj );
     return true;
 }
 
@@ -153,7 +154,7 @@ void PumpTest3::Question()
 {
     QMessageBox msg;
     msg.setWindowTitle( "Визуальный контроль" );
-    msg.setText( "Обнаружена ли течь или потение наружных\nповерхностей на испытуемом гидронасоса" );
+    msg.setText( "Обнаружена ли течь или потение наружных\nповерхностей на испытуемом гидронасосе" );
     QPushButton *no = msg.addButton("Нет", QMessageBox::NoRole );
     QPushButton *yes = msg.addButton("Да", QMessageBox::YesRole );
     msg.setModal( true );

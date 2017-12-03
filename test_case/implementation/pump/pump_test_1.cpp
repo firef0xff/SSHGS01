@@ -26,7 +26,7 @@ bool PumpTest1::Run()
 
 QJsonObject PumpTest1::Serialise() const
 {
-    QJsonObject obj;
+    QJsonObject obj = Test::Serialise();
     obj.insert("mResult",            mResult );
 
     return obj;
@@ -34,6 +34,7 @@ QJsonObject PumpTest1::Serialise() const
 bool PumpTest1::Deserialize( QJsonObject const& obj )
 {
     mResult = obj.value("mResult").toBool();
+    Test::Deserialize( obj );
     return true;
 }
 

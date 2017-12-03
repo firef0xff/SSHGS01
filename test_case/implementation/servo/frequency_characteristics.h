@@ -22,6 +22,7 @@ public:
     typedef std::map<const double , DataSet> Source;
 
     FrequencyCharacteristics();
+    ~FrequencyCharacteristics();
     bool Run();
 
     bool Success() const;
@@ -41,9 +42,9 @@ private:
     double Ampl1;
     double Ampl2;
     double Ampl3;
-    mutable GrapfData* mGrapfs1;
-    mutable GrapfData* mGrapfs2;
-    mutable GrapfData* mGrapfs3;
+    mutable std::unique_ptr<GrapfData> mGrapfs1;
+    mutable std::unique_ptr<GrapfData> mGrapfs2;
+    mutable std::unique_ptr<GrapfData> mGrapfs3;
 };
 
 }//namespace servo

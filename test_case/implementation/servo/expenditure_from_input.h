@@ -1,6 +1,7 @@
 #pragma once
 #include "../test_base.h"
 #include <QVector>
+#include <memory>
 
 namespace test
 {
@@ -27,6 +28,7 @@ public:
 
 
     ExpeditureFromInput();
+    ~ExpeditureFromInput();
     bool Run();
     bool Success() const;
     QJsonObject Serialise() const;
@@ -48,7 +50,7 @@ private:
     DataSet GraphB1;
     DataSet GraphB2;
 
-    mutable GrapfData* mGrapfs;
+    mutable std::unique_ptr<GrapfData> mGrapfs;
     int level;
 };
 

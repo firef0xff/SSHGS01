@@ -168,7 +168,8 @@ public:
 TransientPerformance::TransientPerformance():
     test::servo::Test( "Проверка переходных характеристик", 15, 25 )
 {}
-
+TransientPerformance::~TransientPerformance()
+{}
 bool TransientPerformance::Run()
 {
     Graph1.clear();
@@ -245,11 +246,7 @@ bool TransientPerformance::Deserialize( QJsonObject const& obj )
 void TransientPerformance::ResetDrawLine()
 {
     Test::ResetDrawLine();
-    if ( mGrapfs )
-    {
-        delete mGrapfs;
-        mGrapfs = nullptr;
-    }
+    mGrapfs.reset();
 }
 bool TransientPerformance::Draw(QPainter& painter, QRect &free_rect , const QString &compare_width) const
 {
@@ -361,7 +358,7 @@ bool TransientPerformance::Draw(QPainter& painter, QRect &free_rect , const QStr
 
     QFontMetrics metrix( text_font );
     if (!mGrapfs)
-        mGrapfs = new GrapfData( this, compare_width );
+        mGrapfs.reset( new GrapfData( this, compare_width ) );
 
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &text_font, &DrawRowCenter, &metrix, &params ]( QRect const& rect )

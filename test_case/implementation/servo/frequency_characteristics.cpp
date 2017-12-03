@@ -1225,6 +1225,9 @@ FrequencyCharacteristics::FrequencyCharacteristics():
 #endif
 }
 
+FrequencyCharacteristics::~FrequencyCharacteristics()
+{}
+
 bool FrequencyCharacteristics::Run()
 {
     mSource1.clear();
@@ -1351,21 +1354,9 @@ bool FrequencyCharacteristics::Deserialize( QJsonObject const& obj )
 void FrequencyCharacteristics::ResetDrawLine()
 {
     Test::ResetDrawLine();
-    if ( mGrapfs1 )
-    {
-        delete mGrapfs1;
-        mGrapfs1 = nullptr;
-    }
-    if ( mGrapfs2 )
-    {
-        delete mGrapfs2;
-        mGrapfs2 = nullptr;
-    }
-    if ( mGrapfs3 )
-    {
-        delete mGrapfs3;
-        mGrapfs3 = nullptr;
-    }
+    mGrapfs1.reset();
+    mGrapfs2.reset();
+    mGrapfs3.reset();
 }
 bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const QString &compare_width ) const
 {
@@ -1481,11 +1472,11 @@ bool FrequencyCharacteristics::Draw( QPainter& painter, QRect &free_rect, const 
 
     QFontMetrics metrix( text_font );
     if (!mGrapfs1)
-        mGrapfs1 = new GrapfData( this, 1, compare_width );
+        mGrapfs1.reset( new GrapfData( this, 1, compare_width ) );
     if (!mGrapfs2)
-        mGrapfs2 = new GrapfData( this, 2, compare_width );
+        mGrapfs2.reset( new GrapfData( this, 2, compare_width ) );
     if (!mGrapfs3)
-        mGrapfs3 = new GrapfData( this, 3, compare_width );
+        mGrapfs3.reset( new GrapfData( this, 3, compare_width ) );
 
 #ifdef DEBUG
     auto DEBUG_DATA = [&]( Source const& s)

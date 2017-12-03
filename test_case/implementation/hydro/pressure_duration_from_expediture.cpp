@@ -164,6 +164,8 @@ public:
 PressureDurationFromExpenditure::PressureDurationFromExpenditure():
     test::hydro::Test( "Проверка перепада давления и зависимость\nперепада давления от расхода", 4 )
 {}
+PressureDurationFromExpenditure::~PressureDurationFromExpenditure()
+{}
 
 bool PressureDurationFromExpenditure::Run()
 {
@@ -236,11 +238,7 @@ bool PressureDurationFromExpenditure::Deserialize( QJsonObject const& obj )
 void PressureDurationFromExpenditure::ResetDrawLine()
 {
     Test::ResetDrawLine();
-    if ( mGrapfs )
-    {
-        delete mGrapfs;
-        mGrapfs = nullptr;
-    }
+    mGrapfs.reset();
 }
 bool PressureDurationFromExpenditure::Draw(QPainter& painter, QRect &free_rect , const QString &compare_width) const
 {
@@ -418,7 +416,7 @@ bool PressureDurationFromExpenditure::Draw(QPainter& painter, QRect &free_rect ,
     QFontMetrics metrix( text_font );
 
     if (!mGrapfs)
-        mGrapfs = new GrapfData( this, compare_width );
+        mGrapfs.reset( new GrapfData( this, compare_width ) );
 
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &text_font, &params, &DrawRowCenter, &metrix ]( QRect const& rect )

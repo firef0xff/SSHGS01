@@ -129,6 +129,21 @@ void DrawHelper::DrawRowCenter( QRect const& place, QFont const& font, QColor co
     painter.drawText( start_point, text );
     painter.restore();
 }
+
+void DrawHelper::DrawRowLeft( QRect const& place,
+                  QFont const& font,
+                  QColor const& color1,
+                  QString const& label)
+{
+    painter.save();
+    QFontMetrics metrix( font );
+    QPoint start_point( place.left() , place.center().y()+metrix.height()/2 );
+    painter.setFont( font );
+    painter.setPen( color1 );
+    painter.drawText( start_point, label );
+    painter.restore();
+}
+
 void DrawHelper::DrawRowLeft( QRect const& place,
                   QFont const& font,
                   QColor const& color1,
@@ -148,4 +163,27 @@ void DrawHelper::DrawRowLeft( QRect const& place,
     painter.restore();
 }
 
+void DrawHelper::DrawRowLeft( QRect const& place,
+                              QFont const& font,
+                              QColor const& color1,
+                              QString const& label,
+                              QColor const& color2,
+                              QString const& value,
+                              QColor const& color3,
+                              QString const& value3 )
+{
+    painter.save();
+    QFontMetrics metrix( font );
+    QPoint start_point( place.left() , place.center().y()+metrix.height()/2 );
+    QPoint start_point2( place.left() + metrix.width(label), place.center().y() +metrix.height()/2);
+    QPoint start_point3( place.left() + metrix.width(label)+ metrix.width(value), place.center().y() +metrix.height()/2);
+    painter.setFont( font );
+    painter.setPen( color1 );
+    painter.drawText( start_point, label );
+    painter.setPen( color2 );
+    painter.drawText( start_point2, value );
+    painter.setPen( color3 );
+    painter.drawText( start_point3, value3 );
+    painter.restore();
+}
 }//namespace test

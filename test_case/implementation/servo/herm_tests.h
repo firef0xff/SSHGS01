@@ -2,6 +2,7 @@
 #include "../test_base.h"
 #include <QVector>
 #include <condition_variable>
+#include <memory>
 
 namespace test
 {
@@ -13,6 +14,7 @@ class OutsideHermTest :public test::servo::Test
 {
 public:
     OutsideHermTest();
+    ~OutsideHermTest();
     bool Run();
 
     QJsonObject Serialise() const;
@@ -48,6 +50,7 @@ public:
     typedef std::vector<Data> DataSet;
 
     InsideHermTest();
+    ~InsideHermTest();
     bool Run();
     bool Success() const;
     QJsonObject Serialise() const;
@@ -65,7 +68,7 @@ private:
 
     DataSet GraphA;
     DataSet GraphB;
-    mutable GrapfData* mGrapfs;
+    mutable std::unique_ptr<GrapfData> mGrapfs;
 };
 
 }//namespace servo

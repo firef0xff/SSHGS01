@@ -1,6 +1,7 @@
 #pragma once
 #include "../test_base.h"
 #include <QVector>
+#include <memory>
 
 namespace test
 {
@@ -25,6 +26,7 @@ public:
     };
     typedef QVector<Data> DataSet;
     VACharacteristic();
+    ~VACharacteristic();
     bool Run();
     bool Success() const;
     QJsonObject Serialise() const;
@@ -37,7 +39,7 @@ protected:
 private:
     friend class GrapfData;
     DataSet Graph;
-    mutable GrapfData* mGrapfs;
+    mutable std::unique_ptr<GrapfData> mGrapfs;
     /// вероятно тоже график
     /// (хочу просто массива с контроллера для рисования )
 };

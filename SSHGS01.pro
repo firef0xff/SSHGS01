@@ -100,6 +100,12 @@ SOURCES += main.cpp\
     pump_title_info.cpp \
     pump_test_info.cpp \
     functions.cpp \
+    test_case/implementation/pump/pump_test_5.cpp \
+    test_case/implementation/pump/pump_test_6.cpp \
+    test_case/implementation/pump/pump_test_7.cpp \
+    test_case/implementation/pump/pump_test_8.cpp \
+    test_case/implementation/pump/pump_test_9.cpp \
+    test_case/implementation/pump/pump_test_10.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -189,6 +195,12 @@ HEADERS  += mainwindow.h \
     pump_title_info.h \
     pump_test_info.h \
     functions.h \
+    test_case/implementation/pump/pump_test_5.h \
+    test_case/implementation/pump/pump_test_6.h \
+    test_case/implementation/pump/pump_test_7.h \
+    test_case/implementation/pump/pump_test_8.h \
+    test_case/implementation/pump/pump_test_9.h \
+    test_case/implementation/pump/pump_test_10.h
 
 
 FORMS    += mainwindow.ui \

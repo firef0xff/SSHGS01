@@ -59,6 +59,7 @@ public:
     typedef QVector<Data> DataSet;
 
     ExpeditureFromPressureDuration();
+    ~ExpeditureFromPressureDuration();
     bool Run();
     bool Success() const;
     QJsonObject Serialise() const;
@@ -75,7 +76,7 @@ private:
     DataSet mData;
     mutable int PrintedRows = 0;
     mutable int PrintedPage = 0;
-    mutable GrapfData* mGrapfs;
+    mutable std::unique_ptr<GrapfData> mGrapfs;
 };
 
 }//namespace servo

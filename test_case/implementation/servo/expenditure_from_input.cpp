@@ -357,6 +357,9 @@ ExpeditureFromInput::ExpeditureFromInput():
     test::servo::Test( "Зависимость расхода «к потребителю» от входного тока без нагрузки", 12, 22 )
 {}
 
+ExpeditureFromInput::~ExpeditureFromInput()
+{}
+
 bool ExpeditureFromInput::Run()
 {
     level = 0;
@@ -478,12 +481,8 @@ bool ExpeditureFromInput::Deserialize( QJsonObject const& obj )
 }
 void ExpeditureFromInput::ResetDrawLine()
 {
-    Test::ResetDrawLine();
-    if ( mGrapfs )
-    {
-        delete mGrapfs;
-        mGrapfs = nullptr;
-    }
+   Test::ResetDrawLine();
+   mGrapfs.reset();
 }
 bool ExpeditureFromInput::Draw(QPainter& painter, QRect &free_rect , const QString &compare_width) const
 {
@@ -603,7 +602,7 @@ bool ExpeditureFromInput::Draw(QPainter& painter, QRect &free_rect , const QStri
 
     QFontMetrics metrix( text_font );
     if (!mGrapfs)
-        mGrapfs = new GrapfData( this, compare_width );
+        mGrapfs.reset( new GrapfData( this, compare_width ) );
 
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &text_font, &DrawRowCenter, &metrix ]( QRect const& rect )

@@ -1,7 +1,7 @@
 #pragma once
 #include "../test_base.h"
 #include <QVector>
-
+#include <memory>
 
 namespace test
 {
@@ -31,6 +31,7 @@ public:
     typedef QVector< Channels > DataSet;
 
     PressureDurationFromExpenditure();
+    ~PressureDurationFromExpenditure();
     bool Run();
 
     QJsonObject Serialise() const;
@@ -43,7 +44,7 @@ public:
 private:
     friend class GrapfData;
     DataSet mData;
-    mutable GrapfData* mGrapfs;
+    mutable std::unique_ptr<GrapfData> mGrapfs;
 
     //Зависимость перепада давления от расхода
     /// |--------------------------------------------|--------------------------------------------|

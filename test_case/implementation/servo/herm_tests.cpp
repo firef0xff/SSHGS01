@@ -18,6 +18,8 @@ OutsideHermTest::OutsideHermTest():
     test::servo::Test( "Проверка аппарата пробным давлением", 10, 20 ),
     LeakFounded(false)
 {}
+OutsideHermTest::~OutsideHermTest()
+{}
 
 bool OutsideHermTest::Run()
 {
@@ -296,6 +298,8 @@ public:
 InsideHermTest::InsideHermTest():
     test::servo::Test( "Проверка внутренней герметичности", 11, 21 )
 {}
+InsideHermTest::~InsideHermTest()
+{}
 
 bool InsideHermTest::Run()
 {
@@ -365,11 +369,7 @@ bool InsideHermTest::Deserialize( QJsonObject const& obj )
 void InsideHermTest::ResetDrawLine()
 {
     Test::ResetDrawLine();
-    if ( mGrapfs )
-    {
-        delete mGrapfs;
-        mGrapfs = nullptr;
-    }
+    mGrapfs.reset();
 }
 bool InsideHermTest::Draw(QPainter& painter, QRect &free_rect , const QString &compare_width) const
 {
@@ -479,7 +479,7 @@ bool InsideHermTest::Draw(QPainter& painter, QRect &free_rect , const QString &c
 
     QFontMetrics metrix( text_font );
     if (!mGrapfs)
-        mGrapfs = new GrapfData( this, compare_width );
+        mGrapfs.reset( new GrapfData( this, compare_width ) );
 
     res = DrawLine( num, free_rect, text_font,
     [ this, &painter, &text_font, &DrawRowCenter, &metrix, &compare_width ]( QRect const& rect )
