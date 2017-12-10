@@ -345,7 +345,7 @@ bool ExpeditureFromPressureDuration::Draw(QPainter& painter, QRect &free_rect , 
              "</style>"
             "</head>"
             "<body>"
-            "<table width='100%' border='1.5' cellspacing='-0.5' cellpadding='-0.5'>"
+            "<table width='100%' border='1.5' cellspacing='-0.5' cellpadding='2'>"
                "<tr>"
                    "<th rowspan='2'>Расход<br>л/мин</th>"
                    "<th colspan='3'>Перепад P-->А</th>"

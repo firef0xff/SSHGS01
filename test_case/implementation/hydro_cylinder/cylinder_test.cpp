@@ -149,7 +149,7 @@ bool FunctionalTest::Draw(QPainter& painter, QRect &free_rect , const QString &)
              "</style>"
             "</head>"
             "<body>"
-            "<table width='100%' border='1.5' cellspacing='-0.5' cellpadding='-0.5'>"
+            "<table width='100%' border='1.5' cellspacing='-0.5' cellpadding='2'>"
                "<tr>"
                    "<th> Номер </th>"
                    "<th></th>"

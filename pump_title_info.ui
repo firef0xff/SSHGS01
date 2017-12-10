@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>618</width>
+    <width>626</width>
     <height>522</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Параметры насоса</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>

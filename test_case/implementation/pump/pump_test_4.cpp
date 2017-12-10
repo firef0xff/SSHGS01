@@ -45,6 +45,14 @@ bool PumpTest4::Success() const
 {
     return mResult;
 }
+QString PumpTest4::RepRes()
+{
+   return test::ToString(mData)+"%";
+}
+QString PumpTest4::RepName()
+{
+   return "КПД насоса";
+}
 bool PumpTest4::Draw(QPainter& painter, QRect &free_rect , const QString &) const
 {
    test::pump::Parameters *params = static_cast< test::pump::Parameters * >( CURRENT_PARAMS );
@@ -96,10 +104,13 @@ bool PumpTest4::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
    }, 1.5 );
 
 
+   QString press = test::ToString( params->PressureNom1() );
+   if ( params->SectionsCount() > 1 )
+      press += ", " + test::ToString( params->PressureNom2() );
    res = DrawLine( num, free_rect, text_font,
-   [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
+   [ this, &drw, &FillToSize, &text_font, &press ]( QRect const& rect )
    {
-     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении тспытаний, бар"), Qt::red, "N/A" );
+     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении тспытаний, бар"), Qt::red, press );
    }, 1.5 );
    res = DrawLine( num, free_rect, text_font,
    [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
@@ -124,7 +135,7 @@ bool PumpTest4::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
    res = DrawLine( num, free_rect, text_font,
    [ this, &drw, &FillToSize, &text_font, &params ]( QRect const& rect )
    {
-     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, сек"), Qt::red, "N/A" );
+     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, сек"), Qt::red, test::ToString(TestingTime) );
    }, 1.5 );
 
    res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
@@ -148,3 +159,6 @@ bool PumpTest4::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
 }//namespace pump
 }//namespace test
 
+//В случае, не возможности выйти на заданное давление, по причине превышения допустимой мощности стенда,  уменьшаем давление до значения, обусловленного мощностью стенда. При этом сохраняя необходимую частоту вращения. И в отчете указать, что испытания проводились не при номинальном давлении (указать при каком давлении).
+//В случае не возможности выйти на заданную частоту вращения вала насоса, принять обороты допустимые для данного стенда (от 200 до 2900 об/мин).
+//И об этом сообщается оператору.

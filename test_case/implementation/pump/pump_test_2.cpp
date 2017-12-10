@@ -23,7 +23,14 @@ bool PumpTest2::Run()
 
     return Success();
 }
-
+QString PumpTest2::RepRes()
+{
+   return Success()? QString(" функционирует ") : QString(" не работает ");
+}
+QString PumpTest2::RepName()
+{
+   return "Испытание функционирования при максимальном\nзначении давления";
+}
 QJsonObject PumpTest2::Serialise() const
 {
     QJsonObject obj = Test::Serialise();
@@ -99,9 +106,15 @@ bool PumpTest2::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
      drw.DrawRowLeft( rect, result_font, Qt::black, "Параметры во время испытаний:" );
    }, 1.5 );
 
-   QString press = test::ToString(params->PressureMax1());
+   auto Pressure = []( double n, double m )
+   {
+      double r = n*1.25;
+      return r <= m ? r : m;
+   };
+
+   QString press = test::ToString( Pressure( params->PressureNom1(), params->PressureMax1() ) );
    if ( params->SectionsCount() > 1 )
-      press += ", " + test::ToString(params->PressureMax2());
+      press += ", " + test::ToString( Pressure( params->PressureNom2(), params->PressureMax2() ) );
    res = DrawLine( num, free_rect, text_font,
    [ this, &drw, &FillToSize, &text_font,&params, &press ]( QRect const& rect )
    {
@@ -115,7 +128,7 @@ bool PumpTest2::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
    res = DrawLine( num, free_rect, text_font,
    [ this, &drw, &FillToSize, &text_font, &params ]( QRect const& rect )
    {
-     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, мин"), Qt::red, test::ToString(params->StrongTestTime()) );
+     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, мин"), Qt::red, test::ToString(TestingTime) );
    }, 1.5 );
 
    res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
@@ -128,7 +141,7 @@ bool PumpTest2::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
    [ this, &drw, &text_font, params ]( QRect const& rect )
    {
       drw.DrawRowLeft( rect, text_font,   Qt::black, "Гидронасос ",
-                                     Qt::red, Success()? QString(" функционирует ") : QString(" не работает "));
+                                     Qt::red, RepRes());
    }, 1.5 );
 
    if ( res )
@@ -139,3 +152,6 @@ bool PumpTest2::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
 }//namespace pump
 }//namespace test
 
+//В случае не возможности выйти на заданное давление по причине превышения допустимой мощности стенда.  Уменьшаем обороты насоса до значения, обусловленного мощностью стенда, при котором возможно создать необходимое давление.
+//В случае не возможности выйти на заданную частоту вращения вала насоса, принять обороты допустимые для данного стенда (от 200 до 2900 об/мин).
+//И об этом сообщается оператору.

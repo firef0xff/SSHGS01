@@ -112,6 +112,19 @@ bool Test::DrawLine ( uint32_t& num, QRect& source, QFont font, DrawLineHandler 
     return res;
 }
 
+QString Test::RepName()
+{
+   return Name();
+}
+QString Test::RepRes()
+{
+   return "";
+}
+
+bool Test::RepSkeep()
+{
+   return false;
+}
 
 DrawHelper::DrawHelper( QPainter& p, QRect& r):
     painter(p),

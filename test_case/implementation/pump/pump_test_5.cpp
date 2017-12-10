@@ -45,6 +45,14 @@ bool PumpTest5::Success() const
 {
     return mResult;
 }
+QString PumpTest5::RepRes()
+{
+   return test::ToString(mData)+" см³/об";
+}
+QString PumpTest5::RepName()
+{
+   return "Рабочий объем насоса";
+}
 bool PumpTest5::Draw(QPainter& painter, QRect &free_rect , const QString &) const
 {
    test::pump::Parameters *params = static_cast< test::pump::Parameters * >( CURRENT_PARAMS );
@@ -108,7 +116,7 @@ bool PumpTest5::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
    res = DrawLine( num, free_rect, text_font,
    [ this, &drw, &FillToSize, &text_font, &params ]( QRect const& rect )
    {
-     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, сек"), Qt::red, "N/A" );
+     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, сек"), Qt::red, test::ToString(TestingTime) );
    }, 1.5 );
 
    res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
@@ -132,3 +140,5 @@ bool PumpTest5::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
 }//namespace pump
 }//namespace test
 
+//В случае не возможности выйти на заданную частоту вращения вала насоса, принять обороты допустимые для данного стенда (от 200 до 2900 об/мин). И в расчетах этого испытания принимать их как номинальные.
+//И об этом сообщается оператору.

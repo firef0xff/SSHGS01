@@ -37,6 +37,11 @@ public:
 
     virtual bool Success() const;
 
+    virtual QString RepName();
+    virtual QString RepRes();
+
+    virtual bool RepSkeep();
+
     bool Disabled() const;
     void Disabled( bool );
 

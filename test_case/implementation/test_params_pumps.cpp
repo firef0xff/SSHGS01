@@ -3,6 +3,8 @@
 #include <mutex>
 #include "../tests.h"
 #include "../../cpu/cpu_memory.h"
+#include <QTextDocument>
+#include <QAbstractTextDocumentLayout>
 
 namespace test
 {
@@ -392,9 +394,124 @@ bool Parameters::Draw(QPainter &painter, QRect &free_rect, QString const& compar
 
 bool Parameters::DrawResults(QPainter &painter, QRect &free_rect ) const
 {
-   //TODO
+    QFont title_font = painter.font();
+    title_font.setFamily("Arial");
+    title_font.setPointSize(14);
+
+    QFont text_font = title_font;
+    text_font.setPointSize( 12 );
+
+    auto DrawRowCenter = [ &painter, &free_rect ]( QFont font, QColor color, QString text, double spase = 1 )
+    {
+        painter.save();
+        QFontMetrics metrix( font );
+        QRect place;
+        AllocatePlace( place, metrix.height()*spase ,free_rect );
+        QPoint start_point( place.center().x() - metrix.width( text ) / 2, place.center().y() +metrix.height()/2);
+        painter.setFont( font );
+        painter.setPen( color );
+        painter.drawText( start_point, text );
+        painter.restore();
+    };
+    auto DrawRowCenter2 = [ &painter, &free_rect ]( QFont font, QColor color, QString text, QColor color2, QString text2, double spase = 1 )
+    {
+        painter.save();
+        QFontMetrics metrix( font );
+        QRect place;
+        AllocatePlace( place, metrix.height()*spase ,free_rect );
+        QPoint start_point( place.center().x() - ( metrix.width( text ) + metrix.width( text2 ) ) / 2, place.center().y() +metrix.height()/2);
+        QPoint start_point2( start_point.x() + metrix.width(text), start_point.y() );
+        painter.setFont( font );
+        painter.setPen( color );
+        painter.drawText( start_point, text );
+        painter.setPen( color2 );
+        painter.drawText( start_point2, text2 );
+        painter.restore();
+    };
+
+    auto DrawRowLeft = [ &painter, &free_rect ]( QFont font, QColor color1, QString label, double spase = 1 )
+    {
+        painter.save();
+        QFontMetrics metrix( font );
+        QRect place;
+        AllocatePlace( place, metrix.height()*spase, free_rect );
+        QPoint start_point( place.left() , place.center().y()+metrix.height()/2 );
+        painter.setFont( font );
+        painter.setPen( color1 );
+        painter.drawText( start_point, label );
+        painter.restore();
+    };
+
+    DrawRowCenter( title_font, Qt::black, "Результаты испытаний", 1 );
+    DrawRowCenter2( title_font, Qt::black, "насоса ", Qt::red, mModel, 2 );
+
+    QString header = "<html>"
+            "<head>"
+              "<meta charset='utf-8'>"
+              "<style type='text/css'>"
+                   "td { text-align: center;}"
+                   "th { font-weight: normal; padding: 2px;}"
+                   "table {border-collapse: collapse; border-style: solid; vertical-align:middle;}"
+             "</style>"
+            "</head>"
+            "<body>"
+            "<table width='100%' border='1.5' cellspacing='-0.5' cellpadding='10'>"
+               "<tr>"
+                   "<th> Номер </th>"
+                   "<th> Испытания </th>"
+                   "<th> Работоспособность </th>"
+               "</tr>";
+
+    QString footer = "</table>"
+            "</body>"
+            "</html>";
+
+    QString row;
+    for ( auto it =  mTestCase.begin(), end = mTestCase.end(); it != end; ++it )
+    {
+        Test* ptr = *it;
+        if (ptr->RepSkeep())
+           continue;
+
+        int num = ptr->Number();
+        QString test_str = ptr->RepName();
+        QString res_str = ptr->RepRes();
+
+        row +=  "<tr height='100'>"
+                   "<td >"+test::ToString( num )+"</td>"
+                   "<td style='text-align: left;'>"+ test_str.replace("\n","<br>") +"</td>"
+                   "<td>"+ res_str.replace("\n","<br>") +"</td>"
+                "</tr>";
+    }
+
+    QTextDocument doc;
+    doc.setUndoRedoEnabled( false );
+    doc.setTextWidth( free_rect.width() );
+    doc.setUseDesignMetrics( true );
+    doc.setDefaultTextOption ( QTextOption (Qt::AlignHCenter )  );
+    doc.setHtml( header + row + footer );
+    auto h = doc.documentLayout()->documentSize().height();
+
+    QRect place;
+    AllocatePlace( place, h ,free_rect );
+    QRectF r( 0, 0, place.width(), place.height() );
+    painter.save();
+    painter.translate( place.topLeft() );
+    doc.drawContents( &painter, r);
+    painter.restore();
+
+    DrawRowLeft( text_font, Qt::black, "ИТОГ:", 3 );
+    DrawRowLeft( text_font, Qt::black, "Гидронасос "+ mModel, 1.5 );
+    DrawRowLeft( text_font, Qt::black, "Идентификационный номер: "+ mSerianNo, 1.5 );
+
+    DrawRowLeft( text_font, Qt::black, "__________________________ к эксплуатации.", 5 );
+
+    DrawRowLeft( text_font, Qt::black, "__________________________                /__________________________/", 5 );
+
+    DrawRowLeft( text_font, Qt::black, mDate.toString("dd MMMM yyyy г.") );
     return true;
 }
+
 
 QString Parameters::ModelId() const
 {

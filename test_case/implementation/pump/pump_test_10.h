@@ -32,6 +32,8 @@ public:
    bool Draw(QPainter &painter, QRect &free_rect, const QString & ) const;
 
    bool Success() const;
+   bool RepSkeep();
+
    void ResetDrawLine();
 
 private:

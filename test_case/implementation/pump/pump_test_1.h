@@ -18,6 +18,9 @@ public:
 
    bool Success() const;
 
+   QString RepRes();
+   QString RepName();
+
 private:
    bool mResult;
 };

@@ -45,6 +45,18 @@ bool PumpTest9::Success() const
 {
     return mResult;
 }
+QString PumpTest9::RepRes()
+{
+   QString res = "\n";
+   res += test::ToString( mExp );
+   res += " л/мин\n";
+   res += Success()? QString(" соответсвует ") : QString(" не соответсвует ");
+   return res;
+}
+QString PumpTest9::RepName()
+{
+   return "Расход в дренаже при номинальном режиме";
+}
 bool PumpTest9::Draw(QPainter& painter, QRect &free_rect , const QString &) const
 {
    test::pump::Parameters *params = static_cast< test::pump::Parameters * >( CURRENT_PARAMS );
@@ -110,10 +122,15 @@ bool PumpTest9::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
    {
      drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Подача насоса, л/мин"), Qt::red, "N/A" );
    }, 1.5 );
+
+   QString press = test::ToString( params->PressureNom1() );
+   if ( params->SectionsCount() > 1 )
+      press += ", " + test::ToString( params->PressureNom2() );
+
    res = DrawLine( num, free_rect, text_font,
-   [ this, &drw, &FillToSize, &text_font, &params ]( QRect const& rect )
+   [ this, &drw, &FillToSize, &text_font, &press ]( QRect const& rect )
    {
-     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Рабочее давление, бар"), Qt::red, "N/A" );
+     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Рабочее давление, бар"), Qt::red, press );
    }, 1.5 );
    res = DrawLine( num, free_rect, text_font,
    [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
@@ -123,7 +140,7 @@ bool PumpTest9::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
    res = DrawLine( num, free_rect, text_font,
    [ this, &drw, &FillToSize, &text_font, &params ]( QRect const& rect )
    {
-     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, сек"), Qt::red, "N/A" );
+     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, сек"), Qt::red, test::ToString(TestingTime) );
    }, 1.5 );
 
    res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
@@ -149,3 +166,6 @@ bool PumpTest9::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
 }//namespace pump
 }//namespace test
 
+//В случае не возможности выйти на заданное давление или частоту вращения по причине превышения допустимой мощности стенда.  То данное испытание проводить нельзя.
+//Если нет значения в водимых данных, то испытания не проводим.
+//И об этом сообщается оператору.

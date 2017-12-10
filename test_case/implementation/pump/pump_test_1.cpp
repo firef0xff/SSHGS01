@@ -42,6 +42,14 @@ bool PumpTest1::Success() const
 {
     return mResult;
 }
+QString PumpTest1::RepRes()
+{
+   return Success()? QString(" функционирует ") : QString(" не работает ");
+}
+QString PumpTest1::RepName()
+{
+   return "Испытание функционирования";
+}
 bool PumpTest1::Draw(QPainter& painter, QRect &free_rect , const QString &) const
 {
    test::pump::Parameters *params = static_cast< test::pump::Parameters * >( CURRENT_PARAMS );
@@ -129,7 +137,7 @@ bool PumpTest1::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
    res = DrawLine( num, free_rect, text_font,
    [ this, &drw, &FillToSize, &text_font, &params ]( QRect const& rect )
    {
-     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, сек"), Qt::red, test::ToString(params->FuncTestTime()) );
+     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, сек"), Qt::red, test::ToString(TestingTime) );
    }, 1.5 );
 
    res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
@@ -142,7 +150,7 @@ bool PumpTest1::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
    [ this, &drw, &text_font, params ]( QRect const& rect )
    {
       drw.DrawRowLeft( rect, text_font,   Qt::black, "Гидронасос ",
-                                     Qt::red, Success()? QString(" функционирует ") : QString(" не работает "));
+                                     Qt::red, RepRes());
    }, 1.5 );
 
    if ( res )
@@ -154,3 +162,9 @@ bool PumpTest1::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
 }//namespace pump
 }//namespace test
 
+/*
+ОГРАНИЧЕНИЯ:
+В случае, не возможности выйти на заданное давление, по причине превышения допустимой мощности стенда,  уменьшаем давление до значения, обусловленного мощностью стенда. При этом сохраняя необходимую частоту вращения.
+В случае не возможности выйти на заданную частоту вращения вала насоса, принять обороты допустимые для данного стенда (от 200 до 2900 об/мин).
+И об этом сообщается оператору.
+*/

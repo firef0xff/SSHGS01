@@ -318,6 +318,10 @@ bool PumpTest10::Success() const
 {
     return mResult;
 }
+bool PumpTest10::RepSkeep()
+{
+   return true;
+}
 void PumpTest10::ResetDrawLine()
 {
     Test::ResetDrawLine();
@@ -404,7 +408,7 @@ bool PumpTest10::Draw(QPainter& painter, QRect &free_rect , const QString &compa
    res = DrawLine( num, free_rect, text_font,
    [ this, &drw, &FillToSize, &text_font, &params ]( QRect const& rect )
    {
-     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, сек"), Qt::red, "N/A" );
+     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, сек"), Qt::red, test::ToString(TestingTime) );
    }, 1.5 );
 
    res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
@@ -477,8 +481,8 @@ bool PumpTest10::Draw(QPainter& painter, QRect &free_rect , const QString &compa
            }, 1, 480  );
    };
 
-   res = DrawGrafs( mGrapfs->mData[1], "Зависимость подачи насоса от давления", "Давление, бар", "Подача, л/мин");
    res = DrawGrafs( mGrapfs->mData[0], "Зависимость мощьности насоса от давления", "Давление, бар", "Мощность, кВт");
+   res = DrawGrafs( mGrapfs->mData[1], "Зависимость подачи насоса от давления", "Давление, бар", "Подача, л/мин");
    res = DrawGrafs( mGrapfs->mData[2], "Зависимость коэффициента подачи насоса от давления", "Давление, бар", "Коэффициент подачи");
    res = DrawGrafs( mGrapfs->mData[3], "Зависимость КПД насоса от давления", "Давление, бар", "КПД, %");
 

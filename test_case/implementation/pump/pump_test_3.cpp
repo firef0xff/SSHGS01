@@ -51,6 +51,14 @@ bool PumpTest3::Success() const
 {
     return mResult;
 }
+QString PumpTest3::RepRes()
+{
+   return Success()? QString(" не обнаружена ") : QString(" обнаружена ");
+}
+QString PumpTest3::RepName()
+{
+   return "Наружная герметичность";
+}
 bool PumpTest3::Draw(QPainter& painter, QRect &free_rect , const QString &) const
 {
    test::pump::Parameters *params = static_cast< test::pump::Parameters * >( CURRENT_PARAMS );
@@ -130,7 +138,7 @@ bool PumpTest3::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
    res = DrawLine( num, free_rect, text_font,
    [ this, &drw, &FillToSize, &text_font, &params ]( QRect const& rect )
    {
-     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, сек"), Qt::red, test::ToString(params->HermTestTime()) );
+     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, сек"), Qt::red, test::ToString(TestingTime) );
    }, 1.5 );
 
    res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
@@ -143,7 +151,7 @@ bool PumpTest3::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
    [ this, &drw, &text_font, params ]( QRect const& rect )
    {
       drw.DrawRowLeft( rect, text_font,   Qt::black, "Течь при испытании наружной герметичности ",
-                                     Qt::red, Success()? QString(" не обнаружена ") : QString(" обнаружена "));
+                                     Qt::red, RepRes());
    }, 1.5 );
 
    if ( res )
@@ -169,3 +177,6 @@ void PumpTest3::Question()
 }//namespace pump
 }//namespace test
 
+//В случае не возможности выйти на заданное давление по причине превышения допустимой мощности стенда.  Уменьшаем обороты насоса до значения, обусловленного мощностью стенда, при котором возможно создать необходимое давление.
+//В случае не возможности выйти на заданную частоту вращения вала насоса, принять обороты допустимые для данного стенда (от 200 до 2900 об/мин).
+//И об этом сообщается оператору.
