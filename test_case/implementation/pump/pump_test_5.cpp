@@ -45,11 +45,11 @@ bool PumpTest5::Success() const
 {
     return mResult;
 }
-QString PumpTest5::RepRes()
+QString PumpTest5::RepRes() const
 {
    return test::ToString(mData)+" см³/об";
 }
-QString PumpTest5::RepName()
+QString PumpTest5::RepName() const
 {
    return "Рабочий объем насоса";
 }
@@ -140,5 +140,6 @@ bool PumpTest5::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
 }//namespace pump
 }//namespace test
 
-//В случае не возможности выйти на заданную частоту вращения вала насоса, принять обороты допустимые для данного стенда (от 200 до 2900 об/мин). И в расчетах этого испытания принимать их как номинальные.
+//В случае не возможности выйти на заданную частоту вращения вала насоса, принять обороты допустимые для данного стенда (от 200 до 2900 об/мин).
+//И в расчетах этого испытания принимать их как номинальные.
 //И об этом сообщается оператору.

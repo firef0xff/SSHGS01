@@ -45,11 +45,11 @@ bool PumpTest7::Success() const
 {
     return mResult;
 }
-QString PumpTest7::RepRes()
+QString PumpTest7::RepRes() const
 {
    return test::ToString(mData)+" кВт";
 }
-QString PumpTest7::RepName()
+QString PumpTest7::RepName() const
 {
    return "Номинальная мощность насоса";
 }

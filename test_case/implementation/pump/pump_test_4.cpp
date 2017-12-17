@@ -45,11 +45,11 @@ bool PumpTest4::Success() const
 {
     return mResult;
 }
-QString PumpTest4::RepRes()
+QString PumpTest4::RepRes() const
 {
    return test::ToString(mData)+"%";
 }
-QString PumpTest4::RepName()
+QString PumpTest4::RepName() const
 {
    return "КПД насоса";
 }
@@ -110,7 +110,7 @@ bool PumpTest4::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
    res = DrawLine( num, free_rect, text_font,
    [ this, &drw, &FillToSize, &text_font, &press ]( QRect const& rect )
    {
-     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении тспытаний, бар"), Qt::red, press );
+     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении испытаний, бар"), Qt::red, press );
    }, 1.5 );
    res = DrawLine( num, free_rect, text_font,
    [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
@@ -159,6 +159,8 @@ bool PumpTest4::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
 }//namespace pump
 }//namespace test
 
-//В случае, не возможности выйти на заданное давление, по причине превышения допустимой мощности стенда,  уменьшаем давление до значения, обусловленного мощностью стенда. При этом сохраняя необходимую частоту вращения. И в отчете указать, что испытания проводились не при номинальном давлении (указать при каком давлении).
+//В случае, не возможности выйти на заданное давление, по причине превышения допустимой мощности стенда,
+//уменьшаем давление до значения, обусловленного мощностью стенда. При этом сохраняя необходимую частоту вращения.
+//И в отчете указать, что испытания проводились не при номинальном давлении (указать при каком давлении).
 //В случае не возможности выйти на заданную частоту вращения вала насоса, принять обороты допустимые для данного стенда (от 200 до 2900 об/мин).
 //И об этом сообщается оператору.

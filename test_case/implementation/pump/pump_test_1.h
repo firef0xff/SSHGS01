@@ -18,8 +18,8 @@ public:
 
    bool Success() const;
 
-   QString RepRes();
-   QString RepName();
+   QString RepRes() const;
+   QString RepName() const;
 
 private:
    bool mResult;

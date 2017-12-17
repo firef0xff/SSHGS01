@@ -112,11 +112,11 @@ bool Test::DrawLine ( uint32_t& num, QRect& source, QFont font, DrawLineHandler 
     return res;
 }
 
-QString Test::RepName()
+QString Test::RepName() const
 {
    return Name();
 }
-QString Test::RepRes()
+QString Test::RepRes() const
 {
    return "";
 }

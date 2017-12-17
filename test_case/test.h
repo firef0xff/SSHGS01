@@ -37,8 +37,8 @@ public:
 
     virtual bool Success() const;
 
-    virtual QString RepName();
-    virtual QString RepRes();
+    virtual QString RepName() const;
+    virtual QString RepRes() const;
 
     virtual bool RepSkeep();
 

@@ -51,7 +51,7 @@ bool PumpTest8::Success() const
 {
     return mResult;
 }
-QString PumpTest8::RepName()
+QString PumpTest8::RepName() const
 {
    QString res = "Подача насоса:\n";
 
@@ -73,7 +73,7 @@ QString PumpTest8::RepName()
 
    return res;
 }
-QString PumpTest8::RepRes()
+QString PumpTest8::RepRes() const
 {
    QString res;
    res += test::ToString( mExpMin );
@@ -206,6 +206,7 @@ bool PumpTest8::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
 }//namespace pump
 }//namespace test
 
-//В случае, не возможности выйти на заданное давление, по причине превышения допустимой мощности стенда,  уменьшаем давление до значения, обусловленного мощностью стенда. При этом сохраняя необходимую частоту вращения.
+//В случае, не возможности выйти на заданное давление, по причине превышения допустимой мощности стенда,  уменьшаем давление до значения, обусловленного мощностью стенда.
+//При этом сохраняя необходимую частоту вращения.
 //В случае не возможности выйти на заданную частоту вращения вала насоса, принять обороты допустимые для данного стенда (от 200 до 2900 об/мин).
 //И об этом сообщается оператору.

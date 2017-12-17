@@ -45,7 +45,7 @@ bool PumpTest9::Success() const
 {
     return mResult;
 }
-QString PumpTest9::RepRes()
+QString PumpTest9::RepRes() const
 {
    QString res = "\n";
    res += test::ToString( mExp );
@@ -53,7 +53,7 @@ QString PumpTest9::RepRes()
    res += Success()? QString(" соответсвует ") : QString(" не соответсвует ");
    return res;
 }
-QString PumpTest9::RepName()
+QString PumpTest9::RepName() const
 {
    return "Расход в дренаже при номинальном режиме";
 }
@@ -166,6 +166,7 @@ bool PumpTest9::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
 }//namespace pump
 }//namespace test
 
-//В случае не возможности выйти на заданное давление или частоту вращения по причине превышения допустимой мощности стенда.  То данное испытание проводить нельзя.
+//В случае не возможности выйти на заданное давление или частоту вращения по причине превышения допустимой мощности стенда.
+//То данное испытание проводить нельзя.
 //Если нет значения в водимых данных, то испытания не проводим.
 //И об этом сообщается оператору.

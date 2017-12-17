@@ -17,8 +17,8 @@ public:
    bool Draw(QPainter &painter, QRect &free_rect, const QString & ) const;
 
    bool Success() const;
-   QString RepRes();
-   QString RepName();
+   QString RepRes() const;
+   QString RepName() const;
 private:
    bool mResult;
    double mData;
