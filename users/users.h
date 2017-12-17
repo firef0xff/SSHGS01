@@ -32,6 +32,8 @@ private slots:
     void on_Add_clicked();
     void on_Remove_clicked();
     void on_Edit_clicked();
+
+    void onCardIn( QString const& id );
 };
 
 Q_DECLARE_METATYPE( app::UserInfo* )

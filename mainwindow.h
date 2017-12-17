@@ -81,8 +81,10 @@ private:
 
     QString LastErrs;
 
-private slots:
+public slots:
+    void onLogin();
 
+private slots:
 
     void on_TestCase1_clicked();
     void on_TestCase2_clicked();

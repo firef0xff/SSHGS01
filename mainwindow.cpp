@@ -171,25 +171,45 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 void MainWindow::CheckRights()
 {
-    if ( app::Settings::Instance().UserAccess() != app::Admin )
-    {
-        ui->Users->setEnabled( false );
-        if ( app::Settings::Instance().UserAccess() != app::Master )
-        {
-            ui->ManualControl->setEnabled( false );
-            ui->TestCase1->setEnabled( false );
-            ui->TestCase2->setEnabled( false );
-            ui->TestCase3->setEnabled( false );
-            ui->TestCase4->setEnabled( false );
-            ui->menu_3->setEnabled( false );
-            ui->menu_4->setEnabled( false );
-        }
-    }
+   ui->Users->setEnabled( true );
+   ui->ManualControl->setEnabled( true );
+   ui->TestCase1->setEnabled( true );
+   ui->TestCase2->setEnabled( true );
+   ui->TestCase3->setEnabled( true );
+   ui->TestCase4->setEnabled( true );
+   ui->menu_3->setEnabled( true );
+   ui->menu_4->setEnabled( true );
+   ui->centralWidget->setEnabled( true );
+
+   if ( app::Settings::Instance().UserAccess() != app::Admin )
+   {
+      ui->Users->setEnabled( false );
+      if ( app::Settings::Instance().UserAccess() != app::Master )
+      {
+         ui->ManualControl->setEnabled( false );
+         ui->TestCase1->setEnabled( false );
+         ui->TestCase2->setEnabled( false );
+         ui->TestCase3->setEnabled( false );
+         ui->TestCase4->setEnabled( false );
+         ui->menu_3->setEnabled( false );
+         ui->menu_4->setEnabled( false );
+
+         if ( app::Settings::Instance().UserAccess() != app::User )
+         {
+            ui->centralWidget->setEnabled( false );
+         }
+      }
+   }
 }
+
+void MainWindow::onLogin()
+{
+   CheckRights();
+   ui->statusBar->showMessage("Текущий пользователь: " + app::Settings::Instance().User() );
+}
+
 void MainWindow::showEvent( QShowEvent *e )
 {
-    CheckRights();
-    ui->statusBar->showMessage("Текущий пользователь: " + app::Settings::Instance().User() );
     QMainWindow::showEvent( e );
 }
 

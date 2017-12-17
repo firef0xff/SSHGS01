@@ -8,6 +8,7 @@ namespace app
 
 enum UserLevel
 {
+    Uncknown = -1,
     User = 0,
     Master = 1,
     Admin = 2
@@ -18,7 +19,9 @@ class UserInfo
 public:
     QString Login;
     QString pass_hash;
+    QString card_id;
     UserLevel level;
+    void SetCardId( QString p );
     void SetPass( QString p );
 };
 typedef QVector< UserInfo > UserData;
@@ -51,10 +54,14 @@ public:
     UserData Users() const;
 
     bool CheckUser( QString const& user, QString const& pass );
+    bool CheckUser( QString const& card_id );
+
     UserLevel UserAccess() const;
 
     void ComAddr( QString const& v);
     QString ComAddr() const;
+
+    void LockChecking( bool v );
 private:
     Settings();
     Settings( Settings const& ) = delete;
@@ -63,6 +70,8 @@ private:
     QJsonDocument mDocument;
     QString mFileName;
     UserLevel mCurrentLevel;
+
+    bool mLockUserChecking = false;
 };
 
 

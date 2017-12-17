@@ -5,7 +5,7 @@
 #include "settings/settings.h"
 #include "login.h"
 #include "board/custom_control_board.h"
-
+#include "omnikey.h"
 
 int main(int argc, char *argv[])
 {
@@ -14,10 +14,14 @@ int main(int argc, char *argv[])
     QApplication::setLibraryPaths( paths );
 
     QApplication a(argc, argv);
-
+    a.installEventFilter( &Omnikey::Instance() );
     MainWindow w;
     Login l ( &w );
+    w.connect( &l, &Login::on_login, &w, &MainWindow::onLogin );
     l.show();
 
-    return a.exec();
+    auto res = a.exec();
+    a.removeEventFilter( &Omnikey::Instance() );
+    w.disconnect( &l, &Login::on_login, &w, &MainWindow::onLogin );
+    return res;
 }

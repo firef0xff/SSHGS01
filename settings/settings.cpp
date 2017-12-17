@@ -195,6 +195,7 @@ void Settings::Users( UserData const& u )
         QJsonObject usr;
         usr.insert( "login", val.Login );
         usr.insert( "pass", val.pass_hash );
+        usr.insert( "card", val.card_id );
         usr.insert( "level", val.level );
         users.push_back( usr );
     }
@@ -211,6 +212,7 @@ UserData Settings::Users() const
         UserInfo user;
         user.Login = usr.value("login").toString();
         user.pass_hash = usr.value("pass").toString();
+        user.card_id = usr.value("card").toString();
         user.level = static_cast< UserLevel >( usr.value("level").toInt() );
         res.push_back( user );
     }
@@ -228,8 +230,37 @@ QString Settings::ComAddr() const
     return mDocument.object().value("ComAddr").toString();
 }
 
+bool Settings::CheckUser( QString const& card_id )
+{
+   if (mLockUserChecking)
+      return false;
+
+   mCurrentLevel = Uncknown;
+   auto users = Users();
+   if (users.empty())
+      return false;
+
+   QString hex ( QCryptographicHash::hash( QByteArray( card_id.toStdString().c_str() ), QCryptographicHash::Algorithm::Md5 ) );
+   foreach ( UserInfo const& val, users)
+   {
+      if ( val.card_id == hex )
+      {
+         mCurrentLevel = val.level;
+         User( val.Login );
+         Save();
+         return true;
+      }
+   }
+   User( "" );
+   Save();
+   return false;
+}
 bool Settings::CheckUser( QString const& user, QString const& pass )
 {
+   if (mLockUserChecking)
+      return false;
+
+    mCurrentLevel = Uncknown;
     if ( user.isEmpty() || pass.isEmpty() )
         return false;
     auto users = Users();
@@ -240,20 +271,30 @@ bool Settings::CheckUser( QString const& user, QString const& pass )
          )
     {
         mCurrentLevel = Admin;
+        User( user );
+        Save();
         return true;
     }
 
     QString hex ( QCryptographicHash::hash( QByteArray( pass.toStdString().c_str() ), QCryptographicHash::Algorithm::Md5 ) );
 
+    bool res = false;
     foreach ( UserInfo const& val, users)
     {
         if ( val.Login == user && val.pass_hash == hex)
         {
             mCurrentLevel = val.level;
-            return true;
+            res = true;
         }
     }
-    return false;
+
+    User( res ? user : QString() );
+    Save();
+    return res;
+}
+void Settings::LockChecking( bool v )
+{
+   mLockUserChecking = v;
 }
 
 UserLevel Settings::UserAccess() const
@@ -270,9 +311,12 @@ Settings::Settings():
 
 void UserInfo::SetPass( QString p )
 {
-    pass_hash = QString( QCryptographicHash::hash( QByteArray( p.toStdString().c_str() ), QCryptographicHash::Algorithm::Md5 ) );
+   pass_hash = QString( QCryptographicHash::hash( QByteArray( p.toStdString().c_str() ), QCryptographicHash::Algorithm::Md5 ) );
 }
 
-
+void UserInfo::SetCardId( QString p )
+{
+   card_id = QString( QCryptographicHash::hash( QByteArray( p.toStdString().c_str() ), QCryptographicHash::Algorithm::Md5 ) );
+}
 
 }//namespace app

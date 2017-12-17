@@ -1,6 +1,6 @@
 #include "users.h"
 #include "ui_users.h"
-
+#include "omnikey.h"
 
 QString CastToCombo( app::UserLevel lvl )
 {
@@ -33,12 +33,16 @@ Users::Users(QWidget *parent) :
 {
     ui->setupUi(this);
     mUsers = app::Settings::Instance().Users();
+    app::Settings::Instance().LockChecking(true);
+    connect( &Omnikey::Instance(), &Omnikey::card_in, this, &Users::onCardIn );
     ShowData();
 }
 
 Users::~Users()
 {
-    delete ui;
+   disconnect( &Omnikey::Instance(), &Omnikey::card_in, this, &Users::onCardIn );
+   app::Settings::Instance().LockChecking(false);
+   delete ui;
 }
 
 void Users::closeEvent(QCloseEvent *e)
@@ -83,6 +87,8 @@ void Users::ShowData()
     ui->Pass->setText("");
     ui->UserName->setText("");
     ui->UserLevel->setCurrentIndex( -1 );
+    ui->CardId->setText("");
+    ui->CardId->setChecked(false);
     on_UsersGreed_itemSelectionChanged();
 }
 
@@ -103,17 +109,23 @@ void Users::on_UsersGreed_itemSelectionChanged()
         app::UserInfo* user = mCurrentItem->data(Qt::UserRole).value< app::UserInfo* >();
         ui->UserName->setText( user->Login );
         ui->Pass->setText("");
+        ui->CardId->setText("");
+        ui->CardId->setChecked(false);
         ui->UserLevel->setCurrentText( CastToCombo( user->level ) );
     }
 }
 
 void Users::on_Add_clicked()
 {
-    if (!ui->UserName->text().isEmpty() && !ui->Pass->text().isEmpty())
+    if (!ui->UserName->text().isEmpty() &&
+        ( !ui->Pass->text().isEmpty() ||
+          ( ui->CardId->isChecked() && !ui->CardId->text().isEmpty() ) ) )
     {
         app::UserInfo u;
         u.Login = ui->UserName->text();
         u.SetPass( ui->Pass->text() );
+        if ( ui->CardId->isChecked() )
+           u.SetCardId( ui->CardId->text() );
         u.level = CastToLevel( ui->UserLevel->currentText() );
         mUsers.push_back( u );
         ShowData();
@@ -139,18 +151,26 @@ void Users::on_Remove_clicked()
 
 void Users::on_Edit_clicked()
 {
-    if (!mCurrentItem)
-        return;
+   if (!mCurrentItem)
+      return;
 
-    if (!ui->UserName->text().isEmpty() )
-    {
-        app::UserInfo* user = mCurrentItem->data(Qt::UserRole).value< app::UserInfo* >();
-        user->Login = ui->UserName->text();
-        if ( !ui->Pass->text().isEmpty() )
-        {
-            user->SetPass( ui->Pass->text() );
-        }
-        user->level = CastToLevel( ui->UserLevel->currentText() );
-        ShowData();
-    }
+   if (!ui->UserName->text().isEmpty() )
+   {
+      app::UserInfo* user = mCurrentItem->data(Qt::UserRole).value< app::UserInfo* >();
+      user->Login = ui->UserName->text();
+
+      if ( !ui->Pass->text().isEmpty() )
+         user->SetPass( ui->Pass->text() );
+      if ( ui->CardId->isChecked() )
+         user->SetCardId( ui->CardId->text() );
+
+      user->level = CastToLevel( ui->UserLevel->currentText() );
+      ShowData();
+   }
+}
+
+void Users::onCardIn( QString const& id )
+{
+   if ( ui->CardId->isChecked() )
+      ui->CardId->setText( id );
 }

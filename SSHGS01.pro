@@ -105,7 +105,8 @@ SOURCES += main.cpp\
     test_case/implementation/pump/pump_test_7.cpp \
     test_case/implementation/pump/pump_test_8.cpp \
     test_case/implementation/pump/pump_test_9.cpp \
-    test_case/implementation/pump/pump_test_10.cpp
+    test_case/implementation/pump/pump_test_10.cpp \
+    omnikey.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -200,7 +201,8 @@ HEADERS  += mainwindow.h \
     test_case/implementation/pump/pump_test_7.h \
     test_case/implementation/pump/pump_test_8.h \
     test_case/implementation/pump/pump_test_9.h \
-    test_case/implementation/pump/pump_test_10.h
+    test_case/implementation/pump/pump_test_10.h \
+    omnikey.h
 
 
 FORMS    += mainwindow.ui \
