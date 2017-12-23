@@ -107,7 +107,8 @@ SOURCES += main.cpp\
     test_case/implementation/pump/pump_test_9.cpp \
     test_case/implementation/pump/pump_test_10.cpp \
     omnikey.cpp \
-    child_widget.cpp
+    child_widget.cpp \
+    cpu/db71.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -204,7 +205,8 @@ HEADERS  += mainwindow.h \
     test_case/implementation/pump/pump_test_9.h \
     test_case/implementation/pump/pump_test_10.h \
     omnikey.h \
-    child_widget.h
+    child_widget.h \
+    cpu/db71.h
 
 
 FORMS    += mainwindow.ui \

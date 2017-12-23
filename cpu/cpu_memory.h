@@ -24,6 +24,8 @@
 #include "db50.h"
 #include "db60.h"
 
+#include "db71.h"
+
 #include "m1.h"
 #include "i1.h"
 #include "board_memory.h"
@@ -64,6 +66,8 @@ public:
     data::DB40 DB40;    //аварийные биты (исключения)
     data::DB50 DB50;    //данные датчиков
     data::DB60 DB60;
+
+    data::DB71 DB71;    //Таблица параметров
 
     data::M1   M1;      //управляющие биты ручного режима
     data::I1   I1;      //контрольные биты ручного режима

@@ -234,7 +234,51 @@ bool Parameters::Deserialize(const QJsonObject &obj )
 
 void Parameters::WriteToController() const
 {
-//TODO
+   //здесь реализовать логику ограничений параметров
+   auto& mem = cpu::CpuMemory::Instance().DB71;
+
+   mem.Number_of_sections = mSectionsCount == 2;
+   mem.Direction_of_rotation = mSpin == spRight;
+   mem.Electronic_control = mElektrikControl;
+   mem.Hydraulic_control = mHydroControl;
+
+//   mem.Type_control;     //Тип управления (дискретный/аналоговый)
+   mem.Type_current_discrete = mVoltageType == VT_DC;
+
+
+   mem.Q_N1 = mWorkVolume1;
+   mem.P_N1_min = mPressureMin1;       //ограничить правами пользователя
+   mem.P_N1_nominal = mPressureNom1;   //ограничить правами пользователя
+   mem.P_N1_max = mPressureMax1;       //ограничить правами пользователя
+
+   mem.Q_N2 = mWorkVolume2;
+   mem.P_N2_min = mPressureMin2;       //ограничить правами пользователя
+   mem.P_N2_nominal = mPressureNom2;   //ограничить правами пользователя
+   mem.P_N2_max = mPressureMax2;       //ограничить правами пользователя
+
+   mem.Rotat_speed_pump_min = mFrequencyMin;    //ограничить правами пользователя
+   mem.Rotat_speed_pump_nominal = mFrequencyNom;//ограничить правами пользователя
+   mem.Rotat_speed_pump_max = mFrequencyMax;    //ограничить правами пользователя
+
+   mem.KPD_pump = mVolumeKPD;
+   mem.Drainage_pump = mExpenditure;
+   mem.Voltage = mVoltage;
+   mem.Max_P_control = mMaxControlPressure;
+
+   mem.Time_test_function = mFuncTestTime;
+   mem.Time_test_strength = mStrongTestTime * 60;
+   mem.Time_test_tightness = mHermTestTime;
+
+   mem.Time_set_P = mX;
+   mem.Time_set_rotation = mY;
+   mem.Time_stabil_flow = mZ;
+   mem.Coeffic_function = mA;
+   mem.Coeffic_function_drainag = mA1;
+   mem.Precision_test_function = mE;
+   mem.Time_function_dependence = mB;
+//   mem.Temperature_Work; //Рабочая температура масла в баке
+
+   mem.Write();
 }
 
 bool Parameters::Draw(QPainter &painter, QRect &free_rect, QString const& compare_width ) const
