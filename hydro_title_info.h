@@ -29,12 +29,13 @@ private slots:
 
 private:
     Ui::HydroTitleInfo *ui;
-    std::unique_ptr< QWidget > mChildWindow;
+    std::unique_ptr< ChildWidget > mChildWindow;
     bool mNewMode;
 
     bool SaveInputParams();
     void FromParams();
     void CheckRights();
+    void OnLogin();
 
 };
 

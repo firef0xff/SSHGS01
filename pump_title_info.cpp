@@ -4,6 +4,7 @@
 #include <QMessageBox>
 #include "test_case/implementation/test_params_pumps.h"
 #include "functions.h"
+#include "settings/settings.h"
 
 PumpTitleInfo::PumpTitleInfo(bool new_mode, QWidget *parent) :
    ChildWidget(parent),
@@ -44,6 +45,29 @@ PumpTitleInfo::PumpTitleInfo(bool new_mode, QWidget *parent) :
    {
        FromParams();
    }
+   CheckRights();
+}
+
+void PumpTitleInfo::CheckRights()
+{
+   ui->User->setText( app::Settings::Instance().User() );
+
+   if ( app::Settings::Instance().UserAccess() != app::UserLevel::Uncknown )
+   {
+      ui->AnsverBox->setStandardButtons( QDialogButtonBox::Ok | QDialogButtonBox::Cancel );
+      ui->gridLayout->setEnabled(true);
+   }
+   else
+   {
+      ui->AnsverBox->setStandardButtons( QDialogButtonBox::Cancel );
+      ui->gridLayout->setEnabled(false);
+   }
+}
+void PumpTitleInfo::OnLogin()
+{
+   if ( isHidden() )
+      return;
+   CheckRights();
 }
 
 PumpTitleInfo::~PumpTitleInfo()
@@ -61,9 +85,15 @@ void PumpTitleInfo::on_AnsverBox_accepted()
    {
        hide();
        if ( mChildWindow.get() )
-           QObject::disconnect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
+       {
+           QObject::disconnect( mChildWindow.get(), &ChildWidget::closed, this, &ChildWidget::close );
+           QObject::disconnect( this, &ChildWidget::login, mChildWindow.get(), &ChildWidget::on_login );
+       }
        mChildWindow.reset( new PumpTestInfo( mNewMode ) );
-       QObject::connect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
+       QObject::connect( mChildWindow.get(), &ChildWidget::closed, this, &ChildWidget::close );
+       QObject::connect( this, &ChildWidget::login, mChildWindow.get(), &ChildWidget::on_login );
+
+
        mChildWindow->show();
    }
    else

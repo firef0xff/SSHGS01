@@ -9,6 +9,9 @@
 #include "viewer.h"
 #include "QDateTime"
 #include "test_case/test_params.h"
+#include "settings/settings.h"
+#include <thread>
+
 
 TestRunner::TestRunner(QWidget *parent) :
     ChildWidget(parent),
@@ -27,6 +30,7 @@ TestRunner::TestRunner(QWidget *parent) :
         ui->gridLayout->addWidget( ptr.get() , num++ , 0, 1, 1 );
         mChilds.append( ptr );
     }
+    CheckRights();
 }
 
 TestRunner::~TestRunner()
@@ -41,11 +45,31 @@ void TestRunner::closeEvent(QCloseEvent *e)
     ChildWidget::closeEvent( e );
 }
 
+void TestRunner::CheckRights()
+{
+   if ( app::Settings::Instance().UserAccess() == app::UserLevel::Uncknown )
+   {
+      StopWorker();
+      ui->Start->setEnabled(false);
+   }
+   else
+      ui->Start->setEnabled(true);
+}
+void TestRunner::OnLogin()
+{
+   if (isHidden())
+      return;
+   CheckRights();
+}
 
 void TestRunner::on_Start_clicked()
 {    
+    std::unique_lock<std::mutex> lock( mWorkerMutex );
     if ( mWorker.get() )
         StopWorker();
+
+    if ( app::Settings::Instance().UserAccess() == app::UserLevel::Uncknown )
+       return;
 
     ui->progressBar->reset();
     ui->progressBar->setRange( 0, test::CURRENT_PARAMS->TestCase().size() );
@@ -71,17 +95,24 @@ void TestRunner::on_Start_clicked()
 
 void TestRunner::StopWorker()
 {
-    if ( mWorker.get() )
-    {
-        mWorker->stop();
-        QObject::disconnect( mWorker.get(), &Worker::to_log, ui->LogBox, &QTextBrowser::append );
-        QObject::disconnect( mWorker.get(), &Worker::progress, this, &TestRunner::on_progress );
-        QObject::disconnect( mWorker.get(), &Worker::started, this, &TestRunner::on_test_start );
-        QObject::disconnect( mWorker.get(), &Worker::finished, this, &TestRunner::on_test_stop );
-        QObject::disconnect( mWorker.get(), &Worker::to_exec, this, &TestRunner::exec );
-        mWorker.reset();
-    }
-    ui->Start->setEnabled( true );
+   std::thread t(
+   [this]()
+   {
+      std::unique_lock<std::mutex> lock( mWorkerMutex );
+      if ( mWorker.get() )
+      {
+          mWorker->stop();
+          QObject::disconnect( mWorker.get(), &Worker::to_log, ui->LogBox, &QTextBrowser::append );
+          QObject::disconnect( mWorker.get(), &Worker::progress, this, &TestRunner::on_progress );
+          QObject::disconnect( mWorker.get(), &Worker::started, this, &TestRunner::on_test_start );
+          QObject::disconnect( mWorker.get(), &Worker::finished, this, &TestRunner::on_test_stop );
+          QObject::disconnect( mWorker.get(), &Worker::to_exec, this, &TestRunner::exec );
+          mWorker.reset();
+      }
+      if ( app::Settings::Instance().UserAccess() != app::UserLevel::Uncknown )
+        ui->Start->setEnabled( true );
+   } );
+   t.detach();
 }
 
 void TestRunner::on_Abort_clicked()
@@ -105,7 +136,8 @@ void TestRunner::on_test_start()
 }
 void TestRunner::on_test_stop()
 {
-    ui->Start->setEnabled( true );
+   if ( app::Settings::Instance().UserAccess() != app::UserLevel::Uncknown )
+     ui->Start->setEnabled( true );
 }
 
 void TestRunner::on_SaveTest_clicked()
@@ -196,8 +228,13 @@ void Worker::LaunchIt( Functor func )
 void TestRunner::on_Results_clicked()
 {
     if ( mChildWindow.get() )
-        QObject::disconnect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(show()) );
+    {
+        QObject::disconnect( mChildWindow.get(), &ChildWidget::closed, this, &ChildWidget::show );
+        QObject::disconnect( this, &ChildWidget::login, mChildWindow.get(), &ChildWidget::on_login );
+    }
     mChildWindow.reset( new Viewer() );
-    QObject::connect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(show()) );
+    QObject::connect( mChildWindow.get(), &ChildWidget::closed, this, &ChildWidget::show );
+    QObject::connect( this, &ChildWidget::login, mChildWindow.get(), &ChildWidget::on_login );
+
     mChildWindow->show();
 }

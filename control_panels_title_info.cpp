@@ -70,9 +70,14 @@ void ControlPanelsTitleInfo::on_buttonBox_accepted()
     {
         hide();
         if ( mChildWindow.get() )
-            QObject::disconnect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
+        {
+            QObject::disconnect( mChildWindow.get(), &ChildWidget::closed, this, &ChildWidget::close );
+            QObject::disconnect( this, &ChildWidget::login, mChildWindow.get(), &ChildWidget::on_login );
+        }
         mChildWindow.reset( new TestForm( mNewMode ) );
-        QObject::connect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
+        QObject::connect( mChildWindow.get(), &ChildWidget::closed, this, &ChildWidget::close );
+        QObject::connect( this, &ChildWidget::login, mChildWindow.get(), &ChildWidget::on_login );
+
         mChildWindow->show();
     }
     else
@@ -93,13 +98,29 @@ void ControlPanelsTitleInfo::on_buttonBox_rejected()
 
 void ControlPanelsTitleInfo::CheckRights()
 {
-    if ( app::Settings::Instance().UserAccess() == app::User )
-    {
-        ui->GsType->setEnabled( false );
-        ui->SerNo->setEnabled( false );
-        ui->SignalType->setEnabled( false );
-        ui->Voltage->setEnabled( false );
-        ui->MaxAmperage->setEnabled( false );
-        ui->ReelResist->setEnabled( false );
-    }
+   bool enable = app::Settings::Instance().UserAccess() != app::User;
+   ui->GsType->setEnabled( enable );
+   ui->SerNo->setEnabled( enable );
+   ui->SignalType->setEnabled( enable );
+   ui->Voltage->setEnabled( enable );
+   ui->MaxAmperage->setEnabled( enable );
+   ui->ReelResist->setEnabled( enable );
+
+   if ( app::Settings::Instance().UserAccess() != app::UserLevel::Uncknown )
+   {
+      ui->buttonBox->setStandardButtons( QDialogButtonBox::Ok | QDialogButtonBox::Cancel );
+      ui->gridLayout->setEnabled(true);
+   }
+   else
+   {
+      ui->buttonBox->setStandardButtons( QDialogButtonBox::Cancel );
+      ui->gridLayout->setEnabled(false);
+   }
+}
+
+void ControlPanelsTitleInfo::OnLogin()
+{
+   if ( isHidden() )
+      return;
+   CheckRights();
 }

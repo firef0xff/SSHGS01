@@ -19,7 +19,7 @@ public:
 
 private:
     Ui::StandParams *ui;
-    std::unique_ptr< QWidget > mChildWindow;
+    std::unique_ptr< ChildWidget > mChildWindow;
     bool mNewMode;
     std::function< void() > mCustomAction;
 
@@ -27,7 +27,7 @@ private:
     bool SaveInputParams();
     void FromParams();
     void CheckRights();
-
+    void OnLogin();
 private slots:
     void on_buttonBox_accepted();
     void on_buttonBox_rejected();

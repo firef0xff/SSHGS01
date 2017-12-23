@@ -223,7 +223,7 @@ void MainWindow::CheckRights( bool f_enabled )
 
 void MainWindow::onLogin()
 {
-   if ( mChildWindow && !mChildWindow->isHidden() )
+   if ( mChildWindow )
       emit login();
 
    CheckRights();

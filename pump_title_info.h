@@ -19,12 +19,14 @@ public:
 private:
    Ui::Pump_title_info *ui;
 
-   std::unique_ptr< QWidget > mChildWindow;
+   std::unique_ptr< ChildWidget > mChildWindow;
    bool mNewMode;
 
    bool SaveInputParams();
    void FromParams();
 
+   void OnLogin();
+   void CheckRights();
 private slots:
     void on_AnsverBox_accepted();
     void on_AnsverBox_rejected();

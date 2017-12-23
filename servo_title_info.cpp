@@ -256,10 +256,16 @@ void ServoTitleInfo::on_buttonBox_accepted()
         }
 
         hide();
+
         if ( mChildWindow.get() )
-            QObject::disconnect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
+        {
+            QObject::disconnect( mChildWindow.get(), &ChildWidget::closed, this, &ChildWidget::close );
+            QObject::disconnect( this, &ChildWidget::login, mChildWindow.get(), &ChildWidget::on_login );
+        }
         mChildWindow.reset( new TestForm( mNewMode ) );
-        QObject::connect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
+        QObject::connect( mChildWindow.get(), &ChildWidget::closed, this, &ChildWidget::close );
+        QObject::connect( this, &ChildWidget::login, mChildWindow.get(), &ChildWidget::on_login );
+
         mChildWindow->show();
     }
     else
@@ -320,6 +326,9 @@ void ServoTitleInfo::on_ControlSignal_activated(int index)
     ui->SignalStateA->setEnabled(true);
     ui->SignalStateB->setEnabled(true);
     ui->SignalState0->setEnabled(true);
+    ui->SignalStateA->setValidator( new QDoubleValidator( 0, 0, 2, this ) );
+    ui->SignalStateB->setValidator( new QDoubleValidator( 0, 0, 2, this ) );
+    ui->SignalState0->setValidator( new QDoubleValidator( 0, 0, 2, this ) );
 
     ui->SignalStateA->setText("");
     ui->SignalStateB->setText("");
@@ -647,37 +656,52 @@ void ServoTitleInfo::on_PosCount_valueChanged(int arg1)
 
 void ServoTitleInfo::CheckRights()
 {
-    if ( app::Settings::Instance().UserAccess() == app::User )
-    {
-        ui->SerNo->setEnabled( false );
-        ui->DefExpenditure->setEnabled( false );
-        ui->PosCount->setEnabled( false );
-        ui->RaspredControl->setEnabled( false );
-        ui->MinControlPressure->setEnabled( false );
-        ui->MaxControlPressure->setEnabled( false );
-        ui->MaxExpenditure->setEnabled( false );
-        ui->ControlType->setEnabled( false );
-        ui->PressureTesting->setEnabled( false );
-        ui->FrequencyInc->setEnabled( false );
-        ui->PressureNominal->setEnabled( false );
-        ui->ControlSignal->setEnabled( false );
-        ui->ControlSignalAmpl0->setEnabled( false );
-        ui->ControlSignalAmpl1->setEnabled( false );
-        ui->ControlSignalAmpl2->setEnabled( false );
-        ui->SignalStateA->setEnabled( false );
-        ui->SignalState0->setEnabled( false );
-        ui->SignalStateB->setEnabled( false );
-        ui->ControlReelResist->setEnabled( false );
-        ui->MaxExpenditureA->setEnabled( false );
-        ui->MaxExpenditureB->setEnabled( false );
-        ui->Voltage->setEnabled( false );
-        ui->TestChA->setEnabled( false );
-        ui->ControlReelChA->setEnabled( false );
-        ui->TestChB->setEnabled( false );
-        ui->ControlReelChB->setEnabled( false );
-        ui->Frequency->setEnabled( false );
-        ui->AmplInc->setEnabled( false );
-    }
+   bool enable = app::Settings::Instance().UserAccess() != app::User;
+   ui->SerNo->setEnabled( enable );
+   ui->DefExpenditure->setEnabled( enable );
+   ui->PosCount->setEnabled( enable );
+   ui->RaspredControl->setEnabled( enable );
+   ui->MinControlPressure->setEnabled( enable );
+   ui->MaxControlPressure->setEnabled( enable );
+   ui->MaxExpenditure->setEnabled( enable );
+   ui->ControlType->setEnabled( enable );
+   ui->PressureTesting->setEnabled( enable );
+   ui->FrequencyInc->setEnabled( enable );
+   ui->PressureNominal->setEnabled( enable );
+   ui->ControlSignal->setEnabled( enable );
+   ui->ControlSignalAmpl0->setEnabled( enable );
+   ui->ControlSignalAmpl1->setEnabled( enable );
+   ui->ControlSignalAmpl2->setEnabled( enable );
+   ui->SignalStateA->setEnabled( enable );
+   ui->SignalState0->setEnabled( enable );
+   ui->SignalStateB->setEnabled( enable );
+   ui->ControlReelResist->setEnabled( enable );
+   ui->MaxExpenditureA->setEnabled( enable );
+   ui->MaxExpenditureB->setEnabled( enable );
+   ui->Voltage->setEnabled( enable );
+   ui->TestChA->setEnabled( enable );
+   ui->ControlReelChA->setEnabled( enable );
+   ui->TestChB->setEnabled( enable );
+   ui->ControlReelChB->setEnabled( enable );
+   ui->Frequency->setEnabled( enable );
+   ui->AmplInc->setEnabled( enable );
+
+   if ( app::Settings::Instance().UserAccess() != app::UserLevel::Uncknown )
+   {
+      ui->buttonBox->setStandardButtons( QDialogButtonBox::Ok | QDialogButtonBox::Cancel );
+      ui->gridLayout->setEnabled(true);
+   }
+   else
+   {
+      ui->buttonBox->setStandardButtons( QDialogButtonBox::Cancel );
+      ui->gridLayout->setEnabled(false);
+   }
+}
+void ServoTitleInfo::OnLogin()
+{
+   if ( isHidden() )
+      return;
+   CheckRights();
 }
 
 void ServoTitleInfo::on_OutputType_activated(int index)

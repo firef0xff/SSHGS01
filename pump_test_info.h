@@ -18,11 +18,13 @@ public:
 
 private:
    Ui::Pump_test_info *ui;
-   std::unique_ptr< QWidget > mChildWindow;
+   std::unique_ptr< ChildWidget > mChildWindow;
    bool mNewMode;
 
    bool SaveInputParams();
    void FromParams();
+   void CheckRights();
+   void OnLogin();
 
 private slots:
     void on_buttonBox_accepted();

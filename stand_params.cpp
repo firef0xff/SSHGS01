@@ -113,10 +113,15 @@ void StandParams::on_buttonBox_accepted()
             mCustomAction();
         else
         {
-            if ( mChildWindow.get() )
-                QObject::disconnect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
-            mChildWindow.reset( new TestForm( mNewMode ) );
-            QObject::connect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
+           if ( mChildWindow.get() )
+           {
+               QObject::disconnect( mChildWindow.get(), &ChildWidget::closed, this, &ChildWidget::close );
+               QObject::disconnect( this, &ChildWidget::login, mChildWindow.get(), &ChildWidget::on_login );
+           }
+           mChildWindow.reset( new TestForm( mNewMode ) );
+           QObject::connect( mChildWindow.get(), &ChildWidget::closed, this, &ChildWidget::close );
+           QObject::connect( this, &ChildWidget::login, mChildWindow.get(), &ChildWidget::on_login );
+
             mChildWindow->show();
         }
     }
@@ -143,26 +148,42 @@ void StandParams::SetCallback( std::function< void() > func  )
 
 void StandParams::CheckRights()
 {
-    if ( app::Settings::Instance().UserAccess() == app::User )
-    {
-        ui->DD1A_ON->setEnabled( false );
-        ui->DD2A_ON->setEnabled( false );
-        ui->DD3A_ON->setEnabled( false );
-        ui->OnDynamic_1->setEnabled( false );
+   bool enable = app::Settings::Instance().UserAccess() != app::User;
+   ui->DD1A_ON->setEnabled( enable );
+   ui->DD2A_ON->setEnabled( enable );
+   ui->DD3A_ON->setEnabled( enable );
+   ui->OnDynamic_1->setEnabled( enable );
 
-        ui->DD1A_OFF->setEnabled( false );
-        ui->DD2A_OFF->setEnabled( false );
-        ui->DD3A_OFF->setEnabled( false );
-        ui->OffDynamic_1->setEnabled( false );
+   ui->DD1A_OFF->setEnabled( enable );
+   ui->DD2A_OFF->setEnabled( enable );
+   ui->DD3A_OFF->setEnabled( enable );
+   ui->OffDynamic_1->setEnabled( enable );
 
-        ui->DD1B_ON->setEnabled( false );
-        ui->DD2B_ON->setEnabled( false );
-        ui->DD3B_ON->setEnabled( false );
-        ui->OnDynamic_2->setEnabled( false );
+   ui->DD1B_ON->setEnabled( enable );
+   ui->DD2B_ON->setEnabled( enable );
+   ui->DD3B_ON->setEnabled( enable );
+   ui->OnDynamic_2->setEnabled( enable );
 
-        ui->DD1B_OFF->setEnabled( false );
-        ui->DD2B_OFF->setEnabled( false );
-        ui->DD3B_OFF->setEnabled( false );
-        ui->OffDynamic_2->setEnabled( false );
-    }
+   ui->DD1B_OFF->setEnabled( enable );
+   ui->DD2B_OFF->setEnabled( enable );
+   ui->DD3B_OFF->setEnabled( enable );
+   ui->OffDynamic_2->setEnabled( enable );
+
+   if ( app::Settings::Instance().UserAccess() != app::UserLevel::Uncknown )
+   {
+      ui->buttonBox->setStandardButtons( QDialogButtonBox::Ok | QDialogButtonBox::Cancel );
+      ui->gridLayout->setEnabled(true);
+   }
+   else
+   {
+      ui->buttonBox->setStandardButtons( QDialogButtonBox::Cancel );
+      ui->gridLayout->setEnabled(false);
+   }
+}
+
+void StandParams::OnLogin()
+{
+   if ( isHidden() )
+      return;
+   CheckRights();
 }

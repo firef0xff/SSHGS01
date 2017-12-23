@@ -46,6 +46,12 @@ private:
     void showEvent ( QShowEvent *e );
     void hideEvent ( QHideEvent *e );
 
+    void CheckRights();
+    void OnLogin();
+
+    void Start();
+    void Stop();
+
     void SynkControls();
 
     void UpdateButton( QAbstractButton *btn, bool checked );    

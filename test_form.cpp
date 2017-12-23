@@ -76,10 +76,14 @@ void TestForm::on_buttonBox_accepted()
         }
     }
     if ( mChildWindow.get() )
-        QObject::disconnect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
-    test::CURRENT_PARAMS->TestCase( selected );
+    {
+        QObject::disconnect( mChildWindow.get(), &ChildWidget::closed, this, &ChildWidget::close );
+        QObject::disconnect( this, &ChildWidget::login, mChildWindow.get(), &ChildWidget::on_login );
+    }
     mChildWindow.reset( new TestRunner() );
-    QObject::connect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
+    QObject::connect( mChildWindow.get(), &ChildWidget::closed, this, &ChildWidget::close );
+    QObject::connect( this, &ChildWidget::login, mChildWindow.get(), &ChildWidget::on_login );
+
 
     hide();
     mChildWindow->show();    
@@ -94,4 +98,23 @@ void TestForm::CheckRights()
             check_box->setEnabled( false );
         }
     }
+
+    if ( app::Settings::Instance().UserAccess() != app::UserLevel::Uncknown )
+    {
+       ui->buttonBox->setStandardButtons( QDialogButtonBox::Ok | QDialogButtonBox::Cancel );
+       ui->WorkArea->setEnabled(true);
+    }
+    else
+    {
+       ui->buttonBox->setStandardButtons( QDialogButtonBox::Cancel );
+       ui->WorkArea->setEnabled(false);
+    }
+}
+
+void TestForm::OnLogin()
+{
+   if ( isHidden() )
+      return;
+
+   CheckRights();
 }

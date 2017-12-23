@@ -32,11 +32,11 @@ private:
     QList< ControlPtr > mControls;
     SpaserPtr mHorisontal;
     SpaserPtr mVertical;
-    std::unique_ptr< QWidget > mChildWindow;
+    std::unique_ptr< ChildWidget > mChildWindow;
 
     void CheckRights();
 
-
+    void OnLogin();
 private slots:
     void on_buttonBox_rejected();
     void on_buttonBox_accepted();

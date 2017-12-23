@@ -5,6 +5,7 @@
 #include <QThread>
 #include <memory>
 #include <functional>
+#include <mutex>
 
 namespace Ui {
 class TestRunner;
@@ -32,11 +33,14 @@ private:
     Ui::TestRunner *ui;
     QList< ControlPtr > mChilds;
     std::unique_ptr< Worker > mWorker;
-    std::unique_ptr< QWidget > mChildWindow;
+    std::unique_ptr< ChildWidget > mChildWindow;
+    std::mutex mWorkerMutex;
 
     void closeEvent(QCloseEvent *e);
     void StopWorker();
+    void OnLogin();
 
+    void CheckRights();
 private slots:
     void on_Start_clicked();
     void on_Abort_clicked();

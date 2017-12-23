@@ -1,6 +1,7 @@
 #include "manual_control.h"
 #include "ui_manual_control.h"
 #include "test_case/test_params.h"
+#include "settings/settings.h"
 #include <QMessageBox>
 
 ManualControlUpdater::ManualControlUpdater():
@@ -58,7 +59,8 @@ ManualControl::ManualControl(QWidget *parent) :
     ui->U_ACDC->setValidator( new QIntValidator( 0, 220, this ) );
 
 
-    QObject::connect( &Updater, SIGNAL(update()), this, SLOT(onUpdateControls()) );    
+    QObject::connect( &Updater, SIGNAL(update()), this, SLOT(onUpdateControls()) );
+    CheckRights();
 }
 
 ManualControl::~ManualControl()
@@ -67,41 +69,69 @@ ManualControl::~ManualControl()
     delete ui;
 }
 
+void ManualControl::CheckRights()
+{
+   if ( app::Settings::Instance().UserAccess() != app::UserLevel::Uncknown )
+   {
+      setEnabled(true);
+      Start();
+   }
+   else
+   {
+      setEnabled(false);
+      Stop();
+   }
+}
+
+void ManualControl::OnLogin()
+{
+   if ( isHidden() )
+      return;
+   CheckRights();
+}
+void ManualControl::Start()
+{
+   cpu::CpuMemory::Instance().DB33.Reset();
+   cpu::CpuMemory::Instance().DB35.Reset();
+
+   mTaskMode.N_Operation = 100;
+   mTaskMode.Nasos_M2 = false;
+   mTaskMode.OP15_25_Continum = false;
+   mTaskMode.Q_5_5ma = 80.0;
+   mTaskMode.Start_Oper = false;
+   mTaskMode.Stop_Oper = false;
+   mTaskMode.Write();
+   SynkControls();
+   Updater.start();
+}
+void ManualControl::Stop()
+{
+   Updater.stop();
+   mControlBits.Reset();
+   cpu::CpuMemory::Instance().DB33.Reset();
+   cpu::CpuMemory::Instance().DB35.Reset();
+   try
+   {
+       cpu::CpuMemory::Instance().Board.Stop();
+   }catch( std::exception const& e )
+   {
+   }
+   mTaskMode.N_Operation = 0;
+   mTaskMode.Nasos_M2 = false;
+   mTaskMode.OP15_25_Continum = false;
+   mTaskMode.Q_5_5ma = 80.0;
+   mTaskMode.Start_Oper = false;
+   mTaskMode.Stop_Oper = false;
+   mTaskMode.Write();
+}
 void ManualControl::closeEvent(QCloseEvent *e)
 {
-    Updater.stop();
-    mControlBits.Reset();
-    cpu::CpuMemory::Instance().DB33.Reset();
-    cpu::CpuMemory::Instance().DB35.Reset();
-    try
-    {
-        cpu::CpuMemory::Instance().Board.Stop();
-    }catch( std::exception const& e )
-    {
-    }
-    mTaskMode.N_Operation = 0;
-    mTaskMode.Nasos_M2 = false;
-    mTaskMode.OP15_25_Continum = false;
-    mTaskMode.Q_5_5ma = 80.0;
-    mTaskMode.Start_Oper = false;
-    mTaskMode.Stop_Oper = false;
-    mTaskMode.Write();
+    Stop();
     ChildWidget::closeEvent( e );
 }
 void ManualControl::showEvent( QShowEvent *e )
 {
-    cpu::CpuMemory::Instance().DB33.Reset();
-    cpu::CpuMemory::Instance().DB35.Reset();
-
-    mTaskMode.N_Operation = 100;
-    mTaskMode.Nasos_M2 = false;
-    mTaskMode.OP15_25_Continum = false;
-    mTaskMode.Q_5_5ma = 80.0;
-    mTaskMode.Start_Oper = false;
-    mTaskMode.Stop_Oper = false;
-    mTaskMode.Write();
-    SynkControls();
-    Updater.start();
+    Start();
     QWidget::showEvent( e );
 }
 void ManualControl::hideEvent( QHideEvent *e )

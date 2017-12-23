@@ -4,6 +4,7 @@
 #include "test_case/implementation/test_params_pumps.h"
 #include "test_form.h"
 #include "functions.h"
+#include "settings/settings.h"
 
 PumpTestInfo::PumpTestInfo(bool new_mode, QWidget *parent) :
    ChildWidget(parent),
@@ -16,6 +17,7 @@ PumpTestInfo::PumpTestInfo(bool new_mode, QWidget *parent) :
    {
        FromParams();
    }
+   CheckRights();
 }
 
 PumpTestInfo::~PumpTestInfo()
@@ -33,9 +35,14 @@ void PumpTestInfo::on_buttonBox_accepted()
    {
        hide();
        if ( mChildWindow.get() )
-           QObject::disconnect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
+       {
+           QObject::disconnect( mChildWindow.get(), &ChildWidget::closed, this, &ChildWidget::close );
+           QObject::disconnect( this, &ChildWidget::login, mChildWindow.get(), &ChildWidget::on_login );
+       }
        mChildWindow.reset( new TestForm( mNewMode ) );
-       QObject::connect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
+       QObject::connect( mChildWindow.get(), &ChildWidget::closed, this, &ChildWidget::close );
+       QObject::connect( this, &ChildWidget::login, mChildWindow.get(), &ChildWidget::on_login );
+
        mChildWindow->show();
    }
    else
@@ -87,4 +94,25 @@ void PumpTestInfo::FromParams()
    ui->A1->setValue( params.A1() );
    ui->E->setValue( params.E() );
    ui->B->setValue( params.B() );
+}
+
+void PumpTestInfo::OnLogin()
+{
+   if (isHidden())
+      return;
+   CheckRights();
+}
+
+void PumpTestInfo::CheckRights()
+{
+   if ( app::Settings::Instance().UserAccess() != app::UserLevel::Uncknown )
+   {
+      ui->buttonBox->setStandardButtons( QDialogButtonBox::Ok | QDialogButtonBox::Cancel );
+      ui->gridLayout->setEnabled(true);
+   }
+   else
+   {
+      ui->buttonBox->setStandardButtons( QDialogButtonBox::Cancel );
+      ui->gridLayout->setEnabled(false);
+   }
 }

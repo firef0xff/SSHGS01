@@ -172,9 +172,13 @@ void HydroTitleInfo::on_buttonBox_accepted()
 
         hide();
         if ( mChildWindow.get() )
-            QObject::disconnect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
+        {
+            QObject::disconnect( mChildWindow.get(), &ChildWidget::closed, this, &ChildWidget::close );
+            QObject::disconnect( this, &ChildWidget::login, mChildWindow.get(), &ChildWidget::on_login );
+        }
         mChildWindow.reset( new StandParams( mNewMode ) );
-        QObject::connect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(close()) );
+        QObject::connect( mChildWindow.get(), &ChildWidget::closed, this, &ChildWidget::close );
+        QObject::connect( this, &ChildWidget::login, mChildWindow.get(), &ChildWidget::on_login );
         mChildWindow->show();
     }
     else
@@ -304,27 +308,43 @@ void HydroTitleInfo::on_PosCount_valueChanged(int arg1)
 
 void HydroTitleInfo::CheckRights()
 {
-    if ( app::Settings::Instance().UserAccess() == app::User )
-    {
-        ui->SerNo->setEnabled( false );
-        ui->DefExpenditure->setEnabled( false );
-        ui->Voltage->setEnabled( false );
-        ui->VoltageType->setEnabled( false );
-        ui->PosCount->setEnabled( false );
-        ui->ControlType->setEnabled( false );
-        ui->MinControlPressure->setEnabled( false );
-        ui->MaxControlPressure->setEnabled( false );
-//        ui->TestControlPressure->setEnabled( false );
-        ui->VoltageRange->setEnabled( false );
-        ui->Lost->setEnabled( false );
-        ui->MaxExpenditure->setEnabled( false );
-        ui->MaxWorkPressure->setEnabled( false );
-        ui->MinPressure->setEnabled( false );
-        ui->HermPressure->setEnabled( false );
-        ui->HermSignal->setEnabled( false );
-        ui->PABTSignal->setEnabled( false );
-        ui->PBATSignal->setEnabled( false );
-        ui->ActuationOffTime->setEnabled( false );
-        ui->ActuationOnTime->setEnabled( false );
-    }
+   bool enable = app::Settings::Instance().UserAccess() != app::User;
+
+   ui->SerNo->setEnabled( enable );
+   ui->DefExpenditure->setEnabled( enable );
+   ui->Voltage->setEnabled( enable );
+   ui->VoltageType->setEnabled( enable );
+   ui->PosCount->setEnabled( enable );
+   ui->ControlType->setEnabled( enable );
+   ui->MinControlPressure->setEnabled( enable );
+   ui->MaxControlPressure->setEnabled( enable );
+   //        ui->TestControlPressure->setEnabled( enable );
+   ui->VoltageRange->setEnabled( enable );
+   ui->Lost->setEnabled( enable );
+   ui->MaxExpenditure->setEnabled( enable );
+   ui->MaxWorkPressure->setEnabled( enable );
+   ui->MinPressure->setEnabled( enable );
+   ui->HermPressure->setEnabled( enable );
+   ui->HermSignal->setEnabled( enable );
+   ui->PABTSignal->setEnabled( enable );
+   ui->PBATSignal->setEnabled( enable );
+   ui->ActuationOffTime->setEnabled( enable );
+   ui->ActuationOnTime->setEnabled( enable );
+
+   if ( app::Settings::Instance().UserAccess() != app::UserLevel::Uncknown )
+   {
+      ui->buttonBox->setStandardButtons( QDialogButtonBox::Ok | QDialogButtonBox::Cancel );
+      ui->gridLayout->setEnabled(true);
+   }
+   else
+   {
+      ui->buttonBox->setStandardButtons( QDialogButtonBox::Cancel );
+      ui->gridLayout->setEnabled(false);
+   }
+}
+void HydroTitleInfo::OnLogin()
+{
+   if ( isHidden() )
+      return;
+   CheckRights();
 }
