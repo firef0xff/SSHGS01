@@ -25,7 +25,7 @@ void ManualControlUpdater::stop()
 
 
 ManualControl::ManualControl(QWidget *parent) :
-    QWidget(parent),
+    ChildWidget(parent),
     ui(new Ui::ManualControl),
     mTaskMode( cpu::CpuMemory::Instance().DB31 ),
     mParams( cpu::CpuMemory::Instance().DB50 ),
@@ -86,8 +86,7 @@ void ManualControl::closeEvent(QCloseEvent *e)
     mTaskMode.Start_Oper = false;
     mTaskMode.Stop_Oper = false;
     mTaskMode.Write();
-    QWidget::closeEvent( e );
-    emit closed();
+    ChildWidget::closeEvent( e );
 }
 void ManualControl::showEvent( QShowEvent *e )
 {

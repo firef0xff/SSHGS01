@@ -1,5 +1,5 @@
 #pragma once
-#include <QWidget>
+#include "child_widget.h"
 #include "device_collection.h"
 
 
@@ -10,7 +10,7 @@ class DeviceCollectionWND;
 class QTableWidgetItem;
 class QTableWidget;
 
-class DeviceCollectionWND : public QWidget
+class DeviceCollectionWND : public ChildWidget
 {
     Q_OBJECT
 
@@ -19,7 +19,6 @@ public:
     ~DeviceCollectionWND();
 
 private:
-    void closeEvent(QCloseEvent *e);
     void ShowData();
     void AutoWidth( QTableWidget *sg );
     void MoveSelectedRows( bool up );
@@ -32,8 +31,6 @@ private:
     bool mUpdateGreed;
     QTableWidgetItem* mCurrentItem;
 
-signals:
-    void closed();
 private slots:
     void on_ControlType_activated(int index);
     void on_AddBtn_clicked();

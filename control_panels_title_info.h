@@ -1,12 +1,12 @@
 #pragma once
-#include <QWidget>
+#include "child_widget.h"
 #include <memory>
 
 namespace Ui {
 class ControlPanelsTitleInfo;
 }
 
-class ControlPanelsTitleInfo : public QWidget
+class ControlPanelsTitleInfo : public ChildWidget
 {
     Q_OBJECT
 
@@ -19,13 +19,10 @@ private:
     std::unique_ptr< QWidget > mChildWindow;
     bool mNewMode;
 
-    void closeEvent(QCloseEvent *);
     bool SaveInputParams();
     void FromParams();
     void CheckRights();
 
-signals:
-    void closed();
 private slots:
     void on_buttonBox_accepted();
     void on_buttonBox_rejected();

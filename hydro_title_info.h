@@ -1,14 +1,14 @@
 #ifndef TITLE_INFO_H
 #define TITLE_INFO_H
 
-#include <QWidget>
+#include "child_widget.h"
 #include <memory>
 
 namespace Ui {
 class HydroTitleInfo;
 }
 
-class HydroTitleInfo : public QWidget
+class HydroTitleInfo : public ChildWidget
 {
     Q_OBJECT
 
@@ -29,7 +29,6 @@ private slots:
 
 private:
     Ui::HydroTitleInfo *ui;
-    void closeEvent(QCloseEvent *);
     std::unique_ptr< QWidget > mChildWindow;
     bool mNewMode;
 
@@ -37,8 +36,6 @@ private:
     void FromParams();
     void CheckRights();
 
-signals:
-    void closed();
 };
 
 #endif // TITLE_INFO_H

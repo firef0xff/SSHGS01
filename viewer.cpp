@@ -7,7 +7,7 @@
 #include <QPrintEngine>
 
 Viewer::Viewer(QWidget *parent) :
-    QWidget(parent),
+    ChildWidget(parent),
     ui(new Ui::Viewer),
     mPageNo( 0 ),
     header_logo( "./img/logo1.png", "PNG" ),
@@ -71,11 +71,6 @@ void Viewer::Init()
 Viewer::~Viewer()
 {
     delete ui;
-}
-void Viewer::closeEvent(QCloseEvent *e)
-{
-    QWidget::closeEvent( e );
-    emit closed();
 }
 void Viewer::on_pushButton_clicked()
 {

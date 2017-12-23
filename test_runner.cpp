@@ -11,7 +11,7 @@
 #include "test_case/test_params.h"
 
 TestRunner::TestRunner(QWidget *parent) :
-    QWidget(parent),
+    ChildWidget(parent),
     ui(new Ui::TestRunner)
 {
     qRegisterMetaType< Functor >();
@@ -38,8 +38,7 @@ TestRunner::~TestRunner()
 void TestRunner::closeEvent(QCloseEvent *e)
 {
     StopWorker();
-    QWidget::closeEvent( e );
-    emit closed();
+    ChildWidget::closeEvent( e );
 }
 
 

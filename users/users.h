@@ -1,6 +1,6 @@
 #pragma once
 
-#include <QWidget>
+#include "child_widget.h"
 #include "../settings/settings.h"
 
 namespace Ui {
@@ -9,7 +9,7 @@ class Users;
 class QTableWidget;
 class QTableWidgetItem;
 
-class Users : public QWidget
+class Users : public ChildWidget
 {
     Q_OBJECT
 
@@ -25,8 +25,7 @@ private:
     bool mUpdateGreed;
     app::UserData mUsers;
     QTableWidgetItem* mCurrentItem = nullptr;
-signals:
-    void closed();
+
 private slots:
     void on_UsersGreed_itemSelectionChanged();
     void on_Add_clicked();

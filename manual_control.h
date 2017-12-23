@@ -1,5 +1,5 @@
 #pragma once
-#include <QWidget>
+#include "child_widget.h"
 #include <QAbstractButton>
 #include "cpu/cpu_memory.h"
 #include <QThread>
@@ -25,7 +25,7 @@ signals:
 
 void UpdateMark  ( QLabel *btn, bool draw, QColor color );
 
-class ManualControl : public QWidget
+class ManualControl : public ChildWidget
 {
     Q_OBJECT
 
@@ -57,8 +57,7 @@ private:
 
     void act_CB_clicked();
     void act_CR_clicked();
-signals:
-    void closed();
+
 private slots:
     void onUpdateControls();
     void on_KM1_clicked();

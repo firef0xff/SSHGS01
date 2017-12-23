@@ -1,14 +1,14 @@
 #ifndef SERVO_TITLE_INFO_H
 #define SERVO_TITLE_INFO_H
 
-#include <QWidget>
+#include "child_widget.h"
 #include <memory>
 
 namespace Ui {
 class ServoTitleInfo;
 }
 
-class ServoTitleInfo : public QWidget
+class ServoTitleInfo : public ChildWidget
 {
     Q_OBJECT
 
@@ -21,13 +21,10 @@ private:
     std::unique_ptr< QWidget > mChildWindow;
     bool mNewMode;
 
-    void closeEvent(QCloseEvent *);
     bool SaveInputParams();
     void FromParams();
     void CheckRights();
 
-signals:
-    void closed();
 private slots:
     void on_buttonBox_accepted();
     void on_buttonBox_rejected();

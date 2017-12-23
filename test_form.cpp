@@ -8,7 +8,7 @@
 #include "settings/settings.h"
 
 TestForm::TestForm( bool new_mode, QWidget *parent) :
-    QWidget(parent),
+    ChildWidget(parent),
     ui(new Ui::TestForm)
 {
     ui->setupUi( this );
@@ -57,12 +57,6 @@ TestForm::TestForm( bool new_mode, QWidget *parent) :
 TestForm::~TestForm()
 {
     delete ui;
-}
-
-void TestForm::closeEvent(QCloseEvent *e)
-{
-    QWidget::closeEvent( e );
-    emit closed();
 }
 
 void TestForm::on_buttonBox_rejected()

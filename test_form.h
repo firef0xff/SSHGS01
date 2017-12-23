@@ -1,7 +1,7 @@
 #ifndef TEST_FORM_H
 #define TEST_FORM_H
 
-#include <QWidget>
+#include "child_widget.h"
 #include <QList>
 #include <memory>
 
@@ -17,7 +17,7 @@ class TestCase;
 class QLayoutItem;
 class QCheckBox;
 
-class TestForm : public QWidget
+class TestForm : public ChildWidget
 {
     Q_OBJECT
 
@@ -34,12 +34,9 @@ private:
     SpaserPtr mVertical;
     std::unique_ptr< QWidget > mChildWindow;
 
-    void closeEvent(QCloseEvent *e);
     void CheckRights();
 
 
-signals:
-    void closed();
 private slots:
     void on_buttonBox_rejected();
     void on_buttonBox_accepted();

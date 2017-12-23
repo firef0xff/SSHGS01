@@ -4,6 +4,12 @@
 #include <memory>
 #include <mutex>
 
+#ifdef WIN32
+#include <windows.h>
+#include <Winscard.h>
+#endif
+
+
 namespace
 {
 QString TAG_CARD_IN = "1";
@@ -28,10 +34,85 @@ Omnikey& Omnikey::Instance()
 
 Omnikey::Omnikey()
 {
+   mRun = true;
+   mScanThread.reset( new std::thread( [this]()
+   {
+      ScanThread();
+   } ) );
 }
 
 Omnikey::~Omnikey()
 {
+   mRun = false;
+   if ( mScanThread && mScanThread->joinable() )
+      mScanThread->join();
+   mScanThread.reset();
+}
+
+void Omnikey::ScanThread()
+{
+#ifdef WIN32
+
+   for(; mRun; )
+   {
+      std::this_thread::sleep_for(std::chrono::seconds(1));
+
+      DWORD dwReaders;
+      LPWSTR szReaders = NULL;
+      SCARDCONTEXT hContext;
+      std::vector<wchar_t const*> cards;
+
+      LONG status = SCardEstablishContext(SCARD_SCOPE_USER, NULL, NULL, &hContext);
+      if( status != SCARD_S_SUCCESS )
+         continue;
+
+      dwReaders = SCARD_AUTOALLOCATE;
+      if( SCardListReaders(hContext, NULL, (LPWSTR)&szReaders, &dwReaders) == SCARD_S_SUCCESS )
+      {
+          LPWSTR reader = szReaders;
+          while ( reader != NULL && *reader != '\0')
+          {
+              //std::wcout << L"Reader name: '" << reader << L"'" << std::endl;
+              cards.push_back( reader );
+              reader += wcslen(reader)+1;
+          }
+
+          std::vector<SCARD_READERSTATEW> lpState( cards.size() );
+          for( size_t n = 0; n < cards.size(); ++n )
+          {
+              memset( &lpState[n], 0, sizeof(SCARD_READERSTATEW) );
+              lpState[n].szReader = cards[n];
+          }
+
+          do
+          {
+              status = SCardGetStatusChange( hContext, 500, lpState.data(), cards.size() );
+              switch( status )
+              {
+                 case SCARD_S_SUCCESS:
+                 case SCARD_E_TIMEOUT:
+                     for( size_t n = 0; n < cards.size(); ++n )
+                     {
+                         if( !( lpState[n].dwEventState & SCARD_STATE_PRESENT ))
+                            OnCardOut();//карты нет
+                         else{}
+                            //карта вставлена
+                     }
+                     break;
+                 default:
+                     break;
+              }
+
+              std::this_thread::sleep_for(std::chrono::seconds(1));
+          }
+          while( mRun );
+          // only do this after being done with the strings, or handle the names another way!
+          SCardFreeMemory( hContext, szReaders );
+      }
+      SCardReleaseContext( hContext );
+   }
+#endif
+   mRun = false;
 }
 
 bool Omnikey::IsStartKey( QKeyEvent const& e )
@@ -52,8 +133,6 @@ bool Omnikey::eventFilter(QObject *watched, QEvent *event)
    if ( !mIgnore && event->type() == QEvent::KeyPress )
    {
       QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-      int key = keyEvent->nativeVirtualKey();
-      QString t = keyEvent->text();
       if (!mCollect && IsStartKey( *keyEvent ) )
       {
          mCollect = true;
@@ -116,14 +195,14 @@ bool Omnikey::ParseText( QString const& text )
 {
    if ( text == TAG_CARD_OUT )
    {
-      emit card_out();
+      emit OnCardOut();
       return true;
    }
    else if ( text.left( TAG_CARD_IN.size() ) == TAG_CARD_IN )
    {
       auto offset = TAG_CARD_IN.size();
       QString msg = text.mid( offset, text.size() - offset );
-      emit card_in( msg );
+      OnCardIn(msg);
       return true;
    }
    else
@@ -138,4 +217,17 @@ void Omnikey::SendEvents( KeyEvents& in )
       event.second->event( &event.first );
    }
    mIgnore = false;
+}
+
+void Omnikey::OnCardIn( QString const& id )
+{
+   mCardIn = true;
+   emit card_in( id );
+}
+void Omnikey::OnCardOut()
+{
+   if ( !mCardIn )
+      return;
+   mCardIn = false;
+   emit card_out();
 }

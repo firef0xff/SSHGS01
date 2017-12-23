@@ -1,14 +1,14 @@
 #ifndef PUMP_TEST_INFO_H
 #define PUMP_TEST_INFO_H
 
-#include <QWidget>
+#include "child_widget.h"
 #include <memory>
 
 namespace Ui {
 class Pump_test_info;
 }
 
-class PumpTestInfo : public QWidget
+class PumpTestInfo : public ChildWidget
 {
    Q_OBJECT
 
@@ -21,12 +21,9 @@ private:
    std::unique_ptr< QWidget > mChildWindow;
    bool mNewMode;
 
-   void closeEvent(QCloseEvent *e);
    bool SaveInputParams();
    void FromParams();
 
-signals:
-    void closed();
 private slots:
     void on_buttonBox_accepted();
     void on_buttonBox_rejected();

@@ -8,7 +8,7 @@
 #include "functions.h"
 
 HydroTitleInfo::HydroTitleInfo(bool new_mode, QWidget *parent) :
-    QWidget(parent),
+    ChildWidget(parent),
     ui(new Ui::HydroTitleInfo),
     mNewMode( new_mode )
 {
@@ -191,12 +191,6 @@ void HydroTitleInfo::on_buttonBox_accepted()
 void HydroTitleInfo::on_buttonBox_rejected()
 {
     close();
-}
-
-void HydroTitleInfo::closeEvent(QCloseEvent *e)
-{
-    QWidget::closeEvent( e );
-    emit closed();
 }
 
 void HydroTitleInfo::on_ControlType_activated(int index)

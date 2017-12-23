@@ -7,7 +7,7 @@
 #include "functions.h"
 
 ControlPanelsTitleInfo::ControlPanelsTitleInfo(bool new_mode, QWidget *parent) :
-    QWidget(parent),
+    ChildWidget(parent),
     ui(new Ui::ControlPanelsTitleInfo),
     mNewMode( new_mode )
 {
@@ -31,12 +31,6 @@ ControlPanelsTitleInfo::ControlPanelsTitleInfo(bool new_mode, QWidget *parent) :
 ControlPanelsTitleInfo::~ControlPanelsTitleInfo()
 {
     delete ui;
-}
-
-void ControlPanelsTitleInfo::closeEvent(QCloseEvent *e)
-{
-    QWidget::closeEvent( e );
-    emit closed();
 }
 
 bool ControlPanelsTitleInfo::SaveInputParams()

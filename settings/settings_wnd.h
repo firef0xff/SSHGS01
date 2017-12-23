@@ -1,11 +1,11 @@
 #pragma once
-#include <QWidget>
+#include "child_widget.h"
 
 namespace Ui {
 class settings_wnd;
 }
 
-class settings_wnd : public QWidget
+class settings_wnd : public ChildWidget
 {
     Q_OBJECT
 
@@ -14,14 +14,10 @@ public:
     ~settings_wnd();
 
 private:
-    void closeEvent(QCloseEvent *e);
-
     QString ChooseDir( QString const& place = QString() );
 
     Ui::settings_wnd *ui;
 
-signals:
-    void closed();
 private slots:
     void on_TestParamsButton_clicked();
     void on_toolButton_2_clicked();

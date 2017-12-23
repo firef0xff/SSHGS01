@@ -106,7 +106,8 @@ SOURCES += main.cpp\
     test_case/implementation/pump/pump_test_8.cpp \
     test_case/implementation/pump/pump_test_9.cpp \
     test_case/implementation/pump/pump_test_10.cpp \
-    omnikey.cpp
+    omnikey.cpp \
+    child_widget.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -164,7 +165,7 @@ HEADERS  += mainwindow.h \
     ../mylib/OPC/impl/demo_mode.h \
     ../mylib/OPC/impl/types.h \
     ../mylib/OPC/impl/cache/cache.h \
-    ../mylib/OPC/impl/cache/def.h \
+    ../mylib/OPC/impl/cache/def_opc.h \
     ../mylib/OPC/impl/cache/memory.h \
     ../mylib/OPC/impl/win_ole_mode.h \
     ../mylib/OPC/impl/sync_thread.h \
@@ -202,7 +203,8 @@ HEADERS  += mainwindow.h \
     test_case/implementation/pump/pump_test_8.h \
     test_case/implementation/pump/pump_test_9.h \
     test_case/implementation/pump/pump_test_10.h \
-    omnikey.h
+    omnikey.h \
+    child_widget.h
 
 
 FORMS    += mainwindow.ui \
@@ -234,7 +236,7 @@ DISTFILES += \
 win32 {
     RC_ICONS += img/Main.ico
     DEFINES += WINDOWS
-    LIBS += -lole32 -loleaut32
+    LIBS += -lole32 -loleaut32 -lwinscard
 }
 
 unix {

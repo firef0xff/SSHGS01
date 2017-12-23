@@ -3,6 +3,8 @@
 #include <memory>
 #include "RoundDial/round_dial.h"
 #include <QThread>
+#include "child_widget.h"
+
 namespace examinee
 {
 class DeviceCollection;
@@ -30,8 +32,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    typedef std::shared_ptr< ff0x::RoundDial > ControlPtr;
-    typedef std::unique_ptr< QWidget > ChildPtr;
+    typedef std::unique_ptr< ChildWidget > ChildPtr;
 
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
@@ -51,13 +52,11 @@ private:
     void DeviceLists( examinee::DeviceCollection& devices );
 
     void ShowChildWindow( ChildPtr child, bool maximized = false );
-    void CheckRights();
+    void CheckRights(bool f_enabled = false);
 
 
     Ui::MainWindow *ui;
     ChildPtr mChildWindow;
-
-    QList< ControlPtr > mChildControls;
 
     //барометр
     ff0x::RoundDial* DD1;
@@ -81,6 +80,8 @@ private:
 
     QString LastErrs;
 
+signals:
+    void login();
 public slots:
     void onLogin();
 
@@ -89,7 +90,8 @@ private slots:
     void on_TestCase1_clicked();
     void on_TestCase2_clicked();
 
-    void enable_modes( bool enabled = true );
+    void on_child_close();
+
     void on_act_test_case1_triggered();
     void on_act_test_case2_triggered();
     void on_load_isp_params_triggered();
@@ -109,6 +111,7 @@ private slots:
     void on_Users_triggered();
     void on_TestCase5_clicked();
     void on_act_test_case5_triggered();
+
 };
 
 

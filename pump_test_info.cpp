@@ -6,7 +6,7 @@
 #include "functions.h"
 
 PumpTestInfo::PumpTestInfo(bool new_mode, QWidget *parent) :
-   QWidget(parent),
+   ChildWidget(parent),
    ui(new Ui::Pump_test_info),
    mNewMode(new_mode)
 {
@@ -21,12 +21,6 @@ PumpTestInfo::PumpTestInfo(bool new_mode, QWidget *parent) :
 PumpTestInfo::~PumpTestInfo()
 {
    delete ui;
-}
-
-void PumpTestInfo::closeEvent(QCloseEvent *e)
-{
-   QWidget::closeEvent( e );
-   emit closed();
 }
 
 void PumpTestInfo::on_buttonBox_rejected()

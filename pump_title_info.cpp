@@ -6,7 +6,7 @@
 #include "functions.h"
 
 PumpTitleInfo::PumpTitleInfo(bool new_mode, QWidget *parent) :
-   QWidget(parent),
+   ChildWidget(parent),
    ui(new Ui::Pump_title_info),
    mNewMode( new_mode )
 {
@@ -49,12 +49,6 @@ PumpTitleInfo::PumpTitleInfo(bool new_mode, QWidget *parent) :
 PumpTitleInfo::~PumpTitleInfo()
 {
    delete ui;
-}
-
-void PumpTitleInfo::closeEvent(QCloseEvent *e)
-{
-    QWidget::closeEvent( e );
-    emit closed();
 }
 
 void PumpTitleInfo::on_AnsverBox_rejected()

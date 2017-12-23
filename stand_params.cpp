@@ -8,7 +8,7 @@
 #include "functions.h"
 
 StandParams::StandParams(bool new_mode, QWidget *parent) :
-    QWidget(parent),
+    ChildWidget(parent),
     ui(new Ui::StandParams),
     mNewMode( new_mode )
 {
@@ -41,8 +41,7 @@ StandParams::~StandParams()
 
 void StandParams::closeEvent(QCloseEvent *e)
 {
-    QWidget::closeEvent( e );
-    emit closed();
+    ChildWidget::closeEvent( e );
     if (mCustomAction)
         mCustomAction();
 }

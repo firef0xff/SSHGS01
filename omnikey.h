@@ -3,6 +3,8 @@
 #include <QObject>
 #include <QKeyEvent>
 #include <vector>
+#include <thread>
+#include <memory>
 
 class Omnikey :public QObject
 {
@@ -34,8 +36,18 @@ private:
    bool IsEndKey( QKeyEvent const& e );
    QString ToString( QKeyEvent const& e );
 
+   void ScanThread();
+
+   void OnCardIn( QString const& id );
+   void OnCardOut();
+
+
    KeyEvents mEvents;
    bool mCollect = false;
    QString mLastData;
    bool mIgnore = false;
+
+   std::unique_ptr<std::thread> mScanThread;
+   bool mRun = true;
+   bool mCardIn = false;
 };

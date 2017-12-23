@@ -28,7 +28,7 @@ app::UserLevel CastToLevel( QString const& str )
 }
 
 Users::Users(QWidget *parent) :
-    QWidget(parent),
+    ChildWidget(parent),
     ui(new Ui::Users)
 {
     ui->setupUi(this);
@@ -49,8 +49,7 @@ void Users::closeEvent(QCloseEvent *e)
 {
     app::Settings::Instance().Users( mUsers );
     app::Settings::Instance().Save();
-    QWidget::closeEvent( e );
-    emit closed();
+    ChildWidget::closeEvent( e );
 }
 
 void Users::AutoWidth(QTableWidget *sg )

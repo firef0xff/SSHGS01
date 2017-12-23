@@ -1,5 +1,5 @@
 #pragma once
-#include <QWidget>
+#include <child_widget.h>
 #include <memory>
 #include <functional>
 
@@ -7,7 +7,7 @@ namespace Ui {
 class StandParams;
 }
 
-class StandParams : public QWidget
+class StandParams : public ChildWidget
 {
     Q_OBJECT
 
@@ -28,8 +28,6 @@ private:
     void FromParams();
     void CheckRights();
 
-signals:
-    void closed();
 private slots:
     void on_buttonBox_accepted();
     void on_buttonBox_rejected();

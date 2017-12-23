@@ -169,17 +169,35 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect( &Updater, SIGNAL(update()), this, SLOT(onUpdateControls()) );
     Updater.start();
 }
-void MainWindow::CheckRights()
+void MainWindow::CheckRights( bool f_enabled )
 {
-   ui->Users->setEnabled( true );
-   ui->ManualControl->setEnabled( true );
-   ui->TestCase1->setEnabled( true );
-   ui->TestCase2->setEnabled( true );
-   ui->TestCase3->setEnabled( true );
-   ui->TestCase4->setEnabled( true );
-   ui->menu_3->setEnabled( true );
-   ui->menu_4->setEnabled( true );
-   ui->centralWidget->setEnabled( true );
+   bool enabled = f_enabled || !mChildWindow || ( mChildWindow && mChildWindow->isHidden() );
+
+   ui->act_test_case1->setEnabled( enabled );
+   ui->act_test_case2->setEnabled( enabled );
+   ui->act_test_case3->setEnabled( enabled );
+   ui->act_test_case4->setEnabled( enabled );
+   ui->act_test_case5->setEnabled( enabled );
+   ui->ManualControl->setEnabled( enabled );
+
+   ui->TestCase1->setEnabled( enabled );
+   ui->TestCase2->setEnabled( enabled );
+   ui->TestCase3->setEnabled( enabled );
+   ui->TestCase4->setEnabled( enabled );
+   ui->TestCase5->setEnabled( enabled );
+
+   ui->app_settings->setEnabled( enabled );
+   ui->device_list->setEnabled( enabled );
+
+   ui->hydro_list->setEnabled( enabled );
+   ui->servo_list->setEnabled( enabled );
+
+   ui->load_isp_params->setEnabled( enabled );
+
+   ui->Users->setEnabled( enabled );
+   ui->menu_3->setEnabled( enabled );
+   ui->menu_4->setEnabled( enabled );
+   ui->centralWidget->setEnabled( enabled );
 
    if ( app::Settings::Instance().UserAccess() != app::Admin )
    {
@@ -191,6 +209,7 @@ void MainWindow::CheckRights()
          ui->TestCase2->setEnabled( false );
          ui->TestCase3->setEnabled( false );
          ui->TestCase4->setEnabled( false );
+         ui->TestCase5->setEnabled( false );
          ui->menu_3->setEnabled( false );
          ui->menu_4->setEnabled( false );
 
@@ -204,6 +223,9 @@ void MainWindow::CheckRights()
 
 void MainWindow::onLogin()
 {
+   if ( mChildWindow && !mChildWindow->isHidden() )
+      emit login();
+
    CheckRights();
    ui->statusBar->showMessage("Текущий пользователь: " + app::Settings::Instance().User() );
 }
@@ -236,18 +258,23 @@ void MainWindow::closeEvent(QCloseEvent *e)
     QWidget::closeEvent( e );
 }
 
-void MainWindow::ShowChildWindow( std::unique_ptr< QWidget > child, bool maximized )
+void MainWindow::ShowChildWindow( ChildPtr child, bool maximized )
 {
-    enable_modes(false);
     if ( mChildWindow.get() )
-        QObject::disconnect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(enable_modes()) );
+    {
+        QObject::disconnect( mChildWindow.get(), &ChildWidget::closed, this, &MainWindow::on_child_close );
+        QObject::disconnect( this, &MainWindow::login, mChildWindow.get(), &ChildWidget::on_login );
+    }
     mChildWindow.reset( child.release() );
-    QObject::connect( mChildWindow.get(), SIGNAL(closed()), this, SLOT(enable_modes()) );
+    QObject::connect( mChildWindow.get(), &ChildWidget::closed, this, &MainWindow::on_child_close );
+    QObject::connect( this, &MainWindow::login, mChildWindow.get(), &ChildWidget::on_login );
 
     if ( maximized )
         mChildWindow->showMaximized();
     else
         mChildWindow->show();
+
+    CheckRights();
 }
 
 void MainWindow::StartHydroTest( bool new_test )
@@ -281,30 +308,10 @@ void MainWindow::DeviceLists( examinee::DeviceCollection& devices )
 }
 
 
-void MainWindow::enable_modes(bool enabled)
+void MainWindow::on_child_close()
 {
-    ui->act_test_case1->setEnabled( enabled );
-    ui->act_test_case2->setEnabled( enabled );
-    ui->act_test_case3->setEnabled( enabled );
-    ui->act_test_case4->setEnabled( enabled );
-    ui->ManualControl->setEnabled( enabled );
-
-    ui->TestCase1->setEnabled( enabled );
-    ui->TestCase2->setEnabled( enabled );
-    ui->TestCase3->setEnabled( enabled );
-    ui->TestCase4->setEnabled( enabled );
-
-    ui->app_settings->setEnabled( enabled );
-    ui->device_list->setEnabled( enabled );
-
-    ui->hydro_list->setEnabled( enabled );
-    ui->servo_list->setEnabled( enabled );
-
-    ui->load_isp_params->setEnabled( enabled );
-
-    CheckRights();
+   CheckRights( true );
 }
-
 void MainWindow::on_act_test_case1_triggered()
 {
     on_TestCase1_clicked();
@@ -465,7 +472,7 @@ void MainWindow::onUpdateControls()
     float amperage_dc = table.A1;  //постоянный ток
     ui->Amperage->display(round( amperage_dc *100)/100);
 
-    float amperage_ac = table.A2;  //переменный ток
+//    float amperage_ac = table.A2;  //переменный ток
 //    ui->Amperage->display(amperage_dc);
 
     //температура масла

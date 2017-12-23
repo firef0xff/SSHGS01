@@ -7,7 +7,7 @@
 #include "functions.h"
 
 HydroCilinderTitleInfo::HydroCilinderTitleInfo(bool new_mode, QWidget *parent) :
-    QWidget(parent),
+    ChildWidget(parent),
     ui(new Ui::HydroCilinderTitleInfo),
     mNewMode( new_mode )
 {
@@ -26,12 +26,6 @@ HydroCilinderTitleInfo::HydroCilinderTitleInfo(bool new_mode, QWidget *parent) :
 HydroCilinderTitleInfo::~HydroCilinderTitleInfo()
 {
     delete ui;
-}
-
-void HydroCilinderTitleInfo::closeEvent(QCloseEvent *e)
-{
-    QWidget::closeEvent( e );
-    emit closed();
 }
 
 bool HydroCilinderTitleInfo::SaveInputParams()

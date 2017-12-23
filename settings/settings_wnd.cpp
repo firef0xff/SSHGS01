@@ -4,7 +4,7 @@
 #include <QFileDialog>
 
 settings_wnd::settings_wnd(QWidget *parent) :
-    QWidget(parent),
+    ChildWidget(parent),
     ui(new Ui::settings_wnd)
 {
     ui->setupUi(this);
@@ -28,12 +28,6 @@ settings_wnd::settings_wnd(QWidget *parent) :
 settings_wnd::~settings_wnd()
 {
     delete ui;
-}
-
-void settings_wnd::closeEvent(QCloseEvent *e)
-{
-    QWidget::closeEvent( e );
-    emit closed();
 }
 
 QString settings_wnd::ChooseDir( const QString &place )

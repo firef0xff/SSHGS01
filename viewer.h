@@ -1,5 +1,5 @@
 #pragma once
-#include <QWidget>
+#include "child_widget.h"
 #include <QPixmap>
 #include <QVector>
 
@@ -7,7 +7,7 @@ namespace Ui {
 class Viewer;
 }
 
-class Viewer : public QWidget
+class Viewer : public ChildWidget
 {
     Q_OBJECT
 
@@ -23,12 +23,9 @@ private slots:
 
     void on_Compare_clicked();
 
-signals:
-    void closed();
 
 private:
     void Init();
-    void closeEvent(QCloseEvent *e);
 
     Ui::Viewer *ui;
     int mPageNo;

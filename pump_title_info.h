@@ -1,14 +1,14 @@
 #ifndef PUMP_TITLE_INFO_H
 #define PUMP_TITLE_INFO_H
 
-#include <QWidget>
+#include "child_widget.h"
 #include <memory>
 
 namespace Ui {
 class Pump_title_info;
 }
 
-class PumpTitleInfo : public QWidget
+class PumpTitleInfo : public ChildWidget
 {
    Q_OBJECT
 
@@ -19,15 +19,11 @@ public:
 private:
    Ui::Pump_title_info *ui;
 
-   void closeEvent(QCloseEvent *);
    std::unique_ptr< QWidget > mChildWindow;
    bool mNewMode;
 
    bool SaveInputParams();
    void FromParams();
-
-signals:
-    void closed();
 
 private slots:
     void on_AnsverBox_accepted();

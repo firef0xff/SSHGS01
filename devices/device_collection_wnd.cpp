@@ -3,7 +3,7 @@
 #include "device.h"
 
 DeviceCollectionWND::DeviceCollectionWND ( examinee::DeviceCollection& collection, QWidget *parent) :
-    QWidget(parent),
+    ChildWidget(parent),
     ui(new Ui::DeviceCollectionWND),
     mCollection( collection ),
     mDevices( mCollection.Get() )
@@ -18,12 +18,6 @@ DeviceCollectionWND::DeviceCollectionWND ( examinee::DeviceCollection& collectio
 DeviceCollectionWND::~DeviceCollectionWND()
 {
     delete ui;
-}
-
-void DeviceCollectionWND::closeEvent(QCloseEvent *e)
-{
-    QWidget::closeEvent( e );
-    emit closed();
 }
 
 void DeviceCollectionWND::ShowData()

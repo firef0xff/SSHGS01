@@ -9,7 +9,7 @@
 //#include <climits>
 
 ServoTitleInfo::ServoTitleInfo(bool new_mode, QWidget *parent) :
-    QWidget(parent),
+    ChildWidget(parent),
     ui(new Ui::ServoTitleInfo),
     mNewMode( new_mode )
 {
@@ -277,14 +277,6 @@ void ServoTitleInfo::on_buttonBox_rejected()
 {
     close();
 }
-
-void ServoTitleInfo::closeEvent(QCloseEvent *e)
-{
-    QWidget::closeEvent( e );
-    emit closed();
-}
-
-
 
 void ServoTitleInfo::on_RaspredControl_activated(int index)
 {

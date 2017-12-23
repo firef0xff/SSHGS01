@@ -1,7 +1,7 @@
 #ifndef TEST_RUNNER_H
 #define TEST_RUNNER_H
 
-#include <QWidget>
+#include "child_widget.h"
 #include <QThread>
 #include <memory>
 #include <functional>
@@ -19,7 +19,7 @@ class QLabel;
 class Worker;
 
 typedef std::function< void() > Functor;
-class TestRunner : public QWidget
+class TestRunner : public ChildWidget
 {
     Q_OBJECT
 
@@ -37,8 +37,6 @@ private:
     void closeEvent(QCloseEvent *e);
     void StopWorker();
 
-signals:
-    void closed();
 private slots:
     void on_Start_clicked();
     void on_Abort_clicked();
