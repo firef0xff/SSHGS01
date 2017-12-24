@@ -6,6 +6,7 @@
 #include "login.h"
 #include "board/custom_control_board.h"
 #include "omnikey.h"
+#include "pumps_manual_control.h"
 
 int main(int argc, char *argv[])
 {
@@ -15,6 +16,8 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
     a.installEventFilter( &Omnikey::Instance() );
+    pumps_manual_control pm;
+    pm.show();
     MainWindow w;
     Login l ( &w );
     w.connect( &l, &Login::on_login, &w, &MainWindow::onLogin );

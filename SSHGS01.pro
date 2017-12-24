@@ -108,7 +108,8 @@ SOURCES += main.cpp\
     test_case/implementation/pump/pump_test_10.cpp \
     omnikey.cpp \
     child_widget.cpp \
-    cpu/db71.cpp
+    cpu/db71.cpp \
+    pumps_manual_control.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -206,7 +207,8 @@ HEADERS  += mainwindow.h \
     test_case/implementation/pump/pump_test_10.h \
     omnikey.h \
     child_widget.h \
-    cpu/db71.h
+    cpu/db71.h \
+    pumps_manual_control.h
 
 
 FORMS    += mainwindow.ui \
@@ -224,7 +226,8 @@ FORMS    += mainwindow.ui \
     manual_control.ui \
     users/users.ui \
     pump_title_info.ui \
-    pump_test_info.ui
+    pump_test_info.ui \
+    pumps_manual_control.ui
 
 OTHER_FILES += devices/*.json\
    тз/*\
@@ -256,4 +259,7 @@ release {
 #DEFINES += WINDOWS
 DEFINES += DEMO
 #DEFINES += DEBUG
+
+RESOURCES += \
+    resourses.qrc
 

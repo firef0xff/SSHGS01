@@ -1,0 +1,27 @@
+<RCC>
+    <qresource prefix="/">
+        <file>img/SP(32*32).png</file>
+        <file>img/SP2(32*32).png</file>
+        <file>img/ConOut(33*27).png</file>
+        <file>img/ConIn(33*27).png</file>
+        <file>img/YB2(64*64).png</file>
+        <file>img/YB(64*64).png</file>
+        <file>img/YA(64*64).png</file>
+        <file>img/VLine(32*32).png</file>
+        <file>img/HLine(32*32).png</file>
+        <file>img/YB(32*32).png</file>
+        <file>img/YB2(33*33).png</file>
+        <file>img/YA(33*33).png</file>
+        <file>img/angle1(32*32).png</file>
+        <file>img/angle2(32*32).png</file>
+        <file>img/angle3(32*32).png</file>
+        <file>img/Endl(32*32).png</file>
+        <file>img/VCon(32*32).png</file>
+        <file>img/VMuft.png</file>
+        <file>img/VPump.png</file>
+        <file>img/M13Pump.png</file>
+        <file>img/HPump.png</file>
+        <file>img/HMuft.png</file>
+        <file>img/gmPump.png</file>
+    </qresource>
+</RCC>
