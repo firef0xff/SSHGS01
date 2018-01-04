@@ -1,27 +1,44 @@
 <RCC>
     <qresource prefix="/">
-        <file>img/SP(32*32).png</file>
-        <file>img/SP2(32*32).png</file>
-        <file>img/ConOut(33*27).png</file>
-        <file>img/ConIn(33*27).png</file>
-        <file>img/YB2(64*64).png</file>
-        <file>img/YB(64*64).png</file>
-        <file>img/YA(64*64).png</file>
-        <file>img/VLine(32*32).png</file>
-        <file>img/HLine(32*32).png</file>
-        <file>img/YB(32*32).png</file>
-        <file>img/YB2(33*33).png</file>
-        <file>img/YA(33*33).png</file>
-        <file>img/angle1(32*32).png</file>
-        <file>img/angle2(32*32).png</file>
-        <file>img/angle3(32*32).png</file>
-        <file>img/Endl(32*32).png</file>
-        <file>img/VCon(32*32).png</file>
         <file>img/VMuft.png</file>
         <file>img/VPump.png</file>
         <file>img/M13Pump.png</file>
         <file>img/HPump.png</file>
         <file>img/HMuft.png</file>
         <file>img/gmPump.png</file>
+        <file>img/1(250x300).png</file>
+        <file>img/1.png</file>
+        <file>img/1b(250x300).png</file>
+        <file>img/1b.png</file>
+        <file>img/2(250x300).png</file>
+        <file>img/2.png</file>
+        <file>img/3(250x300).png</file>
+        <file>img/3.png</file>
+        <file>img/4(250x300).png</file>
+        <file>img/4.png</file>
+        <file>img/5(250x300).png</file>
+        <file>img/5.png</file>
+        <file>img/6.png</file>
+        <file>img/angle1(32x32).png</file>
+        <file>img/angle2(32x32).png</file>
+        <file>img/angle3(32x32).png</file>
+        <file>img/ConIn(33x27).png</file>
+        <file>img/ConOut(33x27).png</file>
+        <file>img/Endl(32x32).png</file>
+        <file>img/HLine(32x32).png</file>
+        <file>img/logo1.png</file>
+        <file>img/logo2.png</file>
+        <file>img/Main.ico</file>
+        <file>img/SP(32x32).png</file>
+        <file>img/SP2(32x32).png</file>
+        <file>img/VCon(32x32).png</file>
+        <file>img/VLine(32x32).png</file>
+        <file>img/YA(33x33).png</file>
+        <file>img/YA(64x64).png</file>
+        <file>img/YB(32x32).png</file>
+        <file>img/YB(64x64).png</file>
+        <file>img/YB2(33x33).png</file>
+        <file>img/YB2(64x64).png</file>
+        <file>img/HCon(32x32).png</file>
     </qresource>
 </RCC>
