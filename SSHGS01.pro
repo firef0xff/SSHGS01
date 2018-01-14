@@ -109,7 +109,10 @@ SOURCES += main.cpp\
     omnikey.cpp \
     child_widget.cpp \
     cpu/db71.cpp \
-    pumps_manual_control.cpp
+    pumps_manual_control.cpp \
+    cpu/db70.cpp \
+    cpu/db72.cpp \
+    cpu/db73.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -208,7 +211,10 @@ HEADERS  += mainwindow.h \
     omnikey.h \
     child_widget.h \
     cpu/db71.h \
-    pumps_manual_control.h
+    pumps_manual_control.h \
+    cpu/db70.h \
+    cpu/db72.h \
+    cpu/db73.h
 
 
 FORMS    += mainwindow.ui \

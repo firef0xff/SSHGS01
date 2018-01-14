@@ -24,7 +24,10 @@
 #include "db50.h"
 #include "db60.h"
 
+#include "db70.h"
 #include "db71.h"
+#include "db72.h"
+#include "db73.h"
 
 #include "m1.h"
 #include "i1.h"
@@ -67,7 +70,10 @@ public:
     data::DB50 DB50;    //данные датчиков
     data::DB60 DB60;
 
+    data::DB70 DB70;    //Таблица данных с датчиков
     data::DB71 DB71;    //Таблица параметров
+    data::DB72 DB72;    //метки готовности тестов
+    data::DB73 DB73;    //биты ошибок
 
     data::M1   M1;      //управляющие биты ручного режима
     data::I1   I1;      //контрольные биты ручного режима
