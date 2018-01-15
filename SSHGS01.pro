@@ -112,7 +112,9 @@ SOURCES += main.cpp\
     pumps_manual_control.cpp \
     cpu/db70.cpp \
     cpu/db72.cpp \
-    cpu/db73.cpp
+    cpu/db73.cpp \
+    cpu/db90.cpp \
+    cpu/db91.cpp \
 
 
 HEADERS  += mainwindow.h \
@@ -214,7 +216,9 @@ HEADERS  += mainwindow.h \
     pumps_manual_control.h \
     cpu/db70.h \
     cpu/db72.h \
-    cpu/db73.h
+    cpu/db73.h\
+    cpu/db90.h\
+    cpu/db91.h\
 
 
 FORMS    += mainwindow.ui \
