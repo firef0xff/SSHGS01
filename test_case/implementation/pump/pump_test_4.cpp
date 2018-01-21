@@ -9,33 +9,30 @@ namespace pump
 
 PumpTest4::PumpTest4():
     test::pump::Test( "Расчет КПД", 43 ),
-    mResult(false),
     mData(0.0)
 {}
 
 bool PumpTest4::Run()
 {
     Start();
-//    Wait( mBits.op32_ok, mBits.op32_end );
+    Wait( mBits.OP43_Work, mBits.OP43_End );
     if ( IsStopped() )
         return false;
 
 //    OilTemp = round( mTemperature.T_oil *100)/100;
-
+    mData = mBits.OP43_KPD;
     return Success();
 }
 
 QJsonObject PumpTest4::Serialise() const
 {
     QJsonObject obj = Test::Serialise();
-    obj.insert("mResult",            mResult );
     obj.insert("mData",              mData );
 
     return obj;
 }
 bool PumpTest4::Deserialize( QJsonObject const& obj )
 {
-    mResult = obj.value("mResult").toBool();
     mData = obj.value("mData").toDouble();
     Test::Deserialize( obj );
     return true;
@@ -43,7 +40,7 @@ bool PumpTest4::Deserialize( QJsonObject const& obj )
 
 bool PumpTest4::Success() const
 {
-    return mResult;
+    return true;
 }
 QString PumpTest4::RepRes() const
 {

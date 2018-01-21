@@ -18,7 +18,7 @@ PumpTest3::PumpTest3():
 bool PumpTest3::Run()
 {
     Start();
-//    Wait( mBits.op32_ok, mBits.op32_end );
+    Wait( mBits.OP42_Work, mBits.OP42_End );
     if ( IsStopped() )
         return false;
 

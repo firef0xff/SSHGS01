@@ -9,33 +9,30 @@ namespace pump
 
 PumpTest7::PumpTest7():
     test::pump::Test( "Расчет номинальной мощности", 46 ),
-    mResult(false),
     mData(0.0)
 {}
 
 bool PumpTest7::Run()
 {
     Start();
-//    Wait( mBits.op32_ok, mBits.op32_end );
+    Wait( mBits.OP46_Work, mBits.OP46_End );
     if ( IsStopped() )
         return false;
 
 //    OilTemp = round( mTemperature.T_oil *100)/100;
-
+    mData = mBits.OP46_Power;
     return Success();
 }
 
 QJsonObject PumpTest7::Serialise() const
 {
     QJsonObject obj = Test::Serialise();
-    obj.insert("mResult",            mResult );
     obj.insert("mData",              mData );
 
     return obj;
 }
 bool PumpTest7::Deserialize( QJsonObject const& obj )
 {
-    mResult = obj.value("mResult").toBool();
     mData = obj.value("mData").toDouble();
     Test::Deserialize( obj );
     return true;
@@ -43,7 +40,7 @@ bool PumpTest7::Deserialize( QJsonObject const& obj )
 
 bool PumpTest7::Success() const
 {
-    return mResult;
+    return true;
 }
 QString PumpTest7::RepRes() const
 {

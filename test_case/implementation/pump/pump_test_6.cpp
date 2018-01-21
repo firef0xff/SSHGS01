@@ -9,33 +9,30 @@ namespace pump
 
 PumpTest6::PumpTest6():
     test::pump::Test( "Определение коэффициента подачи", 45 ),
-    mResult(false),
     mData(0.0)
 {}
 
 bool PumpTest6::Run()
 {
     Start();
-//    Wait( mBits.op32_ok, mBits.op32_end );
+    Wait( mBits.OP45_Work, mBits.OP45_End );
     if ( IsStopped() )
         return false;
 
 //    OilTemp = round( mTemperature.T_oil *100)/100;
-
+    mData = mBits.OP45_K_Podacha;
     return Success();
 }
 
 QJsonObject PumpTest6::Serialise() const
 {
     QJsonObject obj = Test::Serialise();
-    obj.insert("mResult",            mResult );
     obj.insert("mData",              mData );
 
     return obj;
 }
 bool PumpTest6::Deserialize( QJsonObject const& obj )
 {
-    mResult = obj.value("mResult").toBool();
     mData = obj.value("mData").toDouble();
     Test::Deserialize( obj );
     return true;
@@ -43,7 +40,7 @@ bool PumpTest6::Deserialize( QJsonObject const& obj )
 
 bool PumpTest6::Success() const
 {
-    return mResult;
+    return true;
 }
 QString PumpTest6::RepRes() const
 {

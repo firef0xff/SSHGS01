@@ -289,7 +289,7 @@ PumpTest10::~PumpTest10()
 bool PumpTest10::Run()
 {
     Start();
-//    Wait( mBits.op32_ok, mBits.op32_end );
+    Wait( mBits.OP49_Work, mBits.OP49_End );
     if ( IsStopped() )
         return false;
 

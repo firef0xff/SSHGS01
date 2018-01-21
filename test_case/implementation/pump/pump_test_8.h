@@ -20,7 +20,6 @@ public:
 virtual QString RepRes() const;
 virtual QString RepName() const;
 private:
-   bool mResult;
    double mExpMin;
    double mExpNom;
    double mExpMax;

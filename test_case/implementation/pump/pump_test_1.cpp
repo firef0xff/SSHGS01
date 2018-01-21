@@ -15,10 +15,11 @@ PumpTest1::PumpTest1():
 bool PumpTest1::Run()
 {
     Start();
-//    Wait( mBits.op32_ok, mBits.op32_end );
+    Wait( mBits.OP40_Work, mBits.OP40_End );
     if ( IsStopped() )
         return false;
 
+//TODO нет бита результата
 //    OilTemp = round( mTemperature.T_oil *100)/100;
 
     return Success();

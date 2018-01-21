@@ -20,7 +20,6 @@ public:
    QString RepRes() const;
    QString RepName() const;
 private:
-   bool mResult;
    double mData;
 };
 

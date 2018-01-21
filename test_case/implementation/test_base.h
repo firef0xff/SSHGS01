@@ -126,6 +126,8 @@ public:
 protected:
     void UpdateData();
 
+    cpu::data::DB72& mBits;
+
 private:
     static uint8_t mTestsCount;
 };

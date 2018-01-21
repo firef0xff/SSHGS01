@@ -9,18 +9,19 @@ namespace pump
 
 PumpTest9::PumpTest9():
     test::pump::Test( "Расход в дренаже", 48 ),
-    mResult(false),
     mExp(0.0)
 {}
 
 bool PumpTest9::Run()
 {
     Start();
-//    Wait( mBits.op32_ok, mBits.op32_end );
+    Wait( mBits.OP48_Work, mBits.OP48_End );
     if ( IsStopped() )
         return false;
 
 //    OilTemp = round( mTemperature.T_oil *100)/100;
+
+    mExp = mBits.OP48_Q_Drenag;
 
     return Success();
 }
@@ -28,14 +29,12 @@ bool PumpTest9::Run()
 QJsonObject PumpTest9::Serialise() const
 {
     QJsonObject obj = Test::Serialise();
-    obj.insert("mResult",            mResult );
     obj.insert("mExp",               mExp );
 
     return obj;
 }
 bool PumpTest9::Deserialize( QJsonObject const& obj )
 {
-    mResult = obj.value("mResult").toBool();
     mExp = obj.value("mExp").toDouble();
     Test::Deserialize( obj );
     return true;
@@ -43,7 +42,7 @@ bool PumpTest9::Deserialize( QJsonObject const& obj )
 
 bool PumpTest9::Success() const
 {
-    return mResult;
+    return true;
 }
 QString PumpTest9::RepRes() const
 {

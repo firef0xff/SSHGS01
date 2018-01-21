@@ -9,7 +9,6 @@ namespace pump
 
 PumpTest8::PumpTest8():
     test::pump::Test( "Расчет подачи насоса", 47 ),
-    mResult(false),
     mExpMin(0.0),
     mExpNom(0.0),
     mExpMax(0.0)
@@ -18,19 +17,21 @@ PumpTest8::PumpTest8():
 bool PumpTest8::Run()
 {
     Start();
-//    Wait( mBits.op32_ok, mBits.op32_end );
+    Wait( mBits.OP47_Work, mBits.OP47_End );
     if ( IsStopped() )
         return false;
 
 //    OilTemp = round( mTemperature.T_oil *100)/100;
 
+    mExpMin = mBits.OP47_Podacha_1;
+    mExpNom = mBits.OP47_Podacha_2;
+    mExpMax = mBits.OP47_Podacha_3;
     return Success();
 }
 
 QJsonObject PumpTest8::Serialise() const
 {
     QJsonObject obj = Test::Serialise();
-    obj.insert("mResult",            mResult );
     obj.insert("mExpMin",            mExpMin );
     obj.insert("mExpNom",            mExpNom );
     obj.insert("mExpMax",            mExpMax );
@@ -39,7 +40,6 @@ QJsonObject PumpTest8::Serialise() const
 }
 bool PumpTest8::Deserialize( QJsonObject const& obj )
 {
-    mResult = obj.value("mResult").toBool();
     mExpMin = obj.value("mExpMin").toDouble();
     mExpNom = obj.value("mExpNom").toDouble();
     mExpMax = obj.value("mExpMax").toDouble();
@@ -49,7 +49,7 @@ bool PumpTest8::Deserialize( QJsonObject const& obj )
 
 bool PumpTest8::Success() const
 {
-    return mResult;
+    return true;
 }
 QString PumpTest8::RepName() const
 {
