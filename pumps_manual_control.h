@@ -2,21 +2,56 @@
 #define PUMPS_MANUAL_CONTROL_H
 
 #include <QWidget>
+#include <QThread>
+#include <QAbstractButton>
+#include "cpu/cpu_memory.h"
 
 namespace Ui {
 class pumps_manual_control;
 }
 
-class pumps_manual_control : public QWidget
+class PumpsManualControlUpdater : public QThread
+{
+    Q_OBJECT
+public:
+    PumpsManualControlUpdater();
+    void run();
+    void stop();
+private:
+    mutable bool mStopSignal;
+signals:
+    void update();
+};
+
+class PumpsManualControl : public QWidget
 {
    Q_OBJECT
 
 public:
-   explicit pumps_manual_control(QWidget *parent = 0);
-   ~pumps_manual_control();
+   explicit PumpsManualControl(QWidget *parent = 0);
+   ~PumpsManualControl();
 
 private:
    Ui::pumps_manual_control *ui;
+
+   cpu::data::DB31   &mTaskMode;
+   PumpsManualControlUpdater mUpdater;
+
+   void closeEvent( QCloseEvent *e );
+   void showEvent ( QShowEvent *e );
+   void hideEvent ( QHideEvent *e );
+
+   void UpdateMarks();
+   void UpdateData();
+   void SynkControls();
+
+   void Start();
+   void Stop();
+
+   void UpdateButton( QAbstractButton *btn, bool checked );
+private slots:
+    void onUpdateControls();
+
 };
 
 #endif // PUMPS_MANUAL_CONTROL_H

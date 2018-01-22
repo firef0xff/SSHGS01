@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
     a.installEventFilter( &Omnikey::Instance() );
-    pumps_manual_control pm;
+    PumpsManualControl pm;
     pm.show();
     MainWindow w;
     Login l ( &w );
