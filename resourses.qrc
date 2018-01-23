@@ -40,5 +40,53 @@
         <file>img/YB2(33x33).png</file>
         <file>img/YB2(64x64).png</file>
         <file>img/HCon(32x32).png</file>
+        <file>img/b_angle2(32x32).png</file>
+        <file>img/b_angle3(32x32).png</file>
+        <file>img/b_ConIn(33x27).png</file>
+        <file>img/b_ConOut(33x27).png</file>
+        <file>img/b_Endl(32x32).png</file>
+        <file>img/b_gmPump.png</file>
+        <file>img/b_HCon(32x32).png</file>
+        <file>img/b_HLine(32x32).png</file>
+        <file>img/b_HMuft.png</file>
+        <file>img/b_HPump.png</file>
+        <file>img/b_M13Pump.png</file>
+        <file>img/b_SP(32x32).png</file>
+        <file>img/b_SP2(32x32).png</file>
+        <file>img/b_VCon(32x32).png</file>
+        <file>img/b_VLine(32x32).png</file>
+        <file>img/b_VMuft.png</file>
+        <file>img/b_VPump.png</file>
+        <file>img/b_YA(33x33).png</file>
+        <file>img/b_YA(64x64).png</file>
+        <file>img/b_YB(32x32).png</file>
+        <file>img/b_YB(64x64).png</file>
+        <file>img/b_YB2(33x33).png</file>
+        <file>img/b_YB2(64x64).png</file>
+        <file>img/r_angle1(32x32).png</file>
+        <file>img/r_angle2(32x32).png</file>
+        <file>img/r_angle3(32x32).png</file>
+        <file>img/r_ConIn(33x27).png</file>
+        <file>img/r_ConOut(33x27).png</file>
+        <file>img/r_Endl(32x32).png</file>
+        <file>img/r_gmPump.png</file>
+        <file>img/r_HCon(32x32).png</file>
+        <file>img/r_HLine(32x32).png</file>
+        <file>img/r_HMuft.png</file>
+        <file>img/r_HPump.png</file>
+        <file>img/r_M13Pump.png</file>
+        <file>img/r_SP(32x32).png</file>
+        <file>img/r_SP2(32x32).png</file>
+        <file>img/r_VCon(32x32).png</file>
+        <file>img/r_VLine(32x32).png</file>
+        <file>img/r_VMuft.png</file>
+        <file>img/r_VPump.png</file>
+        <file>img/r_YA(33x33).png</file>
+        <file>img/r_YA(64x64).png</file>
+        <file>img/r_YB(32x32).png</file>
+        <file>img/r_YB(64x64).png</file>
+        <file>img/r_YB2(33x33).png</file>
+        <file>img/r_YB2(64x64).png</file>
+        <file>img/b_angle1(32x32).png</file>
     </qresource>
 </RCC>

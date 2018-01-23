@@ -32,6 +32,35 @@ DB73::DB73():
    OP42_Qr_NO_Dopusk( mBoolData[22] ),//Расход рабочий не в допуске (гермет-ть)
    OP48_Qd_NO_Dopusk( mBoolData[23] )//Расход в дренаже не в допуске
 {
+   memset( mBoolData, 0, sizeof(mBoolData) );
+   mGroupID = opc::miniOPC::Instance().AddGroup( L"DB73", mAdresses, BOOL_COUNT );
+
+#ifdef DEMO
+   SP16_warning = true;
+   SP17_warning = true;
+   SP18_warning = true;
+   SP19_warning = true;
+   SP20_warning = true;
+   SP21_warning = true;
+   SP22_warning = true;
+   SP23_warning = true;
+   SP24_warning = true;
+   SP25_warning = true;
+   SQ16_warning = true;
+   SQ17_warning = true;
+   SQ18_warning = true;
+   SQ19_warning = true;
+   SQ20_warning = true;
+   SQ21_warning = true;
+   Q_NO_Istablished = true;
+   P_NO_Istablished = true;
+   OP40_Q_Nul = true;
+   OP40_P_Nul = true;
+   OP40_Qr_NO_Dopusk = true;
+   OP41_Qr_NO_Dopusk = true;
+   OP42_Qr_NO_Dopusk = true;
+   OP48_Qd_NO_Dopusk = true;
+#endif
 
 }
 void DB73::Read()
@@ -48,6 +77,32 @@ void DB73::Read()
             mBoolData[ i ] = rez[i].vDataValue.boolVal;
     }
     opc::miniOPC::Instance().OpcMassFree( mGroupID, rez );
+#ifdef DEMO
+   SP16_warning = true;
+   SP17_warning = true;
+   SP18_warning = true;
+   SP19_warning = true;
+   SP20_warning = true;
+   SP21_warning = true;
+   SP22_warning = true;
+   SP23_warning = true;
+   SP24_warning = true;
+   SP25_warning = true;
+   SQ16_warning = true;
+   SQ17_warning = true;
+   SQ18_warning = true;
+   SQ19_warning = true;
+   SQ20_warning = true;
+   SQ21_warning = true;
+   Q_NO_Istablished = true;
+   P_NO_Istablished = true;
+   OP40_Q_Nul = true;
+   OP40_P_Nul = true;
+   OP40_Qr_NO_Dopusk = true;
+   OP41_Qr_NO_Dopusk = true;
+   OP42_Qr_NO_Dopusk = true;
+   OP48_Qd_NO_Dopusk = true;
+#endif
 }
 
 

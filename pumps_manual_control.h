@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QThread>
+#include <QLabel>
 #include <QAbstractButton>
 #include "cpu/cpu_memory.h"
 
@@ -51,6 +52,40 @@ private:
    void UpdateButton( QAbstractButton *btn, bool checked );
 private slots:
     void onUpdateControls();
+
+    void OnYA27YB7Activate();
+
+    void on_YA27_clicked();
+    void on_YB7_clicked();
+    void on_YB8_clicked();
+    void on_YB9_clicked();
+    void on_YB10_clicked();
+    void on_YA28_clicked();
+
+private:
+
+   void SetColor( QLabel *label, QColor cl );
+
+   void Activate_Gm(bool active);
+   void Activate_M13( bool active );
+
+   void Activate_LN_0( bool active );
+   void Activate_LN_1( bool active );
+   void Activate_LN_2( bool active );
+   void Activate_LN_4( bool active );
+   void Activate_LN_5( bool active );
+   void Activate_LN_6( bool active );
+   void Activate_LN_7( bool active );
+   void Activate_LN_8( bool active );
+   void Activate_LN_9( bool active );
+   void Activate_LN_10( bool active );
+   void Activate_LN_11( bool active );
+   void Activate_LN_12( bool active );
+   void Activate_LN_13( bool active );
+   void Activate_LN_14( bool active );
+   void Activate_LN_15( bool active );
+   void Activate_LN_16( bool active );
+
 
 };
 

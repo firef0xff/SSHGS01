@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>926</width>
-    <height>637</height>
+    <width>928</width>
+    <height>638</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -32,7 +32,7 @@
       <number>0</number>
      </property>
      <item row="5" column="4" rowspan="2">
-      <widget class="QLabel" name="label_67">
+      <widget class="QLabel" name="px_gm_1">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -60,7 +60,7 @@
       </widget>
      </item>
      <item row="13" column="3">
-      <widget class="QLabel" name="label_44">
+      <widget class="QLabel" name="px_ln_0_2">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -82,7 +82,7 @@
       </widget>
      </item>
      <item row="4" column="4">
-      <widget class="QLabel" name="label_96">
+      <widget class="QLabel" name="px_gm_0">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -104,7 +104,7 @@
       </widget>
      </item>
      <item row="7" column="3">
-      <widget class="QLabel" name="label_8">
+      <widget class="QLabel" name="px_ln_0_0">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -131,7 +131,7 @@
         <number>0</number>
        </property>
        <item row="4" column="10">
-        <widget class="QLabel" name="label_76">
+        <widget class="QLabel" name="px_ln_4_5">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -153,23 +153,29 @@
         </widget>
        </item>
        <item row="4" column="2">
-        <widget class="QLabel" name="label_29">
+        <widget class="QLabel" name="px_ln_4_2">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="minimumSize">
+          <size>
+           <width>33</width>
+           <height>33</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border-image: url(:/img/SP(32x32).png);</string>
+         </property>
          <property name="text">
           <string/>
-         </property>
-         <property name="pixmap">
-          <pixmap resource="resourses.qrc">:/img/SP(32x32).png</pixmap>
          </property>
         </widget>
        </item>
        <item row="1" column="8">
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="YA27">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -204,7 +210,7 @@
         </widget>
        </item>
        <item row="4" column="13">
-        <widget class="QLabel" name="label_124">
+        <widget class="QLabel" name="px_ln_4_7">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -214,7 +220,7 @@
          <property name="minimumSize">
           <size>
            <width>33</width>
-           <height>33</height>
+           <height>34</height>
           </size>
          </property>
          <property name="styleSheet">
@@ -226,7 +232,7 @@
         </widget>
        </item>
        <item row="4" column="11">
-        <widget class="QLabel" name="label_77">
+        <widget class="QLabel" name="px_ln_4_6">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -258,23 +264,29 @@
         </widget>
        </item>
        <item row="4" column="0">
-        <widget class="QLabel" name="label_18">
+        <widget class="QLabel" name="px_ln_4_0">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="minimumSize">
+          <size>
+           <width>28</width>
+           <height>33</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border-image: url(:/img/ConIn(33x27).png);</string>
+         </property>
          <property name="text">
           <string/>
-         </property>
-         <property name="pixmap">
-          <pixmap resource="resourses.qrc">:/img/ConIn(33x27).png</pixmap>
          </property>
         </widget>
        </item>
        <item row="2" column="6" rowspan="2">
-        <widget class="QLabel" name="label_48">
+        <widget class="QLabel" name="px_ln_6_0">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -296,7 +308,7 @@
         </widget>
        </item>
        <item row="1" column="10">
-        <widget class="QLabel" name="label_73">
+        <widget class="QLabel" name="px_ln_6_4">
          <property name="minimumSize">
           <size>
            <width>33</width>
@@ -312,7 +324,7 @@
         </widget>
        </item>
        <item row="4" column="3">
-        <widget class="QLabel" name="label_34">
+        <widget class="QLabel" name="px_ln_4_3">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -334,7 +346,7 @@
         </widget>
        </item>
        <item row="1" column="9">
-        <widget class="QLabel" name="label_72">
+        <widget class="QLabel" name="px_ln_6_3">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -356,7 +368,7 @@
         </widget>
        </item>
        <item row="1" column="7">
-        <widget class="QLabel" name="label_68">
+        <widget class="QLabel" name="px_ln_6_2">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -378,7 +390,7 @@
         </widget>
        </item>
        <item row="4" column="1">
-        <widget class="QLabel" name="label_23">
+        <widget class="QLabel" name="px_ln_4_1">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
            <horstretch>0</horstretch>
@@ -400,7 +412,7 @@
         </widget>
        </item>
        <item row="4" column="8">
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="YB7">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -435,7 +447,7 @@
         </widget>
        </item>
        <item row="4" column="6">
-        <widget class="QLabel" name="label_47">
+        <widget class="QLabel" name="px_ln_4_4">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -467,7 +479,7 @@
         </widget>
        </item>
        <item row="4" column="7">
-        <widget class="QLabel" name="label_69">
+        <widget class="QLabel" name="px_ln_5_0">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -489,7 +501,7 @@
         </widget>
        </item>
        <item row="4" column="9">
-        <widget class="QLabel" name="label_75">
+        <widget class="QLabel" name="px_ln_5_1">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -521,7 +533,7 @@
         </widget>
        </item>
        <item row="1" column="6">
-        <widget class="QLabel" name="label_49">
+        <widget class="QLabel" name="px_ln_6_1">
          <property name="minimumSize">
           <size>
            <width>33</width>
@@ -2393,7 +2405,7 @@
         </widget>
        </item>
        <item row="2" column="10" rowspan="2">
-        <widget class="QLabel" name="label_74">
+        <widget class="QLabel" name="px_ln_6_5">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -2415,7 +2427,7 @@
         </widget>
        </item>
        <item row="4" column="14">
-        <widget class="QLabel" name="label_127">
+        <widget class="QLabel" name="px_ln_4_8">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -2437,7 +2449,7 @@
         </widget>
        </item>
        <item row="5" column="14">
-        <widget class="QLabel" name="label_99">
+        <widget class="QLabel" name="px_ln_4_9">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -3398,7 +3410,7 @@
         </widget>
        </item>
        <item row="1" column="8">
-        <widget class="QPushButton" name="pushButton_4">
+        <widget class="QPushButton" name="YB9">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -3434,23 +3446,29 @@
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QLabel" name="label_19">
+        <widget class="QLabel" name="px_ln_9_0">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="minimumSize">
+          <size>
+           <width>28</width>
+           <height>33</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border-image: url(:/img/ConIn(33x27).png);</string>
+         </property>
          <property name="text">
           <string/>
-         </property>
-         <property name="pixmap">
-          <pixmap resource="resourses.qrc">:/img/ConIn(33x27).png</pixmap>
          </property>
         </widget>
        </item>
        <item row="1" column="13">
-        <widget class="QLabel" name="label_126">
+        <widget class="QLabel" name="px_ln_9_9">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -3472,7 +3490,7 @@
         </widget>
        </item>
        <item row="1" column="3">
-        <widget class="QLabel" name="label_36">
+        <widget class="QLabel" name="px_ln_9_3">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -3494,18 +3512,24 @@
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="QLabel" name="label_31">
+        <widget class="QLabel" name="px_ln_9_2">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="minimumSize">
+          <size>
+           <width>33</width>
+           <height>33</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border-image: url(:/img/SP(32x32).png);</string>
+         </property>
          <property name="text">
           <string/>
-         </property>
-         <property name="pixmap">
-          <pixmap resource="resourses.qrc">:/img/SP(32x32).png</pixmap>
          </property>
         </widget>
        </item>
@@ -3517,7 +3541,7 @@
         </widget>
        </item>
        <item row="1" column="10">
-        <widget class="QLabel" name="label_81">
+        <widget class="QLabel" name="px_ln_9_7">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -4466,7 +4490,7 @@
         </widget>
        </item>
        <item row="1" column="6">
-        <widget class="QLabel" name="label_40">
+        <widget class="QLabel" name="px_ln_9_4">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -4488,7 +4512,7 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QLabel" name="label_25">
+        <widget class="QLabel" name="px_ln_9_1">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -4510,7 +4534,7 @@
         </widget>
        </item>
        <item row="1" column="9">
-        <widget class="QLabel" name="label_82">
+        <widget class="QLabel" name="px_ln_9_6">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -4532,7 +4556,7 @@
         </widget>
        </item>
        <item row="1" column="7">
-        <widget class="QLabel" name="label_71">
+        <widget class="QLabel" name="px_ln_9_5">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -4554,7 +4578,7 @@
         </widget>
        </item>
        <item row="1" column="11">
-        <widget class="QLabel" name="label_83">
+        <widget class="QLabel" name="px_ln_9_8">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -4576,7 +4600,7 @@
         </widget>
        </item>
        <item row="1" column="14">
-        <widget class="QLabel" name="label_131">
+        <widget class="QLabel" name="px_ln_10_0">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -4598,7 +4622,7 @@
         </widget>
        </item>
        <item row="0" column="14">
-        <widget class="QLabel" name="label_104">
+        <widget class="QLabel" name="px_ln_8_2">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -4620,7 +4644,7 @@
         </widget>
        </item>
        <item row="2" column="14">
-        <widget class="QLabel" name="label_105">
+        <widget class="QLabel" name="px_ln_10_1">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -4642,7 +4666,7 @@
         </widget>
        </item>
        <item row="3" column="14">
-        <widget class="QLabel" name="label_107">
+        <widget class="QLabel" name="px_ln_10_2">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -4666,7 +4690,7 @@
       </layout>
      </item>
      <item row="7" column="5">
-      <widget class="QLabel" name="label_62">
+      <widget class="QLabel" name="px_ln_2_0">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -5770,7 +5794,7 @@ M13</string>
       </widget>
      </item>
      <item row="8" column="4" rowspan="7">
-      <widget class="QLabel" name="label_9">
+      <widget class="QLabel" name="px_ln_1_0">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -7573,7 +7597,7 @@ M13</string>
       </spacer>
      </item>
      <item row="15" column="4">
-      <widget class="QLabel" name="label_14">
+      <widget class="QLabel" name="px_ln_1_1">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -7600,7 +7624,7 @@ M13</string>
         <number>0</number>
        </property>
        <item row="1" column="12">
-        <widget class="QLabel" name="label_78">
+        <widget class="QLabel" name="px_ln_7_7">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -7622,23 +7646,29 @@ M13</string>
         </widget>
        </item>
        <item row="1" column="3">
-        <widget class="QLabel" name="label_17">
+        <widget class="QLabel" name="px_ln_7_0">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="minimumSize">
+          <size>
+           <width>28</width>
+           <height>33</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border-image: url(:/img/ConIn(33x27).png);</string>
+         </property>
          <property name="text">
           <string/>
-         </property>
-         <property name="pixmap">
-          <pixmap resource="resourses.qrc">:/img/ConIn(33x27).png</pixmap>
          </property>
         </widget>
        </item>
        <item row="1" column="4">
-        <widget class="QLabel" name="label_24">
+        <widget class="QLabel" name="px_ln_7_1">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -7670,7 +7700,7 @@ M13</string>
         </widget>
        </item>
        <item row="1" column="15">
-        <widget class="QLabel" name="label_125">
+        <widget class="QLabel" name="px_ln_7_9">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -7679,7 +7709,7 @@ M13</string>
          </property>
          <property name="minimumSize">
           <size>
-           <width>34</width>
+           <width>33</width>
            <height>33</height>
           </size>
          </property>
@@ -7699,7 +7729,7 @@ M13</string>
         </widget>
        </item>
        <item row="1" column="11">
-        <widget class="QLabel" name="label_79">
+        <widget class="QLabel" name="px_ln_7_6">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -7721,7 +7751,7 @@ M13</string>
         </widget>
        </item>
        <item row="1" column="13">
-        <widget class="QLabel" name="label_80">
+        <widget class="QLabel" name="px_ln_7_8">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -7743,7 +7773,7 @@ M13</string>
         </widget>
        </item>
        <item row="1" column="10">
-        <widget class="QPushButton" name="pushButton_3">
+        <widget class="QPushButton" name="YB8">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -7769,23 +7799,29 @@ M13</string>
         </widget>
        </item>
        <item row="1" column="5">
-        <widget class="QLabel" name="label_30">
+        <widget class="QLabel" name="px_ln_7_2">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="minimumSize">
+          <size>
+           <width>33</width>
+           <height>33</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border-image: url(:/img/SP(32x32).png);</string>
+         </property>
          <property name="text">
           <string/>
-         </property>
-         <property name="pixmap">
-          <pixmap resource="resourses.qrc">:/img/SP(32x32).png</pixmap>
          </property>
         </widget>
        </item>
        <item row="1" column="8">
-        <widget class="QLabel" name="label_41">
+        <widget class="QLabel" name="px_ln_7_4">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -7817,7 +7853,7 @@ M13</string>
         </widget>
        </item>
        <item row="1" column="6">
-        <widget class="QLabel" name="label_35">
+        <widget class="QLabel" name="px_ln_7_3">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -7855,7 +7891,7 @@ M13</string>
         </spacer>
        </item>
        <item row="1" column="9">
-        <widget class="QLabel" name="label_70">
+        <widget class="QLabel" name="px_ln_7_5">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -7877,18 +7913,24 @@ M13</string>
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QLabel" name="label_16">
+        <widget class="QLabel" name="px_ln_2_1">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="minimumSize">
+          <size>
+           <width>28</width>
+           <height>33</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border-image: url(:/img/ConOut(33x27).png);</string>
+         </property>
          <property name="text">
           <string/>
-         </property>
-         <property name="pixmap">
-          <pixmap resource="resourses.qrc">:/img/ConOut(33x27).png</pixmap>
          </property>
         </widget>
        </item>
@@ -9742,7 +9784,7 @@ M13</string>
         </widget>
        </item>
        <item row="1" column="16">
-        <widget class="QLabel" name="label_128">
+        <widget class="QLabel" name="px_ln_8_0">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -9764,7 +9806,7 @@ M13</string>
         </widget>
        </item>
        <item row="0" column="16">
-        <widget class="QLabel" name="label_102">
+        <widget class="QLabel" name="px_ln_4_10">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -9786,7 +9828,7 @@ M13</string>
         </widget>
        </item>
        <item row="2" column="16">
-        <widget class="QLabel" name="label_103">
+        <widget class="QLabel" name="px_ln_8_1">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -9810,7 +9852,7 @@ M13</string>
       </layout>
      </item>
      <item row="15" column="5">
-      <widget class="QLabel" name="label_101">
+      <widget class="QLabel" name="px_ln_1_2">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -9883,7 +9925,7 @@ M13</string>
       </spacer>
      </item>
      <item row="7" column="4">
-      <widget class="QLabel" name="label_95">
+      <widget class="QLabel" name="px_gm_2">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -9910,39 +9952,51 @@ M13</string>
         <number>0</number>
        </property>
        <item row="1" column="2">
-        <widget class="QLabel" name="label_32">
+        <widget class="QLabel" name="px_ln_11_2">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="minimumSize">
+          <size>
+           <width>33</width>
+           <height>33</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border-image: url(:/img/SP(32x32).png);</string>
+         </property>
          <property name="text">
           <string/>
-         </property>
-         <property name="pixmap">
-          <pixmap resource="resourses.qrc">:/img/SP(32x32).png</pixmap>
          </property>
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QLabel" name="label_20">
+        <widget class="QLabel" name="px_ln_11_0">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="minimumSize">
+          <size>
+           <width>28</width>
+           <height>33</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border-image: url(:/img/ConIn(33x27).png);</string>
+         </property>
          <property name="text">
           <string/>
-         </property>
-         <property name="pixmap">
-          <pixmap resource="resourses.qrc">:/img/ConIn(33x27).png</pixmap>
          </property>
         </widget>
        </item>
        <item row="1" column="7">
-        <widget class="QLabel" name="label_46">
+        <widget class="QLabel" name="px_ln_11_5">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -9964,7 +10018,7 @@ M13</string>
         </widget>
        </item>
        <item row="1" column="5">
-        <widget class="QLabel" name="label_39">
+        <widget class="QLabel" name="px_ln_11_4">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -9986,7 +10040,7 @@ M13</string>
         </widget>
        </item>
        <item row="2" column="8">
-        <widget class="QLabel" name="label_123">
+        <widget class="QLabel" name="px_ln_11_7">
          <property name="minimumSize">
           <size>
            <width>33</width>
@@ -10009,7 +10063,7 @@ M13</string>
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QLabel" name="label_26">
+        <widget class="QLabel" name="px_ln_11_1">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -10018,7 +10072,7 @@ M13</string>
          </property>
          <property name="minimumSize">
           <size>
-           <width>33</width>
+           <width>40</width>
            <height>33</height>
           </size>
          </property>
@@ -10031,7 +10085,7 @@ M13</string>
         </widget>
        </item>
        <item row="1" column="8">
-        <widget class="QLabel" name="label_121">
+        <widget class="QLabel" name="px_ln_11_6">
          <property name="minimumSize">
           <size>
            <width>33</width>
@@ -10057,7 +10111,7 @@ M13</string>
         </widget>
        </item>
        <item row="1" column="3">
-        <widget class="QLabel" name="label_37">
+        <widget class="QLabel" name="px_ln_11_3">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -11928,7 +11982,7 @@ M13</string>
         </widget>
        </item>
        <item row="0" column="11">
-        <widget class="QLabel" name="label_106">
+        <widget class="QLabel" name="px_ln_10_3">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -11963,7 +12017,7 @@ M13</string>
         </spacer>
        </item>
        <item row="2" column="11">
-        <widget class="QLabel" name="label_155">
+        <widget class="QLabel" name="px_ln_10_5">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -11985,18 +12039,24 @@ M13</string>
         </widget>
        </item>
        <item row="1" column="11">
-        <widget class="QLabel" name="label_130">
+        <widget class="QLabel" name="px_ln_10_4">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="minimumSize">
+          <size>
+           <width>33</width>
+           <height>33</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border-image: url(:/img/SP2(32x32).png);</string>
+         </property>
          <property name="text">
           <string/>
-         </property>
-         <property name="pixmap">
-          <pixmap resource="resourses.qrc">:/img/SP2(32x32).png</pixmap>
          </property>
         </widget>
        </item>
@@ -12010,7 +12070,7 @@ M13</string>
       </layout>
      </item>
      <item row="8" column="3" rowspan="3">
-      <widget class="QLabel" name="label_100">
+      <widget class="QLabel" name="px_ln_0_1">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -12037,7 +12097,7 @@ M13</string>
         <number>0</number>
        </property>
        <item row="4" column="6">
-        <widget class="QPushButton" name="pushButton_7">
+        <widget class="QPushButton" name="YB10">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -12063,7 +12123,7 @@ M13</string>
         </widget>
        </item>
        <item row="2" column="13">
-        <widget class="QLabel" name="label_145">
+        <widget class="QLabel" name="px_ln_15_4">
          <property name="minimumSize">
           <size>
            <width>33</width>
@@ -12079,7 +12139,7 @@ M13</string>
         </widget>
        </item>
        <item row="3" column="13">
-        <widget class="QLabel" name="label_146">
+        <widget class="QLabel" name="px_ln_15_5">
          <property name="minimumSize">
           <size>
            <width>33</width>
@@ -12105,7 +12165,7 @@ M13</string>
         </widget>
        </item>
        <item row="6" column="13">
-        <widget class="QLabel" name="label_151">
+        <widget class="QLabel" name="px_ln_16_4">
          <property name="minimumSize">
           <size>
            <width>33</width>
@@ -13063,7 +13123,7 @@ M13</string>
         </widget>
        </item>
        <item row="4" column="5">
-        <widget class="QLabel" name="label_129">
+        <widget class="QLabel" name="px_ln_13_2">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -13085,7 +13145,7 @@ M13</string>
         </widget>
        </item>
        <item row="4" column="3">
-        <widget class="QLabel" name="label_28">
+        <widget class="QLabel" name="px_ln_13_1">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -13120,7 +13180,7 @@ M13</string>
         </spacer>
        </item>
        <item row="2" column="12">
-        <widget class="QLabel" name="label_144">
+        <widget class="QLabel" name="px_ln_15_3">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -13160,41 +13220,53 @@ M13</string>
           </spacer>
          </item>
          <item>
-          <widget class="QLabel" name="label_93">
+          <widget class="QLabel" name="px_m13_0">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="minimumSize">
+            <size>
+             <width>33</width>
+             <height>33</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">border-image: url(:/img/M13Pump.png);</string>
+           </property>
            <property name="text">
             <string/>
-           </property>
-           <property name="pixmap">
-            <pixmap resource="resourses.qrc">:/img/M13Pump.png</pixmap>
            </property>
           </widget>
          </item>
         </layout>
        </item>
        <item row="5" column="13">
-        <widget class="QLabel" name="label_64">
+        <widget class="QLabel" name="px_m13_2">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="minimumSize">
+          <size>
+           <width>33</width>
+           <height>33</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border-image: url(:/img/VPump.png);</string>
+         </property>
          <property name="text">
           <string/>
-         </property>
-         <property name="pixmap">
-          <pixmap resource="resourses.qrc">:/img/VPump.png</pixmap>
          </property>
         </widget>
        </item>
        <item row="4" column="9">
-        <widget class="QLabel" name="label_141">
+        <widget class="QLabel" name="px_ln_16_0">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -13216,7 +13288,7 @@ M13</string>
         </widget>
        </item>
        <item row="4" column="13">
-        <widget class="QLabel" name="label_148">
+        <widget class="QLabel" name="px_ln_16_3">
          <property name="minimumSize">
           <size>
            <width>33</width>
@@ -13232,7 +13304,7 @@ M13</string>
         </widget>
        </item>
        <item row="3" column="8">
-        <widget class="QLabel" name="label_143">
+        <widget class="QLabel" name="px_ln_15_0">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -13254,23 +13326,29 @@ M13</string>
         </widget>
        </item>
        <item row="4" column="0">
-        <widget class="QLabel" name="label_15">
+        <widget class="QLabel" name="px_ln_1_3">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="minimumSize">
+          <size>
+           <width>28</width>
+           <height>33</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border-image: url(:/img/ConOut(33x27).png);</string>
+         </property>
          <property name="text">
           <string/>
-         </property>
-         <property name="pixmap">
-          <pixmap resource="resourses.qrc">:/img/ConOut(33x27).png</pixmap>
          </property>
         </widget>
        </item>
        <item row="4" column="11" colspan="2">
-        <widget class="QLabel" name="label_147">
+        <widget class="QLabel" name="px_ln_16_2">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -13292,18 +13370,24 @@ M13</string>
         </widget>
        </item>
        <item row="4" column="2">
-        <widget class="QLabel" name="label_22">
+        <widget class="QLabel" name="px_ln_13_0">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="minimumSize">
+          <size>
+           <width>28</width>
+           <height>33</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border-image: url(:/img/ConIn(33x27).png);</string>
+         </property>
          <property name="text">
           <string/>
-         </property>
-         <property name="pixmap">
-          <pixmap resource="resourses.qrc">:/img/ConIn(33x27).png</pixmap>
          </property>
         </widget>
        </item>
@@ -13316,7 +13400,7 @@ M13</string>
           <number>0</number>
          </property>
          <item row="1" column="1">
-          <widget class="QLabel" name="label_27">
+          <widget class="QLabel" name="px_ln_12_1">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -13325,7 +13409,7 @@ M13</string>
            </property>
            <property name="minimumSize">
             <size>
-             <width>33</width>
+             <width>40</width>
              <height>33</height>
             </size>
            </property>
@@ -13338,7 +13422,7 @@ M13</string>
           </widget>
          </item>
          <item row="1" column="3">
-          <widget class="QLabel" name="label_38">
+          <widget class="QLabel" name="px_ln_12_3">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -13360,23 +13444,29 @@ M13</string>
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QLabel" name="label_21">
+          <widget class="QLabel" name="px_ln_12_0">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="minimumSize">
+            <size>
+             <width>28</width>
+             <height>33</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">border-image: url(:/img/ConIn(33x27).png);</string>
+           </property>
            <property name="text">
             <string/>
-           </property>
-           <property name="pixmap">
-            <pixmap resource="resourses.qrc">:/img/ConIn(33x27).png</pixmap>
            </property>
           </widget>
          </item>
          <item row="2" column="4">
-          <widget class="QLabel" name="label_45">
+          <widget class="QLabel" name="px_ln_12_5">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -13398,23 +13488,29 @@ M13</string>
           </widget>
          </item>
          <item row="1" column="2">
-          <widget class="QLabel" name="label_33">
+          <widget class="QLabel" name="px_ln_12_2">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="minimumSize">
+            <size>
+             <width>33</width>
+             <height>33</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">border-image: url(:/img/SP(32x32).png);</string>
+           </property>
            <property name="text">
             <string/>
-           </property>
-           <property name="pixmap">
-            <pixmap resource="resourses.qrc">:/img/SP(32x32).png</pixmap>
            </property>
           </widget>
          </item>
          <item row="1" column="4">
-          <widget class="QLabel" name="label_43">
+          <widget class="QLabel" name="px_ln_12_4">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -13455,18 +13551,24 @@ M13</string>
         </layout>
        </item>
        <item row="5" column="12">
-        <widget class="QLabel" name="label_84">
+        <widget class="QLabel" name="px_m13_1">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="minimumSize">
+          <size>
+           <width>33</width>
+           <height>33</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border-image: url(:/img/HMuft.png);</string>
+         </property>
          <property name="text">
           <string/>
-         </property>
-         <property name="pixmap">
-          <pixmap resource="resourses.qrc">:/img/HMuft.png</pixmap>
          </property>
         </widget>
        </item>
@@ -13487,23 +13589,29 @@ M13</string>
         </spacer>
        </item>
        <item row="4" column="10">
-        <widget class="QLabel" name="label_136">
+        <widget class="QLabel" name="px_ln_16_1">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="minimumSize">
+          <size>
+           <width>33</width>
+           <height>33</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border-image: url(:/img/SP(32x32).png);</string>
+         </property>
          <property name="text">
           <string/>
-         </property>
-         <property name="pixmap">
-          <pixmap resource="resourses.qrc">:/img/SP(32x32).png</pixmap>
          </property>
         </widget>
        </item>
        <item row="4" column="8">
-        <widget class="QLabel" name="label_154">
+        <widget class="QLabel" name="px_ln_14_1">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -13525,7 +13633,7 @@ M13</string>
         </widget>
        </item>
        <item row="4" column="7">
-        <widget class="QLabel" name="label_134">
+        <widget class="QLabel" name="px_ln_14_0">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -13547,7 +13655,7 @@ M13</string>
         </widget>
        </item>
        <item row="2" column="10" colspan="2">
-        <widget class="QPushButton" name="pushButton_8">
+        <widget class="QPushButton" name="YA28">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -13573,7 +13681,7 @@ M13</string>
         </widget>
        </item>
        <item row="2" column="9">
-        <widget class="QLabel" name="label_140">
+        <widget class="QLabel" name="px_ln_15_2">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -13595,7 +13703,7 @@ M13</string>
         </widget>
        </item>
        <item row="2" column="8">
-        <widget class="QLabel" name="label_138">
+        <widget class="QLabel" name="px_ln_15_1">
          <property name="minimumSize">
           <size>
            <width>33</width>

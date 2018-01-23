@@ -47,7 +47,7 @@ private:
 
    enum
    {
-       BOOL_COUNT = 31
+       BOOL_COUNT = 24
    };
 
    bool mBoolData[ BOOL_COUNT ];
