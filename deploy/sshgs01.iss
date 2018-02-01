@@ -3,9 +3,9 @@
 
 #define MyAppName "SSHGS02"
 #define MyAppVersion "0.2"
-#define MyAppPublisher "КБ Полимермаш"
+#define MyAppPublisher "ГЉГЃ ГЏГ®Г«ГЁГ¬ГҐГ°Г¬Г Гё"
 #define MyAppExeName "SSHGS01.exe"
-#define LinkName "Испытательный стенд"
+#define LinkName "Г€Г±ГЇГ»ГІГ ГІГҐГ«ГјГ­Г»Г© Г±ГІГҐГ­Г¤"
 
 #define QtPATH "C:\Qt\5.5\mingw492_32\bin"
 #define QtPLUGINS "C:\Qt\5.5\mingw492_32\plugins"

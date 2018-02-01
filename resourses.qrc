@@ -88,5 +88,6 @@
         <file>img/r_YB2(33x33).png</file>
         <file>img/r_YB2(64x64).png</file>
         <file>img/b_angle1(32x32).png</file>
+        <file>img/YA1(33x33).png</file>
     </qresource>
 </RCC>

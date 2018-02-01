@@ -86,15 +86,27 @@ void PumpsManualControl::UpdateData()
    ui->BT2->display( mem.BT2 );
    ui->BT3->display( mem.BT3 );
 
+   ui->YB12->setValue(mem.R2);
+   ui->YB13->setValue(mem.R3);
+   ui->OilLvl->setValue(mem.BL1);
+   QPalette p = ui->OilLvl->palette();
+   int percent = ui->OilLvl->value() *100 / ( ui->OilLvl->maximum() - ui->OilLvl->minimum() );
+   QColor c;
+   if ( percent <= 10 )
+      c = Qt::red;
+   else if ( percent <= 30 )
+      c = Qt::yellow;
+   else
+      c = Qt::white;
+
+   p.setColor( QPalette::Highlight, Qt::darkGreen );
+   p.setColor( QPalette::Base, c );
+   ui->OilLvl->setPalette(p);
+
 }
 void PumpsManualControl::SynkControls()
 {
-   on_YA27_clicked();
-   on_YB7_clicked();
-   on_YB8_clicked();
-   on_YB9_clicked();
-   on_YB10_clicked();
-   on_YA28_clicked();
+
 }
 void PumpsManualControl::UpdateButton( QAbstractButton *btn, bool checked )
 {
@@ -186,248 +198,38 @@ void PumpsManualControl::SetColor( QLabel *label, QColor cl )
 
 }
 
-void PumpsManualControl::Activate_Gm( bool active )
+void PumpsManualControl::on_EngineStartStop_clicked()
 {
-   QColor c = active? Qt::blue: Qt::black;
-   SetColor( ui->px_gm_0, c );
-   SetColor( ui->px_gm_1, c );
-   SetColor( ui->px_gm_2, c );
-}
-void PumpsManualControl::Activate_M13( bool active )
-{
-   QColor c = active? Qt::blue: Qt::black;
-   SetColor( ui->px_m13_0, c );
-   SetColor( ui->px_m13_1, c );
-   SetColor( ui->px_m13_2, c );
+   bool checked = !ui->EngineStartStop->isChecked();
+   ui->V1->setEnabled(checked);
+   ui->V2->setEnabled(checked);
 }
 
-void PumpsManualControl::Activate_LN_0( bool active )
+void PumpsManualControl::CheckDR1t()
 {
-   QColor c = active? Qt::blue: Qt::black;
-   SetColor( ui->px_ln_0_0, c );
-   SetColor( ui->px_ln_0_1, c );
-   SetColor( ui->px_ln_0_2, c );
+   bool c = (ui->YB7_val->text().toDouble() +
+            ui->YB8_val->text().toDouble() +
+            ui->YB9_val->text().toDouble() +
+            ui->YB10_val->text().toDouble()) != 0.0;
+   ui->DR1t->setEnabled(!c);
+
 }
-void PumpsManualControl::Activate_LN_1( bool active )
+void PumpsManualControl::on_YB7_val_returnPressed()
 {
-   QColor c = active? Qt::blue: Qt::black;
-   SetColor( ui->px_ln_1_0, c );
-   SetColor( ui->px_ln_1_1, c );
-   SetColor( ui->px_ln_1_2, c );
-   SetColor( ui->px_ln_1_3, c );
-}
-void PumpsManualControl::Activate_LN_2( bool active )
-{
-   QColor c = active? Qt::blue: Qt::black;
-   SetColor( ui->px_ln_2_0, c );
-   SetColor( ui->px_ln_2_1, c );
+   CheckDR1t();
 }
 
-void PumpsManualControl::Activate_LN_4( bool active )
+void PumpsManualControl::on_YB10_val_returnPressed()
 {
-   QColor c = active? Qt::blue: Qt::black;
-   SetColor( ui->px_ln_4_0, c );
-   SetColor( ui->px_ln_4_1, c );
-   SetColor( ui->px_ln_4_2, c );
-   SetColor( ui->px_ln_4_3, c );
-   SetColor( ui->px_ln_4_4, c );
-   SetColor( ui->px_ln_4_5, c );
-   SetColor( ui->px_ln_4_6, c );
-   SetColor( ui->px_ln_4_7, c );
-   SetColor( ui->px_ln_4_8, c );
-   SetColor( ui->px_ln_4_9, c );
-   SetColor( ui->px_ln_4_10, c );
-}
-void PumpsManualControl::Activate_LN_5( bool active )
-{
-   QColor c = active? Qt::blue: Qt::black;
-   SetColor( ui->px_ln_5_0, c );
-   SetColor( ui->px_ln_5_1, c );
-}
-void PumpsManualControl::Activate_LN_6( bool active )
-{
-   QColor c = active? Qt::blue: Qt::black;
-   SetColor( ui->px_ln_6_0, c );
-   SetColor( ui->px_ln_6_1, c );
-   SetColor( ui->px_ln_6_2, c );
-   SetColor( ui->px_ln_6_3, c );
-   SetColor( ui->px_ln_6_4, c );
-   SetColor( ui->px_ln_6_5, c );
-}
-void PumpsManualControl::Activate_LN_7( bool active )
-{
-   QColor c = active? Qt::blue: Qt::black;
-   SetColor( ui->px_ln_7_0, c );
-   SetColor( ui->px_ln_7_1, c );
-   SetColor( ui->px_ln_7_2, c );
-   SetColor( ui->px_ln_7_3, c );
-   SetColor( ui->px_ln_7_4, c );
-   SetColor( ui->px_ln_7_5, c );
-   SetColor( ui->px_ln_7_6, c );
-   SetColor( ui->px_ln_7_7, c );
-   SetColor( ui->px_ln_7_8, c );
-   SetColor( ui->px_ln_7_9, c );
-}
-void PumpsManualControl::Activate_LN_8( bool active )
-{
-   QColor c = active? Qt::blue: Qt::black;
-   SetColor( ui->px_ln_8_0, c );
-   SetColor( ui->px_ln_8_1, c );
-   SetColor( ui->px_ln_8_2, c );
-}
-void PumpsManualControl::Activate_LN_9( bool active )
-{
-   QColor c = active? Qt::blue: Qt::black;
-   SetColor( ui->px_ln_9_0, c );
-   SetColor( ui->px_ln_9_1, c );
-   SetColor( ui->px_ln_9_2, c );
-   SetColor( ui->px_ln_9_3, c );
-   SetColor( ui->px_ln_9_4, c );
-   SetColor( ui->px_ln_9_5, c );
-   SetColor( ui->px_ln_9_6, c );
-   SetColor( ui->px_ln_9_7, c );
-   SetColor( ui->px_ln_9_8, c );
-   SetColor( ui->px_ln_9_9, c );
-}
-void PumpsManualControl::Activate_LN_10( bool active )
-{
-   QColor c = active? Qt::blue: Qt::black;
-   SetColor( ui->px_ln_10_0, c );
-   SetColor( ui->px_ln_10_1, c );
-   SetColor( ui->px_ln_10_2, c );
-   SetColor( ui->px_ln_10_3, c );
-   SetColor( ui->px_ln_10_4, c );
-   SetColor( ui->px_ln_10_5, c );
-}
-void PumpsManualControl::Activate_LN_11( bool active )
-{
-   QColor c = active? Qt::blue: Qt::black;
-   SetColor( ui->px_ln_11_0, c );
-   SetColor( ui->px_ln_11_1, c );
-   SetColor( ui->px_ln_11_2, c );
-   SetColor( ui->px_ln_11_3, c );
-   SetColor( ui->px_ln_11_4, c );
-   SetColor( ui->px_ln_11_5, c );
-   SetColor( ui->px_ln_11_6, c );
-   SetColor( ui->px_ln_11_7, c );
-}
-void PumpsManualControl::Activate_LN_12( bool active )
-{
-   QColor c = active? Qt::blue: Qt::black;
-   SetColor( ui->px_ln_12_0, c );
-   SetColor( ui->px_ln_12_1, c );
-   SetColor( ui->px_ln_12_2, c );
-   SetColor( ui->px_ln_12_3, c );
-   SetColor( ui->px_ln_12_4, c );
-   SetColor( ui->px_ln_12_5, c );
-}
-void PumpsManualControl::Activate_LN_13( bool active )
-{
-   QColor c = active? Qt::blue: Qt::black;
-   SetColor( ui->px_ln_13_0, c );
-   SetColor( ui->px_ln_13_1, c );
-   SetColor( ui->px_ln_13_2, c );
-}
-void PumpsManualControl::Activate_LN_14( bool active )
-{
-   QColor c = active? Qt::blue: Qt::black;
-   SetColor( ui->px_ln_14_0, c );
-   SetColor( ui->px_ln_14_1, c );
-}
-void PumpsManualControl::Activate_LN_15( bool active )
-{
-   QColor c = active? Qt::blue: Qt::black;
-   SetColor( ui->px_ln_15_0, c );
-   SetColor( ui->px_ln_15_1, c );
-   SetColor( ui->px_ln_15_2, c );
-   SetColor( ui->px_ln_15_3, c );
-   SetColor( ui->px_ln_15_4, c );
-   SetColor( ui->px_ln_15_5, c );
-}
-void PumpsManualControl::Activate_LN_16( bool active )
-{
-   QColor c = active? Qt::blue: Qt::black;
-   SetColor( ui->px_ln_16_0, c );
-   SetColor( ui->px_ln_16_1, c );
-   SetColor( ui->px_ln_16_2, c );
-   SetColor( ui->px_ln_16_3, c );
-   SetColor( ui->px_ln_16_4, c );
+   CheckDR1t();
 }
 
-void PumpsManualControl::OnYA27YB7Activate()
+void PumpsManualControl::on_YB9_val_returnPressed()
 {
-    auto &mem = cpu::CpuMemory::Instance().M1;
-    bool act_ya27 = mem.YA27;
-    bool act_yb7 = ui->YB7->isChecked();
-    bool main_line = act_ya27 || act_yb7;
-    Activate_Gm( main_line );
-    Activate_LN_0( main_line );
-    Activate_LN_2( main_line );
-    Activate_LN_4( main_line );
-    Activate_LN_5( act_yb7 );
-    Activate_LN_6( act_ya27 );
-    Activate_LN_8( main_line );
-    Activate_LN_10( main_line );
-
-    Activate_LN_11( main_line );
-    Activate_LN_12( main_line );
+   CheckDR1t();
 }
 
-void PumpsManualControl::on_YA27_clicked()
+void PumpsManualControl::on_YB8_val_returnPressed()
 {
-   OnYA27YB7Activate();
-}
-void PumpsManualControl::on_YB7_clicked()
-{
-   OnYA27YB7Activate();
-}
-void PumpsManualControl::on_YB8_clicked()
-{
-   auto &mem = cpu::CpuMemory::Instance().M1;
-   bool act_yb8 = ui->YB8->isChecked();
-   bool main_line = act_yb8;
-   bool glob_line = act_yb8 || ui->YB9->isChecked() || ui->YB7->isChecked() || mem.YA27;
-   Activate_Gm( glob_line );
-   Activate_LN_0( glob_line );
-   Activate_LN_2( glob_line );
-   Activate_LN_7( act_yb8 );
-   Activate_LN_8( main_line || ui->YB7->isChecked() || mem.YA27 );
-
-   Activate_LN_10( glob_line );
-   Activate_LN_11( glob_line );
-   Activate_LN_12( glob_line );
-}
-void PumpsManualControl::on_YB9_clicked()
-{
-   auto &mem = cpu::CpuMemory::Instance().M1;
-   bool act_yb9 = ui->YB9->isChecked();
-   bool glob_line = act_yb9 || ui->YB8->isChecked() || ui->YB7->isChecked() || mem.YA27;
-   Activate_Gm( glob_line );
-   Activate_LN_0( glob_line );
-   Activate_LN_2( glob_line );
-   Activate_LN_9( act_yb9 );
-
-   Activate_LN_10( glob_line );
-   Activate_LN_11( glob_line );
-   Activate_LN_12( glob_line );
-}
-void PumpsManualControl::on_YB10_clicked()
-{
-   bool act_yb10 = ui->YB10->isChecked();
-   bool act_ya28 = ui->YA28->isChecked();
-   bool main_line = act_yb10;
-   Activate_LN_1( main_line );
-   Activate_LN_13( main_line );
-   Activate_LN_14( main_line );
-   Activate_LN_16( main_line );
-   Activate_M13( main_line );
-
-   if ( !act_yb10 )
-      Activate_LN_15( false );
-   else
-      Activate_LN_15( act_ya28 );
-}
-void PumpsManualControl::on_YA28_clicked()
-{
-   on_YB10_clicked();
+   CheckDR1t();
 }

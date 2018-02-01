@@ -51,8 +51,8 @@ DB30.Time_OFF;DB30,REAL48;RW;TST=;CMT=
 DB30.Min_P;DB30,REAL52;RW;TST=;CMT=
 DB30.Max_P;DB30,REAL56;RW;TST=;CMT=
 DB30.Time_P;DB30,REAL60;RW;TST=;CMT=
-DB31.Start_OpeRO;DB31,X2.0;RW;TST=;CMT=
-DB31.Stop_OpeRO;DB31,X2.1;RW;TST=;CMT=
+DB31.Start_Oper;DB31,X2.0;RW;TST=;CMT=
+DB31.Stop_Oper;DB31,X2.1;RW;TST=;CMT=
 DB31.Nasos_M2;DB31,X2.2;RW;TST=;CMT=
 DB31.N_Operation;DB31,REAL4;RW;TST=;CMT=
 DB31.Next_Amp;DB31,X16.0;RW;TST=;CMT=Указание переключиться на следующую амплитуду
@@ -240,7 +240,7 @@ DB34.op12_ab_open_b;DB34,X8.3;RO;TST=;CMT= Катушка б канал АБ открыты
 DB34.op12_b_close_b;DB34,X8.4;RO;TST=;CMT=Катушка б канал Б закрыт
 DB34.op12_a_close_b;DB34,X8.5;RO;TST=;CMT=Катушка б канал А закрыт
 DB34.op14_ready;DB34,X14.0;RO;TST=;CMT=бит готовности данных
-DB34.op14_numbeRO;DB34,REAL4;RO;TST=;CMT=Число ячеек блока DB10/23
+DB34.op14_number;DB34,REAL4;RO;TST=;CMT=Число ячеек блока DB10/23
 DB34.op14_frequency;DB34,REAL10;RO;TST=;CMT=частота на которой полчены данные
 DB34.ampl1;DB34,REAL16;RO;TST=;CMT=амплитуда 1
 DB34.ampl2;DB34,REAL20;RO;TST=;CMT=амплитуда 2
@@ -283,7 +283,7 @@ DB36.op22_b_ab_open;DB36,X8.3;RO;TST=;CMT=катушка б канал АБ открыты
 DB36.op22_b_b_close;DB36,X8.4;RO;TST=;CMT=катушка б канал Б закрыт
 DB36.op22_b_a_close;DB36,X8.5;RO;TST=;CMT=катушка б канал А закрыт
 DB36.op24_ready;DB36,X14.0;RO;TST=;CMT=бит готовности данных
-DB36.op24_numbeRO;DB36,REAL4;RO;TST=;CMT=Число ячеек блока DB20/24
+DB36.op24_number;DB36,REAL4;RO;TST=;CMT=Число ячеек блока DB20/24
 DB36.op24_frequency;DB36,REAL10;RO;TST=;CMT=частота на которой полчены данные
 DB36.ampl1;DB36,REAL16;RO;TST=;CMT=амплитуда 1
 DB36.ampl2;DB36,REAL20;RO;TST=;CMT=амплитуда 2
@@ -379,7 +379,7 @@ DB50.YB4;DB50,REAL80;RO;TST=;CMT=Настройка давления в канале управления (real)
 DB50.YB5;DB50,REAL84;RO;TST=;CMT=Нагрузка в канеле А (real)
 DB50.YB6;DB50,REAL88;RO;TST=;CMT=Нагрузка в канале В (real)
 DB50.Z_U_Post;DB50,REAL92;RO;TST=;CMT=Задание на регулятор постоянного напряжения
-DB50.Z_U_PeRO;DB50,REAL96;RO;TST=;CMT=Задание на регулятор переменного напряжения
+DB50.Z_U_Per;DB50,REAL96;RO;TST=;CMT=Задание на регулятор переменного напряжения
 DB50.Plata_1;DB50,REAL100;RO;TST=;CMT=Задание на плату 4..20мА (real)
 DB50.Plata_2;DB50,REAL104;RO;TST=;CMT=Задание на плату 0..20мА (real)
 DB50.Plata_3;DB50,REAL108;RO;TST=;CMT=Задание на плату +/-10В
@@ -439,11 +439,11 @@ M1.KM6;MX43.7;RW;TST=;CMT=Вентилятор М6,М7
 M1.KM7;MX44.0;RW;TST=;CMT=Вентилятор М8,М9
 M1.KM8;MX44.1;RW;TST=;CMT=Вентилятор М10,М11
 M1.KM10;MX44.2;RW;TST=;CMT=ТЭНы
-M1.Err_cleaRO;MX44.7;RW;TST=;CMT=сброс не правильной комбинации...
+M1.Err_clear;MX44.7;RW;TST=;CMT=сброс не правильной комбинации...
 M1.ONRA;MX45.2;RW;TST=;CMT=ВКЛ катушку А
 M1.ONRB;MX45.3;RW;TST=;CMT=ВКЛ катушку В
 M1.CB;MX45.4;RW;TST=;CMT=Управление от карты
-M1.CRO;MX45.5;RW;TST=;CMT=управление без карты
+M1.CR;MX45.5;RW;TST=;CMT=управление без карты
 M1.RC1;MX45.6;RW;TST=;CMT=1 катушка
 M1.RC2;MX45.7;RW;TST=;CMT=2 катушки
 M1.Kvitir_Osch;MX58.2;RW;TST=;CMT=подтверждение сообщения
@@ -476,7 +476,7 @@ I1.SL2;IX4.1;RO;TST=;CMT=уровень масла -  предупреждение
 I1.SL3;IX4.2;RO;TST=;CMT=уровень масла - авария
 I1.SL4;IX4.3;RO;TST=;CMT=уровень масла верхний (поддон)
 I1.SL5;IX4.4;RO;TST=;CMT=уровень масла нижний (поддон)
-I1.ErroRO;MX44.6;RO;TST=;CMT=не правильная комбинация вкл клапанов
+I1.Error;MX44.6;RO;TST=;CMT=не правильная комбинация вкл клапанов
 DB70.BP7;DB70,REAL2;RO;TST=;CMT=давление в контуре А (real)
 DB70.BP8;DB70,REAL6;RO;TST=;CMT=давление в контуре В (real)
 DB70.BP9;DB70,REAL10;RO;TST=;CMT=давление в контуре С (real)
@@ -580,7 +580,7 @@ DB72.Q_NO_Dopusk;DB72,REAL6;RO;TST=;CMT=Расход не в допуске (рабочий/дренаж)
 DB72.OP43_KPD;DB72,REAL10;RO;TST=;CMT=Значение КПД
 DB72.OP44_Work_V;DB72,REAL14;RO;TST=;CMT=Значение рабочего объема
 DB72.OP45_K_Podacha;DB72,REAL18;RO;TST=;CMT=Значение коэффиц. подачи
-DB72.OP46_PoweRO;DB72,REAL22;RO;TST=;CMT=Значение мощности
+DB72.OP46_Power;DB72,REAL22;RO;TST=;CMT=Значение мощности
 DB72.OP47_Podacha_1;DB72,REAL26;RO;TST=;CMT=Значение подачи 1
 DB72.OP47_Podacha_2;DB72,REAL30;RO;TST=;CMT=Значение подачи 2
 DB72.OP47_Podacha_3;DB72,REAL34;RO;TST=;CMT=Значение подачи 3
