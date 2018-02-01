@@ -356,7 +356,8 @@ void PumpsManualControl::Activate_LN_16( bool active )
 
 void PumpsManualControl::OnYA27YB7Activate()
 {
-    bool act_ya27 = ui->YA27->isChecked();
+    auto &mem = cpu::CpuMemory::Instance().M1;
+    bool act_ya27 = mem.YA27;
     bool act_yb7 = ui->YB7->isChecked();
     bool main_line = act_ya27 || act_yb7;
     Activate_Gm( main_line );
@@ -382,14 +383,15 @@ void PumpsManualControl::on_YB7_clicked()
 }
 void PumpsManualControl::on_YB8_clicked()
 {
+   auto &mem = cpu::CpuMemory::Instance().M1;
    bool act_yb8 = ui->YB8->isChecked();
    bool main_line = act_yb8;
-   bool glob_line = act_yb8 || ui->YB9->isChecked() || ui->YB7->isChecked() || ui->YA27->isChecked();
+   bool glob_line = act_yb8 || ui->YB9->isChecked() || ui->YB7->isChecked() || mem.YA27;
    Activate_Gm( glob_line );
    Activate_LN_0( glob_line );
    Activate_LN_2( glob_line );
    Activate_LN_7( act_yb8 );
-   Activate_LN_8( main_line || ui->YB7->isChecked() || ui->YA27->isChecked() );
+   Activate_LN_8( main_line || ui->YB7->isChecked() || mem.YA27 );
 
    Activate_LN_10( glob_line );
    Activate_LN_11( glob_line );
@@ -397,9 +399,9 @@ void PumpsManualControl::on_YB8_clicked()
 }
 void PumpsManualControl::on_YB9_clicked()
 {
+   auto &mem = cpu::CpuMemory::Instance().M1;
    bool act_yb9 = ui->YB9->isChecked();
-   bool main_line = act_yb9;
-   bool glob_line = act_yb9 || ui->YB8->isChecked() || ui->YB7->isChecked() || ui->YA27->isChecked();
+   bool glob_line = act_yb9 || ui->YB8->isChecked() || ui->YB7->isChecked() || mem.YA27;
    Activate_Gm( glob_line );
    Activate_LN_0( glob_line );
    Activate_LN_2( glob_line );
