@@ -28,6 +28,7 @@
 #include "db71.h"
 #include "db72.h"
 #include "db73.h"
+#include "db82.h"
 #include "db90.h"
 #include "db91.h"
 
@@ -76,6 +77,7 @@ public:
     data::DB71 DB71;    //Таблица параметров                            //!!
     data::DB72 DB72;    //метки готовности тестов                       //PumpTest10
     data::DB73 DB73;    //биты ошибок
+    data::DB82 DB82;    //настройки ручного режима
     data::DB90 DB90;    //массив значений "давление"                    //PumpTest10
     data::DB91 DB91;    //массив значений (значение каждого подпункта)
 

@@ -115,6 +115,7 @@ SOURCES += main.cpp\
     cpu/db73.cpp \
     cpu/db90.cpp \
     cpu/db91.cpp \
+    cpu/db82.cpp \
 
 
 HEADERS  += mainwindow.h \
@@ -219,6 +220,7 @@ HEADERS  += mainwindow.h \
     cpu/db73.h\
     cpu/db90.h\
     cpu/db91.h\
+    cpu/db82.h\
 
 
 FORMS    += mainwindow.ui \

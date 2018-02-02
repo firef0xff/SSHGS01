@@ -1,0 +1,12 @@
+CPU/DB82.Start_Stop;DB82,X2.0;RW;TST=;CMT=;Пуск/стоп основные насосы
+CPU/DB82.PumpManual;MX155.0;RW;TST=;CMT=;включение ручного режима
+CPU/DB82.YA27;MX155.1;RW;TST=;CMT=;включение клапана YA27
+CPU/DB82.Q1_man;DB82,REAL4;RW;TST=;CMT=;задание рабочего объема 1 насоса (см3)
+CPU/DB82.Q2_man;DB82,REAL8;RW;TST=;CMT=;задание рабочего объема 2 насоса (см3)
+CPU/DB82.Speed_man;DB82,REAL12;RW;TST=;CMT=;задание скорости вращения (об/мин)
+CPU/DB82.YB7_man;DB82,REAL16;RW;TST=;CMT=;задание давления на клапан YB7 (бар)
+CPU/DB82.YB8_man;DB82,REAL20;RW;TST=;CMT=;задание давления на клапан YB8 (бар)
+CPU/DB82.YB9_man;DB82,REAL24;RW;TST=;CMT=;задание давления на клапан YB9 (бар)
+CPU/DB82.YB10_man;DB82,REAL28;RW;TST=;CMT=;задание давления на клапан YB10 (бар)
+CPU/DB82.Voltage_man;DB82,REAL32;RW;TST=;CMT=;напряжение питания дискретных катушек
+CPU/DB82.Type_Voltage_man;DB82,REAL36;RW;TST=;CMT=;Тип напряжения (постоянное/переменное)

@@ -115,7 +115,11 @@ void PumpsManualControl::UpdateButton( QAbstractButton *btn, bool checked )
 
 void PumpsManualControl::Start()
 {
-//   cpu::CpuMemory::Instance().DB71.Reset();
+   auto& mem = cpu::CpuMemory::Instance().DB82;
+   mem.Reset();
+   mem.PumpManual = true;
+   mem.Write();
+
 
    mTaskMode.N_Operation = 101;
    mTaskMode.Nasos_M2 = false;
@@ -130,8 +134,8 @@ void PumpsManualControl::Start()
 void PumpsManualControl::Stop()
 {
    mUpdater.stop();
-//   mControlBits.Reset();
-//   cpu::CpuMemory::Instance().DB71.Reset();
+   cpu::CpuMemory::Instance().DB82.Reset();
+
    mTaskMode.N_Operation = 0;
    mTaskMode.Nasos_M2 = false;
    mTaskMode.OP15_25_Continum = false;
@@ -200,9 +204,18 @@ void PumpsManualControl::SetColor( QLabel *label, QColor cl )
 
 void PumpsManualControl::on_EngineStartStop_clicked()
 {
-   bool checked = !ui->EngineStartStop->isChecked();
-   ui->V1->setEnabled(checked);
-   ui->V2->setEnabled(checked);
+   bool checked = ui->EngineStartStop->isChecked();
+   ui->V1->setEnabled(!checked);
+   ui->V2->setEnabled(!checked);
+
+   if ( checked )
+   {
+      on_comboBox_activated("");
+      on_comboBox_2_activated(0);
+   }
+   auto& mem = cpu::CpuMemory::Instance().DB82;
+   mem.Start_Stop = checked;
+   mem.Write();
 }
 
 void PumpsManualControl::CheckDR1t()
@@ -217,19 +230,69 @@ void PumpsManualControl::CheckDR1t()
 void PumpsManualControl::on_YB7_val_returnPressed()
 {
    CheckDR1t();
+   auto& mem = cpu::CpuMemory::Instance().DB82;
+   mem.YB7_man = ui->YB7_val->text().toFloat();
+   mem.Write();
 }
-
-void PumpsManualControl::on_YB10_val_returnPressed()
-{
-   CheckDR1t();
-}
-
-void PumpsManualControl::on_YB9_val_returnPressed()
-{
-   CheckDR1t();
-}
-
 void PumpsManualControl::on_YB8_val_returnPressed()
 {
    CheckDR1t();
+   auto& mem = cpu::CpuMemory::Instance().DB82;
+   mem.YB8_man = ui->YB8_val->text().toFloat();
+   mem.Write();
+}
+void PumpsManualControl::on_YB9_val_returnPressed()
+{
+   CheckDR1t();
+   auto& mem = cpu::CpuMemory::Instance().DB82;
+   mem.YB9_man = ui->YB9_val->text().toFloat();
+   mem.Write();
+}
+void PumpsManualControl::on_YB10_val_returnPressed()
+{
+   CheckDR1t();
+   auto& mem = cpu::CpuMemory::Instance().DB82;
+   mem.YB10_man = ui->YB10_val->text().toFloat();
+   mem.Write();
+}
+
+
+void PumpsManualControl::on_V1_returnPressed()
+{
+   auto& mem = cpu::CpuMemory::Instance().DB82;
+   mem.Q1_man = ui->V1->text().toFloat();
+   mem.Write();
+}
+void PumpsManualControl::on_V2_returnPressed()
+{
+   auto& mem = cpu::CpuMemory::Instance().DB82;
+   mem.Q2_man = ui->V2->text().toFloat();
+   mem.Write();
+}
+void PumpsManualControl::on_DR1t_returnPressed()
+{
+   auto& mem = cpu::CpuMemory::Instance().DB82;
+   mem.Speed_man = ui->DR1t->text().toFloat();
+   mem.Write();
+}
+
+void PumpsManualControl::on_comboBox_activated(const QString &)
+{
+   auto& mem = cpu::CpuMemory::Instance().DB82;
+   mem.Voltage_man = ui->comboBox->currentText().toFloat();
+   mem.Write();
+}
+
+void PumpsManualControl::on_comboBox_2_activated(int)
+{
+   auto& mem = cpu::CpuMemory::Instance().DB82;
+   mem.Type_Voltage_man = ui->comboBox_2->currentIndex();
+   mem.Write();
+}
+
+void PumpsManualControl::on_YA27_clicked()
+{
+   auto& mem = cpu::CpuMemory::Instance().DB82;
+   mem.YA27 = ui->YA27->isChecked();
+   mem.Write();
 }

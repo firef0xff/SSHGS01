@@ -61,6 +61,16 @@ private slots:
     void on_YB9_val_returnPressed();
     void on_YB8_val_returnPressed();
 
+    void on_V1_returnPressed();
+    void on_V2_returnPressed();
+    void on_DR1t_returnPressed();
+
+    void on_comboBox_activated(const QString &);
+
+    void on_comboBox_2_activated(int);
+
+    void on_YA27_clicked();
+
 private:
 
    void SetColor( QLabel *label, QColor cl );
