@@ -152,7 +152,8 @@ void PumpsManualControl::Start()
    mem.Reset();
    mem.PumpManual = true;
    mem.Write();
-
+   on_comboBox_activated("");
+   on_comboBox_2_activated(0);
 
    mTaskMode.N_Operation = 101;
    mTaskMode.Nasos_M2 = false;
@@ -241,11 +242,6 @@ void PumpsManualControl::on_EngineStartStop_clicked()
    ui->V1->setEnabled(!checked);
    ui->V2->setEnabled(!checked);
 
-   if ( checked )
-   {
-      on_comboBox_activated("");
-      on_comboBox_2_activated(0);
-   }
    auto& mem = cpu::CpuMemory::Instance().DB82;
    mem.Start_Stop = checked;
    mem.Write();
@@ -265,8 +261,8 @@ void PumpsManualControl::CheckDR1t()
    };
    auto& mem = cpu::CpuMemory::Instance().DB82;
    float p7 = ui->YB7_val->text().toFloat();
-   float p8 = ui->YB7_val->text().toFloat();
-   float p9 = ui->YB7_val->text().toFloat();
+   float p8 = ui->YB8_val->text().toFloat();
+   float p9 = ui->YB9_val->text().toFloat();
 
    float p1 = 0.0;
    float p2 = 0.0;

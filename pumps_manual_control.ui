@@ -4069,6 +4069,9 @@ background-color: rgb(255, 255, 0);
            <property name="value">
             <number>500</number>
            </property>
+           <property name="format">
+            <string/>
+           </property>
           </widget>
          </item>
         </layout>
