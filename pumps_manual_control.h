@@ -37,6 +37,8 @@ private:
 
    cpu::data::DB31   &mTaskMode;
    PumpsManualControlUpdater mUpdater;
+   bool mShowErr;
+   QString mErrors;
 
    void closeEvent( QCloseEvent *e );
    void showEvent ( QShowEvent *e );
@@ -71,9 +73,11 @@ private slots:
 
     void on_YA27_clicked();
 
+    void on_Alarm_clicked();
+
 private:
 
-   void SetColor( QLabel *label, QColor cl );
+   void SetColor(QWidget *label, QColor cl );
 
 };
 

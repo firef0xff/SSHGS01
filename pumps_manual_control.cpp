@@ -1,5 +1,7 @@
 #include "pumps_manual_control.h"
 #include "ui_pumps_manual_control.h"
+#include "test_case/implementation/test_base.h"
+#include <QMessageBox>
 
 PumpsManualControlUpdater::PumpsManualControlUpdater():
     mStopSignal(false)
@@ -10,6 +12,7 @@ void PumpsManualControlUpdater::run()
     while ( !mStopSignal )
     {
         cpu::CpuMemory::Instance().DB70.Read();
+        cpu::CpuMemory::Instance().DB73.Read();
         emit update();
         msleep(500);
     }
@@ -51,18 +54,48 @@ void PumpsManualControl::UpdateMarks()
    auto &mem = cpu::CpuMemory::Instance().DB73;
    if( mem.SP16_warning )
       SetColor( ui->px_ln_4_2, Qt::red ); //16
+   else
+      SetColor( ui->px_ln_4_2, Qt::black ); //16
    if( mem.SP17_warning )
       SetColor( ui->px_ln_7_2, Qt::red ); //17
+   else
+      SetColor( ui->px_ln_7_2, Qt::black ); //17
    if( mem.SP18_warning )
       SetColor( ui->px_ln_9_2, Qt::red ); //18
+   else
+      SetColor( ui->px_ln_9_2, Qt::black ); //18
    if( mem.SP25_warning )
       SetColor( ui->px_ln_11_2, Qt::red ); //25
+   else
+      SetColor( ui->px_ln_11_2, Qt::black ); //25
    if( mem.SP24_warning )
       SetColor( ui->px_ln_12_2, Qt::red ); //24
+   else
+      SetColor( ui->px_ln_12_2, Qt::black ); //24
    if( mem.SP22_warning )
       SetColor( ui->px_ln_10_4, Qt::red ); //22
+   else
+      SetColor( ui->px_ln_10_4, Qt::black ); //22
    if( mem.SP19_warning )
       SetColor( ui->px_ln_16_1, Qt::red ); //19
+   else
+      SetColor( ui->px_ln_16_1, Qt::black ); //19
+
+   mErrors = test::ErrMsg();
+   if ( mErrors.isEmpty() )
+   {
+      mShowErr = false;
+      SetColor( ui->Alarm, Qt::black );
+   }
+   else
+   {
+      if (!mShowErr)
+      {
+         mShowErr = true;
+         SetColor( ui->Alarm, Qt::red );
+         on_Alarm_clicked();
+      }
+   }
 }
 void PumpsManualControl::UpdateData()
 {
@@ -91,17 +124,17 @@ void PumpsManualControl::UpdateData()
    ui->OilLvl->setValue(mem.BL1);
    QPalette p = ui->OilLvl->palette();
    int percent = ui->OilLvl->value() *100 / ( ui->OilLvl->maximum() - ui->OilLvl->minimum() );
-   QColor c;
+   QString c;
    if ( percent <= 10 )
-      c = Qt::red;
+      c = "background-color: rgb(255, 0, 0);";
    else if ( percent <= 30 )
-      c = Qt::yellow;
+      c = "background-color: rgb(255, 255, 0);";
    else
-      c = Qt::white;
+      c = "background-color: rgb(255, 255, 255);";
 
    p.setColor( QPalette::Highlight, Qt::darkGreen );
    p.setColor( QPalette::Base, c );
-   ui->OilLvl->setPalette(p);
+   ui->OilLvl->setStyleSheet( "border-color: rgb(255,255,255);" + c );
 
 }
 void PumpsManualControl::SynkControls()
@@ -161,7 +194,7 @@ void PumpsManualControl::hideEvent( QHideEvent *e )
 }
 
 
-void PumpsManualControl::SetColor( QLabel *label, QColor cl )
+void PumpsManualControl::SetColor( QWidget *label, QColor cl )
 {
    QString sh = label->styleSheet();
    if ( sh.isEmpty() )
@@ -226,27 +259,90 @@ void PumpsManualControl::CheckDR1t()
             ui->YB10_val->text().toDouble()) != 0.0;
    ui->DR1t->setEnabled(!c);
 
+   auto power = []( float q, float n, float p )
+   {
+      return (q*n/1000*p)/540;
+   };
+   auto& mem = cpu::CpuMemory::Instance().DB82;
+   float p7 = ui->YB7_val->text().toFloat();
+   float p8 = ui->YB7_val->text().toFloat();
+   float p9 = ui->YB7_val->text().toFloat();
+
+   float p1 = 0.0;
+   float p2 = 0.0;
+   int cnt = 0;
+   auto fill_vals = [&p1, &p2, &cnt]( float& val )
+   {
+      if ( val )
+      {
+         if (!p1)
+         {
+            p1 = val;
+            ++cnt;
+         }
+         else if ( !p2 )
+         {
+            p2 = val;
+            ++cnt;
+         }
+         else
+            val = 0.0;
+      }
+   };
+
+   fill_vals( p7 );
+   fill_vals( p8 );
+   fill_vals( p9 );
+
+   float n = mem.Speed_man;
+
+   float q1 = mem.Q1_man;
+   float q2 = mem.Q2_man;
+   if ( cnt == 2 )
+   {
+      if ( !q1 )
+      {
+         q1 = q2;
+      }
+      if ( !q2 )
+      {
+         q2 = q1;
+      }
+   }
+
+   float max_power = power( q1, n, p1 );
+   if ( cnt == 2 )
+      max_power += power( q2, n, p2 );
+
+   if ( max_power <= 110 )
+   {
+      mem.YB7_man = p7;
+      mem.YB8_man = p8;
+      mem.YB9_man = p9;
+      mem.Q1_man = q1;
+      mem.Q2_man = q2;
+      mem.Write();
+      return;
+   }
+
+   QMessageBox msg;
+   msg.setWindowTitle( "Ошибки тестирования" );
+   msg.setText( "Превышено ограничение в 110кВт\nНеобходимая мощность " + QString::number(max_power) + "кВт" );
+   msg.addButton( QMessageBox::Ok );
+   msg.setModal( true );
+   msg.exec();
 }
 void PumpsManualControl::on_YB7_val_returnPressed()
 {
    CheckDR1t();
-   auto& mem = cpu::CpuMemory::Instance().DB82;
-   mem.YB7_man = ui->YB7_val->text().toFloat();
-   mem.Write();
 }
 void PumpsManualControl::on_YB8_val_returnPressed()
 {
    CheckDR1t();
-   auto& mem = cpu::CpuMemory::Instance().DB82;
-   mem.YB8_man = ui->YB8_val->text().toFloat();
-   mem.Write();
 }
 void PumpsManualControl::on_YB9_val_returnPressed()
 {
    CheckDR1t();
-   auto& mem = cpu::CpuMemory::Instance().DB82;
-   mem.YB9_man = ui->YB9_val->text().toFloat();
-   mem.Write();
 }
 void PumpsManualControl::on_YB10_val_returnPressed()
 {
@@ -295,4 +391,17 @@ void PumpsManualControl::on_YA27_clicked()
    auto& mem = cpu::CpuMemory::Instance().DB82;
    mem.YA27 = ui->YA27->isChecked();
    mem.Write();
+}
+
+void PumpsManualControl::on_Alarm_clicked()
+{
+   if (mErrors.isEmpty())
+      return;
+
+   QMessageBox msg;
+   msg.setWindowTitle( "Ошибки тестирования" );
+   msg.setText( mErrors );
+   msg.addButton( QMessageBox::Ok );
+   msg.setModal( true );
+   msg.exec();
 }
