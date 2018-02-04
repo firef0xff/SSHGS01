@@ -80,6 +80,7 @@ void TestForm::on_buttonBox_accepted()
         QObject::disconnect( mChildWindow.get(), &ChildWidget::closed, this, &ChildWidget::close );
         QObject::disconnect( this, &ChildWidget::login, mChildWindow.get(), &ChildWidget::on_login );
     }
+    test::CURRENT_PARAMS->TestCase( selected );
     mChildWindow.reset( new TestRunner() );
     QObject::connect( mChildWindow.get(), &ChildWidget::closed, this, &ChildWidget::close );
     QObject::connect( this, &ChildWidget::login, mChildWindow.get(), &ChildWidget::on_login );
