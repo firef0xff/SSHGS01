@@ -98,7 +98,6 @@ SOURCES += main.cpp\
     board/custom_control_board.cpp \
     cpu/board_memory.cpp \
     pump_title_info.cpp \
-    pump_test_info.cpp \
     functions.cpp \
     test_case/implementation/pump/pump_test_5.cpp \
     test_case/implementation/pump/pump_test_6.cpp \
@@ -203,7 +202,6 @@ HEADERS  += mainwindow.h \
     board/custom_control_board.h \
     cpu/board_memory.h \
     pump_title_info.h \
-    pump_test_info.h \
     functions.h \
     test_case/implementation/pump/pump_test_5.h \
     test_case/implementation/pump/pump_test_6.h \

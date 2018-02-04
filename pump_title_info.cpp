@@ -1,8 +1,8 @@
 #include "pump_title_info.h"
 #include "ui_pump_title_info.h"
-#include "pump_test_info.h"
 #include <QMessageBox>
 #include "test_case/implementation/test_params_pumps.h"
+#include "test_form.h"
 #include "functions.h"
 #include "settings/settings.h"
 
@@ -51,16 +51,15 @@ PumpTitleInfo::PumpTitleInfo(bool new_mode, QWidget *parent) :
 void PumpTitleInfo::CheckRights()
 {
    ui->User->setText( app::Settings::Instance().User() );
-
    if ( app::Settings::Instance().UserAccess() != app::UserLevel::Uncknown )
    {
       ui->AnsverBox->setStandardButtons( QDialogButtonBox::Ok | QDialogButtonBox::Cancel );
-      ui->gridLayout->setEnabled(true);
+      setEnabled(true);
    }
    else
    {
       ui->AnsverBox->setStandardButtons( QDialogButtonBox::Cancel );
-      ui->gridLayout->setEnabled(false);
+      setEnabled(false);
    }
 }
 void PumpTitleInfo::OnLogin()
@@ -89,7 +88,7 @@ void PumpTitleInfo::on_AnsverBox_accepted()
            QObject::disconnect( mChildWindow.get(), &ChildWidget::closed, this, &ChildWidget::close );
            QObject::disconnect( this, &ChildWidget::login, mChildWindow.get(), &ChildWidget::on_login );
        }
-       mChildWindow.reset( new PumpTestInfo( mNewMode ) );
+       mChildWindow.reset( new TestForm( mNewMode ) );
        QObject::connect( mChildWindow.get(), &ChildWidget::closed, this, &ChildWidget::close );
        QObject::connect( this, &ChildWidget::login, mChildWindow.get(), &ChildWidget::on_login );
 
@@ -159,6 +158,19 @@ bool PumpTitleInfo::SaveInputParams()
    {
       res *= ParamChecker( ui->l_drainage,  ValidateRange( ui->Drainage, params.Expenditure( ui->Drainage->text() ) ) );
    }
+
+   res *= ParamChecker( ui->l_func_test_time,   params.FuncTestTime( ui->FuncTestTime->text() ) );
+   res *= ParamChecker( ui->l_strong_test_time, params.StrongTestTime( ui->StrongTestTime->text() ) );
+   res *= ParamChecker( ui->l_herm_test_time,   params.HermTestTime( ui->HermTestTime->text() ) );
+
+   res *= ParamChecker( ui->l_x,    params.X( ui->X->text() ) );
+   res *= ParamChecker( ui->l_y,    params.Y( ui->Y->text() ) );
+   res *= ParamChecker( ui->l_z,    params.Z( ui->Z->text() ) );
+   res *= ParamChecker( ui->l_a,    params.A( ui->A->text() ) );
+   res *= ParamChecker( ui->l_a1,   params.A1( ui->A1->text() ) );
+   res *= ParamChecker( ui->l_e,    params.E( ui->E->text() ) );
+   res *= ParamChecker( ui->l_b,    params.B( ui->B->text() ) );
+
    return res;
 }
 
@@ -210,4 +222,16 @@ void PumpTitleInfo::FromParams()
    {
       ui->Drainage->setText( test::ToString( params.Expenditure() ) );
    }
+
+   ui->FuncTestTime->setValue( params.FuncTestTime() );
+   ui->StrongTestTime->setValue( params.StrongTestTime() );
+   ui->HermTestTime->setValue( params.HermTestTime() );
+
+   ui->X->setValue( params.X() );
+   ui->Y->setValue( params.Y() );
+   ui->Z->setValue( params.Z() );
+   ui->A->setValue( params.A() );
+   ui->A1->setValue( params.A1() );
+   ui->E->setValue( params.E() );
+   ui->B->setValue( params.B() );
 }
