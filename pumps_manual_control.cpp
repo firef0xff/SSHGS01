@@ -11,6 +11,8 @@ void PumpsManualControlUpdater::run()
     mStopSignal = false;
     while ( !mStopSignal )
     {
+        cpu::CpuMemory::Instance().DB40.Read();
+        cpu::CpuMemory::Instance().DB50.Read();
         cpu::CpuMemory::Instance().DB70.Read();
         cpu::CpuMemory::Instance().DB73.Read();
         emit update();
@@ -30,6 +32,19 @@ PumpsManualControl::PumpsManualControl(QWidget *parent) :
    ui(new Ui::pumps_manual_control)
 {
    ui->setupUi(this);
+
+   auto *val1 = new QDoubleValidator( 0, 999.9, 1, this );
+   ui->V1->setValidator( val1 );
+   ui->V2->setValidator( val1 );
+
+   auto *val2 = new QIntValidator( 0, 2400, this );
+   ui->DR1t->setValidator( val2 );
+
+   auto *val3 = new QIntValidator( 0, 999, this );
+   ui->YB7_val->setValidator( val3 );
+   ui->YB8_val->setValidator( val3 );
+   ui->YB9_val->setValidator( val3 );
+   ui->YB10_val->setValidator( val3 );
 
    QObject::connect( &mUpdater, &PumpsManualControlUpdater::update, this, &PumpsManualControl::onUpdateControls );
 }
@@ -100,24 +115,32 @@ void PumpsManualControl::UpdateMarks()
 void PumpsManualControl::UpdateData()
 {
    auto & mem = cpu::CpuMemory::Instance().DB70;
-   ui->BP7->display( mem.BP7 );
-   ui->BP8->display( mem.BP8 );
-   ui->BP9->display( mem.BP9 );
-   ui->BP10->display( mem.BP10 );
-   ui->BP12->display( mem.BP12 );
-   ui->BP13->display( mem.BP13 );
+   auto & mem1 = cpu::CpuMemory::Instance().DB50;
 
-   ui->BV5->display( mem.BV5 );
-   ui->BV6->display( mem.BV6 );
-   ui->BV7->display( mem.BV7 );
+   auto Round= []( float val )
+   {
+      return round( val *10)/10;
+   };
 
-   ui->BV8910->display( max( max( mem.BV8, mem.BV9 ), mem.BV10 ) );
+   ui->BP7->display( Round( mem.BP7 ) );
+   ui->BP8->display( Round( mem.BP8 ) );
+   ui->BP9->display( Round( mem.BP9 ) );
+   ui->BP10->display( Round( mem.BP10 ) );
+   ui->BP12->display( Round( mem.BP12 ) );
+   ui->BP13->display( Round( mem.BP13 ) );
 
-   ui->DM1->display( mem.DM1 );
-   ui->DR1->display( mem.DR1 );
+   ui->BV5->display( Round( mem.BV5 ) );
+   ui->BV6->display( Round( mem.BV6 ) );
+   ui->BV7->display( Round( mem.BV7 ) );
 
-   ui->BT2->display( mem.BT2 );
-   ui->BT3->display( mem.BT3 );
+   ui->BV8910->display( Round( max( max( mem.BV8, mem.BV9 ), mem.BV10 ) ) );
+
+   ui->DM1->display( Round( mem.DM1 ) );
+   ui->DR1->display( Round( mem.DR1 ) );
+
+   ui->BT1->display( Round( mem1.BT1) );
+   ui->BT2->display( Round( mem.BT2 ) );
+   ui->BT3->display( Round( mem.BT3 ) );
 
    ui->YB12->setValue(mem.R2);
    ui->YB13->setValue(mem.R3);
@@ -239,9 +262,37 @@ void PumpsManualControl::SetColor( QWidget *label, QColor cl )
 void PumpsManualControl::on_EngineStartStop_clicked()
 {
    bool checked = ui->EngineStartStop->isChecked();
+
+   bool error = false;
+   auto& e_mem1 = cpu::CpuMemory::Instance().DB40;
+   error += e_mem1.sl3;
+   error += e_mem1.sq1;
+   error += e_mem1.sq3;
+   error += e_mem1.sq5;
+   error += e_mem1.sq7;
+   error += e_mem1.sq13;
+   error += e_mem1.sq14;
+   error += e_mem1.sq15;
+   error += e_mem1.sq9;
+
+   auto& e_mem2 = cpu::CpuMemory::Instance().DB73;
+   error += e_mem2.SQ21_warning;
+   error += e_mem2.SQ16_warning;
+   error += e_mem2.SQ17_warning;
+   error += e_mem2.SQ18_warning;
+   error += e_mem2.LevelMaslaAlarmPump;
+   error += e_mem2.TempMaslaAlarmPump1;
+   error += e_mem2.TempMaslaAlarmPump2;
+
+   if ( error )
+   {
+      on_Alarm_clicked();
+      checked = false;
+      ui->EngineStartStop->setChecked( checked );
+   }
+
    ui->V1->setEnabled(!checked);
    ui->V2->setEnabled(!checked);
-
    auto& mem = cpu::CpuMemory::Instance().DB82;
    mem.Start_Stop = checked;
    mem.Write();
@@ -342,7 +393,6 @@ void PumpsManualControl::on_YB9_val_returnPressed()
 }
 void PumpsManualControl::on_YB10_val_returnPressed()
 {
-   CheckDR1t();
    auto& mem = cpu::CpuMemory::Instance().DB82;
    mem.YB10_man = ui->YB10_val->text().toFloat();
    mem.Write();
@@ -400,4 +450,37 @@ void PumpsManualControl::on_Alarm_clicked()
    msg.addButton( QMessageBox::Ok );
    msg.setModal( true );
    msg.exec();
+}
+
+void PumpsManualControl::CheckYb()
+{
+
+   std::vector<QLineEdit *> uis;
+   if ( ui->YB7_val->text().toDouble() == 0.0 )
+   {
+      uis.push_back(ui->YB7_val);
+   }
+   if ( ui->YB8_val->text().toDouble() == 0.0 )
+   {
+      uis.push_back(ui->YB8_val);
+   }
+   if ( ui->YB9_val->text().toDouble() == 0.0 )
+   {
+      uis.push_back(ui->YB9_val);
+   }
+
+   for ( QLineEdit* ptr: uis )
+      ptr->setEnabled( uis.size() >= 2 );
+}
+void PumpsManualControl::on_YB7_val_textChanged(const QString &)
+{
+   CheckYb();
+}
+void PumpsManualControl::on_YB8_val_textChanged(const QString &)
+{
+   CheckYb();
+}
+void PumpsManualControl::on_YB9_val_textChanged(const QString &)
+{
+   CheckYb();
 }

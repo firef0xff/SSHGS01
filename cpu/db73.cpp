@@ -30,7 +30,11 @@ DB73::DB73():
    OP40_Qr_NO_Dopusk( mBoolData[20] ),//Расход рабочий не в допуске (функц-ние)
    OP41_Qr_NO_Dopusk( mBoolData[21] ),//Расход рабочий не в допуске (прочность)
    OP42_Qr_NO_Dopusk( mBoolData[22] ),//Расход рабочий не в допуске (гермет-ть)
-   OP48_Qd_NO_Dopusk( mBoolData[23] )//Расход в дренаже не в допуске
+   OP48_Qd_NO_Dopusk( mBoolData[23] ),//Расход в дренаже не в допуске
+   LevelMaslaAlarmPump( mBoolData[24] ), //аварийный уровень в баке масла 2
+   TempMaslaAlarmPump1( mBoolData[25] ), //аварийная температура масла в баке 1
+   TempMaslaAlarmPump2( mBoolData[26] ) //аварийная температура масла в баке 2
+
 {
    memset( mBoolData, 0, sizeof(mBoolData) );
    mGroupID = opc::miniOPC::Instance().AddGroup( L"DB73", mAdresses, BOOL_COUNT );
@@ -60,6 +64,9 @@ DB73::DB73():
    OP41_Qr_NO_Dopusk = true;
    OP42_Qr_NO_Dopusk = true;
    OP48_Qd_NO_Dopusk = true;
+   LevelMaslaAlarmPump = true;
+   TempMaslaAlarmPump1 = true;
+   TempMaslaAlarmPump2 = true;
 #endif
 
 }
@@ -102,6 +109,9 @@ void DB73::Read()
    OP41_Qr_NO_Dopusk = true;
    OP42_Qr_NO_Dopusk = true;
    OP48_Qd_NO_Dopusk = true;
+   LevelMaslaAlarmPump = true;
+   TempMaslaAlarmPump1 = true;
+   TempMaslaAlarmPump2 = true;
 #endif
 }
 

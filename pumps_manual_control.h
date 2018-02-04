@@ -75,6 +75,11 @@ private slots:
 
     void on_Alarm_clicked();
 
+    void CheckYb();
+    void on_YB7_val_textChanged(const QString &arg1);
+    void on_YB8_val_textChanged(const QString &arg1);
+    void on_YB9_val_textChanged(const QString &arg1);
+
 private:
 
    void SetColor(QWidget *label, QColor cl );

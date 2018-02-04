@@ -38,6 +38,9 @@ public:
    bool& OP41_Qr_NO_Dopusk; //Расход рабочий не в допуске (прочность)
    bool& OP42_Qr_NO_Dopusk; //Расход рабочий не в допуске (гермет-ть)
    bool& OP48_Qd_NO_Dopusk; //Расход в дренаже не в допуске
+   bool& LevelMaslaAlarmPump; //аварийный уровень в баке масла 2
+   bool& TempMaslaAlarmPump1; //аварийная температура масла в баке 1
+   bool& TempMaslaAlarmPump2; //аварийная температура масла в баке 2
 
 private:
    friend class cpu::CpuMemory;
@@ -47,7 +50,7 @@ private:
 
    enum
    {
-       BOOL_COUNT = 24
+       BOOL_COUNT = 27
    };
 
    bool mBoolData[ BOOL_COUNT ];
@@ -78,6 +81,9 @@ private:
       L"CPU/DB73.OP41_Qr_NO_Dopusk",
       L"CPU/DB73.OP42_Qr_NO_Dopusk",
       L"CPU/DB73.OP48_Qd_NO_Dopusk",
+      L"CPU/DB73.LevelMaslaAlarmPump",
+      L"CPU/DB73.TempMaslaAlarmPump1",
+      L"CPU/DB73.TempMaslaAlarmPump2",
    };
 };
 
