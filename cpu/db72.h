@@ -15,6 +15,11 @@ public:
    void Read();
 
    bool& OP40_Work; //Выполнение (функц-ние)
+   bool& OP40_control;  //это особый бит, по которому должно выплыть окошко с текстом;
+                        //   «В системе отсутствуют: удары, стуки,
+                        //   повышенная вибрация, резкий шум, повышенный нагрев.
+                        //   Отсутствуют каплеобразования: из под крышек,
+                        //   пробок, фланцев, через стыки корпусных деталей и т.д.»
    bool& OP41_Work; //Выполнение (прочность)
    bool& OP42_Work; //Выполнение (наружная герметичность)
    bool& OP43_Work; //Выполнение (КПД)
@@ -46,7 +51,8 @@ public:
    bool& OP49_G6; //Выполнение - график 6
    bool& OP49_Ready; //данные готовы к чтению
 
-   float& Q_NO_Dopusk; //Расход не в допуске (рабочий/дренаж)
+   float& Q_S1; //Расход S1 //Расход не в допуске (рабочий/дренаж)
+   float& Q_S2; //Расход S2
    float& OP43_KPD; //Значение КПД
    float& OP44_Work_V; //Значение рабочего объема
    float& OP45_K_Podacha; //Значение коэффиц. подачи
@@ -64,8 +70,8 @@ private:
 
    enum
    {
-       BOOL_COUNT = 31,
-       FLOAT_COUNT = 9
+       BOOL_COUNT = 32,
+       FLOAT_COUNT = 10
    };
 
    bool mBoolData[ BOOL_COUNT ];
@@ -74,6 +80,7 @@ private:
 
    wchar_t const* mAdresses[ BOOL_COUNT + FLOAT_COUNT ] = {
       L"CPU/DB72.OP40_Work",
+      L"CPU/DB72.OP40_control",
       L"CPU/DB72.OP41_Work",
       L"CPU/DB72.OP42_Work",
       L"CPU/DB72.OP43_Work",
@@ -105,7 +112,8 @@ private:
       L"CPU/DB72.OP49_G6",
       L"CPU/DB72.OP49_Ready",
 
-      L"CPU/DB72.Q_NO_Dopusk",
+      L"CPU/DB72.Q_S1",
+      L"CPU/DB72.Q_S2",
       L"CPU/DB72.OP43_KPD",
       L"CPU/DB72.OP44_Work_V",
       L"CPU/DB72.OP45_K_Podacha",

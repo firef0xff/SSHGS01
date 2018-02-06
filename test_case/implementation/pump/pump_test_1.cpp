@@ -1,6 +1,9 @@
 #include "pump_test_1.h"
 #include <QJsonObject>
+#include <QMessageBox>
+#include <QPushButton>
 #include "../test_params_pumps.h"
+#include <functional>
 
 namespace test
 {
@@ -9,20 +12,60 @@ namespace pump
 
 PumpTest1::PumpTest1():
     test::pump::Test( "Испытание функционирования", 40 ),
-    mResult(false)
+    mResult(false),
+    mContol( cpu::CpuMemory::Instance().M2 )
 {}
 
 bool PumpTest1::Run()
 {
+    mIsSet = false;
+    mResult = false;
+    mContol.Reset();
     Start();
     Wait( mBits.OP40_Work, mBits.OP40_End );
     if ( IsStopped() )
         return false;
 
-//TODO нет бита результата
-//    OilTemp = round( mTemperature.T_oil *100)/100;
+    OilTemp = round( mSensors.BT2 *100)/100;
 
     return Success();
+}
+
+void PumpTest1::UpdateData()
+{
+   Test::UpdateData();
+   if ( mBits.OP40_control && !mIsSet )
+   {
+      std::mutex mutex;
+      std::unique_lock< std::mutex > lock( mutex );
+      Launcher( std::bind( &PumpTest1::Question, this ) );
+
+      mCondVar.wait( lock );
+      mIsSet = true;
+
+      if ( mResult )
+         mContol.Pump_Continue = true;
+      else
+         mContol.Pump_Fail = true;
+      mContol.Write();
+   }
+}
+void PumpTest1::Question()
+{
+    QMessageBox msg;
+    msg.setWindowTitle( "Визуальный контроль" );
+    msg.setText( "В системе отсутствуют: удары, стуки,\n"
+                 "повышенная вибрация, резкий шум, повышенный нагрев.\n"
+                 "Отсутствуют каплеобразования: из под крышек,\n"
+                 "пробок, фланцев, через стыки корпусных деталей и т.д." );
+    QPushButton *no = msg.addButton("Нет", QMessageBox::NoRole );
+    QPushButton *yes = msg.addButton("Да", QMessageBox::YesRole );
+    msg.setModal( true );
+    no->setDefault( false );
+    yes->setDefault( false );
+    msg.exec();
+    mResult = msg.clickedButton() == yes;
+    mCondVar.notify_all();
 }
 
 QJsonObject PumpTest1::Serialise() const

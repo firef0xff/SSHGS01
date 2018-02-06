@@ -127,6 +127,7 @@ protected:
     void UpdateData();
 
     cpu::data::DB72& mBits;
+    cpu::data::DB70& mSensors;
 
 private:
     static uint8_t mTestsCount;

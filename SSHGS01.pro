@@ -92,6 +92,7 @@ SOURCES += main.cpp\
     cpu/db60.cpp \
     manual_control.cpp \
     cpu/m1.cpp \
+    cpu/m2.cpp \
     cpu/i1.cpp \
     users/users.cpp \
     ../mylib/COMPort/ComPort.cpp \
@@ -196,6 +197,7 @@ HEADERS  += mainwindow.h \
     cpu/db60.h \
     manual_control.h \
     cpu/m1.h \
+    cpu/m2.h \
     cpu/i1.h \
     users/users.h \
     ../mylib/COMPort/ComPort.h \

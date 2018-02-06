@@ -1,5 +1,6 @@
 #pragma once
 #include "../test_base.h"
+#include <condition_variable>
 
 namespace test
 {
@@ -18,11 +19,18 @@ public:
 
    bool Success() const;
 
+   void UpdateData();
+
    QString RepRes() const;
    QString RepName() const;
 
 private:
    bool mResult;
+   bool mIsSet;
+   std::condition_variable mCondVar;
+   void Question();
+
+   cpu::data::M2& mContol;
 };
 
 }//namespace pump

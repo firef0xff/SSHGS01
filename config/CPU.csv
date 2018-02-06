@@ -546,6 +546,7 @@ DB71.Precision_test_function;DB71,REAL98;RW;TST=;CMT=Точность для испыт. функц-н
 DB71.Time_function_dependence;DB71,REAL102;RW;TST=;CMT=Время испыт. функц-ные зависимости - В (1..360)
 DB71.Temperature_Work;DB71,REAL106;RW;TST=;CMT=Рабочая температура масла в баке
 DB72.OP40_Work;DB72,X2.0;RO;TST=;CMT=Выполнение (функц-ние)
+DB72.OP40_control;DB72,X46.0;RO;TST=;CMT=Визуальный контроль (функц-ние)
 DB72.OP41_Work;DB72,X2.1;RO;TST=;CMT=Выполнение (прочность)
 DB72.OP42_Work;DB72,X2.2;RO;TST=;CMT=Выполнение (наружная герметичность)
 DB72.OP43_Work;DB72,X2.3;RO;TST=;CMT=Выполнение (КПД)
@@ -576,7 +577,8 @@ DB72.OP49_G4;DB72,X5.3;RO;TST=;CMT=Выполнение - график 4
 DB72.OP49_G5;DB72,X5.4;RO;TST=;CMT=Выполнение - график 5
 DB72.OP49_G6;DB72,X5.5;RO;TST=;CMT=Выполнение - график 6
 DB72.OP49_Ready;DB72,X5.6;RO;TST=;CMT=данные готовы к чтению
-DB72.Q_NO_Dopusk;DB72,REAL6;RO;TST=;CMT=Расход не в допуске (рабочий/дренаж)
+DB72.Q_S1;DB72,REAL6;RO;TST=;CMT=Расход не в допуске (рабочий/дренаж)
+DB72.Q_S2;DB72,REAL42;RO;TST=;CMT=Расход не в допуске (рабочий/дренаж)
 DB72.OP43_KPD;DB72,REAL10;RO;TST=;CMT=Значение КПД
 DB72.OP44_Work_V;DB72,REAL14;RO;TST=;CMT=Значение рабочего объема
 DB72.OP45_K_Podacha;DB72,REAL18;RO;TST=;CMT=Значение коэффиц. подачи
@@ -624,3 +626,5 @@ DB82.YB9_man;DB82,REAL24;RW;TST=;CMT=задание давления на клапан YB9 (бар)
 DB82.YB10_man;DB82,REAL28;RW;TST=;CMT=задание давления на клапан YB10 (бар)
 DB82.Voltage_man;DB82,REAL32;RW;TST=;CMT=напряжение питания дискретных катушек
 DB82.Type_Voltage_man;DB82,REAL36;RW;TST=;CMT=Тип напряжения (постоянное/переменное)
+M2.Pump_Continue;MX127.1;RW;TST=;CMT=продолжить тест
+M2.Pump_Fail;MX128.6;RW;TST=;CMT=завершить тест

@@ -346,13 +346,16 @@ namespace pump
 uint8_t Test::mTestsCount = 1;
 Test::Test( QString const& name, uint8_t id ):
     test::TestCommonData( &Pumps, name, mTestsCount, id ),
-    mBits( cpu::CpuMemory::Instance().DB72 )
+    mBits( cpu::CpuMemory::Instance().DB72 ),
+    mSensors( cpu::CpuMemory::Instance().DB70 )
 {
     ++mTestsCount;
 }
 
 void Test::UpdateData()
 {
+   mBits.Read();
+   mSensors.Read();
 }
 
 
