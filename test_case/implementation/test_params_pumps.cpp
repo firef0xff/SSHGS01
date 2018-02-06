@@ -242,7 +242,7 @@ void Parameters::WriteToController() const
    mem.Electronic_control = mElektrikControl;
    mem.Hydraulic_control = mHydroControl;
 
-//   mem.Type_control;     //Тип управления (дискретный/аналоговый)
+   mem.Type_control;     //Тип управления (дискретный/аналоговый)
    mem.Type_current_discrete = mVoltageType == VT_DC;
 
 
@@ -276,7 +276,14 @@ void Parameters::WriteToController() const
    mem.Coeffic_function_drainag = mA1;
    mem.Precision_test_function = mE;
    mem.Time_function_dependence = mB;
-//   mem.Temperature_Work; //Рабочая температура масла в баке
+
+   mem.Temperature_Work; //Рабочая температура масла в баке
+   mem.Contur_A_Q1; //выбран контур А для секции 1
+   mem.Contur_B_Q1; //выбран контур В для секции 1
+   mem.Contur_C_Q1; //выбран контур С для секции 1
+   mem.Contur_A_Q2; //выбран контур А для секции 2
+   mem.Contur_B_Q2; //выбран контур В для секции 2
+   mem.Contur_C_Q2; //выбран контур С для с2кции 2
 
    mem.Write();
 }

@@ -517,6 +517,12 @@ DB71.Number_of_sections;DB71,X2.0;RW;TST=;CMT=Количество секций в насосе (1/2)
 DB71.Direction_of_rotation;DB71,X2.1;RW;TST=;CMT=Направление вращения (левое/правое)
 DB71.Electronic_control;DB71,X2.2;RW;TST=;CMT=Наличие электр-го управления
 DB71.Hydraulic_control;DB71,X2.3;RW;TST=;CMT=Наличие гидравл-го управления
+DB71.Contur_A_Q1;DB71,X110.0;RW;TST=;CMT=выбран контур А для секции 1
+DB71.Contur_B_Q1;DB71,X110.1;RW;TST=;CMT=выбран контур В для секции 1
+DB71.Contur_C_Q1;DB71,X110.2;RW;TST=;CMT=выбран контур С для секции 1
+DB71.Contur_A_Q2;DB71,X110.3;RW;TST=;CMT=выбран контур А для секции 2
+DB71.Contur_B_Q2;DB71,X110.4;RW;TST=;CMT=выбран контур В для секции 2
+DB71.Contur_C_Q2;DB71,X110.5;RW;TST=;CMT=выбран контур С для сeкции 2
 DB71.Time_test_function;DB71,REAL4;RW;TST=;CMT=Время испытаний функц-ия (0..360сек)
 DB71.Time_test_strength;DB71,REAL8;RW;TST=;CMT=Время испытаний на прочность (1..10мин)
 DB71.Time_test_tightness;DB71,REAL12;RW;TST=;CMT=Время испытаний наружн. герметичности (0..360сек)

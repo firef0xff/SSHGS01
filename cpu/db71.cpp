@@ -14,6 +14,12 @@ DB71::DB71():
    Hydraulic_control    ( mBoolData[3] ), //Наличие гидравл-го управления
    Type_control         ( mBoolData[4] ),     //Тип управления (дискретный/аналоговый)
    Type_current_discrete( mBoolData[5] ), //Тип тока для дискретного клапана (пост./перем.)
+   Contur_A_Q1          ( mBoolData[6] ), //выбран контур А для секции 1
+   Contur_B_Q1          ( mBoolData[7] ), //выбран контур В для секции 1
+   Contur_C_Q1          ( mBoolData[8] ), //выбран контур С для секции 1
+   Contur_A_Q2          ( mBoolData[9] ), //выбран контур А для секции 2
+   Contur_B_Q2          ( mBoolData[10] ), //выбран контур В для секции 2
+   Contur_C_Q2          ( mBoolData[11] ), //выбран контур С для секции 2
 
    Time_test_function      ( mFloatData[0] ), // Время испытаний функц-ия (0..360сек)
    Time_test_strength      ( mFloatData[1] ), //Время испытаний на прочность (1..10мин)

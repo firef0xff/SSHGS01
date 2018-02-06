@@ -18,6 +18,12 @@ public:
    bool& Hydraulic_control; //Наличие гидравл-го управления
    bool& Type_control;     //Тип управления (дискретный/аналоговый)
    bool& Type_current_discrete; //Тип тока для дискретного клапана (пост./перем.)
+   bool& Contur_A_Q1; //выбран контур А для секции 1
+   bool& Contur_B_Q1; //выбран контур В для секции 1
+   bool& Contur_C_Q1; //выбран контур С для секции 1
+   bool& Contur_A_Q2; //выбран контур А для секции 2
+   bool& Contur_B_Q2; //выбран контур В для секции 2
+   bool& Contur_C_Q2; //выбран контур С для с2кции 2
 
    float& Time_test_function; // Время испытаний функц-ия (0..360сек)
    float& Time_test_strength; //Время испытаний на прочность (1..10мин)
@@ -54,7 +60,7 @@ private:
 
    enum
    {
-       BOOL_COUNT = 6,
+       BOOL_COUNT = 12,
        FLOAT_COUNT = 26
    };
 
@@ -69,6 +75,12 @@ private:
       L"CPU/DB71.Hydraulic_control",
       L"CPU/DB71.Type_control",
       L"CPU/DB71.Type_current_discrete",
+      L"CPU/DB71.Contur_A_Q1",
+      L"CPU/DB71.Contur_B_Q1",
+      L"CPU/DB71.Contur_C_Q1",
+      L"CPU/DB71.Contur_A_Q2",
+      L"CPU/DB71.Contur_B_Q2",
+      L"CPU/DB71.Contur_C_Q2",
 
       L"CPU/DB71.Time_test_function",
       L"CPU/DB71.Time_test_strength",
