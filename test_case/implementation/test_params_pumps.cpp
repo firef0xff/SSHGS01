@@ -37,6 +37,35 @@ QString ToString( SPIN const& v )
    }
 }
 
+bool ParseValue ( CONTROL_MODE& sig, QString const& val )
+{
+   if ( !val.compare( "Дискретный", Qt::CaseInsensitive ) )
+   {
+       sig = cmDiskret;
+       return true;
+   }
+   else if ( !val.compare( "Аналоговый", Qt::CaseInsensitive ) )
+   {
+       sig = cmAnalog;
+       return true;
+   }
+   return false;
+}
+QString ToString( CONTROL_MODE const& v )
+{
+   switch (v)
+   {
+       case cmDiskret:
+           return "Дискретный";
+       case cmAnalog:
+           return "Аналоговый";
+       case cmUnknown:
+           return "Не задан";
+   default:
+       return "Неизвестное значение";
+   }
+}
+
 namespace pump
 {
 static std::shared_ptr< Parameters > PARAMS_INSTANCE;
@@ -113,6 +142,17 @@ void Parameters::Reset()
    mA1 = 0.0;//Коэффициент функционирования для дренажа, % (А1)
    mE = 0.0;//Точность для испытаний функциональные зависимости, сек (Е)
    mB = 0;//Продолжительность испытаний функциональные зависимости, сек (В)
+
+   mTypeControl = cmUnknown; //Тип управления (дискретный/аналоговый)
+  mWorkTemperature = 0;       //Рабочая температура масла в баке
+
+   mConturA1 = false; //выбран контур А для секции 1
+   mConturB1 = false; //выбран контур В для секции 1
+   mConturC1 = false; //выбран контур С для секции 1
+
+   mConturA2 = false; //выбран контур А для секции 2
+   mConturB2 = false; //выбран контур В для секции 2
+   mConturC2 = false; //выбран контур С для с2кции 2
 }
 
 QString Parameters::ToString() const
@@ -171,6 +211,16 @@ QJsonObject Parameters::Serialise() const
     obj.insert("mE", mE);
     obj.insert("mB", mB);
 
+
+    obj.insert("mTypeControl", mTypeControl);
+    obj.insert("mWorkTemperature",mWorkTemperature);
+    obj.insert("mConturA1", mConturA1);
+    obj.insert("mConturB1", mConturB1);
+    obj.insert("mConturC1", mConturC1);
+    obj.insert("mConturA2", mConturA2);
+    obj.insert("mConturB2", mConturB2);
+    obj.insert("mConturC2", mConturC2);
+
     QJsonObject ret = test::Parameters::Serialise();
     ret.insert("pump", obj);
 
@@ -225,6 +275,17 @@ bool Parameters::Deserialize(const QJsonObject &obj )
         mA1 = obj.value("mA1").toDouble();
         mE = obj.value("mE").toDouble();
         mB = obj.value("mB").toInt();
+
+
+
+        mTypeControl = static_cast<CONTROL_MODE>(obj.value("mTypeControl" ).toInt());
+        mWorkTemperature = obj.value("mWorkTemperature").toInt();
+        mConturA1 = obj.value("mConturA1").toBool();
+        mConturB1 = obj.value("mConturB1").toBool();
+        mConturC1 = obj.value("mConturC1").toBool();
+        mConturA2 = obj.value("mConturA2").toBool();
+        mConturB2 = obj.value("mConturB2").toBool();
+        mConturC2 = obj.value("mConturC2").toBool();
     }
     else
         ret = false;
@@ -277,13 +338,13 @@ void Parameters::WriteToController() const
    mem.Precision_test_function = mE;
    mem.Time_function_dependence = mB;
 
-   mem.Temperature_Work; //Рабочая температура масла в баке
-   mem.Contur_A_Q1; //выбран контур А для секции 1
-   mem.Contur_B_Q1; //выбран контур В для секции 1
-   mem.Contur_C_Q1; //выбран контур С для секции 1
-   mem.Contur_A_Q2; //выбран контур А для секции 2
-   mem.Contur_B_Q2; //выбран контур В для секции 2
-   mem.Contur_C_Q2; //выбран контур С для с2кции 2
+   mem.Temperature_Work = mWorkTemperature; //Рабочая температура масла в баке
+   mem.Contur_A_Q1 = mConturA1; //выбран контур А для секции 1
+   mem.Contur_B_Q1 = mConturB1; //выбран контур В для секции 1
+   mem.Contur_C_Q1 = mConturC1; //выбран контур С для секции 1
+   mem.Contur_A_Q2 = mConturA2; //выбран контур А для секции 2
+   mem.Contur_B_Q2 = mConturB2; //выбран контур В для секции 2
+   mem.Contur_C_Q2 = mConturC2; //выбран контур С для с2кции 2
 
    mem.Write();
 }
@@ -841,6 +902,85 @@ bool Parameters::B( QString const& val )
 qint32 Parameters::B()
 {
    return mB;
+}
+
+
+bool Parameters::TypeControl( QString const& val )
+{
+   return ParseValue( mTypeControl, val );
+}
+CONTROL_MODE Parameters::TypeControl()
+{
+   return mTypeControl;
+}
+
+bool Parameters::WorkTemperature( QString const& val )
+{
+   return ParseValue( mWorkTemperature, val );
+}
+qint32 Parameters::WorkTemperature()
+{
+   return mWorkTemperature;
+}
+
+bool Parameters::ConturA1( bool val )
+{
+   mConturA1 = val;
+   return true;
+}
+bool Parameters::ConturA1()
+{
+   return mConturA1;
+}
+
+bool Parameters::ConturB1( bool val )
+{
+   mConturB1 = val;
+   return true;
+}
+bool Parameters::ConturB1()
+{
+   return mConturB1;
+}
+
+bool Parameters::ConturC1( bool val )
+{
+   mConturC1 = val;
+   return true;
+}
+bool Parameters::ConturC1()
+{
+   return mConturC1;
+}
+
+bool Parameters::ConturA2( bool val )
+{
+   mConturA2 = val;
+   return true;
+}
+bool Parameters::ConturA2()
+{
+   return mConturA2;
+}
+
+bool Parameters::ConturB2( bool val )
+{
+   mConturB2 = val;
+   return true;
+}
+bool Parameters::ConturB2()
+{
+   return mConturB2;
+}
+
+bool Parameters::ConturC2( bool val )
+{
+   mConturC2 = val;
+   return true;
+}
+bool Parameters::ConturC2()
+{
+   return mConturC2;
 }
 
 }//namespace pump

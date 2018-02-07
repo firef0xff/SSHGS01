@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>736</width>
-    <height>620</height>
+    <width>952</width>
+    <height>744</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,193 +20,6 @@
       <string>Параметры насоса</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_4">
-      <item row="2" column="2" rowspan="6" colspan="2">
-       <layout class="QVBoxLayout" name="verticalLayout_4">
-        <item>
-         <widget class="QGroupBox" name="Section2">
-          <property name="title">
-           <string>Секция №2</string>
-          </property>
-          <property name="flat">
-           <bool>false</bool>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-          <property name="checked">
-           <bool>false</bool>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_3">
-           <item row="1" column="0" colspan="2">
-            <widget class="QGroupBox" name="Pressure_2">
-             <property name="title">
-              <string>Давление в напорной полости, бар:</string>
-             </property>
-             <layout class="QFormLayout" name="formLayout_6">
-              <item row="0" column="0">
-               <widget class="QLabel" name="l_min_pressure_2">
-                <property name="text">
-                 <string>Минимальное</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="l_nom_pressure_2">
-                <property name="text">
-                 <string>Номинальное</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="0">
-               <widget class="QLabel" name="l_max_pressure_2">
-                <property name="text">
-                 <string>Максимальное</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QLineEdit" name="MinPressure_2">
-                <property name="toolTip">
-                 <string>0...450 бар</string>
-                </property>
-                <property name="toolTipDuration">
-                 <number>1000</number>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QLineEdit" name="NomPressure_2">
-                <property name="toolTip">
-                 <string>0...450 бар</string>
-                </property>
-                <property name="toolTipDuration">
-                 <number>1000</number>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1">
-               <widget class="QLineEdit" name="MaxPressure_2">
-                <property name="toolTip">
-                 <string>0...450 бар</string>
-                </property>
-                <property name="toolTipDuration">
-                 <number>1000</number>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="l_work_volume_2">
-             <property name="text">
-              <string>Рабочий объем, см³/об</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QLineEdit" name="WorkVolume_2">
-             <property name="toolTip">
-              <string>0...355 см³/об</string>
-             </property>
-             <property name="toolTipDuration">
-              <number>1000</number>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="HydroControl">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="title">
-           <string>Гидравлическое управление</string>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-          <property name="checked">
-           <bool>false</bool>
-          </property>
-          <layout class="QFormLayout" name="formLayout_5">
-           <item row="0" column="0">
-            <widget class="QLabel" name="l_max_control_pressure">
-             <property name="text">
-              <string>Максимальное давление
-в канале управления, бар</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QSpinBox" name="MaxControlPressure">
-             <property name="toolTip">
-              <string>0...100 бар</string>
-             </property>
-             <property name="toolTipDuration">
-              <number>1000</number>
-             </property>
-             <property name="maximum">
-              <number>100</number>
-             </property>
-             <property name="value">
-              <number>6</number>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <spacer name="verticalSpacer_3">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="SerNo"/>
-      </item>
-      <item row="0" column="2">
-       <widget class="QLabel" name="l_model">
-        <property name="text">
-         <string>Модель гидронасоса</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="User"/>
-      </item>
-      <item row="1" column="3">
-       <widget class="QComboBox" name="Spin">
-        <property name="currentIndex">
-         <number>1</number>
-        </property>
-        <item>
-         <property name="text">
-          <string>Левое</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Правое</string>
-         </property>
-        </item>
-       </widget>
-      </item>
       <item row="1" column="0">
        <widget class="QLabel" name="l_user">
         <property name="text">
@@ -214,10 +27,13 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
-       <widget class="QLabel" name="l_spin">
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="User"/>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="l_ser_no">
         <property name="text">
-         <string>Направление вращения</string>
+         <string>Серийный номер</string>
         </property>
        </widget>
       </item>
@@ -339,122 +155,44 @@
          </widget>
         </item>
         <item>
-         <spacer name="verticalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
+         <widget class="QGroupBox" name="HydroControl">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
           </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="l_ser_no">
-        <property name="text">
-         <string>Серийный номер</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3">
-       <widget class="QComboBox" name="Model">
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0" rowspan="6" colspan="2">
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QGroupBox" name="Section1">
           <property name="title">
-           <string>Секция №1</string>
+           <string>Гидравлическое управление</string>
           </property>
-          <layout class="QGridLayout" name="gridLayout_2">
-           <item row="1" column="0" colspan="2">
-            <widget class="QGroupBox" name="Pressure">
-             <property name="title">
-              <string>Давление в напорной полости, бар:</string>
-             </property>
-             <layout class="QFormLayout" name="formLayout_3">
-              <item row="0" column="0">
-               <widget class="QLabel" name="l_min_pressure">
-                <property name="text">
-                 <string>Минимальное</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="l_nom_pressure">
-                <property name="text">
-                 <string>Номинальное</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="0">
-               <widget class="QLabel" name="l_max_pressure">
-                <property name="text">
-                 <string>Максимальное</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QLineEdit" name="MinPressure">
-                <property name="toolTip">
-                 <string>0...450 бар</string>
-                </property>
-                <property name="toolTipDuration">
-                 <number>1000</number>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QLineEdit" name="NomPressure">
-                <property name="toolTip">
-                 <string>0...450 бар</string>
-                </property>
-                <property name="toolTipDuration">
-                 <number>1000</number>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1">
-               <widget class="QLineEdit" name="MaxPressure">
-                <property name="toolTip">
-                 <string>0...450 бар</string>
-                </property>
-                <property name="toolTipDuration">
-                 <number>1000</number>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
+          <layout class="QFormLayout" name="formLayout_5">
            <item row="0" column="0">
-            <widget class="QLabel" name="l_work_volume">
+            <widget class="QLabel" name="l_max_control_pressure">
              <property name="text">
-              <string>Рабочий объем, см³/об</string>
+              <string>Максимальное давление
+в канале управления, бар</string>
              </property>
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QLineEdit" name="WorkVolume">
+            <widget class="QSpinBox" name="MaxControlPressure">
              <property name="toolTip">
-              <string>0...355 см³/об</string>
+              <string>0...100 бар</string>
              </property>
              <property name="toolTipDuration">
               <number>1000</number>
+             </property>
+             <property name="maximum">
+              <number>100</number>
+             </property>
+             <property name="value">
+              <number>6</number>
              </property>
             </widget>
            </item>
@@ -537,11 +275,354 @@
              </item>
             </widget>
            </item>
+           <item row="3" column="1">
+            <widget class="QComboBox" name="ControlMode">
+             <item>
+              <property name="text">
+               <string>Дискретный</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Аналоговый</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="l_cotrol_mode">
+             <property name="text">
+              <string>Режим управления</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="3">
+       <widget class="QComboBox" name="Model">
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="SerNo"/>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="l_model">
+        <property name="text">
+         <string>Модель гидронасоса</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" rowspan="6" colspan="2">
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QGroupBox" name="Section1">
+          <property name="title">
+           <string>Секция №1</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_2">
+           <item row="0" column="0">
+            <widget class="QLabel" name="l_work_volume">
+             <property name="text">
+              <string>Рабочий объем, см³/об</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="WorkVolume">
+             <property name="toolTip">
+              <string>0...355 см³/об</string>
+             </property>
+             <property name="toolTipDuration">
+              <number>1000</number>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0" colspan="2">
+            <widget class="QGroupBox" name="Pressure">
+             <property name="title">
+              <string>Давление в напорной полости, бар:</string>
+             </property>
+             <layout class="QFormLayout" name="formLayout_3">
+              <item row="0" column="0">
+               <widget class="QLabel" name="l_min_pressure">
+                <property name="text">
+                 <string>Минимальное</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="l_nom_pressure">
+                <property name="text">
+                 <string>Номинальное</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="l_max_pressure">
+                <property name="text">
+                 <string>Максимальное</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QLineEdit" name="MinPressure">
+                <property name="toolTip">
+                 <string>0...450 бар</string>
+                </property>
+                <property name="toolTipDuration">
+                 <number>1000</number>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QLineEdit" name="NomPressure">
+                <property name="toolTip">
+                 <string>0...450 бар</string>
+                </property>
+                <property name="toolTipDuration">
+                 <number>1000</number>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QLineEdit" name="MaxPressure">
+                <property name="toolTip">
+                 <string>0...450 бар</string>
+                </property>
+                <property name="toolTipDuration">
+                 <number>1000</number>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="2" column="0" colspan="2">
+            <widget class="QGroupBox" name="groupBox_3">
+             <property name="title">
+              <string>Контур</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_5">
+              <item>
+               <widget class="QCheckBox" name="ConturA1">
+                <property name="text">
+                 <string>Контур А</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="ConturB1">
+                <property name="text">
+                 <string>Контур B</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="ConturC1">
+                <property name="text">
+                 <string>Контур C</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
           </layout>
          </widget>
         </item>
         <item>
          <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLabel" name="l_spin">
+        <property name="text">
+         <string>Направление вращения</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QComboBox" name="Spin">
+        <property name="currentIndex">
+         <number>1</number>
+        </property>
+        <item>
+         <property name="text">
+          <string>Левое</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Правое</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="2" column="2" rowspan="6" colspan="2">
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <item>
+         <widget class="QGroupBox" name="Section2">
+          <property name="title">
+           <string>Секция №2</string>
+          </property>
+          <property name="flat">
+           <bool>false</bool>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_3">
+           <item row="0" column="0">
+            <widget class="QLabel" name="l_work_volume_2">
+             <property name="text">
+              <string>Рабочий объем, см³/об</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0" colspan="2">
+            <widget class="QGroupBox" name="Pressure_2">
+             <property name="title">
+              <string>Давление в напорной полости, бар:</string>
+             </property>
+             <layout class="QFormLayout" name="formLayout_6">
+              <item row="0" column="0">
+               <widget class="QLabel" name="l_min_pressure_2">
+                <property name="text">
+                 <string>Минимальное</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="l_nom_pressure_2">
+                <property name="text">
+                 <string>Номинальное</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="l_max_pressure_2">
+                <property name="text">
+                 <string>Максимальное</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QLineEdit" name="MinPressure_2">
+                <property name="toolTip">
+                 <string>0...450 бар</string>
+                </property>
+                <property name="toolTipDuration">
+                 <number>1000</number>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QLineEdit" name="NomPressure_2">
+                <property name="toolTip">
+                 <string>0...450 бар</string>
+                </property>
+                <property name="toolTipDuration">
+                 <number>1000</number>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QLineEdit" name="MaxPressure_2">
+                <property name="toolTip">
+                 <string>0...450 бар</string>
+                </property>
+                <property name="toolTipDuration">
+                 <number>1000</number>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="WorkVolume_2">
+             <property name="toolTip">
+              <string>0...355 см³/об</string>
+             </property>
+             <property name="toolTipDuration">
+              <number>1000</number>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0" colspan="2">
+            <widget class="QGroupBox" name="groupBox_4">
+             <property name="title">
+              <string>Контур</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_6">
+              <item>
+               <widget class="QCheckBox" name="ConturA2">
+                <property name="text">
+                 <string>Контур А</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="ConturB2">
+                <property name="text">
+                 <string>Контур B</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="ConturC2">
+                <property name="text">
+                 <string>Контур C</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_3">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
@@ -564,6 +645,7 @@
      <zorder>l_spin</zorder>
      <zorder>l_model</zorder>
      <zorder>Model</zorder>
+     <zorder></zorder>
     </widget>
    </item>
    <item>
@@ -834,6 +916,33 @@
         </property>
         <property name="value">
          <number>5</number>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="2">
+       <widget class="QLabel" name="l_work_temperature">
+        <property name="text">
+         <string>Рабочая температура масла
+в баке, C</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="3">
+       <widget class="QSpinBox" name="WorkTemperature">
+        <property name="toolTip">
+         <string>1...600</string>
+        </property>
+        <property name="toolTipDuration">
+         <number>1000</number>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>150</number>
+        </property>
+        <property name="value">
+         <number>35</number>
         </property>
        </widget>
       </item>

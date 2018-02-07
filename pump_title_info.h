@@ -3,6 +3,7 @@
 
 #include "child_widget.h"
 #include <memory>
+#include "QCheckBox"
 
 namespace Ui {
 class Pump_title_info;
@@ -30,6 +31,15 @@ private:
 private slots:
     void on_AnsverBox_accepted();
     void on_AnsverBox_rejected();
+
+    void on_ConturA1_clicked();
+    void on_ConturB1_clicked();
+    void on_ConturC1_clicked();
+    void on_ConturA2_clicked();
+    void on_ConturB2_clicked();
+    void on_ConturC2_clicked();
+
+    void ProcessContur( QCheckBox* activated );
 };
 
 #endif // PUMP_TITLE_INFO_H

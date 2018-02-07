@@ -11,8 +11,18 @@ enum SPIN
    spRight
 };
 
+enum CONTROL_MODE
+{
+   cmUnknown,
+   cmDiskret,
+   cmAnalog
+};
+
 bool ParseValue ( SPIN& sig, QString const& val );
 QString ToString( SPIN const& v );
+
+bool ParseValue ( CONTROL_MODE& sig, QString const& val );
+QString ToString( CONTROL_MODE const& v );
 
 namespace pump
 {
@@ -117,6 +127,31 @@ public:
    bool B( QString const& val );
    qint32 B();
 
+   bool TypeControl( QString const& val );
+   CONTROL_MODE TypeControl();
+
+   bool WorkTemperature( QString const& val );
+   qint32 WorkTemperature();
+
+   bool ConturA1( bool val );
+   bool ConturA1();
+
+   bool ConturB1( bool val );
+   bool ConturB1();
+
+   bool ConturC1( bool val );
+   bool ConturC1();
+
+   bool ConturA2( bool val );
+   bool ConturA2();
+
+   bool ConturB2( bool val );
+   bool ConturB2();
+
+   bool ConturC2( bool val );
+   bool ConturC2();
+
+
 private:
     Parameters();
     Parameters( Parameters const& ) = delete;
@@ -170,6 +205,17 @@ private:
    double mA1 = 0.0;//Коэффициент функционирования для дренажа, % (А1)
    double mE = 0.0;//Точность для испытаний функциональные зависимости, сек (Е)
    qint32 mB = 0;//Продолжительность испытаний функциональные зависимости, сек (В)
+
+   CONTROL_MODE mTypeControl = cmUnknown; //Тип управления (дискретный/аналоговый)
+   qint32 mWorkTemperature = 0;       //Рабочая температура масла в баке
+
+   bool mConturA1 = false; //выбран контур А для секции 1
+   bool mConturB1 = false; //выбран контур В для секции 1
+   bool mConturC1 = false; //выбран контур С для секции 1
+
+   bool mConturA2 = false; //выбран контур А для секции 2
+   bool mConturB2 = false; //выбран контур В для секции 2
+   bool mConturC2 = false; //выбран контур С для с2кции 2
 };
 
 }

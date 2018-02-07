@@ -171,6 +171,30 @@ bool PumpTitleInfo::SaveInputParams()
    res *= ParamChecker( ui->l_e,    params.E( ui->E->text() ) );
    res *= ParamChecker( ui->l_b,    params.B( ui->B->text() ) );
 
+   res *= ParamChecker( ui->l_cotrol_mode,    params.TypeControl( ui->ControlMode->currentText() ) );
+   res *= ParamChecker( ui->l_work_temperature,    params.WorkTemperature( ui->WorkTemperature->text() ) );
+
+   bool a1 = ui->ConturA1->isChecked();
+   bool b1 = ui->ConturB1->isChecked();
+   bool c1 = ui->ConturC1->isChecked();
+   params.ConturA1( a1 );
+   params.ConturB1( b1 );
+   params.ConturC1( c1 );
+
+   res *= (a1||b1||c1);
+
+   if ( ui->Section2->isChecked() )
+   {
+      bool a2 = ui->ConturA2->isChecked();
+      bool b2 = ui->ConturB2->isChecked();
+      bool c2 = ui->ConturC2->isChecked();
+      params.ConturA2( a2 );
+      params.ConturB2( b2 );
+      params.ConturC2( c2 );
+
+      res *= (a2||b2||c2);
+   }
+
    return res;
 }
 
@@ -234,4 +258,67 @@ void PumpTitleInfo::FromParams()
    ui->A1->setValue( params.A1() );
    ui->E->setValue( params.E() );
    ui->B->setValue( params.B() );
+
+   ui->ControlMode->setCurrentText( test::ToString( params.TypeControl() ) );
+   ui->WorkTemperature->setValue( params.WorkTemperature() );
+
+   ui->ConturA1->setChecked( params.ConturA1() );
+   ui->ConturB1->setChecked( params.ConturB1() );
+   ui->ConturC1->setChecked( params.ConturC1() );
+
+   ui->ConturA2->setChecked( params.ConturA2() );
+   ui->ConturB2->setChecked( params.ConturB2() );
+   ui->ConturC2->setChecked( params.ConturC2() );
+}
+
+
+void PumpTitleInfo::on_ConturA1_clicked()
+{
+   ProcessContur( ui->ConturA1 );
+}
+void PumpTitleInfo::on_ConturB1_clicked()
+{
+   ProcessContur( ui->ConturB1 );
+}
+void PumpTitleInfo::on_ConturC1_clicked()
+{
+   ProcessContur( ui->ConturC1 );
+}
+void PumpTitleInfo::on_ConturA2_clicked()
+{
+   ProcessContur( ui->ConturA2 );
+}
+void PumpTitleInfo::on_ConturB2_clicked()
+{
+   ProcessContur( ui->ConturB2 );
+}
+void PumpTitleInfo::on_ConturC2_clicked()
+{
+   ProcessContur( ui->ConturC2 );
+}
+
+void PumpTitleInfo::ProcessContur( QCheckBox* activated )
+{
+   if ( !activated->isChecked() )
+      return;
+
+   typedef std::vector< QCheckBox* > ToDisable;
+   typedef std::map< QCheckBox*, ToDisable > ConturMap;
+
+   static ConturMap m =
+   {
+      std::pair<QCheckBox*,ToDisable >(ui->ConturA1,{ui->ConturB1, ui->ConturC1, ui->ConturA2} ),
+      std::pair<QCheckBox*,ToDisable >(ui->ConturB1,{ui->ConturC1, ui->ConturA1, ui->ConturB2} ),
+      std::pair<QCheckBox*,ToDisable >(ui->ConturC1,{ui->ConturB1, ui->ConturA1, ui->ConturC2} ),
+
+      std::pair<QCheckBox*,ToDisable >(ui->ConturA2,{ui->ConturB2, ui->ConturC2, ui->ConturA1} ),
+      std::pair<QCheckBox*,ToDisable >(ui->ConturB2,{ui->ConturC2, ui->ConturA2, ui->ConturB1} ),
+      std::pair<QCheckBox*,ToDisable >(ui->ConturC2,{ui->ConturB2, ui->ConturA2, ui->ConturC1} )
+   };
+
+   ToDisable& to_disable = m[activated];
+   for( QCheckBox* item: to_disable )
+   {
+      item->setChecked( false );
+   }
 }

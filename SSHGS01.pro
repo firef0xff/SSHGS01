@@ -238,7 +238,6 @@ FORMS    += mainwindow.ui \
     manual_control.ui \
     users/users.ui \
     pump_title_info.ui \
-    pump_test_info.ui \
     pumps_manual_control.ui
 
 OTHER_FILES += devices/*.json\
