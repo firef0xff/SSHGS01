@@ -19,7 +19,7 @@ bool PumpTest9::Run()
     if ( IsStopped() )
         return false;
 
-//    OilTemp = round( mTemperature.T_oil *100)/100;
+    OilTemp = round( mSensors.BT2 *100)/100;
 
     mExp = mBits.OP48_Q_Drenag;
 

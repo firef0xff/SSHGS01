@@ -22,8 +22,7 @@ bool PumpTest3::Run()
     if ( IsStopped() )
         return false;
 
-//    OilTemp = round( mTemperature.T_oil *100)/100;
-
+    OilTemp = round( mSensors.BT2 *100)/100;
     std::mutex mutex;
     std::unique_lock< std::mutex > lock( mutex );
     Launcher( std::bind( &PumpTest3::Question, this ) );

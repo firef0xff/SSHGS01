@@ -19,7 +19,7 @@ bool PumpTest6::Run()
     if ( IsStopped() )
         return false;
 
-//    OilTemp = round( mTemperature.T_oil *100)/100;
+    OilTemp = round( mSensors.BT2 *100)/100;
     mData = mBits.OP45_K_Podacha;
     return Success();
 }

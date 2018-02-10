@@ -293,7 +293,7 @@ bool PumpTest10::Run()
     if ( IsStopped() )
         return false;
 
-//    OilTemp = round( mTemperature.T_oil *100)/100;
+    OilTemp = round( mSensors.BT2 *100)/100;
 
     return Success();
 }
