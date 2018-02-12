@@ -593,6 +593,19 @@ DB72.OP47_Podacha_1;DB72,REAL26;RO;TST=;CMT=Значение подачи 1
 DB72.OP47_Podacha_2;DB72,REAL30;RO;TST=;CMT=Значение подачи 2
 DB72.OP47_Podacha_3;DB72,REAL34;RO;TST=;CMT=Значение подачи 3
 DB72.OP48_Q_Drenag;DB72,REAL38;RO;TST=;CMT=Значение расхода в дренаже
+DB72.Exp1;DB72,REAL48;RO;TST=;CMT=расход  в секции 1
+DB72.Exp2;DB72,REAL72;RO;TST=;CMT=расход в секции 2
+DB72.Press1;DB72,REAL52;RO;TST=;CMT=давления  в секции 1
+DB72.Press2;DB72,REAL76;RO;TST=;CMT=давление в секции 2
+DB72.Frequency;DB72,REAL56;RO;TST=;CMT=частота вращения
+DB72.Torque;DB72,REAL60;RO;TST=;CMT=крутящий момент
+DB72.MaxExp1;DB72,REAL80;RO;TST=;CMT=максимальный расход секция 1
+DB72.MinExp1;DB72,REAL84;RO;TST=;CMT=миниимальный расход секция 1
+DB72.MaxExp2;DB72,REAL88;RO;TST=;CMT=максимальный расход секция 2
+DB72.MinExp2;DB72,REAL92;RO;TST=;CMT=миниимальный расход секция 2
+DB72.FrequencyMin;DB72,REAL108;RO;TST=;CMT=минимальная частота вращения
+DB72.FrequencyMax;DB72,REAL116;RO;TST=;CMT=номимальная частота вращения
+DB72.FrequencyNom;DB72,REAL112;RO;TST=;CMT=максимальная частота вращения
 DB73.SP16_warning;DB73,X2.0;RO;TST=;CMT=загрязнен фильтр в контуре А
 DB73.SP17_warning;DB73,X2.1;RO;TST=;CMT=загрязнен фильтр в контуре В
 DB73.SP18_warning;DB73,X2.2;RO;TST=;CMT=загрязнен фильтр в контуре С
@@ -613,7 +626,8 @@ DB73.Q_NO_Istablished;DB73,X4.0;RO;TST=;CMT=Расход в регуляторе не установился
 DB73.P_NO_Istablished;DB73,X4.1;RO;TST=;CMT=Давление в регуляторе не установилось
 DB73.OP40_Q_Nul;DB73,X4.2;RO;TST=;CMT=Расход в нуле
 DB73.OP40_P_Nul;DB73,X4.3;RO;TST=;CMT=Давленине в нуле
-DB73.OP40_Qr_NO_Dopusk;DB73,X4.4;RO;TST=;CMT=Расход рабочий не в допуске (функц-ние)
+DB73.OP40_Qr_NO_Dopusk1;DB73,X4.4;RO;TST=;CMT=Расход рабочий не в допуске (функц-ние)
+DB73.OP40_Qr_NO_Dopusk2;DB73,X5.2;RO;TST=;CMT=Расход рабочий не в допуске (функц-ние)
 DB73.OP41_Qr_NO_Dopusk;DB73,X4.5;RO;TST=;CMT=Расход рабочий не в допуске (прочность)
 DB73.OP42_Qr_NO_Dopusk;DB73,X4.6;RO;TST=;CMT=Расход рабочий не в допуске (гермет-ть)
 DB73.OP48_Qd_NO_Dopusk;DB73,X4.7;RO;TST=;CMT=Расход в дренаже не в допуске

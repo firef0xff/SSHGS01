@@ -21,11 +21,15 @@ bool PumpTest8::Run()
     if ( IsStopped() )
         return false;
 
-    OilTemp = round( mSensors.BT2 *100)/100;
-
     mExpMin = mBits.OP47_Podacha_1;
     mExpNom = mBits.OP47_Podacha_2;
     mExpMax = mBits.OP47_Podacha_3;
+
+    mFrequencyMin = mBits.FrequencyMin;
+    mFrequencyMax = mBits.FrequencyMax;
+    mFrequencyNom = mBits.FrequencyNom;
+
+
     return Success();
 }
 
@@ -36,6 +40,10 @@ QJsonObject PumpTest8::Serialise() const
     obj.insert("mExpNom",            mExpNom );
     obj.insert("mExpMax",            mExpMax );
 
+    obj.insert("mFrequencyMin",     mFrequencyMin );
+    obj.insert("mFrequencyMax",     mFrequencyMax );
+    obj.insert("mFrequencyNom",     mFrequencyNom );
+
     return obj;
 }
 bool PumpTest8::Deserialize( QJsonObject const& obj )
@@ -43,6 +51,11 @@ bool PumpTest8::Deserialize( QJsonObject const& obj )
     mExpMin = obj.value("mExpMin").toDouble();
     mExpNom = obj.value("mExpNom").toDouble();
     mExpMax = obj.value("mExpMax").toDouble();
+
+    mFrequencyMin = obj.value("mFrequencyMin").toDouble();
+    mFrequencyMax = obj.value("mFrequencyMax").toDouble();
+    mFrequencyNom = obj.value("mFrequencyNom").toDouble();
+
     Test::Deserialize( obj );
     return true;
 }
@@ -139,36 +152,43 @@ bool PumpTest8::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
      drw.DrawRowLeft( rect, result_font, Qt::black, "Параметры во время испытаний:" );
    }, 1.5 );
 
-   res = DrawLine( num, free_rect, text_font,
-   [ this, &drw, &FillToSize, &text_font, &params ]( QRect const& rect )
-   {
-     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Частота вращения минимальная, об/мин"), Qt::red, test::ToString( params->FrequencyMin() ) );
-   }, 1.5 );
-   res = DrawLine( num, free_rect, text_font,
-   [ this, &drw, &FillToSize, &text_font, &params ]( QRect const& rect )
-   {
-     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Частота вращения номинальная, об/мин"), Qt::red, test::ToString( params->FrequencyNom() ) );
-   }, 1.5 );
-   res = DrawLine( num, free_rect, text_font,
-   [ this, &drw, &FillToSize, &text_font, &params ]( QRect const& rect )
-   {
-     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Частота вращения максимальная, об/мин"), Qt::red, test::ToString( params->FrequencyMax() ) );
-   }, 1.5 );
 
-   QString press = test::ToString( params->PressureNom1() );
-   if ( params->SectionsCount() > 1 )
-      press += ", " + test::ToString( params->PressureNom2() );
-
-   res = DrawLine( num, free_rect, text_font,
-   [ this, &drw, &FillToSize, &text_font, &press ]( QRect const& rect )
-   {
-     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Рабочее давление, бар"), Qt::red, press );
-   }, 1.5 );
    res = DrawLine( num, free_rect, text_font,
    [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
    {
      drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Температура масла во время испытаний, ˚С"), Qt::red, test::ToString(OilTemp) );
    }, 1.5 );
+
+
+   res = DrawLine( num, free_rect, text_font,
+   [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
+   {
+     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление в секции 1, Бар"), Qt::red, test::ToString(mPress1) );
+   }, 1.5 );
+   if ( params->SectionsCount() == 2 )
+   {
+      res = DrawLine( num, free_rect, text_font,
+      [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
+      {
+        drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление в секции 2, Бар"), Qt::red, test::ToString(mPress2) );
+      }, 1.5 );
+   }
+   res = DrawLine( num, free_rect, text_font,
+   [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
+   {
+     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Минимальная частота вращения, об/мин"), Qt::red, test::ToString(mFrequencyMin) );
+   }, 1.5 );
+   res = DrawLine( num, free_rect, text_font,
+   [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
+   {
+     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Номинальная частота вращения, об/мин"), Qt::red, test::ToString(mFrequencyNom) );
+   }, 1.5 );
+   res = DrawLine( num, free_rect, text_font,
+   [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
+   {
+     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Максимальная частота вращения, об/мин"), Qt::red, test::ToString(mFrequencyMax) );
+   }, 1.5 );
+
    res = DrawLine( num, free_rect, text_font,
    [ this, &drw, &FillToSize, &text_font, &params ]( QRect const& rect )
    {

@@ -25,8 +25,17 @@ public:
    QString RepName() const;
 
 private:
-   bool mResult;
-   bool mIsSet;
+   bool mResult = false;
+   bool mIsSet = false;
+   bool mInvalidExpenditure1 = false;
+   bool mInvalidExpenditure2 = false;
+
+   double mMaxExp1 = 0.0;
+   double mMinExp1 = 0.0;
+   double mMaxExp2 = 0.0;
+   double mMinExp2 = 0.0;
+
+
    std::condition_variable mCondVar;
    void Question();
 

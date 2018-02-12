@@ -27,13 +27,14 @@ DB73::DB73():
    P_NO_Istablished( mBoolData[17] ),//Давление в регуляторе не установилось
    OP40_Q_Nul( mBoolData[18] ),//Расход в нуле
    OP40_P_Nul( mBoolData[19] ),//Давленине в нуле
-   OP40_Qr_NO_Dopusk( mBoolData[20] ),//Расход рабочий не в допуске (функц-ние)
-   OP41_Qr_NO_Dopusk( mBoolData[21] ),//Расход рабочий не в допуске (прочность)
-   OP42_Qr_NO_Dopusk( mBoolData[22] ),//Расход рабочий не в допуске (гермет-ть)
-   OP48_Qd_NO_Dopusk( mBoolData[23] ),//Расход в дренаже не в допуске
-   LevelMaslaAlarmPump( mBoolData[24] ), //аварийный уровень в баке масла 2
-   TempMaslaAlarmPump1( mBoolData[25] ), //аварийная температура масла в баке 1
-   TempMaslaAlarmPump2( mBoolData[26] ) //аварийная температура масла в баке 2
+   OP40_Qr_NO_Dopusk1( mBoolData[20] ),//Расход рабочий не в допуске (функц-ние)
+   OP40_Qr_NO_Dopusk2( mBoolData[21] ),//Расход рабочий не в допуске (функц-ние)
+   OP41_Qr_NO_Dopusk( mBoolData[22] ),//Расход рабочий не в допуске (прочность)
+   OP42_Qr_NO_Dopusk( mBoolData[23] ),//Расход рабочий не в допуске (гермет-ть)
+   OP48_Qd_NO_Dopusk( mBoolData[24] ),//Расход в дренаже не в допуске
+   LevelMaslaAlarmPump( mBoolData[25] ), //аварийный уровень в баке масла 2
+   TempMaslaAlarmPump1( mBoolData[26] ), //аварийная температура масла в баке 1
+   TempMaslaAlarmPump2( mBoolData[27] ) //аварийная температура масла в баке 2
 
 {
    memset( mBoolData, 0, sizeof(mBoolData) );
@@ -60,7 +61,8 @@ DB73::DB73():
    P_NO_Istablished = true;
    OP40_Q_Nul = true;
    OP40_P_Nul = true;
-   OP40_Qr_NO_Dopusk = true;
+   OP40_Qr_NO_Dopusk1 = true;
+   OP40_Qr_NO_Dopusk2 = true;
    OP41_Qr_NO_Dopusk = true;
    OP42_Qr_NO_Dopusk = true;
    OP48_Qd_NO_Dopusk = true;
@@ -105,7 +107,8 @@ void DB73::Read()
    P_NO_Istablished = true;
    OP40_Q_Nul = true;
    OP40_P_Nul = true;
-   OP40_Qr_NO_Dopusk = true;
+   OP40_Qr_NO_Dopusk1 = true;
+   OP40_Qr_NO_Dopusk2 = true;
    OP41_Qr_NO_Dopusk = true;
    OP42_Qr_NO_Dopusk = true;
    OP48_Qd_NO_Dopusk = true;

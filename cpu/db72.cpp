@@ -50,7 +50,21 @@ DB72::DB72():
    OP47_Podacha_1( mFloatData[6] ),//Значение подачи 1
    OP47_Podacha_2( mFloatData[7] ),//Значение подачи 2
    OP47_Podacha_3( mFloatData[8] ),//Значение подачи 3
-   OP48_Q_Drenag( mFloatData[9] ) //Значение расхода в дренаже
+   OP48_Q_Drenag( mFloatData[9] ), //Значение расхода в дренаже
+   Exp1( mFloatData[10] ), //расход  в секции 1
+   Exp2( mFloatData[11] ), //расход в секции 2
+   Press1( mFloatData[12] ), //давления  в секции 1
+   Press2( mFloatData[13] ), //давление в секции 2
+   Frequency( mFloatData[14] ), //частота вращения
+   Torque( mFloatData[15] ), //крутящий момент
+   MaxExp1( mFloatData[16] ), //максимальный расход секция 1
+   MinExp1( mFloatData[17] ), //миниимальный расход секция 1
+   MaxExp2( mFloatData[18] ), //максимальный расход секция 2
+   MinExp2( mFloatData[19] ), //миниимальный расход секция 2
+   FrequencyMin( mFloatData[20] ), //минимальная частота вращения;
+   FrequencyMax( mFloatData[21] ), //номимальная частота вращения;
+   FrequencyNom( mFloatData[22] ) //максимальная частота вращения;
+
 {
    memset( mBoolData, 0, sizeof(mBoolData) );
    memset( mFloatData, 0, sizeof(mFloatData) );

@@ -34,7 +34,8 @@ public:
    bool& P_NO_Istablished; //Давление в регуляторе не установилось
    bool& OP40_Q_Nul; //Расход в нуле
    bool& OP40_P_Nul; //Давленине в нуле
-   bool& OP40_Qr_NO_Dopusk; //Расход рабочий не в допуске (функц-ние)
+   bool& OP40_Qr_NO_Dopusk1; //Расход рабочий не в допуске (функц-ние)
+   bool& OP40_Qr_NO_Dopusk2; //Расход рабочий не в допуске (функц-ние)
    bool& OP41_Qr_NO_Dopusk; //Расход рабочий не в допуске (прочность)
    bool& OP42_Qr_NO_Dopusk; //Расход рабочий не в допуске (гермет-ть)
    bool& OP48_Qd_NO_Dopusk; //Расход в дренаже не в допуске
@@ -50,7 +51,7 @@ private:
 
    enum
    {
-       BOOL_COUNT = 27
+       BOOL_COUNT = 28
    };
 
    bool mBoolData[ BOOL_COUNT ];
@@ -77,7 +78,8 @@ private:
       L"CPU/DB73.P_NO_Istablished",
       L"CPU/DB73.OP40_Q_Nul",
       L"CPU/DB73.OP40_P_Nul",
-      L"CPU/DB73.OP40_Qr_NO_Dopusk",
+      L"CPU/DB73.OP40_Qr_NO_Dopusk1",
+      L"CPU/DB73.OP40_Qr_NO_Dopusk2",
       L"CPU/DB73.OP41_Qr_NO_Dopusk",
       L"CPU/DB73.OP42_Qr_NO_Dopusk",
       L"CPU/DB73.OP48_Qd_NO_Dopusk",

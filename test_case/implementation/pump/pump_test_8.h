@@ -20,9 +20,13 @@ public:
 virtual QString RepRes() const;
 virtual QString RepName() const;
 private:
-   double mExpMin;
-   double mExpNom;
-   double mExpMax;
+   double mExpMin = 0.0;
+   double mExpNom = 0.0;
+   double mExpMax = 0.0;
+
+   double mFrequencyMin = 0.0;
+   double mFrequencyMax = 0.0;
+   double mFrequencyNom = 0.0;
 };
 
 }//namespace pump

@@ -19,8 +19,6 @@ bool PumpTest9::Run()
     if ( IsStopped() )
         return false;
 
-    OilTemp = round( mSensors.BT2 *100)/100;
-
     mExp = mBits.OP48_Q_Drenag;
 
     return Success();
@@ -48,8 +46,7 @@ QString PumpTest9::RepRes() const
 {
    QString res = "\n";
    res += test::ToString( mExp );
-   res += " л/мин\n";
-   res += Success()? QString(" соответсвует ") : QString(" не соответсвует ");
+   res += " л/мин";
    return res;
 }
 QString PumpTest9::RepName() const
@@ -112,30 +109,41 @@ bool PumpTest9::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
    }, 1.5 );
 
    res = DrawLine( num, free_rect, text_font,
-   [ this, &drw, &FillToSize, &text_font, &params ]( QRect const& rect )
-   {
-     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Частота вращения номинальная, об/мин"), Qt::red, test::ToString( params->FrequencyNom() ) );
-   }, 1.5 );
-   res = DrawLine( num, free_rect, text_font,
-   [ this, &drw, &FillToSize, &text_font, &params ]( QRect const& rect )
-   {
-     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Подача насоса, л/мин"), Qt::red, "N/A" );
-   }, 1.5 );
-
-   QString press = test::ToString( params->PressureNom1() );
-   if ( params->SectionsCount() > 1 )
-      press += ", " + test::ToString( params->PressureNom2() );
-
-   res = DrawLine( num, free_rect, text_font,
-   [ this, &drw, &FillToSize, &text_font, &press ]( QRect const& rect )
-   {
-     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Рабочее давление, бар"), Qt::red, press );
-   }, 1.5 );
-   res = DrawLine( num, free_rect, text_font,
    [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
    {
      drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Температура масла во время испытаний, ˚С"), Qt::red, test::ToString(OilTemp) );
    }, 1.5 );
+
+   res = DrawLine( num, free_rect, text_font,
+   [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
+   {
+     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Расход в секции 1, л/мин"), Qt::red, test::ToString(mExp1) );
+   }, 1.5 );
+   res = DrawLine( num, free_rect, text_font,
+   [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
+   {
+     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление в секции 1, Бар"), Qt::red, test::ToString(mPress1) );
+   }, 1.5 );
+   if ( params->SectionsCount() == 2 )
+   {
+      res = DrawLine( num, free_rect, text_font,
+      [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
+      {
+        drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Расход в секции 2, л/мин"), Qt::red, test::ToString(mExp2) );
+      }, 1.5 );
+      res = DrawLine( num, free_rect, text_font,
+      [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
+      {
+        drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление в секции 2, Бар"), Qt::red, test::ToString(mPress2) );
+      }, 1.5 );
+   }
+   res = DrawLine( num, free_rect, text_font,
+   [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
+   {
+     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Частота вращения, об/мин"), Qt::red, test::ToString(mFrequency) );
+   }, 1.5 );
+
+
    res = DrawLine( num, free_rect, text_font,
    [ this, &drw, &FillToSize, &text_font, &params ]( QRect const& rect )
    {
@@ -151,8 +159,8 @@ bool PumpTest9::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
    res = DrawLine( num, free_rect, text_font,
    [ this, &drw, &text_font, params ]( QRect const& rect )
    {
-      drw.DrawRowLeft( rect, text_font,   Qt::black, "Дренаж ",
-                                          Qt::red, Success()? QString(" соответсвует ") : QString(" не соответсвует "),
+      drw.DrawRowLeft( rect, text_font,   Qt::black, "Расход в дренаже ",
+                                          Qt::red, mExp >= 0.5 ? test::ToString( mExp ) + " л/мин" : QString(" меньше 0.5 л/мин"),
                                           Qt::black, "заявленным данным");
    }, 1.5 );
 

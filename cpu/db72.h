@@ -61,6 +61,21 @@ public:
    float& OP47_Podacha_2; //Значение подачи 2
    float& OP47_Podacha_3; //Значение подачи 3
    float& OP48_Q_Drenag; //Значение расхода в дренаже
+   float& Exp1; //расход  в секции 1
+   float& Exp2; //расход в секции 2
+   float& Press1; //давления  в секции 1
+   float& Press2; //давление в секции 2
+   float& Frequency; //частота вращения
+   float& Torque; //крутящий момент
+
+   float& MaxExp1; //максимальный расход секция 1
+   float& MinExp1; //миниимальный расход секция 1
+   float& MaxExp2; //максимальный расход секция 2
+   float& MinExp2; //миниимальный расход секция 2
+
+   float& FrequencyMin; //минимальная частота вращения;
+   float& FrequencyMax; //номимальная частота вращения;
+   float& FrequencyNom; //максимальная частота вращения;
 
 private:
    friend class cpu::CpuMemory;
@@ -71,7 +86,7 @@ private:
    enum
    {
        BOOL_COUNT = 32,
-       FLOAT_COUNT = 10
+       FLOAT_COUNT = 23
    };
 
    bool mBoolData[ BOOL_COUNT ];
@@ -122,7 +137,23 @@ private:
       L"CPU/DB72.OP47_Podacha_2",
       L"CPU/DB72.OP47_Podacha_3",
       L"CPU/DB72.OP48_Q_Drenag",
+      L"CPU/DB72.Exp1",
+      L"CPU/DB72.Exp2",
+      L"CPU/DB72.Press1",
+      L"CPU/DB72.Press2",
+      L"CPU/DB72.Frequency",
+      L"CPU/DB72.Torque",
+      L"CPU/DB72.MaxExp1",
+      L"CPU/DB72.MinExp1",
+      L"CPU/DB72.MaxExp2",
+      L"CPU/DB72.MinExp2",
+
+      L"CPU/DB72.FrequencyMin", //минимальная частота вращения;
+      L"CPU/DB72.FrequencyMax", //номимальная частота вращения;
+      L"CPU/DB72.FrequencyNom", //максимальная частота вращения;
    };
+
+
 };
 
 }

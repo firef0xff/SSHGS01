@@ -22,7 +22,6 @@ bool PumpTest3::Run()
     if ( IsStopped() )
         return false;
 
-    OilTemp = round( mSensors.BT2 *100)/100;
     std::mutex mutex;
     std::unique_lock< std::mutex > lock( mutex );
     Launcher( std::bind( &PumpTest3::Question, this ) );
@@ -121,19 +120,26 @@ bool PumpTest3::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
      drw.DrawRowLeft( rect, result_font, Qt::black, "Параметры во время испытаний:" );
    }, 1.5 );
 
-   QString press = test::ToString(params->PressureMax1());
-   if ( params->SectionsCount() > 1 )
-      press += ", " + test::ToString(params->PressureMax2());
-   res = DrawLine( num, free_rect, text_font,
-   [ this, &drw, &FillToSize, &text_font,&params, &press ]( QRect const& rect )
-   {
-     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении испытаний, бар"), Qt::red, press );
-   }, 1.5 );
    res = DrawLine( num, free_rect, text_font,
    [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
    {
      drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Температура масла во время испытаний, ˚С"), Qt::red, test::ToString(OilTemp) );
    }, 1.5 );
+
+   res = DrawLine( num, free_rect, text_font,
+   [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
+   {
+     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление в секции 1, Бар"), Qt::red, test::ToString(mPress1) );
+   }, 1.5 );
+   if ( params->SectionsCount() == 2 )
+   {
+      res = DrawLine( num, free_rect, text_font,
+      [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
+      {
+        drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление в секции 2, Бар"), Qt::red, test::ToString(mPress2) );
+      }, 1.5 );
+   }
+
    res = DrawLine( num, free_rect, text_font,
    [ this, &drw, &FillToSize, &text_font, &params ]( QRect const& rect )
    {

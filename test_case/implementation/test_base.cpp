@@ -132,12 +132,12 @@ QString db73_errs()
    if (errs.SQ21_warning) str_errs+="нет закрытия кожуха муфты\n";
    if (errs.Q_NO_Istablished) str_errs+="Расход в регуляторе не установился\n";
    if (errs.P_NO_Istablished) str_errs+="Давление в регуляторе не установилось\n";
-   if (errs.OP40_Q_Nul) str_errs+="Расход в нуле\n";
-   if (errs.OP40_P_Nul) str_errs+="Давленине в нуле\n";
-   if (errs.OP40_Qr_NO_Dopusk) str_errs+="Расход рабочий не в допуске (функц-ние)\n";
-   if (errs.OP41_Qr_NO_Dopusk) str_errs+="Расход рабочий не в допуске (прочность)\n";
-   if (errs.OP42_Qr_NO_Dopusk) str_errs+="Расход рабочий не в допуске (гермет-ть)\n";
-   if (errs.OP48_Qd_NO_Dopusk) str_errs+="Расход в дренаже не в допуске\n";
+//   if (errs.OP40_Q_Nul) str_errs+="Расход в нуле\n";
+//   if (errs.OP40_P_Nul) str_errs+="Давленине в нуле\n";
+//   if (errs.OP40_Qr_NO_Dopusk) str_errs+="Расход рабочий не в допуске (функц-ние)\n";
+//   if (errs.OP41_Qr_NO_Dopusk) str_errs+="Расход рабочий не в допуске (прочность)\n";
+//   if (errs.OP42_Qr_NO_Dopusk) str_errs+="Расход рабочий не в допуске (гермет-ть)\n";
+//   if (errs.OP48_Qd_NO_Dopusk) str_errs+="Расход в дренаже не в допуске\n";
    if (errs.LevelMaslaAlarmPump) str_errs += "Аварийный уровень в баке масла 2\n";
    if (errs.TempMaslaAlarmPump1) str_errs += "Аварийная температура масла в баке 1\n";
    if (errs.TempMaslaAlarmPump2) str_errs += "Аварийная температура масла в баке 2\n";
@@ -347,7 +347,8 @@ uint8_t Test::mTestsCount = 1;
 Test::Test( QString const& name, uint8_t id ):
     test::TestCommonData( &Pumps, name, mTestsCount, id ),
     mBits( cpu::CpuMemory::Instance().DB72 ),
-    mSensors( cpu::CpuMemory::Instance().DB70 )
+    mSensors( cpu::CpuMemory::Instance().DB70 ),
+    mWarns( cpu::CpuMemory::Instance().DB73 )
 {
     ++mTestsCount;
 }
@@ -356,8 +357,38 @@ void Test::UpdateData()
 {
    mBits.Read();
    mSensors.Read();
+
+   OilTemp = round( mSensors.BT2 *100)/100;
+   mExp1 = mBits.Exp1;
+   mExp2 = mBits.Exp2;
+   mPress1 = mBits.Press1;
+   mPress2 = mBits.Press2;
+   mFrequency = mBits.Frequency;
+   mTorque = mBits.Torque;
 }
 
+QJsonObject Test::Serialise() const
+{
+   QJsonObject obj = TestCommonData::Serialise();
+   obj.insert("mExp1",           mExp1 );
+   obj.insert("mExp2",           mExp2 );
+   obj.insert("mPress1",         mPress1 );
+   obj.insert("mPress2",         mPress2 );
+   obj.insert("mFrequency",      mFrequency );
+   obj.insert("mTorque",         mTorque );
+   return obj;
+}
+bool Test::Deserialize( QJsonObject const& obj )
+{
+   mExp1 = obj.value("mExp1").toDouble();
+   mExp2 = obj.value("mExp2").toDouble();
+   mPress1 = obj.value("mPress1").toDouble();
+   mPress2 = obj.value("mPress2").toDouble();
+   mFrequency = obj.value("mFrequency").toDouble();
+   mTorque = obj.value("mTorque").toDouble();
+   TestCommonData::Deserialize( obj );
+   return true;
+}
 
 }
 

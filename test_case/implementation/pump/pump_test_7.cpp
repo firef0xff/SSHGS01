@@ -19,7 +19,6 @@ bool PumpTest7::Run()
     if ( IsStopped() )
         return false;
 
-    OilTemp = round( mSensors.BT2 *100)/100;
     mData = mBits.OP46_Power;
     return Success();
 }
@@ -106,25 +105,35 @@ bool PumpTest7::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
    }, 1.5 );
 
    res = DrawLine( num, free_rect, text_font,
-   [ this, &drw, &FillToSize, &text_font, &params ]( QRect const& rect )
-   {
-     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Частота вращения, об/мин"), Qt::red, "N/A" );
-   }, 1.5 );
-
-   QString press = test::ToString( params->PressureNom1() );
-   if ( params->SectionsCount() > 1 )
-      press += ", " + test::ToString( params->PressureNom2() );
-
-   res = DrawLine( num, free_rect, text_font,
-   [ this, &drw, &FillToSize, &text_font, &press ]( QRect const& rect )
-   {
-     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Рабочее давление, бар"), Qt::red, press );
-   }, 1.5 );
-   res = DrawLine( num, free_rect, text_font,
    [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
    {
      drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Температура масла во время испытаний, ˚С"), Qt::red, test::ToString(OilTemp) );
    }, 1.5 );
+
+   res = DrawLine( num, free_rect, text_font,
+   [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
+   {
+     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление в секции 1, Бар"), Qt::red, test::ToString(mPress1) );
+   }, 1.5 );
+   if ( params->SectionsCount() == 2 )
+   {
+      res = DrawLine( num, free_rect, text_font,
+      [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
+      {
+        drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление в секции 2, Бар"), Qt::red, test::ToString(mPress2) );
+      }, 1.5 );
+   }
+   res = DrawLine( num, free_rect, text_font,
+   [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
+   {
+     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Частота вращения, об/мин"), Qt::red, test::ToString(mFrequency) );
+   }, 1.5 );
+   res = DrawLine( num, free_rect, text_font,
+   [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
+   {
+     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Крутящий момент, Нм"), Qt::red, test::ToString(mTorque) );
+   }, 1.5 );
+
    res = DrawLine( num, free_rect, text_font,
    [ this, &drw, &FillToSize, &text_font, &params ]( QRect const& rect )
    {

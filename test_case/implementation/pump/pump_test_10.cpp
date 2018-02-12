@@ -292,9 +292,6 @@ bool PumpTest10::Run()
     Wait( mBits.OP49_Work, mBits.OP49_End );
     if ( IsStopped() )
         return false;
-
-    OilTemp = round( mSensors.BT2 *100)/100;
-
     return Success();
 }
 

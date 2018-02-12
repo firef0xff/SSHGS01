@@ -1,6 +1,9 @@
 #include "pump_test_2.h"
 #include <QJsonObject>
+#include <QMessageBox>
+#include <QPushButton>
 #include "../test_params_pumps.h"
+#include <functional>
 
 namespace test
 {
@@ -9,37 +12,102 @@ namespace pump
 
 PumpTest2::PumpTest2():
     test::pump::Test( "Испытание функционирования при максимальном давлении", 41 ),
-    mResult(false)
+    mResult(false),
+    mContol( cpu::CpuMemory::Instance().M2 )
 {}
 
 bool PumpTest2::Run()
 {
-    Start();
-    Wait( mBits.OP41_Work, mBits.OP41_End );
-    if ( IsStopped() )
-        return false;
+   mIsSet = false;
+   mResult = false;
+   mInvalidExpenditure1 = false;
+   mInvalidExpenditure2 = false;
+   mMaxExp1 = 0.0;
+   mMinExp1 = 0.0;
+   mMaxExp2 = 0.0;
+   mMinExp2 = 0.0;
 
-    OilTemp = round( mSensors.BT2 *100)/100;
-    return Success();
+   mContol.Reset();
+
+   Start();
+   Wait( mBits.OP41_Work, mBits.OP41_End );
+   if ( IsStopped() )
+      return false;
+   return Success();
 }
-QString PumpTest2::RepRes() const
+
+void PumpTest2::UpdateData()
 {
-   return Success()? QString(" функционирует ") : QString(" не работает ");
+   Test::UpdateData();
+   mWarns.Read();
+   mInvalidExpenditure1 = mWarns.OP40_Qr_NO_Dopusk1;
+   mInvalidExpenditure2 = mWarns.OP40_Qr_NO_Dopusk2;
+
+   mMaxExp1 = mBits.MaxExp1;
+   mMinExp1 = mBits.MinExp1;
+   mMaxExp2 = mBits.MaxExp2;
+   mMinExp2 = mBits.MinExp2;
+
+   if ( mBits.OP40_control && !mIsSet )
+   {
+      std::mutex mutex;
+      std::unique_lock< std::mutex > lock( mutex );
+      Launcher( std::bind( &PumpTest2::Question, this ) );
+
+      mCondVar.wait( lock );
+      mIsSet = true;
+
+      if ( mResult )
+         mContol.Pump_Continue = true;
+      else
+         mContol.Pump_Fail = true;
+      mContol.Write();
+   }
 }
-QString PumpTest2::RepName() const
+void PumpTest2::Question()
 {
-   return "Испытание функционирования при максимальном\nзначении давления";
+    QMessageBox msg;
+    msg.setWindowTitle( "Визуальный контроль" );
+    msg.setText( "В системе отсутствуют удары, стуки, повышенная вибрация,\n"
+                 "резкий шум, повышенный нагрев,\n"
+                 "отсутствуют каплеобразования из под крышек, пробок,\n"
+                 "фланцев, через стыки корпусных деталей и т.д." );
+    QPushButton *no = msg.addButton("Нет", QMessageBox::NoRole );
+    QPushButton *yes = msg.addButton("Да", QMessageBox::YesRole );
+    msg.setModal( true );
+    no->setDefault( false );
+    yes->setDefault( false );
+    msg.exec();
+    mResult = msg.clickedButton() == yes;
+    mCondVar.notify_all();
 }
+
+
 QJsonObject PumpTest2::Serialise() const
 {
     QJsonObject obj = Test::Serialise();
     obj.insert("mResult",            mResult );
+    obj.insert("InvalidExpenditure1",            mInvalidExpenditure1 );
+    obj.insert("InvalidExpenditure2",            mInvalidExpenditure2 );
+
+    obj.insert("mMaxExp1",            mMaxExp1 );
+    obj.insert("mMinExp1",            mMinExp1 );
+    obj.insert("mMaxExp2",            mMaxExp2 );
+    obj.insert("mMinExp2",            mMinExp2 );
 
     return obj;
 }
 bool PumpTest2::Deserialize( QJsonObject const& obj )
 {
     mResult = obj.value("mResult").toBool();
+    mInvalidExpenditure1 = obj.value("InvalidExpenditure1").toBool();
+    mInvalidExpenditure2 = obj.value("InvalidExpenditure2").toBool();
+
+    mMaxExp1 = obj.value("mMaxExp1").toDouble();
+    mMinExp1 = obj.value("mMinExp1").toDouble();
+    mMaxExp2 = obj.value("mMaxExp2").toDouble();
+    mMinExp2 = obj.value("mMinExp2").toDouble();
+
     Test::Deserialize( obj );
     return true;
 }
@@ -47,6 +115,14 @@ bool PumpTest2::Deserialize( QJsonObject const& obj )
 bool PumpTest2::Success() const
 {
     return mResult;
+}
+QString PumpTest2::RepRes() const
+{
+   return Success()? QString("Да ") : QString(" Нет ");
+}
+QString PumpTest2::RepName() const
+{
+   return "Испытание функционирования при максимальном\nзначении давления";
 }
 bool PumpTest2::Draw(QPainter& painter, QRect &free_rect , const QString &) const
 {
@@ -111,23 +187,46 @@ bool PumpTest2::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
       return r <= m ? r : m;
    };
 
-   QString press = test::ToString( Pressure( params->PressureNom1(), params->PressureMax1() ) );
-   if ( params->SectionsCount() > 1 )
-      press += ", " + test::ToString( Pressure( params->PressureNom2(), params->PressureMax2() ) );
-   res = DrawLine( num, free_rect, text_font,
-   [ this, &drw, &FillToSize, &text_font,&params, &press ]( QRect const& rect )
-   {
-     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление при проведении испытаний, бар"), Qt::red, press );
-   }, 1.5 );
    res = DrawLine( num, free_rect, text_font,
    [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
    {
      drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Температура масла во время испытаний, ˚С"), Qt::red, test::ToString(OilTemp) );
    }, 1.5 );
+
+   res = DrawLine( num, free_rect, text_font,
+   [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
+   {
+     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Расход в секции 1, л/мин"), Qt::red, test::ToString(mExp1) );
+   }, 1.5 );
+   res = DrawLine( num, free_rect, text_font,
+   [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
+   {
+     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление в секции 1, Бар"), Qt::red, test::ToString(mPress1) );
+   }, 1.5 );
+   if ( params->SectionsCount() == 2 )
+   {
+      res = DrawLine( num, free_rect, text_font,
+      [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
+      {
+        drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Расход в секции 2, л/мин"), Qt::red, test::ToString(mExp2) );
+      }, 1.5 );
+      res = DrawLine( num, free_rect, text_font,
+      [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
+      {
+        drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Давление в секции 2, Бар"), Qt::red, test::ToString(mPress2) );
+      }, 1.5 );
+   }
+   res = DrawLine( num, free_rect, text_font,
+   [ this, &drw, &FillToSize, &text_font ]( QRect const& rect )
+   {
+     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Частота вращения, об/мин"), Qt::red, test::ToString(mFrequency) );
+   }, 1.5 );
+
+
    res = DrawLine( num, free_rect, text_font,
    [ this, &drw, &FillToSize, &text_font, &params ]( QRect const& rect )
    {
-     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, мин"), Qt::red, test::ToString(TestingTime) );
+     drw.DrawRowLeft( rect, text_font, Qt::black, FillToSize("Длительность испытания, сек"), Qt::red, test::ToString(TestingTime) );
    }, 1.5 );
 
    res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
@@ -136,12 +235,50 @@ bool PumpTest2::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
    {
      drw.DrawRowLeft( rect, result_font, Qt::black, "РЕЗУЛЬТАТ:" );
    }, 1.5 );
+
    res = DrawLine( num, free_rect, text_font,
    [ this, &drw, &text_font, params ]( QRect const& rect )
    {
-      drw.DrawRowLeft( rect, text_font,   Qt::black, "Гидронасос ",
-                                     Qt::red, RepRes());
+      drw.DrawRowLeft( rect, text_font,   Qt::black, "В системе отсутствуют удары, стуки, повышенная вибрация, резкий шум,");
    }, 1.5 );
+   res = DrawLine( num, free_rect, text_font,
+   [ this, &drw, &text_font, params ]( QRect const& rect )
+   {
+      drw.DrawRowLeft( rect, text_font,   Qt::black, "повышенный нагрев, отсутствуют каплеобразования из под крышек, пробок,");
+   }, 1.5 );
+   res = DrawLine( num, free_rect, text_font,
+   [ this, &drw, &text_font, params ]( QRect const& rect )
+   {
+      drw.DrawRowLeft( rect, text_font,   Qt::black, "фланцев, через стыки корпусных деталей и т.д.: ",
+                       Qt::red, RepRes());
+   }, 1.5 );
+
+   res = DrawLine( num, free_rect, text_font,
+   [ this, &drw, &text_font, params ]( QRect const& rect )
+   {
+      drw.DrawRowLeft( rect, text_font, Qt::black, "Расход в секции 1 ",  Qt::red, mInvalidExpenditure1 ? "не в допуске" :"в допуске");
+   }, 1.5 );
+   res = DrawLine( num, free_rect, text_font,
+   [ this, &drw, &text_font, params ]( QRect const& rect )
+   {
+      drw.DrawRowLeft( rect, text_font,   Qt::black, "Допуск для секции 1: " ,
+                       Qt::red, test::ToString( mMinExp1 ) + " - " + test::ToString( mMaxExp1 ) );
+   }, 1.5 );
+
+   if ( params->SectionsCount() == 2 )
+   {
+      res = DrawLine( num, free_rect, text_font,
+      [ this, &drw, &text_font, params ]( QRect const& rect )
+      {
+         drw.DrawRowLeft( rect, text_font, Qt::black, "Расход в секции 2 ",  Qt::red, mInvalidExpenditure2 ? "не в допуске" :"в допуске");
+      }, 1.5 );
+      res = DrawLine( num, free_rect, text_font,
+      [ this, &drw, &text_font, params ]( QRect const& rect )
+      {
+         drw.DrawRowLeft( rect, text_font,   Qt::black, "Допуск для секции 2: " ,
+                          Qt::red, test::ToString( mMinExp2 ) + " - " + test::ToString( mMaxExp2 ) );
+      }, 1.5 );
+   }
 
    if ( res )
       free_rect.setHeight(0);

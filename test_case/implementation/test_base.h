@@ -128,7 +128,17 @@ protected:
 
     cpu::data::DB72& mBits;
     cpu::data::DB70& mSensors;
+    cpu::data::DB73& mWarns;
 
+    QJsonObject Serialise() const;
+    bool Deserialize( QJsonObject const& obj );
+    //параметры
+    double mExp1 = 0.0;
+    double mExp2 = 0.0;
+    double mPress1 = 0.0;
+    double mPress2 = 0.0;
+    double mFrequency = 0.0;
+    double mTorque = 0.0;
 private:
     static uint8_t mTestsCount;
 };
