@@ -10,17 +10,12 @@ class PumpTest10 :public test::pump::Test
 {
 public:
    class GrapfData;
-   struct ArrData
-   {
-       double mPower = 0.0;         //мощность
-       double mExpenditure = 0.0;   //подача
-       double mExpCoeff = 0.0;      //коэффициент подачи
-       double mKPD = 0.0;           //КПД
-       double mPressure = 0.0;      //Давление (ось х)
-   };
+
+
+   typedef std::pair< double, double > ArrData;
    typedef std::vector< ArrData > DataSet;
-   typedef std::pair< const double , DataSet > SourceItem;
-   typedef std::map<const double , DataSet> Source; //частота вращения, зависимость
+   typedef std::pair< double, DataSet > SourceItem;
+   typedef std::map< double, DataSet > Source;
 
    PumpTest10();
    ~PumpTest10();
@@ -40,7 +35,11 @@ private:
    friend class GrapfData;
 
    bool mResult;
-   Source mSourse;
+
+   Source mPower;         //мощность
+   Source mExpenditure;   //подача
+   Source mExpCoeff;      //коэффициент подачи
+   Source mKPD;           //КПД
    mutable std::unique_ptr<GrapfData> mGrapfs;
 };
 
