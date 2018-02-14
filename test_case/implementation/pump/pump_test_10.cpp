@@ -274,7 +274,9 @@ public:
 
 PumpTest10::PumpTest10():
     test::pump::Test( "Функциональные зависимости", 49 ),
-    mResult(false)
+    mResult(false),
+    key(0),
+    ready_for_ready(true)
 {
 }
 
@@ -284,6 +286,7 @@ PumpTest10::~PumpTest10()
 bool PumpTest10::Run()
 {
     key = 0;
+    ready_for_ready = true;
     mPressure_S1.clear();
     mPressure_S2.clear();
     mExpenditure_S1.clear();
@@ -306,12 +309,16 @@ void PumpTest10::UpdateData()
    Test::UpdateData();
 
    if ( !mBits.OP49_Ready )
+   {
+      ready_for_ready = true;
       return;
+   }
 
-   auto& cnt = cpu::CpuMemory::Instance().M3;
-   cnt.Read();
-   if ( cnt.OP49_Continue )
-      return;
+   if ( !ready_for_ready )
+       return;
+
+   ready_for_ready = false;
+
 
    auto& mem = cpu::CpuMemory::Instance().DB90;
    mem.Read();
@@ -341,6 +348,7 @@ void PumpTest10::UpdateData()
       mKPD[k].push_back( mem.KPD[i] );
    }
 
+   auto& cnt = cpu::CpuMemory::Instance().M3;
    cnt.OP49_Continue = true;
    cnt.Write();
 }
@@ -486,7 +494,7 @@ bool PumpTest10::Draw(QPainter& painter, QRect &free_rect , const QString &compa
 
    typedef PumpTest10::GrapfData::Grapfs Grafs;
 
-   auto DrawGrafs = [this, &num, &free_rect, &text_font, &painter, &text_font, &drw, &metrix]
+   auto DrawGrafs = [this, &num, &free_rect, &text_font, &painter, &drw, &metrix]
          ( Grafs const& grapfs, QString const& title, QString const& x_msg, QString const& y_msg )
    {
       return DrawLine( num, free_rect, text_font,

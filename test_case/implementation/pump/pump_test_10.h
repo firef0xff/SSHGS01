@@ -48,6 +48,7 @@ private:
    Source mKPD;           //КПД
 
    int key;
+   bool ready_for_ready;
    mutable std::unique_ptr<GrapfData> mGrapfs;
 };
 
