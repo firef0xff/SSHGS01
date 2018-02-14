@@ -109,10 +109,10 @@ void TestRunner::StopWorker()
           QObject::disconnect( mWorker.get(), &Worker::to_exec, this, &TestRunner::exec );
           mWorker.reset();
       }
-      if ( app::Settings::Instance().UserAccess() != app::UserLevel::Uncknown )
-        ui->Start->setEnabled( true );
    } );
    t.detach();
+   if ( app::Settings::Instance().UserAccess() != app::UserLevel::Uncknown )
+     ui->Start->setEnabled( true );
 }
 
 void TestRunner::on_Abort_clicked()

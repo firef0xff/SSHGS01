@@ -12,8 +12,8 @@ public:
    class GrapfData;
 
 
-   typedef std::pair< double, double > ArrData;
-   typedef std::vector< ArrData > DataSet;
+   typedef double ArrData;
+   typedef std::vector< double > DataSet;
    typedef std::pair< double, DataSet > SourceItem;
    typedef std::map< double, DataSet > Source;
 
@@ -38,10 +38,16 @@ private:
 
    bool mResult;
 
+   Source mPressure_S1;         //Давление в полости 1
+   Source mPressure_S2;         //Давление в полости 2
+   Source mExpenditure_S1;   //подача
+   Source mExpenditure_S2;   //подача
+   Source mExpCoeff_S1;      //коэффициент подачи
+   Source mExpCoeff_S2;      //коэффициент подачи
    Source mPower;         //мощность
-   Source mExpenditure;   //подача
-   Source mExpCoeff;      //коэффициент подачи
    Source mKPD;           //КПД
+
+   int key;
    mutable std::unique_ptr<GrapfData> mGrapfs;
 };
 

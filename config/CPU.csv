@@ -606,6 +606,7 @@ DB72.MinExp2;DB72,REAL92;RO;TST=;CMT=миниимальный расход секци€ 2
 DB72.FrequencyMin;DB72,REAL108;RO;TST=;CMT=минимальна€ частота вращени€
 DB72.FrequencyMax;DB72,REAL116;RO;TST=;CMT=номимальна€ частота вращени€
 DB72.FrequencyNom;DB72,REAL112;RO;TST=;CMT=максимальна€ частота вращени€
+DB72.OP49_Count;DB80,W230;RO;TST=;CMT=„исло значений в массивах
 DB73.SP16_warning;DB73,X2.0;RO;TST=;CMT=загр€знен фильтр в контуре ј
 DB73.SP17_warning;DB73,X2.1;RO;TST=;CMT=загр€знен фильтр в контуре ¬
 DB73.SP18_warning;DB73,X2.2;RO;TST=;CMT=загр€знен фильтр в контуре —
@@ -648,7 +649,7 @@ DB82.Voltage_man;DB82,REAL32;RW;TST=;CMT=напр€жение питани€ дискретных катушек
 DB82.Type_Voltage_man;DB82,REAL36;RW;TST=;CMT=“ип напр€жени€ (посто€нное/переменное)
 M2.Pump_Continue;MX127.1;RW;TST=;CMT=продолжить тест
 M2.Pump_Fail;MX128.6;RW;TST=;CMT=завершить тест
-M3.OP49_Continue;MX127.7;RW;TST=;CMT=продолжить выполнение теста
+M3.OP49_Continue;MX127.1;RW;TST=;CMT=продолжить выполнение теста
 DB90.Pressure_S1;DB90,REAL0,1000;RO;TST=;CMT=массив значений давлени€ в секции 1
 DB90.Pressure_S2;DB91,REAL0,1000;RO;TST=;CMT=массив значений давлени€ в секции 2
 DB90.Consumption_S1;DB92,REAL0,1000;RO;TST=;CMT=массив значений расхода в секции 1

@@ -63,12 +63,15 @@ DB72::DB72():
    MinExp2( mFloatData[19] ), //миниимальный расход секция 2
    FrequencyMin( mFloatData[20] ), //минимальная частота вращения;
    FrequencyMax( mFloatData[21] ), //номимальная частота вращения;
-   FrequencyNom( mFloatData[22] ) //максимальная частота вращения;
+   FrequencyNom( mFloatData[22] ), //максимальная частота вращения;
+
+   OP49_Count( mIntData[0] )
 
 {
    memset( mBoolData, 0, sizeof(mBoolData) );
    memset( mFloatData, 0, sizeof(mFloatData) );
-   mGroupID = opc::miniOPC::Instance().AddGroup( L"DB72", mAdresses, BOOL_COUNT + FLOAT_COUNT );
+   memset( mIntData, 0, sizeof(mIntData) );
+   mGroupID = opc::miniOPC::Instance().AddGroup( L"DB72", mAdresses, BOOL_COUNT + FLOAT_COUNT + INT_COUNT);
 
 }
 
@@ -80,12 +83,14 @@ void DB72::Read()
         //ошибка подключения..
         return;
     }
-    for (size_t i = 0; i < BOOL_COUNT + FLOAT_COUNT; i++)
+    for (size_t i = 0; i < BOOL_COUNT + FLOAT_COUNT + INT_COUNT; i++)
     {
         if ( i < ( BOOL_COUNT ) )
             mBoolData[ i ] = rez[i].vDataValue.boolVal;
-        else
+        else if ( i < ( BOOL_COUNT + FLOAT_COUNT ) )
             mFloatData[ i - BOOL_COUNT ] = rez[i].vDataValue.fltVal;
+        else
+            mIntData[ i - (BOOL_COUNT + FLOAT_COUNT) ] = rez[i].vDataValue.lVal;
     }
     opc::miniOPC::Instance().OpcMassFree( mGroupID, rez );
 }

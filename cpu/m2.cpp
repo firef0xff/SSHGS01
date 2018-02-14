@@ -42,6 +42,21 @@ void M3::Write()
        res = opc::miniOPC::Instance().WriteMass( mGroupID, 0, BOOL_COUNT, static_cast<void*>( mBoolData ), opc::tBOOL );
 
 }
+void M3::Read()
+{
+   OPCITEMSTATE* rez = opc::miniOPC::Instance().Read( mGroupID );
+   if (!rez)
+   {
+       //ошибка подключения..
+       return;
+   }
+   for (size_t i = 0; i < BOOL_COUNT; i++)
+   {
+       if ( i < BOOL_COUNT )
+           mBoolData[ i ] = rez[i].vDataValue.boolVal;
+   }
+   opc::miniOPC::Instance().OpcMassFree( mGroupID, rez );
+}
 }//namespace data
 }//namespace cpu
 

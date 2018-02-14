@@ -20,10 +20,7 @@ QJsonArray ToJson( PumpTest10::Source const& in_src )
         for ( auto it2 = data.begin(), end2 = data.end(); it2!=end2; ++it2)
         {
             PumpTest10::ArrData const& lnk = *it2;
-            QJsonObject item;
-            item.insert( "x",    lnk.first );
-            item.insert( "y",    lnk.second );
-            data_set.insert( data_set.end(), item );
+            data_set.insert( data_set.end(), lnk );
         }
         QJsonObject src;
         src.insert("key", key);
@@ -44,10 +41,7 @@ PumpTest10::Source FromJson( QJsonArray arr )
         QJsonArray data_set = src.value("data_set").toArray();
         foreach ( QJsonValue const& v_item, data_set )
         {
-            QJsonObject item = v_item.toObject();
-            PumpTest10::ArrData it;
-            it.first =       item.value("x").toDouble();
-            it.second = item.value("y").toDouble();
+            PumpTest10::ArrData it = v_item.toDouble();
             ds.push_back( it );
         }
         res.insert( PumpTest10::SourceItem( key, ds ) );
@@ -55,14 +49,52 @@ PumpTest10::Source FromJson( QJsonArray arr )
     return std::move( res );
 }
 
-ff0x::NoAxisGraphBuilder::LinePoints Process ( PumpTest10::DataSet const& src, QPointF& x_range, QPointF& y_range )
+ff0x::NoAxisGraphBuilder::LinePoints Process ( PumpTest10::DataSet const& x_src,
+                                               PumpTest10::DataSet const& y_src,
+                                               QPointF& x_range, QPointF& y_range )
 {
     ff0x::NoAxisGraphBuilder::LinePoints result;
 
-    for ( size_t i = 0; i < src.size(); ++i )
+    for ( size_t i = 0; i < x_src.size() && i < y_src.size(); ++i )
     {
-        double const x = fabs( src[i].first );
-        double const y = fabs( src[i].second );
+        double const x = fabs( x_src[i] );
+        double const y = fabs( y_src[i] );
+
+        if ( !i )
+        {
+            x_range.setX( x );
+            x_range.setY( x );
+            y_range.setX( y );
+            y_range.setY( y );
+        }
+        else
+        {
+            if ( x > x_range.x() )
+                x_range.setX( x );
+            if ( x < x_range.y() )
+                x_range.setY( x );
+
+            if ( y > y_range.x() )
+                y_range.setX( y );
+            if ( y < y_range.y() )
+                y_range.setY( y );
+        }
+
+        result.push_back( QPointF( x, y ) );
+    }
+    return std::move( result );
+}
+ff0x::NoAxisGraphBuilder::LinePoints Process2 ( PumpTest10::DataSet const& x1_src,
+                                                PumpTest10::DataSet const& x2_src,
+                                                PumpTest10::DataSet const& y_src,
+                                                QPointF& x_range, QPointF& y_range )
+{
+    ff0x::NoAxisGraphBuilder::LinePoints result;
+
+    for ( size_t i = 0; i < x1_src.size() && i < x2_src.size() && i < y_src.size(); ++i )
+    {
+        double const x = max( fabs( x1_src[i] ), fabs( x2_src[i] ) );
+        double const y = fabs( y_src[i] );
 
         if ( !i )
         {
@@ -96,12 +128,15 @@ class PumpTest10::GrapfData
 public:
    GrapfData( PumpTest10 const* test, QString compare_width )
    {
-      mData.resize(4); //4 типа графиков
-
+      mData.resize(6);
       //поиск данных теста
+      PumpTest10::Source pressure_S1;
+      PumpTest10::Source pressure_S2;
+      PumpTest10::Source expenditure_S1;
+      PumpTest10::Source expenditure_S2;
+      PumpTest10::Source exp_coeff_S1;
+      PumpTest10::Source exp_coeff_S2;
       PumpTest10::Source power;
-      PumpTest10::Source expenditure;
-      PumpTest10::Source exp_coeff;
       PumpTest10::Source kpd;
 
       foreach (QJsonValue const& val, test::ReadFromFile(compare_width).value("Results").toArray())
@@ -110,85 +145,117 @@ public:
          if ( obj.value("id").toInt() == test->mId )
          {
             auto data = obj.value("data").toObject();
-             QJsonArray a0 = data.value("mPower").toArray();
-             power = FromJson( a0 );
-             QJsonArray a1 = data.value("mExpenditure").toArray();
-             expenditure = FromJson( a1 );
-             QJsonArray a2 = data.value("mExpCoeff").toArray();
-             exp_coeff = FromJson( a2 );
-             QJsonArray a3 = data.value("mKPD").toArray();
-             kpd = FromJson( a3 );
+
+            pressure_S1 = FromJson( data.value("mPressure_S1").toArray() );
+            pressure_S2 = FromJson( data.value("mPressure_S2").toArray() );
+            expenditure_S1 = FromJson( data.value("mExpenditure_S1").toArray() );
+            expenditure_S2 = FromJson( data.value("mExpenditure_S2").toArray() );
+            exp_coeff_S1 = FromJson( data.value("mExpCoeff_S1").toArray() );
+            exp_coeff_S2 = FromJson( data.value("mExpCoeff_S2").toArray() );
+            kpd = FromJson( data.value("mKPD").toArray() );
+            power = FromJson( data.value("mPower").toArray() );
          }
       }
 
-      for( auto it = power.begin(), end = power.end(); it !=end; ++it )
+      auto ProcessTmplData2 = [this, &pressure_S1, &pressure_S2]( PumpTest10::Source const& src, int pos )
       {
-         Data &d0 = mData[0][it->first];
-         d0.templdate = Process( it->second , d0.x_range, d0.y_range );
-      }
-      for( auto it = expenditure.begin(), end = expenditure.end(); it !=end; ++it )
+         for( auto it = src.begin(), end = src.end(); it !=end; ++it )
+         {
+            auto k = it->first;
+            PumpTest10::DataSet const& x1_src = pressure_S1[k];
+            PumpTest10::DataSet const& x2_src = pressure_S2[k];
+            PumpTest10::DataSet const& y_src = it->second;
+            Data &d = mData[pos][k];
+            d.templdate = Process2( x1_src, x2_src, y_src , d.x_range, d.y_range );
+         }
+      };
+      auto ProcessTmplData = [this]( PumpTest10::Source const& xsrc, PumpTest10::Source const& src, int pos )
       {
-         Data &d1 = mData[1][it->first];
-         d1.templdate = Process( it->second , d1.x_range, d1.y_range );
-      }
-      for( auto it = exp_coeff.begin(), end = exp_coeff.end(); it !=end; ++it )
-      {
-         Data &d2 = mData[2][it->first];
-         d2.templdate = Process( it->second , d2.x_range, d2.y_range );
-      }
-      for( auto it = kpd.begin(), end = kpd.end(); it !=end; ++it )
-      {
-         Data &d3 = mData[3][it->first];
-         d3.templdate = Process( it->second , d3.x_range, d3.y_range );
-      }
+         PumpTest10::DataSet empty;
+         for( auto it = src.begin(), end = src.end(); it !=end; ++it )
+         {
+            auto k = it->first;
 
-      for( auto it = test->mPower.begin(), end = test->mPower.end(); it !=end; ++it )
+
+            PumpTest10::DataSet const* x_src = &empty;
+            auto ij = xsrc.find(k);
+            if ( ij != xsrc.end() )
+               x_src = &ij->second;
+
+            PumpTest10::DataSet const& y_src = it->second;
+            Data &d = mData[pos][k];
+            d.templdate = Process( *x_src, y_src , d.x_range, d.y_range );
+         }
+      };
+
+      auto const& ps1 = test->mPressure_S1;
+      auto const& ps2 = test->mPressure_S2;
+      auto ProcessData2 = [this, &ps1, &ps2]( PumpTest10::Source const& src, int pos )
       {
-         QPointF x_range;
-         QPointF y_range;
+         PumpTest10::DataSet empty;
+         for( auto it = src.begin(), end = src.end(); it !=end; ++it )
+         {
+            QPointF x_range;
+            QPointF y_range;
 
-         Data &d0 = mData[0][it->first];
-         d0.data = Process( it->second , x_range, y_range );
-         d0.x_range = ff0x::MergeRanges( x_range, d0.x_range );
-         d0.y_range = ff0x::MergeRanges( y_range, d0.y_range );
-      }
-      for( auto it = test->mExpenditure.begin(), end = test->mExpenditure.end(); it !=end; ++it )
+            auto k = it->first;
+
+            PumpTest10::DataSet const* x1_src = &empty;
+            auto ij1 = ps1.find(k);
+            if ( ij1 != ps1.end() )
+               x1_src = &ij1->second;
+
+            PumpTest10::DataSet const* x2_src = &empty;
+            auto ij2 = ps2.find(k);
+            if ( ij2 != ps2.end() )
+               x2_src = &ij2->second;
+
+
+            PumpTest10::DataSet const& y_src = it->second;
+            Data &d = mData[pos][k];
+            d.data = Process2( *x1_src, *x2_src, y_src , x_range, y_range );
+            d.x_range = ff0x::MergeRanges( x_range, d.x_range );
+            d.y_range = ff0x::MergeRanges( y_range, d.y_range );
+         }
+      };
+      auto ProcessData = [this]( PumpTest10::Source const& xsrc, PumpTest10::Source const& src, int pos )
       {
-         QPointF x_range;
-         QPointF y_range;
+         PumpTest10::DataSet empty;
+         for( auto it = src.begin(), end = src.end(); it !=end; ++it )
+         {
+            QPointF x_range;
+            QPointF y_range;
 
-         x_range = QPointF();
-         y_range = QPointF();
-         Data &d1 = mData[1][it->first];
-         d1.data = Process( it->second , x_range, y_range );
-         d1.x_range = ff0x::MergeRanges( x_range, d1.x_range );
-         d1.y_range = ff0x::MergeRanges( y_range, d1.y_range );
-      }
-      for( auto it = test->mExpCoeff.begin(), end = test->mExpCoeff.end(); it !=end; ++it )
-      {
-         QPointF x_range;
-         QPointF y_range;
+            auto k = it->first;
+            PumpTest10::DataSet const* x_src = &empty;
+            auto ij = xsrc.find(k);
+            if ( ij != xsrc.end() )
+               x_src = &ij->second;
+            PumpTest10::DataSet const& y_src = it->second;
+            Data &d = mData[pos][k];
+            d.data = Process( *x_src, y_src , d.x_range, d.y_range );
+            d.x_range = ff0x::MergeRanges( x_range, d.x_range );
+            d.y_range = ff0x::MergeRanges( y_range, d.y_range );
+         }
+      };
 
-         x_range = QPointF();
-         y_range = QPointF();
-         Data &d2 = mData[2][it->first];
-         d2.data = Process( it->second , x_range, y_range );
-         d2.x_range = ff0x::MergeRanges( x_range, d2.x_range );
-         d2.y_range = ff0x::MergeRanges( y_range, d2.y_range );
-      }
-      for( auto it = test->mKPD.begin(), end = test->mKPD.end(); it !=end; ++it )
-      {
-         QPointF x_range;
-         QPointF y_range;
+      ProcessTmplData2( power, 0 );
+      ProcessData2( test->mPower, 0 );
 
-         x_range = QPointF();
-         y_range = QPointF();
-         Data &d3 = mData[3][it->first];
-         d3.data = Process( it->second , x_range, y_range );
-         d3.x_range = ff0x::MergeRanges( x_range, d3.x_range );
-         d3.y_range = ff0x::MergeRanges( y_range, d3.y_range );
-      }
+      ProcessTmplData2( kpd, 1 );
+      ProcessData2( test->mKPD, 1 );
 
+      ProcessTmplData( pressure_S1, expenditure_S1, 2 );
+      ProcessData( test->mPressure_S1, test->mExpenditure_S1, 2 );
+
+      ProcessTmplData( pressure_S2, expenditure_S2, 3 );
+      ProcessData( test->mPressure_S2, test->mExpenditure_S2, 3 );
+
+      ProcessTmplData( pressure_S1, exp_coeff_S1, 4 );
+      ProcessData( test->mPressure_S1, test->mExpCoeff_S1, 4 );
+
+      ProcessTmplData( pressure_S2, exp_coeff_S2, 5 );
+      ProcessData( test->mPressure_S2, test->mExpCoeff_S2, 5 );
    }
 
     struct Data
@@ -216,10 +283,21 @@ PumpTest10::~PumpTest10()
 
 bool PumpTest10::Run()
 {
+    key = 0;
+    mPressure_S1.clear();
+    mPressure_S2.clear();
+    mExpenditure_S1.clear();
+    mExpenditure_S2.clear();
+    mExpCoeff_S1.clear();
+    mExpCoeff_S2.clear();
+    mPower.clear();
+    mKPD.clear();
+
     Start();
     Wait( mBits.OP49_Work, mBits.OP49_End );
+    mResult = true;
     if ( IsStopped() )
-        return false;
+        mResult = false;
     return Success();
 }
 
@@ -227,36 +305,72 @@ void PumpTest10::UpdateData()
 {
    Test::UpdateData();
 
-   if ( mBits.OP49_Ready )
-   {
-      auto& mem = cpu::CpuMemory::Instance().DB90;
-      mem.Read();
+   if ( !mBits.OP49_Ready )
+      return;
 
-      auto& cnt = cpu::CpuMemory::Instance().M3;
-      cnt.OP49_Continue = true;
-      cnt.Write();
+   auto& cnt = cpu::CpuMemory::Instance().M3;
+   cnt.Read();
+   if ( cnt.OP49_Continue )
+      return;
+
+   auto& mem = cpu::CpuMemory::Instance().DB90;
+   mem.Read();
+
+   int count = mBits.OP49_Count;
+   int k = key;
+   ++key;
+
+   mPressure_S1[k].clear();
+   mPressure_S2[k].clear();
+   mExpenditure_S1[k].clear();
+   mExpenditure_S2[k].clear();
+   mExpCoeff_S1[k].clear();
+   mExpCoeff_S2[k].clear();
+   mPower[k].clear();
+   mKPD[k].clear();
+
+   for ( int i = 0; i < count; ++i )
+   {
+      mPressure_S1[k].push_back( mem.Pressure_S1[i] );
+      mPressure_S2[k].push_back( mem.Pressure_S2[i] );
+      mExpenditure_S1[k].push_back( mem.Consumption_S1[i] );
+      mExpenditure_S2[k].push_back( mem.Consumption_S2[i] );
+      mExpCoeff_S1[k].push_back( mem.K_Consumption_S1[i] );
+      mExpCoeff_S2[k].push_back( mem.K_Consumption_S2[i] );
+      mPower[k].push_back( mem.Power[i] );
+      mKPD[k].push_back( mem.KPD[i] );
    }
 
+   cnt.OP49_Continue = true;
+   cnt.Write();
 }
 
 QJsonObject PumpTest10::Serialise() const
 {
     QJsonObject obj = Test::Serialise();
     obj.insert("mResult",            mResult );
-    obj.insert("mPower",    ToJson(mPower) );
-    obj.insert("mExpenditure",    ToJson(mExpenditure) );
-    obj.insert("mExpCoeff",    ToJson(mExpCoeff) );
+    obj.insert("mPressure_S1",    ToJson(mPressure_S1) );
+    obj.insert("mPressure_S2",    ToJson(mPressure_S2) );
+    obj.insert("mExpenditure_S1",    ToJson(mExpenditure_S1) );
+    obj.insert("mExpenditure_S2",    ToJson(mExpenditure_S2) );
+    obj.insert("mExpCoeff_S1",    ToJson(mExpCoeff_S1) );
+    obj.insert("mExpCoeff_S2",    ToJson(mExpCoeff_S2) );
     obj.insert("mKPD",    ToJson(mKPD) );
+    obj.insert("mPower",    ToJson(mPower) );
 
     return obj;
 }
 bool PumpTest10::Deserialize( QJsonObject const& obj )
 {
     mResult = obj.value("mResult").toBool();
-    mPower = FromJson( obj.value("mPower").toArray() );
-    mExpenditure = FromJson( obj.value("mExpenditure").toArray() );
-    mExpCoeff = FromJson( obj.value("mExpCoeff").toArray() );
+    mPressure_S1 = FromJson( obj.value("mPressure_S1").toArray() );
+    mPressure_S2 = FromJson( obj.value("mPressure_S2").toArray() );
+    mExpenditure_S1 = FromJson( obj.value("mExpenditure_S1").toArray() );
+    mExpenditure_S2 = FromJson( obj.value("mExpenditure_S2").toArray() );
+    mExpCoeff_S1 = FromJson( obj.value("mExpCoeff_S1").toArray() );
+    mExpCoeff_S2 = FromJson( obj.value("mExpCoeff_S2").toArray() );
     mKPD = FromJson( obj.value("mKPD").toArray() );
+    mPower = FromJson( obj.value("mPower").toArray() );
     Test::Deserialize( obj );
     return true;
 }
@@ -429,9 +543,15 @@ bool PumpTest10::Draw(QPainter& painter, QRect &free_rect , const QString &compa
    };
 
    res = DrawGrafs( mGrapfs->mData[0], "Зависимость мощьности насоса от давления", "Давление, бар", "Мощность, кВт");
-   res = DrawGrafs( mGrapfs->mData[1], "Зависимость подачи насоса от давления", "Давление, бар", "Подача, л/мин");
-   res = DrawGrafs( mGrapfs->mData[2], "Зависимость коэффициента подачи насоса от давления", "Давление, бар", "Коэффициент подачи");
-   res = DrawGrafs( mGrapfs->mData[3], "Зависимость КПД насоса от давления", "Давление, бар", "КПД, %");
+   res = DrawGrafs( mGrapfs->mData[1], "Зависимость КПД насоса от давления", "Давление, бар", "КПД, %");
+   res = DrawGrafs( mGrapfs->mData[2], "Зависимость подачи насоса от давления (секция 1)", "Давление, бар", "Подача, л/мин");
+   res = DrawGrafs( mGrapfs->mData[4], "Зависимость коэффициента подачи насоса от давления (секция 1)", "Давление, бар", "Коэффициент подачи");
+
+   if ( params->SectionsCount() == 2 )
+   {
+      res = DrawGrafs( mGrapfs->mData[3], "Зависимость подачи насоса от давления (секция 2)", "Давление, бар", "Подача, л/мин");
+      res = DrawGrafs( mGrapfs->mData[5], "Зависимость коэффициента подачи насоса от давления (секция 2)", "Давление, бар", "Коэффициент подачи");
+   }
 
    if ( res )
       free_rect.setHeight(0);

@@ -39,10 +39,11 @@ private:
     };
 };
 
-class M3 : public Out
+class M3 : public InOut
 {
 public:
     void Write();
+    void Read();
 
     bool& OP49_Continue;          //m127.7 продолжить тест
 

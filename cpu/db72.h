@@ -77,6 +77,7 @@ public:
    float& FrequencyMax; //номимальная частота вращения;
    float& FrequencyNom; //максимальная частота вращения;
 
+   int& OP49_Count;         //DB80,W124
 private:
    friend class cpu::CpuMemory;
    DB72();
@@ -86,14 +87,16 @@ private:
    enum
    {
        BOOL_COUNT = 32,
-       FLOAT_COUNT = 23
+       FLOAT_COUNT = 23,
+       INT_COUNT = 1,
    };
 
    bool mBoolData[ BOOL_COUNT ];
    float mFloatData[ FLOAT_COUNT ];
+   int mIntData[ INT_COUNT ];
    uint64_t mGroupID = 0;
 
-   wchar_t const* mAdresses[ BOOL_COUNT + FLOAT_COUNT ] = {
+   wchar_t const* mAdresses[ BOOL_COUNT + FLOAT_COUNT + INT_COUNT] = {
       L"CPU/DB72.OP40_Work",
       L"CPU/DB72.OP40_control",
       L"CPU/DB72.OP41_Work",
@@ -151,6 +154,8 @@ private:
       L"CPU/DB72.FrequencyMin", //минимальная частота вращения;
       L"CPU/DB72.FrequencyMax", //номимальная частота вращения;
       L"CPU/DB72.FrequencyNom", //максимальная частота вращения;
+
+      L"CPU/DB72.OP49_Count", //DB80.DBW124
    };
 
 
