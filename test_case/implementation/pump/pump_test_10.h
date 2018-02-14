@@ -31,6 +31,8 @@ public:
 
    void ResetDrawLine();
 
+   void UpdateData();
+
 private:
    friend class GrapfData;
 

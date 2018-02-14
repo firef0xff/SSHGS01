@@ -39,6 +39,35 @@ private:
     };
 };
 
+class M3 : public Out
+{
+public:
+    void Write();
+
+    bool& OP49_Continue;          //m127.7 продолжить тест
+
+private:
+
+    friend class cpu::CpuMemory;
+    M3();
+    M3( const M3& ) = delete;
+    void operator = ( const M3& ) = delete;
+
+    enum
+    {
+        BOOL_COUNT = 1
+    };
+
+    bool mBoolData[ BOOL_COUNT ];
+    uint64_t mGroupID = 0;
+
+    wchar_t const* mAdresses[ BOOL_COUNT ] =
+    {
+        L"CPU/M3.OP49_Continue", //m127.7 продолжить тест
+    };
+};
+
+
 }//namespace data
 
 }//namespace cpu

@@ -223,6 +223,22 @@ bool PumpTest10::Run()
     return Success();
 }
 
+void PumpTest10::UpdateData()
+{
+   Test::UpdateData();
+
+   if ( mBits.OP49_Ready )
+   {
+      auto& mem = cpu::CpuMemory::Instance().DB90;
+      mem.Read();
+
+      auto& cnt = cpu::CpuMemory::Instance().M3;
+      cnt.OP49_Continue = true;
+      cnt.Write();
+   }
+
+}
+
 QJsonObject PumpTest10::Serialise() const
 {
     QJsonObject obj = Test::Serialise();

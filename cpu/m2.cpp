@@ -27,6 +27,21 @@ void M2::Write()
 
 }
 
+
+M3::M3():
+    OP49_Continue(mBoolData[0])
+{
+    memset( mBoolData, 0, sizeof(mBoolData) );
+    mGroupID = opc::miniOPC::Instance().AddGroup( L"M3", mAdresses, BOOL_COUNT );
+}
+
+void M3::Write()
+{
+   HRESULT res = E_FAIL;
+   while ( res == E_FAIL )
+       res = opc::miniOPC::Instance().WriteMass( mGroupID, 0, BOOL_COUNT, static_cast<void*>( mBoolData ), opc::tBOOL );
+
+}
 }//namespace data
 }//namespace cpu
 
