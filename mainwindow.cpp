@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "manual_control.h"
+#include "pumps_manual_control.h"
 #include "ui_mainwindow.h"
 #include "hydro_title_info.h"
 #include "servo_title_info.h"
@@ -362,6 +363,11 @@ void MainWindow::on_ManualControl_clicked()
     ShowChildWindow( ChildPtr( new ManualControl() ) );
 }
 
+void MainWindow::on_ManualControl2_clicked()
+{
+   ShowChildWindow( ChildPtr( new PumpsManualControl() ) );
+}
+
 //ACTIONS
 void MainWindow::on_load_isp_params_triggered()
 {
@@ -539,3 +545,5 @@ void ControlsUpdater::stop()
     mStopSignal = true;
     wait();
 }
+
+

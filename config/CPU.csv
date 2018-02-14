@@ -607,6 +607,8 @@ DB72.FrequencyMin;DB72,REAL108;RO;TST=;CMT=минимальна€ частота вращени€
 DB72.FrequencyMax;DB72,REAL116;RO;TST=;CMT=номимальна€ частота вращени€
 DB72.FrequencyNom;DB72,REAL112;RO;TST=;CMT=максимальна€ частота вращени€
 DB72.OP49_Count;DB80,W230;RO;TST=;CMT=„исло значений в массивах
+DB72.OP49_SpeenSpeed1;DB72,REAL120;RO;TST=;CMT=частота вращени€ при первом замере
+DB72.OP49_SpeenSpeed2;DB72,REAL124;RO;TST=;CMT=частота вращени€ при втором замере
 DB73.SP16_warning;DB73,X2.0;RO;TST=;CMT=загр€знен фильтр в контуре ј
 DB73.SP17_warning;DB73,X2.1;RO;TST=;CMT=загр€знен фильтр в контуре ¬
 DB73.SP18_warning;DB73,X2.2;RO;TST=;CMT=загр€знен фильтр в контуре —
@@ -635,6 +637,7 @@ DB73.OP48_Qd_NO_Dopusk;DB73,X4.7;RO;TST=;CMT=–асход в дренаже не в допуске
 DB73.LevelMaslaAlarmPump;MX123.7;RO;TST=;CMT=аварийный уровень в баке масла 2
 DB73.TempMaslaAlarmPump1;MX150.1;RO;TST=;CMT=аварийна€ температура масла в баке 1
 DB73.TempMaslaAlarmPump2;MX122.2;RO;TST=;CMT=аварийна€ температура масла в баке 2
+DB73.LowSpeenSpeed;DB73,X6.0;RO;TST=;CMT=–асчетные обороты ниже допустимых
 DB82.Start_Stop;DB82,X2.0;RW;TST=;CMT=ѕуск/стоп основные насосы
 DB82.PumpManual;MX155.0;RW;TST=;CMT=включение ручного режима
 DB82.YA27;MX155.1;RW;TST=;CMT=включение клапана YA27

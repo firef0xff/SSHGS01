@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QAbstractButton>
 #include "cpu/cpu_memory.h"
+#include <child_widget.h>
 
 namespace Ui {
 class pumps_manual_control;
@@ -24,7 +25,7 @@ signals:
     void update();
 };
 
-class PumpsManualControl : public QWidget
+class PumpsManualControl : public ChildWidget
 {
    Q_OBJECT
 
@@ -84,6 +85,8 @@ private:
 
    void SetColor(QWidget *label, QColor cl );
 
+   virtual void OnLogin();
+   void  CheckRights();
 };
 
 #endif // PUMPS_MANUAL_CONTROL_H

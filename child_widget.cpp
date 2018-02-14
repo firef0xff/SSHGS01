@@ -19,3 +19,4 @@ void ChildWidget::closeEvent(QCloseEvent *e)
    QWidget::closeEvent( e );
    emit closed();
 }
+

@@ -64,6 +64,8 @@ DB72::DB72():
    FrequencyMin( mFloatData[20] ), //минимальная частота вращения;
    FrequencyMax( mFloatData[21] ), //номимальная частота вращения;
    FrequencyNom( mFloatData[22] ), //максимальная частота вращения;
+   OP49_SpeenSpeed1( mFloatData[23] ),  //частота вращения при первом замере
+   OP49_SpeenSpeed2( mFloatData[24] ),  //частота вращения при втором замере
 
    OP49_Count( mIntData[0] )
 

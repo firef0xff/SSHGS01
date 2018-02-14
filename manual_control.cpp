@@ -60,7 +60,6 @@ ManualControl::ManualControl(QWidget *parent) :
 
 
     QObject::connect( &Updater, SIGNAL(update()), this, SLOT(onUpdateControls()) );
-    CheckRights();
 }
 
 ManualControl::~ManualControl()
@@ -131,7 +130,7 @@ void ManualControl::closeEvent(QCloseEvent *e)
 }
 void ManualControl::showEvent( QShowEvent *e )
 {
-    Start();
+    CheckRights();
     QWidget::showEvent( e );
 }
 void ManualControl::hideEvent( QHideEvent *e )

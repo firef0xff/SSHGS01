@@ -132,15 +132,17 @@ QString db73_errs()
    if (errs.SQ21_warning) str_errs+="нет закрытия кожуха муфты\n";
    if (errs.Q_NO_Istablished) str_errs+="Расход в регуляторе не установился\n";
    if (errs.P_NO_Istablished) str_errs+="Давление в регуляторе не установилось\n";
-//   if (errs.OP40_Q_Nul) str_errs+="Расход в нуле\n";
-//   if (errs.OP40_P_Nul) str_errs+="Давленине в нуле\n";
-//   if (errs.OP40_Qr_NO_Dopusk) str_errs+="Расход рабочий не в допуске (функц-ние)\n";
-//   if (errs.OP41_Qr_NO_Dopusk) str_errs+="Расход рабочий не в допуске (прочность)\n";
-//   if (errs.OP42_Qr_NO_Dopusk) str_errs+="Расход рабочий не в допуске (гермет-ть)\n";
-//   if (errs.OP48_Qd_NO_Dopusk) str_errs+="Расход в дренаже не в допуске\n";
+   if (errs.OP40_Q_Nul) str_errs+="Расход в нуле\n";
+   if (errs.OP40_P_Nul) str_errs+="Давленине в нуле\n";
+   if (errs.OP40_Qr_NO_Dopusk1) str_errs+="Расход рабочий не в допуске (функц-ние)\n";
+   if (errs.OP40_Qr_NO_Dopusk2) str_errs+="Расход рабочий не в допуске (функц-ние)\n";
+   if (errs.OP41_Qr_NO_Dopusk) str_errs+="Расход рабочий не в допуске (прочность)\n";
+   if (errs.OP42_Qr_NO_Dopusk) str_errs+="Расход рабочий не в допуске (гермет-ть)\n";
+   if (errs.OP48_Qd_NO_Dopusk) str_errs+="Расход в дренаже не в допуске\n";
    if (errs.LevelMaslaAlarmPump) str_errs += "Аварийный уровень в баке масла 2\n";
    if (errs.TempMaslaAlarmPump1) str_errs += "Аварийная температура масла в баке 1\n";
    if (errs.TempMaslaAlarmPump2) str_errs += "Аварийная температура масла в баке 2\n";
+   if (errs.LowSpeenSpeed) str_errs += "Расчетные обороты ниже допустимых\n";
    return str_errs;
 }
 

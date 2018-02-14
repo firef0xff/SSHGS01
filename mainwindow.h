@@ -112,6 +112,7 @@ private slots:
     void on_TestCase5_clicked();
     void on_act_test_case5_triggered();
 
+    void on_ManualControl2_clicked();
 };
 
 

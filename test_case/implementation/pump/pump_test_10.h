@@ -15,7 +15,7 @@ public:
    typedef double ArrData;
    typedef std::vector< double > DataSet;
    typedef std::pair< double, DataSet > SourceItem;
-   typedef std::map< double, DataSet > Source;
+   typedef std::vector< DataSet > Source;
 
    PumpTest10();
    ~PumpTest10();
@@ -46,6 +46,7 @@ private:
    Source mExpCoeff_S2;      //коэффициент подачи
    Source mPower;         //мощность
    Source mKPD;           //КПД
+   DataSet mSpeenSpeedMap;
 
    int key;
    bool ready_for_ready;

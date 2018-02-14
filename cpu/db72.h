@@ -77,6 +77,9 @@ public:
    float& FrequencyMax; //номимальная частота вращения;
    float& FrequencyNom; //максимальная частота вращения;
 
+   float& OP49_SpeenSpeed1;  //частота вращения при первом замере
+   float& OP49_SpeenSpeed2;  //частота вращения при втором замере
+
    int& OP49_Count;         //DB80,W124
 private:
    friend class cpu::CpuMemory;
@@ -87,7 +90,7 @@ private:
    enum
    {
        BOOL_COUNT = 32,
-       FLOAT_COUNT = 23,
+       FLOAT_COUNT = 25,
        INT_COUNT = 1,
    };
 
@@ -154,6 +157,8 @@ private:
       L"CPU/DB72.FrequencyMin", //минимальная частота вращения;
       L"CPU/DB72.FrequencyMax", //номимальная частота вращения;
       L"CPU/DB72.FrequencyNom", //максимальная частота вращения;
+      L"CPU/DB72.OP49_SpeenSpeed1",
+      L"CPU/DB72.OP49_SpeenSpeed2",
 
       L"CPU/DB72.OP49_Count", //DB80.DBW124
    };

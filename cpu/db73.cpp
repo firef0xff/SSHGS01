@@ -34,7 +34,8 @@ DB73::DB73():
    OP48_Qd_NO_Dopusk( mBoolData[24] ),//Расход в дренаже не в допуске
    LevelMaslaAlarmPump( mBoolData[25] ), //аварийный уровень в баке масла 2
    TempMaslaAlarmPump1( mBoolData[26] ), //аварийная температура масла в баке 1
-   TempMaslaAlarmPump2( mBoolData[27] ) //аварийная температура масла в баке 2
+   TempMaslaAlarmPump2( mBoolData[27] ), //аварийная температура масла в баке 2
+   LowSpeenSpeed( mBoolData[28] ) //Расчетные обороты ниже допустимых
 
 {
    memset( mBoolData, 0, sizeof(mBoolData) );
@@ -69,6 +70,7 @@ DB73::DB73():
    LevelMaslaAlarmPump = true;
    TempMaslaAlarmPump1 = true;
    TempMaslaAlarmPump2 = true;
+   LowSpeenSpeed = true;
 #endif
 
 }
@@ -115,6 +117,7 @@ void DB73::Read()
    LevelMaslaAlarmPump = true;
    TempMaslaAlarmPump1 = true;
    TempMaslaAlarmPump2 = true;
+   LowSpeenSpeed = true;
 #endif
 }
 

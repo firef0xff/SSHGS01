@@ -1,6 +1,7 @@
 #include "pumps_manual_control.h"
 #include "ui_pumps_manual_control.h"
 #include "test_case/implementation/test_base.h"
+#include "settings/settings.h"
 #include <QMessageBox>
 
 PumpsManualControlUpdater::PumpsManualControlUpdater():
@@ -27,9 +28,9 @@ void PumpsManualControlUpdater::stop()
 
 
 PumpsManualControl::PumpsManualControl(QWidget *parent) :
-   QWidget(parent),
-   mTaskMode( cpu::CpuMemory::Instance().DB31 ),
-   ui(new Ui::pumps_manual_control)
+   ChildWidget(parent),
+   ui(new Ui::pumps_manual_control),
+   mTaskMode( cpu::CpuMemory::Instance().DB31 )
 {
    ui->setupUi(this);
 
@@ -205,11 +206,11 @@ void PumpsManualControl::Stop()
 void PumpsManualControl::closeEvent(QCloseEvent *e)
 {
     Stop();
-    QWidget::closeEvent( e );
+    ChildWidget::closeEvent( e );
 }
 void PumpsManualControl::showEvent( QShowEvent *e )
 {
-    Start();
+    CheckRights();
     QWidget::showEvent( e );
 }
 void PumpsManualControl::hideEvent( QHideEvent *e )
@@ -483,4 +484,24 @@ void PumpsManualControl::on_YB8_val_textChanged(const QString &)
 void PumpsManualControl::on_YB9_val_textChanged(const QString &)
 {
    CheckYb();
+}
+
+void PumpsManualControl::OnLogin()
+{
+   if ( isHidden() )
+      return;
+   CheckRights();
+}
+void  PumpsManualControl::CheckRights()
+{
+   if ( app::Settings::Instance().UserAccess() != app::UserLevel::Uncknown )
+   {
+      setEnabled(true);
+      Start();
+   }
+   else
+   {
+      setEnabled(false);
+      Stop();
+   }
 }

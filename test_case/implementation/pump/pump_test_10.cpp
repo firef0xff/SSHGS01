@@ -9,23 +9,37 @@ namespace pump
 
 namespace
 {
+QJsonArray ToJson( PumpTest10::DataSet const& in_src )
+{
+    QJsonArray source;
+    for ( auto it = in_src.begin(), end = in_src.end(); it != end; ++it )
+    {
+       PumpTest10::ArrData const& lnk = *it;
+       source.insert( source.end(), lnk );
+    }
+
+    return source;
+}
+PumpTest10::DataSet DataSetFromJson( QJsonArray arr )
+{
+   PumpTest10::DataSet ds;
+   foreach ( QJsonValue const& v_item, arr )
+   {
+      PumpTest10::ArrData it = v_item.toDouble();
+      ds.push_back( it );
+   }
+   return ds;
+}
+
+
 QJsonArray ToJson( PumpTest10::Source const& in_src )
 {
     QJsonArray source;
     for ( auto it = in_src.begin(), end = in_src.end(); it != end; ++it )
     {
-        double key = it->first;
-        PumpTest10::DataSet const& data = it->second;
-        QJsonArray data_set;
-        for ( auto it2 = data.begin(), end2 = data.end(); it2!=end2; ++it2)
-        {
-            PumpTest10::ArrData const& lnk = *it2;
-            data_set.insert( data_set.end(), lnk );
-        }
-        QJsonObject src;
-        src.insert("key", key);
-        src.insert("data_set", data_set);
-        source.insert( source.end(), src );
+        PumpTest10::DataSet const& data = *it;
+        QJsonArray data_set = ToJson( data );
+        source.insert( source.end(), data_set );
     }
 
     return source;
@@ -35,19 +49,15 @@ PumpTest10::Source FromJson( QJsonArray arr )
     PumpTest10::Source res;
     foreach (QJsonValue const& v, arr)
     {
-        QJsonObject src = v.toObject();
-        double key = src.value("key").toDouble();
-        PumpTest10::DataSet ds;
-        QJsonArray data_set = src.value("data_set").toArray();
-        foreach ( QJsonValue const& v_item, data_set )
-        {
-            PumpTest10::ArrData it = v_item.toDouble();
-            ds.push_back( it );
-        }
-        res.insert( PumpTest10::SourceItem( key, ds ) );
+        QJsonArray data_set = v.toArray();
+        PumpTest10::DataSet ds = DataSetFromJson( data_set );
+        res.push_back( ds );
     }
     return std::move( res );
 }
+
+
+
 
 ff0x::NoAxisGraphBuilder::LinePoints Process ( PumpTest10::DataSet const& x_src,
                                                PumpTest10::DataSet const& y_src,
@@ -128,6 +138,7 @@ class PumpTest10::GrapfData
 public:
    GrapfData( PumpTest10 const* test, QString compare_width )
    {
+      mColorMap = { Qt::blue, Qt::darkBlue, Qt::gray, Qt::darkGray };
       mData.resize(6);
       //поиск данных теста
       PumpTest10::Source pressure_S1;
@@ -138,6 +149,8 @@ public:
       PumpTest10::Source exp_coeff_S2;
       PumpTest10::Source power;
       PumpTest10::Source kpd;
+
+      PumpTest10::DataSet speen_speed_tmpl;
 
       foreach (QJsonValue const& val, test::ReadFromFile(compare_width).value("Results").toArray())
       {
@@ -154,37 +167,32 @@ public:
             exp_coeff_S2 = FromJson( data.value("mExpCoeff_S2").toArray() );
             kpd = FromJson( data.value("mKPD").toArray() );
             power = FromJson( data.value("mPower").toArray() );
+            speen_speed_tmpl =  DataSetFromJson( data.value("mSpeenSpeedMap").toArray() );
          }
       }
 
-      auto ProcessTmplData2 = [this, &pressure_S1, &pressure_S2]( PumpTest10::Source const& src, int pos )
+      auto ProcessTmplData2 = [this, &pressure_S1, &pressure_S2, &speen_speed_tmpl]( PumpTest10::Source const& src, int pos )
       {
-         for( auto it = src.begin(), end = src.end(); it !=end; ++it )
+         for( size_t k = 0; k < src.size(); ++k )
          {
-            auto k = it->first;
             PumpTest10::DataSet const& x1_src = pressure_S1[k];
             PumpTest10::DataSet const& x2_src = pressure_S2[k];
-            PumpTest10::DataSet const& y_src = it->second;
+            PumpTest10::DataSet const& y_src = src[k];
             Data &d = mData[pos][k];
             d.templdate = Process2( x1_src, x2_src, y_src , d.x_range, d.y_range );
+            d.templSpeenSpeed = speen_speed_tmpl[k];
          }
       };
-      auto ProcessTmplData = [this]( PumpTest10::Source const& xsrc, PumpTest10::Source const& src, int pos )
+      auto ProcessTmplData = [this, &speen_speed_tmpl]( PumpTest10::Source const& xsrc, PumpTest10::Source const& src, int pos )
       {
-         PumpTest10::DataSet empty;
-         for( auto it = src.begin(), end = src.end(); it !=end; ++it )
+         for( size_t k = 0; k < src.size(); ++k )
          {
-            auto k = it->first;
+            PumpTest10::DataSet const& x_src = xsrc[k];
 
-
-            PumpTest10::DataSet const* x_src = &empty;
-            auto ij = xsrc.find(k);
-            if ( ij != xsrc.end() )
-               x_src = &ij->second;
-
-            PumpTest10::DataSet const& y_src = it->second;
+            PumpTest10::DataSet const& y_src = src[k];
             Data &d = mData[pos][k];
-            d.templdate = Process( *x_src, y_src , d.x_range, d.y_range );
+            d.templdate = Process( x_src, y_src , d.x_range, d.y_range );
+            d.templSpeenSpeed = speen_speed_tmpl[k];
          }
       };
 
@@ -192,48 +200,32 @@ public:
       auto const& ps2 = test->mPressure_S2;
       auto ProcessData2 = [this, &ps1, &ps2]( PumpTest10::Source const& src, int pos )
       {
-         PumpTest10::DataSet empty;
-         for( auto it = src.begin(), end = src.end(); it !=end; ++it )
+         for( size_t k = 0; k < src.size(); ++k )
          {
             QPointF x_range;
             QPointF y_range;
 
-            auto k = it->first;
+            PumpTest10::DataSet const& x1_src = ps1[k];
+            PumpTest10::DataSet const& x2_src = ps2[k];
 
-            PumpTest10::DataSet const* x1_src = &empty;
-            auto ij1 = ps1.find(k);
-            if ( ij1 != ps1.end() )
-               x1_src = &ij1->second;
-
-            PumpTest10::DataSet const* x2_src = &empty;
-            auto ij2 = ps2.find(k);
-            if ( ij2 != ps2.end() )
-               x2_src = &ij2->second;
-
-
-            PumpTest10::DataSet const& y_src = it->second;
+            PumpTest10::DataSet const& y_src = src[k];
             Data &d = mData[pos][k];
-            d.data = Process2( *x1_src, *x2_src, y_src , x_range, y_range );
+            d.data = Process2( x1_src, x2_src, y_src , x_range, y_range );
             d.x_range = ff0x::MergeRanges( x_range, d.x_range );
             d.y_range = ff0x::MergeRanges( y_range, d.y_range );
          }
       };
       auto ProcessData = [this]( PumpTest10::Source const& xsrc, PumpTest10::Source const& src, int pos )
       {
-         PumpTest10::DataSet empty;
-         for( auto it = src.begin(), end = src.end(); it !=end; ++it )
+         for( size_t k = 0; k < src.size(); ++k )
          {
             QPointF x_range;
             QPointF y_range;
 
-            auto k = it->first;
-            PumpTest10::DataSet const* x_src = &empty;
-            auto ij = xsrc.find(k);
-            if ( ij != xsrc.end() )
-               x_src = &ij->second;
-            PumpTest10::DataSet const& y_src = it->second;
+            PumpTest10::DataSet const& x_src = xsrc[k];
+            PumpTest10::DataSet const& y_src = src[k];
             Data &d = mData[pos][k];
-            d.data = Process( *x_src, y_src , d.x_range, d.y_range );
+            d.data = Process( x_src, y_src , d.x_range, d.y_range );
             d.x_range = ff0x::MergeRanges( x_range, d.x_range );
             d.y_range = ff0x::MergeRanges( y_range, d.y_range );
          }
@@ -263,13 +255,17 @@ public:
        ff0x::NoAxisGraphBuilder::LinePoints data;
        ff0x::NoAxisGraphBuilder::LinePoints templdate;
 
+       double templSpeenSpeed = 0.0;
+
        QPointF x_range;
        QPointF y_range;
     };
-    typedef std::map< double, Data > Grapfs; //массивы графиков сортированняе по частоте вращения насоса
+    typedef std::map< int, Data > Grapfs; //массивы графиков сортированняе по частоте вращения насоса
     typedef std::vector< Grapfs > DataSet; //вектор графиков по типам
 
     DataSet mData;
+    typedef std::vector<Qt::GlobalColor> ColorMap;
+    ColorMap mColorMap;
 };
 
 PumpTest10::PumpTest10():
@@ -278,6 +274,7 @@ PumpTest10::PumpTest10():
     key(0),
     ready_for_ready(true)
 {
+   mSpeenSpeedMap = { 0, 0 };
 }
 
 PumpTest10::~PumpTest10()
@@ -295,6 +292,7 @@ bool PumpTest10::Run()
     mExpCoeff_S2.clear();
     mPower.clear();
     mKPD.clear();
+    mSpeenSpeedMap = { 0, 0 };
 
     Start();
     Wait( mBits.OP49_Work, mBits.OP49_End );
@@ -307,6 +305,8 @@ bool PumpTest10::Run()
 void PumpTest10::UpdateData()
 {
    Test::UpdateData();
+
+   mSpeenSpeedMap = { mBits.OP49_SpeenSpeed1, mBits.OP49_SpeenSpeed2 };
 
    if ( !mBits.OP49_Ready )
    {
@@ -366,6 +366,8 @@ QJsonObject PumpTest10::Serialise() const
     obj.insert("mKPD",    ToJson(mKPD) );
     obj.insert("mPower",    ToJson(mPower) );
 
+    obj.insert("mSpeenSpeedMap",    ToJson(mSpeenSpeedMap) );
+
     return obj;
 }
 bool PumpTest10::Deserialize( QJsonObject const& obj )
@@ -379,6 +381,9 @@ bool PumpTest10::Deserialize( QJsonObject const& obj )
     mExpCoeff_S2 = FromJson( obj.value("mExpCoeff_S2").toArray() );
     mKPD = FromJson( obj.value("mKPD").toArray() );
     mPower = FromJson( obj.value("mPower").toArray() );
+
+    mSpeenSpeedMap = DataSetFromJson( obj.value("mSpeenSpeedMap").toArray() );
+
     Test::Deserialize( obj );
     return true;
 }
@@ -437,26 +442,26 @@ bool PumpTest10::Draw(QPainter& painter, QRect &free_rect , const QString &compa
    {
       QRect r(rect.left() + 76, rect.top(), rect.width() - 76, rect.height() );
       drw.DrawRowLeft( r, text_font, Qt::black, "Цель данного испытания - построение графиков зависимости:" );
+   }, 1.5 );   
+   res = DrawLine( num, free_rect, result_font,
+   [ this, &drw, &text_font ]( QRect const& rect )
+   {
+     drw.DrawRowLeft( rect, text_font, Qt::black, "1) Мощности насоса от давления при различной частоте вращения насоса;" );
    }, 1.5 );
    res = DrawLine( num, free_rect, result_font,
    [ this, &drw, &text_font ]( QRect const& rect )
    {
-     drw.DrawRowLeft( rect, text_font, Qt::black, "1) Подачи насоса от давления при различной частоте вращения насоса;" );
+     drw.DrawRowLeft( rect, text_font, Qt::black, "2) КПД от давления при различной частоте вращения насоса;" );
    }, 1.5 );
    res = DrawLine( num, free_rect, result_font,
    [ this, &drw, &text_font ]( QRect const& rect )
    {
-     drw.DrawRowLeft( rect, text_font, Qt::black, "2) Мощности насоса от давления при различной частоте вращения насоса;" );
+     drw.DrawRowLeft( rect, text_font, Qt::black, "3) Подачи насоса от давления при различной частоте вращения насоса;" );
    }, 1.5 );
    res = DrawLine( num, free_rect, result_font,
    [ this, &drw, &text_font ]( QRect const& rect )
    {
-     drw.DrawRowLeft( rect, text_font, Qt::black, "3) Коэффициент подачи от давления при различной частоте вращения насоса;" );
-   }, 1.5 );
-   res = DrawLine( num, free_rect, result_font,
-   [ this, &drw, &text_font ]( QRect const& rect )
-   {
-     drw.DrawRowLeft( rect, text_font, Qt::black, "4) КПД от давления при различной частоте вращения насоса;" );
+     drw.DrawRowLeft( rect, text_font, Qt::black, "4) Коэффициент подачи от давления при различной частоте вращения насоса;" );
    }, 1.5 );
 
 
@@ -493,12 +498,13 @@ bool PumpTest10::Draw(QPainter& painter, QRect &free_rect , const QString &compa
        mGrapfs.reset( new GrapfData( this, compare_width ) );
 
    typedef PumpTest10::GrapfData::Grapfs Grafs;
+   typedef PumpTest10::GrapfData::ColorMap ColorMap;
 
    auto DrawGrafs = [this, &num, &free_rect, &text_font, &painter, &drw, &metrix]
-         ( Grafs const& grapfs, QString const& title, QString const& x_msg, QString const& y_msg )
+         ( int grapfs_index, QString const& title, QString const& x_msg, QString const& y_msg )
    {
       return DrawLine( num, free_rect, text_font,
-           [ this, &painter, &text_font, &drw, &metrix, &grapfs, &title, &x_msg, &y_msg ]( QRect const& rect )
+           [ this, &painter, &text_font, &drw, &metrix, &grapfs_index, &title, &x_msg, &y_msg ]( QRect const& rect )
            {
                painter.save();
 
@@ -508,9 +514,12 @@ bool PumpTest10::Draw(QPainter& painter, QRect &free_rect , const QString &compa
                int h = (rect.height() - metrix.height())*0.98;
 
                ff0x::NoAxisGraphBuilder builder ( w, h, f );
+               builder.DrawBorderCeil(false);
                ff0x::NoAxisGraphBuilder::GraphDataLine lines;
                QPointF x_range;
                QPointF y_range;
+               Grafs const& grapfs = mGrapfs->mData[grapfs_index];
+               ColorMap const& colors = mGrapfs->mColorMap;
                for ( auto it = grapfs.begin(), end = grapfs.end(); it != end; ++it )
                {
                   PumpTest10::GrapfData::Data const& data = it->second;
@@ -525,10 +534,10 @@ bool PumpTest10::Draw(QPainter& painter, QRect &free_rect , const QString &compa
                      y_range = ff0x::MergeRanges( y_range, data.y_range );
                   }
 
-                  double key = it->first;
-                  lines.push_back( ff0x::NoAxisGraphBuilder::Line(data.data, ff0x::NoAxisGraphBuilder::LabelInfo( "Испытуемый аппарат " + test::ToString(key), Qt::blue ) ) );
+                  int key = it->first;
+                  lines.push_back( ff0x::NoAxisGraphBuilder::Line(data.data, ff0x::NoAxisGraphBuilder::LabelInfo( test::ToString(mSpeenSpeedMap[key]) + " об/мин", colors[key] ) ) );
                   if ( !data.templdate.isEmpty() )
-                     lines.push_back( ff0x::NoAxisGraphBuilder::Line(data.templdate, ff0x::NoAxisGraphBuilder::LabelInfo( "Предыдущий результат" + test::ToString(key), Qt::gray ) ) );
+                     lines.push_back( ff0x::NoAxisGraphBuilder::Line(data.templdate, ff0x::NoAxisGraphBuilder::LabelInfo( "Эталон " + test::ToString(data.templSpeenSpeed) + " об/мин", colors[key+2] ) ) );
                }
 
                QRect p1(rect.left(), rect.top(), w, h );
@@ -550,15 +559,15 @@ bool PumpTest10::Draw(QPainter& painter, QRect &free_rect , const QString &compa
            }, 1, 480  );
    };
 
-   res = DrawGrafs( mGrapfs->mData[0], "Зависимость мощьности насоса от давления", "Давление, бар", "Мощность, кВт");
-   res = DrawGrafs( mGrapfs->mData[1], "Зависимость КПД насоса от давления", "Давление, бар", "КПД, %");
-   res = DrawGrafs( mGrapfs->mData[2], "Зависимость подачи насоса от давления (секция 1)", "Давление, бар", "Подача, л/мин");
-   res = DrawGrafs( mGrapfs->mData[4], "Зависимость коэффициента подачи насоса от давления (секция 1)", "Давление, бар", "Коэффициент подачи");
+   res = DrawGrafs( 0, "Зависимость мощности насоса от давления", "Давление, бар", "Мощность, кВт");
+   res = DrawGrafs( 1, "Зависимость КПД насоса от давления", "Давление, бар", "КПД, %");
+   res = DrawGrafs( 2, "Зависимость подачи насоса от давления (секция 1)", "Давление, бар", "Подача, л/мин");
+   res = DrawGrafs( 4, "Зависимость коэффициента подачи насоса от давления (секция 1)", "Давление, бар", "Коэффициент подачи");
 
    if ( params->SectionsCount() == 2 )
    {
-      res = DrawGrafs( mGrapfs->mData[3], "Зависимость подачи насоса от давления (секция 2)", "Давление, бар", "Подача, л/мин");
-      res = DrawGrafs( mGrapfs->mData[5], "Зависимость коэффициента подачи насоса от давления (секция 2)", "Давление, бар", "Коэффициент подачи");
+      res = DrawGrafs( 3, "Зависимость подачи насоса от давления (секция 2)", "Давление, бар", "Подача, л/мин");
+      res = DrawGrafs( 5, "Зависимость коэффициента подачи насоса от давления (секция 2)", "Давление, бар", "Коэффициент подачи");
    }
 
    if ( res )
