@@ -327,6 +327,15 @@ void PumpTest10::UpdateData()
    int k = key;
    ++key;
 
+   mPressure_S1.resize(k+1);
+   mPressure_S2.resize(k+1);
+   mExpenditure_S1.resize(k+1);
+   mExpenditure_S2.resize(k+1);
+   mExpCoeff_S1.resize(k+1);
+   mExpCoeff_S2.resize(k+1);
+   mPower.resize(k+1);
+   mKPD.resize(k+1);
+
    mPressure_S1[k].clear();
    mPressure_S2[k].clear();
    mExpenditure_S1[k].clear();
