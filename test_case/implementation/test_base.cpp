@@ -143,6 +143,11 @@ QString db73_errs()
    if (errs.TempMaslaAlarmPump1) str_errs += "Аварийная температура масла в баке 1\n";
    if (errs.TempMaslaAlarmPump2) str_errs += "Аварийная температура масла в баке 2\n";
    if (errs.LowSpeenSpeed) str_errs += "Расчетные обороты ниже допустимых\n";
+   if (errs.SpeenSpeedNotSet) str_errs += "Обороты не установились\n";
+   if (errs.Pressure1NotSet) str_errs += "Давление в секции 1 не установилось\n";
+   if (errs.Pressure2NotSet) str_errs += "Давление в секции 2 не установилось\n";
+   if (errs.ControlPressureNotSet) str_errs += "Давление управления не установилось\n";
+
    return str_errs;
 }
 

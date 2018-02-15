@@ -43,6 +43,12 @@ public:
    bool& TempMaslaAlarmPump1; //аварийная температура масла в баке 1
    bool& TempMaslaAlarmPump2; //аварийная температура масла в баке 2
    bool& LowSpeenSpeed;       //Расчетные обороты ниже допустимых
+
+   bool& SpeenSpeedNotSet; //Обороты не установились
+   bool& Pressure1NotSet; //Давление в секции 1 не установилось
+   bool& Pressure2NotSet; //Давление в секции 2 не установилось
+   bool& ControlPressureNotSet;//Давление управления не установилось
+
 private:
    friend class cpu::CpuMemory;
    DB73();
@@ -51,7 +57,7 @@ private:
 
    enum
    {
-       BOOL_COUNT = 29
+       BOOL_COUNT = 33
    };
 
    bool mBoolData[ BOOL_COUNT ];
@@ -87,6 +93,12 @@ private:
       L"CPU/DB73.TempMaslaAlarmPump1",
       L"CPU/DB73.TempMaslaAlarmPump2",
       L"CPU/DB73.LowSpeenSpeed",
+
+      L"CPU/DB73.SpeenSpeedNotSet", //Обороты не установились
+      L"CPU/DB73.Pressure1NotSet", //Давление в секции 1 не установилось
+      L"CPU/DB73.Pressure2NotSet", //Давление в секции 2 не установилось
+      L"CPU/DB73.ControlPressureNotSet",//Давление управления не установилось
+
    };
 };
 

@@ -638,6 +638,10 @@ DB73.LevelMaslaAlarmPump;MX123.7;RO;TST=;CMT=аварийный уровень в баке масла 2
 DB73.TempMaslaAlarmPump1;MX150.1;RO;TST=;CMT=аварийная температура масла в баке 1
 DB73.TempMaslaAlarmPump2;MX122.2;RO;TST=;CMT=аварийная температура масла в баке 2
 DB73.LowSpeenSpeed;DB73,X6.0;RO;TST=;CMT=Расчетные обороты ниже допустимых
+DB73.SpeenSpeedNotSet;DB73,X6.1;RO;TST=;CMT=Обороты не установились
+DB73.Pressure1NotSet;DB73,X6.2;RO;TST=;CMT=Давление в секции 1 не установилось
+DB73.Pressure2NotSet;DB73,X6.3;RO;TST=;CMT=Давление в секции 2 не установилось
+DB73.ControlPressureNotSet;DB73,X6.4;RO;TST=;CMT=Давление управления не установилось
 DB82.Start_Stop;DB82,X2.0;RW;TST=;CMT=Пуск/стоп основные насосы
 DB82.PumpManual;MX155.0;RW;TST=;CMT=включение ручного режима
 DB82.YA27;MX155.1;RW;TST=;CMT=включение клапана YA27

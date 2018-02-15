@@ -35,45 +35,23 @@ DB73::DB73():
    LevelMaslaAlarmPump( mBoolData[25] ), //аварийный уровень в баке масла 2
    TempMaslaAlarmPump1( mBoolData[26] ), //аварийная температура масла в баке 1
    TempMaslaAlarmPump2( mBoolData[27] ), //аварийная температура масла в баке 2
-   LowSpeenSpeed( mBoolData[28] ) //Расчетные обороты ниже допустимых
+   LowSpeenSpeed( mBoolData[28] ), //Расчетные обороты ниже допустимых
+   SpeenSpeedNotSet( mBoolData[29] ), //Обороты не установились
+   Pressure1NotSet( mBoolData[30] ), //Давление в секции 1 не установилось
+   Pressure2NotSet( mBoolData[31] ), //Давление в секции 2 не установилось
+   ControlPressureNotSet( mBoolData[32] )//Давление управления не установилось
+
 
 {
    memset( mBoolData, 0, sizeof(mBoolData) );
    mGroupID = opc::miniOPC::Instance().AddGroup( L"DB73", mAdresses, BOOL_COUNT );
 
 #ifdef DEMO
-   SP16_warning = true;
-   SP17_warning = true;
-   SP18_warning = true;
-   SP19_warning = true;
-   SP20_warning = true;
-   SP21_warning = true;
-   SP22_warning = true;
-   SP23_warning = true;
-   SP24_warning = true;
-   SP25_warning = true;
-   SQ16_warning = true;
-   SQ17_warning = true;
-   SQ18_warning = true;
-   SQ19_warning = true;
-   SQ20_warning = true;
-   SQ21_warning = true;
-   Q_NO_Istablished = true;
-   P_NO_Istablished = true;
-   OP40_Q_Nul = true;
-   OP40_P_Nul = true;
-   OP40_Qr_NO_Dopusk1 = true;
-   OP40_Qr_NO_Dopusk2 = true;
-   OP41_Qr_NO_Dopusk = true;
-   OP42_Qr_NO_Dopusk = true;
-   OP48_Qd_NO_Dopusk = true;
-   LevelMaslaAlarmPump = true;
-   TempMaslaAlarmPump1 = true;
-   TempMaslaAlarmPump2 = true;
-   LowSpeenSpeed = true;
+   memset( mBoolData, 1, sizeof(mBoolData) );
 #endif
 
 }
+
 void DB73::Read()
 {
     OPCITEMSTATE* rez = opc::miniOPC::Instance().Read( mGroupID );
@@ -89,38 +67,10 @@ void DB73::Read()
     }
     opc::miniOPC::Instance().OpcMassFree( mGroupID, rez );
 #ifdef DEMO
-   SP16_warning = true;
-   SP17_warning = true;
-   SP18_warning = true;
-   SP19_warning = true;
-   SP20_warning = true;
-   SP21_warning = true;
-   SP22_warning = true;
-   SP23_warning = true;
-   SP24_warning = true;
-   SP25_warning = true;
-   SQ16_warning = true;
-   SQ17_warning = true;
-   SQ18_warning = true;
-   SQ19_warning = true;
-   SQ20_warning = true;
-   SQ21_warning = true;
-   Q_NO_Istablished = true;
-   P_NO_Istablished = true;
-   OP40_Q_Nul = true;
-   OP40_P_Nul = true;
-   OP40_Qr_NO_Dopusk1 = true;
-   OP40_Qr_NO_Dopusk2 = true;
-   OP41_Qr_NO_Dopusk = true;
-   OP42_Qr_NO_Dopusk = true;
-   OP48_Qd_NO_Dopusk = true;
-   LevelMaslaAlarmPump = true;
-   TempMaslaAlarmPump1 = true;
-   TempMaslaAlarmPump2 = true;
-   LowSpeenSpeed = true;
+   memset( mBoolData, 1, sizeof(mBoolData) );
 #endif
-}
 
+}
 
 }
 }
