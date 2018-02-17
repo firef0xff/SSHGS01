@@ -153,6 +153,8 @@ void Parameters::Reset()
    mConturA2 = false; //выбран контур А для секции 2
    mConturB2 = false; //выбран контур В для секции 2
    mConturC2 = false; //выбран контур С для с2кции 2
+
+   mSignalLevel = 0.0;
 }
 
 QString Parameters::ToString() const
@@ -221,6 +223,8 @@ QJsonObject Parameters::Serialise() const
     obj.insert("mConturB2", mConturB2);
     obj.insert("mConturC2", mConturC2);
 
+    obj.insert("mSignalLevel", mSignalLevel);
+
     QJsonObject ret = test::Parameters::Serialise();
     ret.insert("pump", obj);
 
@@ -286,6 +290,8 @@ bool Parameters::Deserialize(const QJsonObject &obj )
         mConturA2 = obj.value("mConturA2").toBool();
         mConturB2 = obj.value("mConturB2").toBool();
         mConturC2 = obj.value("mConturC2").toBool();
+
+        mSignalLevel = obj.value("mSignalLevel").toDouble();
     }
     else
         ret = false;
@@ -305,6 +311,7 @@ void Parameters::WriteToController() const
 
    mem.Type_control = mTypeControl == cmAnalog;     //Тип управления (дискретный/аналоговый)
    mem.Type_current_discrete = mVoltageType == VT_AC;
+   mem.SignalLevel = mSignalLevel;
 
 
    mem.Q_N1 = mWorkVolume1;
@@ -983,5 +990,13 @@ bool Parameters::ConturC2()
    return mConturC2;
 }
 
+bool Parameters::SignalLevel( QString const& val )
+{
+   return ParseValue( mSignalLevel, val );
+}
+bool Parameters::SignalLevel()
+{
+   return mSignalLevel;
+}
 }//namespace pump
 }//namespace test

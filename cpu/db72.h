@@ -51,15 +51,20 @@ public:
    bool& OP49_G6; //Выполнение - график 6
    bool& OP49_Ready; //данные готовы к чтению
 
-   float& Q_S1; //Расход S1 //Расход не в допуске (рабочий/дренаж)
-   float& Q_S2; //Расход S2
+   float& Reserve1; //Расход S1 //Расход не в допуске (рабочий/дренаж)
+   float& Reserve2; //Расход S2
    float& OP43_KPD; //Значение КПД
-   float& OP44_Work_V; //Значение рабочего объема
-   float& OP45_K_Podacha; //Значение коэффиц. подачи
+   float& OP44_Work_V_S1; //Значение рабочего объема
+   float& OP44_Work_V_S2; //Значение рабочего объема
+   float& OP45_K_Podacha_S1; //Значение коэффиц. подачи
+   float& OP45_K_Podacha_S2; //Значение коэффиц. подачи
    float& OP46_Power; //Значение мощности
-   float& OP47_Podacha_1; //Значение подачи 1
-   float& OP47_Podacha_2; //Значение подачи 2
-   float& OP47_Podacha_3; //Значение подачи 3
+   float& OP47_Podacha_1_S1; //Значение подачи 1
+   float& OP47_Podacha_2_S1; //Значение подачи 2
+   float& OP47_Podacha_3_S1; //Значение подачи 3
+   float& OP47_Podacha_1_S2; //Значение подачи 1
+   float& OP47_Podacha_2_S2; //Значение подачи 2
+   float& OP47_Podacha_3_S2; //Значение подачи 3
    float& OP48_Q_Drenag; //Значение расхода в дренаже
    float& Exp1; //расход  в секции 1
    float& Exp2; //расход в секции 2
@@ -90,7 +95,7 @@ private:
    enum
    {
        BOOL_COUNT = 32,
-       FLOAT_COUNT = 25,
+       FLOAT_COUNT = 30,
        INT_COUNT = 1,
    };
 
@@ -136,12 +141,17 @@ private:
       L"CPU/DB72.Q_S1",
       L"CPU/DB72.Q_S2",
       L"CPU/DB72.OP43_KPD",
-      L"CPU/DB72.OP44_Work_V",
-      L"CPU/DB72.OP45_K_Podacha",
+      L"CPU/DB72.OP44_Work_V_S1",
+      L"CPU/DB72.OP44_Work_V_S2",
+      L"CPU/DB72.OP45_K_Podacha_S1",
+      L"CPU/DB72.OP45_K_Podacha_S2",
       L"CPU/DB72.OP46_Power",
-      L"CPU/DB72.OP47_Podacha_1",
-      L"CPU/DB72.OP47_Podacha_2",
-      L"CPU/DB72.OP47_Podacha_3",
+      L"CPU/DB72.OP47_Podacha_1_S1",
+      L"CPU/DB72.OP47_Podacha_2_S1",
+      L"CPU/DB72.OP47_Podacha_3_S1",
+      L"CPU/DB72.OP47_Podacha_1_S2",
+      L"CPU/DB72.OP47_Podacha_2_S2",
+      L"CPU/DB72.OP47_Podacha_3_S2",
       L"CPU/DB72.OP48_Q_Drenag",
       L"CPU/DB72.Exp1",
       L"CPU/DB72.Exp2",

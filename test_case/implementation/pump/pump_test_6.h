@@ -20,7 +20,8 @@ public:
    QString RepRes() const;
    QString RepName() const;
 private:
-   double mData;
+   double mData1;
+   double mData2;
 };
 
 }//namespace pump

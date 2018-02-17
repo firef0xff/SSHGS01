@@ -51,6 +51,7 @@ public:
    float& Precision_test_function; //Точность для испыт. функц-ные зависимости - E (0,5..
    float& Time_function_dependence; //Время испыт. функц-ные зависимости - В (1..360)
    float& Temperature_Work; //Рабочая температура масла в баке
+   float& SignalLevel; //Уровень сигнала управления
 
 private:
    friend class cpu::CpuMemory;
@@ -61,7 +62,7 @@ private:
    enum
    {
        BOOL_COUNT = 12,
-       FLOAT_COUNT = 26
+       FLOAT_COUNT = 27
    };
 
    bool mBoolData[ BOOL_COUNT ];
@@ -107,7 +108,8 @@ private:
       L"CPU/DB71.Coeffic_function_drainag",
       L"CPU/DB71.Precision_test_function",
       L"CPU/DB71.Time_function_dependence",
-      L"CPU/DB71.Temperature_Work"
+      L"CPU/DB71.Temperature_Work",
+      L"CPU/DB71.SignalLevel",
    };
 };
 }

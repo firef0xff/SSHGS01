@@ -160,8 +160,7 @@ bool PumpTest9::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
    [ this, &drw, &text_font, params ]( QRect const& rect )
    {
       drw.DrawRowLeft( rect, text_font,   Qt::black, "Расход в дренаже ",
-                                          Qt::red, mExp >= 0.5 ? test::ToString( mExp ) + " л/мин" : QString(" меньше 0.5 л/мин"),
-                                          Qt::black, "заявленным данным");
+                                          Qt::red, mExp >= 0.5 ? test::ToString( mExp ) + " л/мин" : QString(" меньше 0.5 л/мин") );
    }, 1.5 );
 
    if ( res )

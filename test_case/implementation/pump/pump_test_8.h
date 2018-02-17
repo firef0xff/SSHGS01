@@ -20,9 +20,13 @@ public:
 virtual QString RepRes() const;
 virtual QString RepName() const;
 private:
-   double mExpMin = 0.0;
-   double mExpNom = 0.0;
-   double mExpMax = 0.0;
+   double mExpMin1 = 0.0;
+   double mExpNom1 = 0.0;
+   double mExpMax1 = 0.0;
+
+   double mExpMin2 = 0.0;
+   double mExpNom2 = 0.0;
+   double mExpMax2 = 0.0;
 
    double mFrequencyMin = 0.0;
    double mFrequencyMax = 0.0;

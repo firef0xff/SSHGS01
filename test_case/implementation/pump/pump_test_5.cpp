@@ -9,7 +9,8 @@ namespace pump
 
 PumpTest5::PumpTest5():
     test::pump::Test( "Проверка рабочего объема", 44 ),
-    mData(0.0)
+    mData1(0.0),
+    mData2(0.0)
 {}
 
 bool PumpTest5::Run()
@@ -18,20 +19,23 @@ bool PumpTest5::Run()
     Wait( mBits.OP44_Work, mBits.OP44_End );
     if ( IsStopped() )
         return false;
-    mData = mBits.OP44_Work_V;
+    mData1 = mBits.OP44_Work_V_S1;
+    mData2 = mBits.OP44_Work_V_S2;
     return Success();
 }
 
 QJsonObject PumpTest5::Serialise() const
 {
     QJsonObject obj = Test::Serialise();
-    obj.insert("mData",              mData );
+    obj.insert("mData1",              mData1 );
+    obj.insert("mData2",              mData2 );
 
     return obj;
 }
 bool PumpTest5::Deserialize( QJsonObject const& obj )
 {
-    mData = obj.value("mData").toDouble();
+    mData1 = obj.value("mData1").toDouble();
+    mData2 = obj.value("mData2").toDouble();
     Test::Deserialize( obj );
     return true;
 }
@@ -42,11 +46,26 @@ bool PumpTest5::Success() const
 }
 QString PumpTest5::RepRes() const
 {
-   return test::ToString(mData)+" см³/об";
+   QString res = test::ToString(mData1)+" см³/об";
+   test::pump::Parameters *params = static_cast< test::pump::Parameters * >( CURRENT_PARAMS );
+   if ( !params )
+      return res;
+   if (params->SectionsCount() == 2 )
+      res += "\n"+ test::ToString(mData2)+" см³/об";
+   return res;
 }
 QString PumpTest5::RepName() const
 {
-   return "Рабочий объем насоса";
+   QString res = "Рабочий объем секции 1 насоса";
+   test::pump::Parameters *params = static_cast< test::pump::Parameters * >( CURRENT_PARAMS );
+   if ( !params )
+      return res;
+   if (params->SectionsCount() == 2 )
+   {
+      res += "\n";
+      res += "Рабочий объем секции 2 насоса";
+   }
+   return res;
 }
 bool PumpTest5::Draw(QPainter& painter, QRect &free_rect , const QString &) const
 {
@@ -123,8 +142,17 @@ bool PumpTest5::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
    res = DrawLine( num, free_rect, text_font,
    [ this, &drw, &text_font, params ]( QRect const& rect )
    {
-      drw.DrawRowLeft( rect, text_font,   Qt::black, "Измеренный рабочий объем насоса, см³/об: ",   Qt::red, test::ToString(mData));
+      drw.DrawRowLeft( rect, text_font,   Qt::black, "Измеренный рабочий объем секции 1 насоса, см³/об: ",   Qt::red, test::ToString(mData1));
    }, 1.5 );
+
+   if (params->SectionsCount()==2)
+   {
+      res = DrawLine( num, free_rect, text_font,
+      [ this, &drw, &text_font, params ]( QRect const& rect )
+      {
+         drw.DrawRowLeft( rect, text_font,   Qt::black, "Измеренный рабочий объем секции 2 насоса, см³/об: ",   Qt::red, test::ToString(mData2));
+      }, 1.5 );
+   }
 
    if ( res )
       free_rect.setHeight(0);

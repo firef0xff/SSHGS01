@@ -9,9 +9,12 @@ namespace pump
 
 PumpTest8::PumpTest8():
     test::pump::Test( "Расчет подачи насоса", 47 ),
-    mExpMin(0.0),
-    mExpNom(0.0),
-    mExpMax(0.0)
+    mExpMin1(0.0),
+    mExpNom1(0.0),
+    mExpMax1(0.0),
+    mExpMin2(0.0),
+    mExpNom2(0.0),
+    mExpMax2(0.0)
 {}
 
 bool PumpTest8::Run()
@@ -21,9 +24,13 @@ bool PumpTest8::Run()
     if ( IsStopped() )
         return false;
 
-    mExpMin = mBits.OP47_Podacha_1;
-    mExpNom = mBits.OP47_Podacha_2;
-    mExpMax = mBits.OP47_Podacha_3;
+    mExpMin1 = mBits.OP47_Podacha_1_S1;
+    mExpNom1 = mBits.OP47_Podacha_2_S1;
+    mExpMax1 = mBits.OP47_Podacha_3_S1;
+
+    mExpMin2 = mBits.OP47_Podacha_1_S2;
+    mExpNom2 = mBits.OP47_Podacha_2_S2;
+    mExpMax2 = mBits.OP47_Podacha_3_S2;
 
     mFrequencyMin = mBits.FrequencyMin;
     mFrequencyMax = mBits.FrequencyMax;
@@ -36,9 +43,14 @@ bool PumpTest8::Run()
 QJsonObject PumpTest8::Serialise() const
 {
     QJsonObject obj = Test::Serialise();
-    obj.insert("mExpMin",            mExpMin );
-    obj.insert("mExpNom",            mExpNom );
-    obj.insert("mExpMax",            mExpMax );
+    obj.insert("mExpMin1",            mExpMin1 );
+    obj.insert("mExpNom1",            mExpNom1 );
+    obj.insert("mExpMax1",            mExpMax1 );
+
+    obj.insert("mExpMin2",            mExpMin2 );
+    obj.insert("mExpNom2",            mExpNom2 );
+    obj.insert("mExpMax2",            mExpMax2 );
+
 
     obj.insert("mFrequencyMin",     mFrequencyMin );
     obj.insert("mFrequencyMax",     mFrequencyMax );
@@ -48,9 +60,13 @@ QJsonObject PumpTest8::Serialise() const
 }
 bool PumpTest8::Deserialize( QJsonObject const& obj )
 {
-    mExpMin = obj.value("mExpMin").toDouble();
-    mExpNom = obj.value("mExpNom").toDouble();
-    mExpMax = obj.value("mExpMax").toDouble();
+    mExpMin1 = obj.value("mExpMin1").toDouble();
+    mExpNom1 = obj.value("mExpNom1").toDouble();
+    mExpMax1 = obj.value("mExpMax1").toDouble();
+
+    mExpMin2 = obj.value("mExpMin2").toDouble();
+    mExpNom2 = obj.value("mExpNom2").toDouble();
+    mExpMax2 = obj.value("mExpMax2").toDouble();
 
     mFrequencyMin = obj.value("mFrequencyMin").toDouble();
     mFrequencyMax = obj.value("mFrequencyMax").toDouble();
@@ -66,35 +82,66 @@ bool PumpTest8::Success() const
 }
 QString PumpTest8::RepName() const
 {
-   QString res = "Подача насоса:\n";
+   QString res = "Подача секции 1 насоса:\n";
 
    test::pump::Parameters *params = static_cast< test::pump::Parameters * >( CURRENT_PARAMS );
    if ( !params )
       return res;
 
-   res += "- при минимальной частоте насоса (";
+   res += "- при мин. частоте насоса (";
    res += test::ToString( params->FrequencyMin() );
    res += " об/мин)\n";
 
-   res += "- при номинальной частоте насоса (";
+   res += "- при ном. частоте насоса (";
    res += test::ToString( params->FrequencyNom() );
    res += " об/мин)\n";
 
-   res += "- при максимальной частоте насоса (";
+   res += "- при макс. частоте насоса (";
    res += test::ToString( params->FrequencyMax() );
    res += " об/мин)";
+
+   if ( params->SectionsCount() == 2 )
+   {
+      res += "\n\n";
+      res += "Подача секции 2 насоса:\n";
+      res += "- при мин. частоте насоса (";
+      res += test::ToString( params->FrequencyMin() );
+      res += " об/мин)\n";
+
+      res += "- при ном. частоте насоса (";
+      res += test::ToString( params->FrequencyNom() );
+      res += " об/мин)\n";
+
+      res += "- при макс. частоте насоса (";
+      res += test::ToString( params->FrequencyMax() );
+      res += " об/мин)";
+   }
 
    return res;
 }
 QString PumpTest8::RepRes() const
 {
-   QString res;
-   res += test::ToString( mExpMin );
+   QString res = "\n";
+   res += test::ToString( mExpMin1 );
    res += " л/мин\n";
-   res += test::ToString( mExpNom );
+   res += test::ToString( mExpNom1 );
    res += " л/мин\n";
-   res += test::ToString( mExpMax );
+   res += test::ToString( mExpMax1 );
    res += " л/мин";
+
+   test::pump::Parameters *params = static_cast< test::pump::Parameters * >( CURRENT_PARAMS );
+   if ( !params )
+      return res;
+   if (params->SectionsCount() == 2 )
+   {
+      res += "\n\n\n";
+      res += test::ToString( mExpMin2 );
+      res += " л/мин\n";
+      res += test::ToString( mExpNom2 );
+      res += " л/мин\n";
+      res += test::ToString( mExpMax2 );
+      res += " л/мин";
+   }
    return res;
 }
 bool PumpTest8::Draw(QPainter& painter, QRect &free_rect , const QString &) const
@@ -204,18 +251,37 @@ bool PumpTest8::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
    res = DrawLine( num, free_rect, text_font,
    [ this, &drw, &text_font, params ]( QRect const& rect )
    {
-      drw.DrawRowLeft( rect, text_font,   Qt::black, "Подача насоса при минимальной частоте вращения насоса, л/мин: ",   Qt::red, test::ToString(mExpMin));
+      drw.DrawRowLeft( rect, text_font,   Qt::black, "Подача секции 1 насоса при минимальной частоте вращения насоса, л/мин: ",   Qt::red, test::ToString(mExpMin1));
    }, 1.5 );
    res = DrawLine( num, free_rect, text_font,
    [ this, &drw, &text_font, params ]( QRect const& rect )
    {
-      drw.DrawRowLeft( rect, text_font,   Qt::black, "Подача насоса при номинальной частоте вращения насоса, л/мин: ",   Qt::red, test::ToString(mExpNom));
+      drw.DrawRowLeft( rect, text_font,   Qt::black, "Подача секции 1 насоса при номинальной частоте вращения насоса, л/мин: ",   Qt::red, test::ToString(mExpNom1));
    }, 1.5 );
    res = DrawLine( num, free_rect, text_font,
    [ this, &drw, &text_font, params ]( QRect const& rect )
    {
-      drw.DrawRowLeft( rect, text_font,   Qt::black, "Подача насоса при максимальной частоте вращения насоса, л/мин: ",   Qt::red, test::ToString(mExpMax));
+      drw.DrawRowLeft( rect, text_font,   Qt::black, "Подача секции 1 насоса при максимальной частоте вращения насоса, л/мин: ",   Qt::red, test::ToString(mExpMax1));
    }, 1.5 );
+
+   if (params->SectionsCount()==2)
+   {
+      res = DrawLine( num, free_rect, text_font,
+      [ this, &drw, &text_font, params ]( QRect const& rect )
+      {
+         drw.DrawRowLeft( rect, text_font,   Qt::black, "Подача секции 2 насоса при минимальной частоте вращения насоса, л/мин: ",   Qt::red, test::ToString(mExpMin2));
+      }, 1.5 );
+      res = DrawLine( num, free_rect, text_font,
+      [ this, &drw, &text_font, params ]( QRect const& rect )
+      {
+         drw.DrawRowLeft( rect, text_font,   Qt::black, "Подача секции 2 насоса при номинальной частоте вращения насоса, л/мин: ",   Qt::red, test::ToString(mExpNom2));
+      }, 1.5 );
+      res = DrawLine( num, free_rect, text_font,
+      [ this, &drw, &text_font, params ]( QRect const& rect )
+      {
+         drw.DrawRowLeft( rect, text_font,   Qt::black, "Подача секции 2 насоса при максимальной частоте вращения насоса, л/мин: ",   Qt::red, test::ToString(mExpMax2));
+      }, 1.5 );
+   }
 
    if ( res )
       free_rect.setHeight(0);

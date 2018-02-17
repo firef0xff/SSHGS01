@@ -41,31 +41,36 @@ DB72::DB72():
    OP49_G6( mBoolData[30] ),//Выполнение - график 6
    OP49_Ready( mBoolData[31] ),//данные готовы к чтению
 
-   Q_S1( mFloatData[0] ),
-   Q_S2( mFloatData[1] ),
+   Reserve1( mFloatData[0] ),
+   Reserve2( mFloatData[1] ),
    OP43_KPD( mFloatData[2] ),//Значение КПД
-   OP44_Work_V( mFloatData[3] ),//Значение рабочего объема
-   OP45_K_Podacha( mFloatData[4] ),//Значение коэффиц. подачи
-   OP46_Power( mFloatData[5] ),//Значение мощности
-   OP47_Podacha_1( mFloatData[6] ),//Значение подачи 1
-   OP47_Podacha_2( mFloatData[7] ),//Значение подачи 2
-   OP47_Podacha_3( mFloatData[8] ),//Значение подачи 3
-   OP48_Q_Drenag( mFloatData[9] ), //Значение расхода в дренаже
-   Exp1( mFloatData[10] ), //расход  в секции 1
-   Exp2( mFloatData[11] ), //расход в секции 2
-   Press1( mFloatData[12] ), //давления  в секции 1
-   Press2( mFloatData[13] ), //давление в секции 2
-   Frequency( mFloatData[14] ), //частота вращения
-   Torque( mFloatData[15] ), //крутящий момент
-   MaxExp1( mFloatData[16] ), //максимальный расход секция 1
-   MinExp1( mFloatData[17] ), //миниимальный расход секция 1
-   MaxExp2( mFloatData[18] ), //максимальный расход секция 2
-   MinExp2( mFloatData[19] ), //миниимальный расход секция 2
-   FrequencyMin( mFloatData[20] ), //минимальная частота вращения;
-   FrequencyMax( mFloatData[21] ), //номимальная частота вращения;
-   FrequencyNom( mFloatData[22] ), //максимальная частота вращения;
-   OP49_SpeenSpeed1( mFloatData[23] ),  //частота вращения при первом замере
-   OP49_SpeenSpeed2( mFloatData[24] ),  //частота вращения при втором замере
+   OP44_Work_V_S1( mFloatData[3] ),//Значение рабочего объема
+   OP44_Work_V_S2( mFloatData[4] ),//Значение рабочего объема
+   OP45_K_Podacha_S1( mFloatData[5] ),//Значение коэффиц. подачи
+   OP45_K_Podacha_S2( mFloatData[6] ),//Значение коэффиц. подачи
+   OP46_Power( mFloatData[7] ),//Значение мощности
+   OP47_Podacha_1_S1( mFloatData[8] ),//Значение подачи 1
+   OP47_Podacha_2_S1( mFloatData[9] ),//Значение подачи 2
+   OP47_Podacha_3_S1( mFloatData[10] ),//Значение подачи 3
+   OP47_Podacha_1_S2( mFloatData[11] ),//Значение подачи 1
+   OP47_Podacha_2_S2( mFloatData[12] ),//Значение подачи 2
+   OP47_Podacha_3_S2( mFloatData[13] ),//Значение подачи 3
+   OP48_Q_Drenag( mFloatData[14] ), //Значение расхода в дренаже
+   Exp1( mFloatData[15] ), //расход  в секции 1
+   Exp2( mFloatData[16] ), //расход в секции 2
+   Press1( mFloatData[17] ), //давления  в секции 1
+   Press2( mFloatData[18] ), //давление в секции 2
+   Frequency( mFloatData[19] ), //частота вращения
+   Torque( mFloatData[20] ), //крутящий момент
+   MaxExp1( mFloatData[21] ), //максимальный расход секция 1
+   MinExp1( mFloatData[22] ), //миниимальный расход секция 1
+   MaxExp2( mFloatData[23] ), //максимальный расход секция 2
+   MinExp2( mFloatData[24] ), //миниимальный расход секция 2
+   FrequencyMin( mFloatData[25] ), //минимальная частота вращения;
+   FrequencyMax( mFloatData[26] ), //номимальная частота вращения;
+   FrequencyNom( mFloatData[27] ), //максимальная частота вращения;
+   OP49_SpeenSpeed1( mFloatData[28] ),  //частота вращения при первом замере
+   OP49_SpeenSpeed2( mFloatData[29] ),  //частота вращения при втором замере
 
    OP49_Count( mIntData[0] )
 

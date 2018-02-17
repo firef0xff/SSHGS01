@@ -151,6 +151,8 @@ public:
    bool ConturC2( bool val );
    bool ConturC2();
 
+   bool SignalLevel( QString const& val );
+   bool SignalLevel();
 
 private:
     Parameters();
@@ -216,6 +218,8 @@ private:
    bool mConturA2 = false; //выбран контур А для секции 2
    bool mConturB2 = false; //выбран контур В для секции 2
    bool mConturC2 = false; //выбран контур С для с2кции 2
+
+   double mSignalLevel = 0.0; //уровень сигнала управления
 };
 
 }

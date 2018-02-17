@@ -46,7 +46,8 @@ DB71::DB71():
    Coeffic_function_drainag( mFloatData[22] ), //Коэффициент функц-ния для дренажа - А1 (0..1%)
    Precision_test_function ( mFloatData[23] ), //Точность для испыт. функц-ные зависимости - E (0,5..
    Time_function_dependence( mFloatData[24] ), //Время испыт. функц-ные зависимости - В (1..360)
-   Temperature_Work        ( mFloatData[25] ) //Рабочая температура масла в баке
+   Temperature_Work        ( mFloatData[25] ), //Рабочая температура масла в баке
+   SignalLevel             ( mFloatData[26] )  //Уровень сигнала управления
 {
    memset( mBoolData, 0, sizeof(mBoolData) );
    memset( mFloatData, 0, sizeof(mFloatData) );

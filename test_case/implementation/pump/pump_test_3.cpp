@@ -51,7 +51,7 @@ bool PumpTest3::Success() const
 }
 QString PumpTest3::RepRes() const
 {
-   return Success()? QString(" не обнаружена ") : QString(" обнаружена ");
+   return "течь" + ( Success()? QString(" не обнаружена ") : QString(" обнаружена ") );
 }
 QString PumpTest3::RepName() const
 {
@@ -155,7 +155,7 @@ bool PumpTest3::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
    res = DrawLine( num, free_rect, text_font,
    [ this, &drw, &text_font, params ]( QRect const& rect )
    {
-      drw.DrawRowLeft( rect, text_font,   Qt::black, "Течь при испытании наружной герметичности ",
+      drw.DrawRowLeft( rect, text_font,   Qt::black, "При испытании наружной герметичности ",
                                      Qt::red, RepRes());
    }, 1.5 );
 

@@ -35,6 +35,9 @@ PumpTitleInfo::PumpTitleInfo(bool new_mode, QWidget *parent) :
    auto *val4 = new QDoubleValidator( 0.7, 90, 2, this );
    ui->Drainage->setValidator( val4 );
 
+   auto *val5 = new QIntValidator( 0, 1400, this );
+   ui->SignalLevel->setValidator( val5 );
+
    if ( !mNewMode )
    {
        FromParams();
@@ -120,6 +123,7 @@ bool PumpTitleInfo::SaveInputParams()
    {
       res *= ParamChecker( ui->l_voltage, params.Voltage( ui->Voltage->currentText() ) );
       res *= ParamChecker( ui->l_ac_dc, params.VoltageType( ui->AcDc->currentText() ) );
+      res *= ParamChecker( ui->l_signal_level, params.SignalLevel( ui->SignalLevel->text() ) );
    }
 
    params.HydroControl( ui->HydroControl->isChecked() );
@@ -231,6 +235,7 @@ void PumpTitleInfo::FromParams()
    {
       ui->Voltage->setCurrentText( test::ToString( params.Voltage() ) );
       ui->AcDc->setCurrentText( test::ToString( params.VoltageType() ) );
+      ui->SignalLevel->setText( test::ToString( params.SignalLevel() ) );
    }
 
    ui->HydroControl->setChecked( params.HydroControl() );

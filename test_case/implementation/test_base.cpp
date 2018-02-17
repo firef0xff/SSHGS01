@@ -184,11 +184,11 @@ void TestCommonData::Wait( bool& work, bool& done)
 {
     work = false;
     done = false;
-    bool started = false;
-    while( !done || !started )
+//    bool started = false;
+    while( !done/* || !started*/ )
     {
-        if (work)
-            started = true;
+//        if (work)
+//            started = true;
         UpdateData();
         if ( IsStopped() )
         {            

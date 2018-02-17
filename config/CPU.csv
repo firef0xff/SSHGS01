@@ -561,6 +561,7 @@ DB71.Coeffic_function_drainag;DB71,REAL94;RW;TST=;CMT=Коэффициент функц-ния для 
 DB71.Precision_test_function;DB71,REAL98;RW;TST=;CMT=Точность для испыт. функц-ные зависимости - E (0,5..
 DB71.Time_function_dependence;DB71,REAL102;RW;TST=;CMT=Время испыт. функц-ные зависимости - В (1..360)
 DB71.Temperature_Work;DB71,REAL106;RW;TST=;CMT=Рабочая температура масла в баке
+DB71.SignalLevel;DB71,REAL112;RW;TST=;CMT=Уровень сигнала управления
 DB72.OP40_Work;DB72,X2.0;RO;TST=;CMT=Выполнение (функц-ние)
 DB72.OP40_control;DB72,X46.0;RO;TST=;CMT=Визуальный контроль (функц-ние)
 DB72.OP41_Work;DB72,X2.1;RO;TST=;CMT=Выполнение (прочность)
@@ -596,12 +597,17 @@ DB72.OP49_Ready;DB72,X5.6;RO;TST=;CMT=данные готовы к чтению
 DB72.Q_S1;DB72,REAL6;RO;TST=;CMT=Расход не в допуске (рабочий/дренаж)
 DB72.Q_S2;DB72,REAL42;RO;TST=;CMT=Расход не в допуске (рабочий/дренаж)
 DB72.OP43_KPD;DB72,REAL10;RO;TST=;CMT=Значение КПД
-DB72.OP44_Work_V;DB72,REAL14;RO;TST=;CMT=Значение рабочего объема
-DB72.OP45_K_Podacha;DB72,REAL18;RO;TST=;CMT=Значение коэффиц. подачи
+DB72.OP44_Work_V_S1;DB72,REAL14;RO;TST=;CMT=Значение рабочего объема 1
+DB72.OP44_Work_V_S2;DB72,REAL64;RO;TST=;CMT=Значение рабочего объема 2
+DB72.OP45_K_Podacha_S1;DB72,REAL18;RO;TST=;CMT=Значение коэффиц. подачи 1
+DB72.OP45_K_Podacha_S2;DB72,REAL68;RO;TST=;CMT=Значение коэффиц. подачи 2
 DB72.OP46_Power;DB72,REAL22;RO;TST=;CMT=Значение мощности
-DB72.OP47_Podacha_1;DB72,REAL26;RO;TST=;CMT=Значение подачи 1
-DB72.OP47_Podacha_2;DB72,REAL30;RO;TST=;CMT=Значение подачи 2
-DB72.OP47_Podacha_3;DB72,REAL34;RO;TST=;CMT=Значение подачи 3
+DB72.OP47_Podacha_1_S1;DB72,REAL26;RO;TST=;CMT=Значение подачи 1 секция 1
+DB72.OP47_Podacha_2_S1;DB72,REAL30;RO;TST=;CMT=Значение подачи 2 секция 1
+DB72.OP47_Podacha_3_S1;DB72,REAL34;RO;TST=;CMT=Значение подачи 3 секция 1
+DB72.OP47_Podacha_1_S2;DB72,REAL96;RO;TST=;CMT=Значение подачи 1 секция 2
+DB72.OP47_Podacha_2_S2;DB72,REAL100;RO;TST=;CMT=Значение подачи 2 секция 2
+DB72.OP47_Podacha_3_S2;DB72,REAL104;RO;TST=;CMT=Значение подачи 3 секция 2
 DB72.OP48_Q_Drenag;DB72,REAL38;RO;TST=;CMT=Значение расхода в дренаже
 DB72.Exp1;DB72,REAL48;RO;TST=;CMT=расход  в секции 1
 DB72.Exp2;DB72,REAL72;RO;TST=;CMT=расход в секции 2
