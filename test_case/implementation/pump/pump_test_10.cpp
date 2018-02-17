@@ -211,8 +211,8 @@ public:
             PumpTest10::DataSet const& y_src = src[k];
             Data &d = mData[pos][k];
             d.data = Process2( x1_src, x2_src, y_src , x_range, y_range );
-            d.x_range = ff0x::MergeRanges( x_range, d.x_range );
-            d.y_range = ff0x::MergeRanges( y_range, d.y_range );
+            d.x_range = ff0x::MergeRanges( x_range, d.x_range, !d.templdate.empty() );
+            d.y_range = ff0x::MergeRanges( y_range, d.y_range, !d.templdate.empty() );
          }
       };
       auto ProcessData = [this]( PumpTest10::Source const& xsrc, PumpTest10::Source const& src, int pos )
@@ -225,9 +225,9 @@ public:
             PumpTest10::DataSet const& x_src = xsrc[k];
             PumpTest10::DataSet const& y_src = src[k];
             Data &d = mData[pos][k];
-            d.data = Process( x_src, y_src , d.x_range, d.y_range );
-            d.x_range = ff0x::MergeRanges( x_range, d.x_range );
-            d.y_range = ff0x::MergeRanges( y_range, d.y_range );
+            d.data = Process( x_src, y_src , x_range, y_range );
+            d.x_range = ff0x::MergeRanges( x_range, d.x_range, !d.templdate.empty()  );
+            d.y_range = ff0x::MergeRanges( y_range, d.y_range, !d.templdate.empty()  );
          }
       };
 

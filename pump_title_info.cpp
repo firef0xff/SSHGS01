@@ -23,7 +23,7 @@ PumpTitleInfo::PumpTitleInfo(bool new_mode, QWidget *parent) :
    ui->WorkVolume->setValidator( val1 );
    ui->WorkVolume_2->setValidator( val1 );
 
-   auto *val2 = new QIntValidator( 0, 450, this );
+   auto *val2 = new QIntValidator( 0, 350, this );
    ui->MinPressure->setValidator( val2 );
    ui->NomPressure->setValidator( val2 );
    ui->MaxPressure->setValidator( val2 );
@@ -31,12 +31,6 @@ PumpTitleInfo::PumpTitleInfo(bool new_mode, QWidget *parent) :
    ui->MinPressure_2->setValidator( val2 );
    ui->NomPressure_2->setValidator( val2 );
    ui->MaxPressure_2->setValidator( val2 );
-
-   auto *val3 = new QIntValidator( 0, 4000, this );
-   ui->MinFrequency->setValidator( val3 );
-   ui->NomFrequency->setValidator( val3 );
-   ui->MaxFrequency->setValidator( val3 );
-
 
    auto *val4 = new QDoubleValidator( 0.7, 90, 2, this );
    ui->Drainage->setValidator( val4 );
@@ -46,6 +40,7 @@ PumpTitleInfo::PumpTitleInfo(bool new_mode, QWidget *parent) :
        FromParams();
    }
    CheckRights();
+   UpdateFrequency();
 }
 
 void PumpTitleInfo::CheckRights()
@@ -138,6 +133,14 @@ bool PumpTitleInfo::SaveInputParams()
    res *= ParamChecker( ui->l_min_pressure,  params.PressureMin1( ui->MinPressure->text() ) );
    res *= ParamChecker( ui->l_nom_pressure,  params.PressureNom1( ui->NomPressure->text() ) );
    res *= ParamChecker( ui->l_max_pressure,  params.PressureMax1( ui->MaxPressure->text() ) );
+   if (res)
+   {
+      bool r = params.PressureMin1() <= params.PressureNom1() &&
+            params.PressureNom1() <= params.PressureMax1() ;
+      res *= ParamChecker( ui->l_min_pressure, r );
+      res *= ParamChecker( ui->l_nom_pressure, r );
+      res *= ParamChecker( ui->l_max_pressure, r );
+   }
 
    if ( ui->Section2->isChecked() )
    {
@@ -146,11 +149,27 @@ bool PumpTitleInfo::SaveInputParams()
       res *= ParamChecker( ui->l_min_pressure_2,  params.PressureMin2( ui->MinPressure_2->text() ) );
       res *= ParamChecker( ui->l_nom_pressure_2,  params.PressureNom2( ui->NomPressure_2->text() ) );
       res *= ParamChecker( ui->l_max_pressure_2,  params.PressureMax2( ui->MaxPressure_2->text() ) );
+      if (res)
+      {
+         bool r = params.PressureMin2() <= params.PressureNom2() &&
+               params.PressureNom2() <= params.PressureMax2() ;
+         res *= ParamChecker( ui->l_min_pressure_2, r );
+         res *= ParamChecker( ui->l_nom_pressure_2, r );
+         res *= ParamChecker( ui->l_max_pressure_2, r );
+      }
    }
 
    res *= ParamChecker( ui->l_min_freq,  params.FrequencyMin( ui->MinFrequency->text() ) );
    res *= ParamChecker( ui->l_nom_freq,  params.FrequencyNom( ui->NomFrequency->text() ) );
    res *= ParamChecker( ui->l_max_freq,  params.FrequencyMax( ui->MaxFrequency->text() ) );
+   if (res)
+   {
+      bool r = params.FrequencyMin() <= params.FrequencyNom() &&
+            params.FrequencyNom() <= params.FrequencyMax() ;
+      res *= ParamChecker( ui->l_min_freq, r );
+      res *= ParamChecker( ui->l_nom_freq, r );
+      res *= ParamChecker( ui->l_max_freq, r );
+   }
 
    res *= ParamChecker( ui->l_volume_kpd,  params.VolumeKPD( ui->VolumeKPD->text() ) );
 
@@ -297,6 +316,65 @@ void PumpTitleInfo::on_ConturC2_clicked()
    ProcessContur( ui->ConturC2 );
 }
 
+void PumpTitleInfo::UpdateFrequency()
+{
+   int k_a = 600;
+   int k_b = 240;
+   int k_c = 36;
+   int k = k_a;
+
+   auto SetK = [&]( bool r, int kn )
+   {
+      if ( r && k > kn )
+         k = kn;
+   };
+
+   SetK( ui->ConturA1->isChecked(), k_a );
+   SetK( ui->ConturB1->isChecked(), k_b );
+   SetK( ui->ConturC1->isChecked(), k_c );
+   bool val = false;
+   bool val2 = false;
+   double d1 = ui->WorkVolume->text().toDouble( &val );
+   double d2 = ui->WorkVolume_2->text().toDouble( &val2 );
+
+   int n_max1 = 0;
+   int n_max2 = 0;
+
+   if ( val )
+      n_max1 = k * 1000 / d1;
+
+   int freq = n_max1;
+   if ( ui->Section2->isChecked() )
+   {
+      k = k_a;
+      SetK( ui->ConturA2->isChecked(), k_a );
+      SetK( ui->ConturB2->isChecked(), k_b );
+      SetK( ui->ConturC2->isChecked(), k_c );
+
+      if ( val2 )
+         n_max2 = k * 1000 / d2;
+      freq = std::min( n_max1, n_max2 );
+   }
+
+
+   int max_val = 2400;
+   if ( app::Settings::Instance().UserAccess() == app::UserLevel::Admin )
+   {
+      max_val = 4000;
+   }
+   freq = std::min( freq, max_val );
+
+   auto *val3 = new QIntValidator( 100, freq, this );
+   ui->MinFrequency->setValidator( val3 );
+   ui->NomFrequency->setValidator( val3 );
+   ui->MaxFrequency->setValidator( val3 );
+
+   QString tt = QString::number( val3->bottom() ) + "..." + QString::number( val3->top() ) + " об/мин";
+   ui->MinFrequency->setToolTip( tt );
+   ui->NomFrequency->setToolTip( tt );
+   ui->MaxFrequency->setToolTip( tt );
+}
+
 void PumpTitleInfo::ProcessContur( QCheckBox* activated )
 {
    if ( !activated->isChecked() )
@@ -305,7 +383,7 @@ void PumpTitleInfo::ProcessContur( QCheckBox* activated )
    typedef std::vector< QCheckBox* > ToDisable;
    typedef std::map< QCheckBox*, ToDisable > ConturMap;
 
-   static ConturMap m =
+   ConturMap m =
    {
       std::pair<QCheckBox*,ToDisable >(ui->ConturA1,{ui->ConturB1, ui->ConturC1, ui->ConturA2} ),
       std::pair<QCheckBox*,ToDisable >(ui->ConturB1,{ui->ConturC1, ui->ConturA1, ui->ConturB2} ),
@@ -321,4 +399,15 @@ void PumpTitleInfo::ProcessContur( QCheckBox* activated )
    {
       item->setChecked( false );
    }
+   UpdateFrequency();
+}
+
+void PumpTitleInfo::on_WorkVolume_textChanged(const QString &)
+{
+    UpdateFrequency();
+}
+
+void PumpTitleInfo::on_WorkVolume_2_textChanged(const QString &)
+{
+    UpdateFrequency();
 }

@@ -40,6 +40,9 @@ private slots:
     void on_ConturC2_clicked();
 
     void ProcessContur( QCheckBox* activated );
+    void UpdateFrequency();
+    void on_WorkVolume_textChanged(const QString &arg1);
+    void on_WorkVolume_2_textChanged(const QString &arg1);
 };
 
 #endif // PUMP_TITLE_INFO_H

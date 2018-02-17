@@ -303,8 +303,8 @@ void Parameters::WriteToController() const
    mem.Electronic_control = mElektrikControl;
    mem.Hydraulic_control = mHydroControl;
 
-   mem.Type_control;     //Тип управления (дискретный/аналоговый)
-   mem.Type_current_discrete = mVoltageType == VT_DC;
+   mem.Type_control = mTypeControl == cmAnalog;     //Тип управления (дискретный/аналоговый)
+   mem.Type_current_discrete = mVoltageType == VT_AC;
 
 
    mem.Q_N1 = mWorkVolume1;

@@ -38,10 +38,7 @@ PumpsManualControl::PumpsManualControl(QWidget *parent) :
    ui->V1->setValidator( val1 );
    ui->V2->setValidator( val1 );
 
-   auto *val2 = new QIntValidator( 0, 2400, this );
-   ui->DR1t->setValidator( val2 );
-
-   auto *val3 = new QIntValidator( 0, 999, this );
+   auto *val3 = new QIntValidator( 0, 350, this );
    ui->YB7_val->setValidator( val3 );
    ui->YB8_val->setValidator( val3 );
    ui->YB9_val->setValidator( val3 );
@@ -498,6 +495,14 @@ void  PumpsManualControl::CheckRights()
    {
       setEnabled(true);
       Start();
+      int max_val = 2400;
+      if (app::Settings::Instance().UserAccess() == app::UserLevel::Admin )
+         max_val = 4000;
+
+      auto *val2 = new QIntValidator( 0, max_val, this );
+      ui->DR1t->setValidator( val2 );
+      QString tt = QString::number( val2->bottom() ) + "..." + QString::number( val2->top() ) + " об/мин";
+      ui->DR1t->setToolTip( tt );
    }
    else
    {
