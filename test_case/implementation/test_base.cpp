@@ -97,8 +97,8 @@ QString db73_errs()
    if (errs.SQ19_warning) str_errs+="кран закрытие дренажной линии - закрыт\n";
    if (errs.SQ20_warning) str_errs+="нет закрытия защитного кожуха\n";
    if (errs.SQ21_warning) str_errs+="нет закрытия кожуха муфты\n";
-   if (errs.Q_NO_Istablished) str_errs+="Расход в регуляторе не установился\n";
-   if (errs.P_NO_Istablished) str_errs+="Давление в регуляторе не установилось\n";
+   if (errs.Q_NO_Istablished) str_errs+="Аварийная температура масла модуля питания\n";
+   if (errs.P_NO_Istablished) str_errs+="Обрыв РВД\n";
    if (errs.OP40_Q_Nul_S1) str_errs+="Расход в нуле секция 1\n";
    if (errs.OP40_Q_Nul_S2) str_errs+="Расход в нуле секция 2\n";
    if (errs.OP40_P_Nul_S1) str_errs+="Давленине в нуле секция 1\n";

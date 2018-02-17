@@ -635,8 +635,8 @@ DB73.SQ18_warning;DB73,X3.4;RO;TST=;CMT=кран на отключение всасывающей линии - з
 DB73.SQ19_warning;DB73,X3.5;RO;TST=;CMT=кран закрытие дренажной линии - закрыт
 DB73.SQ20_warning;DB73,X3.6;RO;TST=;CMT=нет закрытия защитного кожуха
 DB73.SQ21_warning;DB73,X3.7;RO;TST=;CMT=нет закрытия кожуха муфты
-DB73.Q_NO_Istablished;DB73,X4.0;RO;TST=;CMT=Расход в регуляторе не установился
-DB73.P_NO_Istablished;DB73,X4.1;RO;TST=;CMT=Давление в регуляторе не установилось
+DB73.Q_NO_Istablished;DB73,X4.0;RO;TST=;CMT=Аварийная температура масла модуля питания
+DB73.P_NO_Istablished;DB73,X4.1;RO;TST=;CMT=Обрыв РВД
 DB73.OP40_Q_Nul_S1;DB73,X4.2;RO;TST=;CMT=Расход в нуле секция 1
 DB73.OP40_Q_Nul_S2;DB73,X5.0;RO;TST=;CMT=Расход в нуле секция 2
 DB73.OP40_P_Nul_S1;DB73,X4.3;RO;TST=;CMT=Давленине в нуле секция 1

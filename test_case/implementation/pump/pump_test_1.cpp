@@ -158,44 +158,6 @@ bool PumpTest1::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
    }, 1.5 );
 
    res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
-   res = DrawLine( num, free_rect, text_font,
-   [ this, &drw, &text_font ]( QRect const& rect )
-   {
-      QRect r(rect.left() + 76, rect.top(), rect.width() - 76, rect.height() );
-      drw.DrawRowLeft( r, text_font, Qt::black, "Проверка функционирования проводится в 2 этапа:" );
-   }, 1.5 );
-   res = DrawLine( num, free_rect, text_font,
-   [ this, &drw, &text_font ]( QRect const& rect )
-   {
-      drw.DrawRowLeft( rect, text_font, Qt::black,
-      "I) В начале без нагрузки 2 кратковременных включения по 5 сек., при максимальных" );
-   }, 1.5 );
-   res = DrawLine( num, free_rect, text_font,
-   [ this, &drw, &text_font ]( QRect const& rect )
-   {
-      drw.DrawRowLeft( rect, text_font, Qt::black,
-      "оборотах, и минимальном давлении." );
-   }, 1.5 );
-   res = DrawLine( num, free_rect, text_font,
-   [ this, &drw, &text_font ]( QRect const& rect )
-   {
-      drw.DrawRowLeft( rect, text_font, Qt::black,
-      "II) Затем плавное повышение давления в течении 10 сек. до номинального давления" );
-   }, 1.5 );
-   res = DrawLine( num, free_rect, text_font,
-   [ this, &drw, &text_font ]( QRect const& rect )
-   {
-      drw.DrawRowLeft( rect, text_font, Qt::black,
-      "и номинальнной частоты вращения и работа на таких параметрах в течении времени." );
-   }, 1.5 );
-   res = DrawLine( num, free_rect, text_font,
-   [ this, &drw, &text_font ]( QRect const& rect )
-   {
-      drw.DrawRowLeft( rect, text_font, Qt::black,
-      "" );
-   }, 1.5 );
-
-   res = DrawLine( num, free_rect, text_font, []( QRect const& ){});
 
    res = DrawLine( num, free_rect, result_font,
    [ this, &drw, &result_font ]( QRect const& rect )

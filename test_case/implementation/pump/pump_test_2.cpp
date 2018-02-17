@@ -236,22 +236,22 @@ bool PumpTest2::Draw(QPainter& painter, QRect &free_rect , const QString &) cons
      drw.DrawRowLeft( rect, result_font, Qt::black, "РЕЗУЛЬТАТ:" );
    }, 1.5 );
 
-   res = DrawLine( num, free_rect, text_font,
-   [ this, &drw, &text_font, params ]( QRect const& rect )
-   {
-      drw.DrawRowLeft( rect, text_font,   Qt::black, "В системе отсутствуют удары, стуки, повышенная вибрация, резкий шум,");
-   }, 1.5 );
-   res = DrawLine( num, free_rect, text_font,
-   [ this, &drw, &text_font, params ]( QRect const& rect )
-   {
-      drw.DrawRowLeft( rect, text_font,   Qt::black, "повышенный нагрев, отсутствуют каплеобразования из под крышек, пробок,");
-   }, 1.5 );
-   res = DrawLine( num, free_rect, text_font,
-   [ this, &drw, &text_font, params ]( QRect const& rect )
-   {
-      drw.DrawRowLeft( rect, text_font,   Qt::black, "фланцев, через стыки корпусных деталей и т.д.: ",
-                       Qt::red, RepRes());
-   }, 1.5 );
+//   res = DrawLine( num, free_rect, text_font,
+//   [ this, &drw, &text_font, params ]( QRect const& rect )
+//   {
+//      drw.DrawRowLeft( rect, text_font,   Qt::black, "В системе отсутствуют удары, стуки, повышенная вибрация, резкий шум,");
+//   }, 1.5 );
+//   res = DrawLine( num, free_rect, text_font,
+//   [ this, &drw, &text_font, params ]( QRect const& rect )
+//   {
+//      drw.DrawRowLeft( rect, text_font,   Qt::black, "повышенный нагрев, отсутствуют каплеобразования из под крышек, пробок,");
+//   }, 1.5 );
+//   res = DrawLine( num, free_rect, text_font,
+//   [ this, &drw, &text_font, params ]( QRect const& rect )
+//   {
+//      drw.DrawRowLeft( rect, text_font,   Qt::black, "фланцев, через стыки корпусных деталей и т.д.: ",
+//                       Qt::red, RepRes());
+//   }, 1.5 );
 
    res = DrawLine( num, free_rect, text_font,
    [ this, &drw, &text_font, params ]( QRect const& rect )
