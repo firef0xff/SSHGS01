@@ -32,8 +32,10 @@ public:
    bool& SQ21_warning; //нет закрытия кожуха муфты
    bool& Q_NO_Istablished; //Расход в регуляторе не установился
    bool& P_NO_Istablished; //Давление в регуляторе не установилось
-   bool& OP40_Q_Nul; //Расход в нуле
-   bool& OP40_P_Nul; //Давленине в нуле
+   bool& OP40_Q_Nul_S1; //Расход в нуле
+   bool& OP40_Q_Nul_S2; //Расход в нуле
+   bool& OP40_P_Nul_S1; //Давленине в нуле
+   bool& OP40_P_Nul_S2; //Давленине в нуле
    bool& OP40_Qr_NO_Dopusk1; //Расход рабочий не в допуске (функц-ние)
    bool& OP40_Qr_NO_Dopusk2; //Расход рабочий не в допуске (функц-ние)
    bool& OP41_Qr_NO_Dopusk; //Расход рабочий не в допуске (прочность)
@@ -49,6 +51,25 @@ public:
    bool& Pressure2NotSet; //Давление в секции 2 не установилось
    bool& ControlPressureNotSet;//Давление управления не установилось
 
+   bool& SensPressA;              //Обрыв/неисправность датчика давления контура А
+   bool& SensPressB;              //Обрыв/неисправность датчика давления контура В
+   bool& SensPressC;              //Обрыв/неисправность датчика давления контура С
+   bool& SensPressPumpControl;    //Обрыв неисправность датчика давления управления насосом
+   bool& SensPressEngineControl;  //Обрыв/неисправность датчика давления управления гидромотором
+   bool& SensPressIn;             //Обрыв/неисправность датчика давления на всасывании
+   bool& SensPressOut;            //Обрыв/неисправность датчика давления в дренаже насоса
+   bool& SensTempIn;              //Обрыв/неисправность датчика температуры масла на всасывании
+   bool& SensTempFeed;            //Обрыв/неисправность датчика температуры масла модуля питания
+   bool& SensLevelFeed;           //Обрыв/неисправность датчика уровня масла модуля питания
+   bool& SensTorque;              //Обрыв/неисправность датчика момента
+   bool& SensSpeenSpeed;          //Обрыв/неисправность датчика оборотов
+
+   bool& M13_Fault; //Нет включения М13
+   bool& M14_Fault; //Нет включения М14
+   bool& M15_Fault; //Нет включения М15
+   bool& M16_17_Fault; //Нет включения М16,17
+   bool& M18_19_Fault; //Нет включения М18,19
+
 private:
    friend class cpu::CpuMemory;
    DB73();
@@ -57,7 +78,7 @@ private:
 
    enum
    {
-       BOOL_COUNT = 33
+       BOOL_COUNT = 52
    };
 
    bool mBoolData[ BOOL_COUNT ];
@@ -82,8 +103,10 @@ private:
       L"CPU/DB73.SQ21_warning",
       L"CPU/DB73.Q_NO_Istablished",
       L"CPU/DB73.P_NO_Istablished",
-      L"CPU/DB73.OP40_Q_Nul",
-      L"CPU/DB73.OP40_P_Nul",
+      L"CPU/DB73.OP40_Q_Nul_S1",
+      L"CPU/DB73.OP40_Q_Nul_S2",
+      L"CPU/DB73.OP40_P_Nul_S1",
+      L"CPU/DB73.OP40_P_Nul_S2",
       L"CPU/DB73.OP40_Qr_NO_Dopusk1",
       L"CPU/DB73.OP40_Qr_NO_Dopusk2",
       L"CPU/DB73.OP41_Qr_NO_Dopusk",
@@ -99,6 +122,24 @@ private:
       L"CPU/DB73.Pressure2NotSet", //Давление в секции 2 не установилось
       L"CPU/DB73.ControlPressureNotSet",//Давление управления не установилось
 
+      L"CPU/DB73.SensPressA",             //Обрыв/неисправность датчика давления контура А
+      L"CPU/DB73.SensPressB",             //Обрыв/неисправность датчика давления контура В
+      L"CPU/DB73.SensPressC",             //Обрыв/неисправность датчика давления контура С
+      L"CPU/DB73.SensPressPumpControl",   //Обрыв неисправность датчика давления управления насосом
+      L"CPU/DB73.SensPressEngineControl", //Обрыв/неисправность датчика давления управления гидромотором
+      L"CPU/DB73.SensPressIn",            //Обрыв/неисправность датчика давления на всасывании
+      L"CPU/DB73.SensPressOut",           //Обрыв/неисправность датчика давления в дренаже насоса
+      L"CPU/DB73.SensTempIn",             //Обрыв/неисправность датчика температуры масла на всасывании
+      L"CPU/DB73.SensTempFeed",           //Обрыв/неисправность датчика температуры масла модуля питания
+      L"CPU/DB73.SensLevelFeed",          //Обрыв/неисправность датчика уровня масла модуля питания
+      L"CPU/DB73.SensTorque",             //Обрыв/неисправность датчика момента
+      L"CPU/DB73.SensSpeenSpeed",         //Обрыв/неисправность датчика оборотов
+
+      L"CPU/DB73.M13_Fault",//Нет включения М13
+      L"CPU/DB73.M14_Fault",//Нет включения М14
+      L"CPU/DB73.M15_Fault",//Нет включения М15
+      L"CPU/DB73.M16_17_Fault",//Нет включения М16,17
+      L"CPU/DB73.M18_19_Fault",//Нет включения М18,19
    };
 };
 

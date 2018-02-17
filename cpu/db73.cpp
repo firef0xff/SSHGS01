@@ -25,22 +25,40 @@ DB73::DB73():
    SQ21_warning( mBoolData[15] ),//нет закрытия кожуха муфты
    Q_NO_Istablished( mBoolData[16] ),//Расход в регуляторе не установился
    P_NO_Istablished( mBoolData[17] ),//Давление в регуляторе не установилось
-   OP40_Q_Nul( mBoolData[18] ),//Расход в нуле
-   OP40_P_Nul( mBoolData[19] ),//Давленине в нуле
-   OP40_Qr_NO_Dopusk1( mBoolData[20] ),//Расход рабочий не в допуске (функц-ние)
-   OP40_Qr_NO_Dopusk2( mBoolData[21] ),//Расход рабочий не в допуске (функц-ние)
-   OP41_Qr_NO_Dopusk( mBoolData[22] ),//Расход рабочий не в допуске (прочность)
-   OP42_Qr_NO_Dopusk( mBoolData[23] ),//Расход рабочий не в допуске (гермет-ть)
-   OP48_Qd_NO_Dopusk( mBoolData[24] ),//Расход в дренаже не в допуске
-   LevelMaslaAlarmPump( mBoolData[25] ), //аварийный уровень в баке масла 2
-   TempMaslaAlarmPump1( mBoolData[26] ), //аварийная температура масла в баке 1
-   TempMaslaAlarmPump2( mBoolData[27] ), //аварийная температура масла в баке 2
-   LowSpeenSpeed( mBoolData[28] ), //Расчетные обороты ниже допустимых
-   SpeenSpeedNotSet( mBoolData[29] ), //Обороты не установились
-   Pressure1NotSet( mBoolData[30] ), //Давление в секции 1 не установилось
-   Pressure2NotSet( mBoolData[31] ), //Давление в секции 2 не установилось
-   ControlPressureNotSet( mBoolData[32] )//Давление управления не установилось
-
+   OP40_Q_Nul_S1( mBoolData[18] ),//Расход в нуле
+   OP40_Q_Nul_S2( mBoolData[19] ),//Расход в нуле
+   OP40_P_Nul_S1( mBoolData[20] ),//Давленине в нуле
+   OP40_P_Nul_S2( mBoolData[21] ),//Давленине в нуле
+   OP40_Qr_NO_Dopusk1( mBoolData[22] ),//Расход рабочий не в допуске (функц-ние)
+   OP40_Qr_NO_Dopusk2( mBoolData[23] ),//Расход рабочий не в допуске (функц-ние)
+   OP41_Qr_NO_Dopusk( mBoolData[24] ),//Расход рабочий не в допуске (прочность)
+   OP42_Qr_NO_Dopusk( mBoolData[25] ),//Расход рабочий не в допуске (гермет-ть)
+   OP48_Qd_NO_Dopusk( mBoolData[26] ),//Расход в дренаже не в допуске
+   LevelMaslaAlarmPump( mBoolData[27] ), //аварийный уровень в баке масла 2
+   TempMaslaAlarmPump1( mBoolData[28] ), //аварийная температура масла в баке 1
+   TempMaslaAlarmPump2( mBoolData[29] ), //аварийная температура масла в баке 2
+   LowSpeenSpeed( mBoolData[30] ), //Расчетные обороты ниже допустимых
+   SpeenSpeedNotSet( mBoolData[31] ), //Обороты не установились
+   Pressure1NotSet( mBoolData[32] ), //Давление в секции 1 не установилось
+   Pressure2NotSet( mBoolData[33] ), //Давление в секции 2 не установилось
+   ControlPressureNotSet( mBoolData[34] ),//Давление управления не установилось
+   SensPressA( mBoolData[35] ),              //Обрыв/неисправность датчика давления контура А
+   SensPressB( mBoolData[36] ),              //Обрыв/неисправность датчика давления контура В
+   SensPressC( mBoolData[37] ),              //Обрыв/неисправность датчика давления контура С
+   SensPressPumpControl( mBoolData[38] ),    //Обрыв неисправность датчика давления управления насосом
+   SensPressEngineControl( mBoolData[39] ),  //Обрыв/неисправность датчика давления управления гидромотором
+   SensPressIn( mBoolData[40] ),             //Обрыв/неисправность датчика давления на всасывании
+   SensPressOut( mBoolData[41] ),            //Обрыв/неисправность датчика давления в дренаже насоса
+   SensTempIn( mBoolData[42] ),              //Обрыв/неисправность датчика температуры масла на всасывании
+   SensTempFeed( mBoolData[43] ),            //Обрыв/неисправность датчика температуры масла модуля питания
+   SensLevelFeed( mBoolData[44] ),           //Обрыв/неисправность датчика уровня масла модуля питания
+   SensTorque( mBoolData[45] ),              //Обрыв/неисправность датчика момента
+   SensSpeenSpeed( mBoolData[46] ),           //Обрыв/неисправность датчика оборотов
+   M13_Fault( mBoolData[47] ), //Нет включения М13
+   M14_Fault( mBoolData[48] ), //Нет включения М14
+   M15_Fault( mBoolData[49] ), //Нет включения М15
+   M16_17_Fault( mBoolData[50] ), //Нет включения М16,17
+   M18_19_Fault( mBoolData[51] ) //Нет включения М18,19
 
 {
    memset( mBoolData, 0, sizeof(mBoolData) );

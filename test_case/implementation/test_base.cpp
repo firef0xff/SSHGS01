@@ -15,96 +15,63 @@ QString db40_errs()
    errs.Read();
 
    QString str_errs;
-//    if (errs.sl1)
-//        str_errs += "уровень масла в норме\n";
-   if (errs.sl2)
-       str_errs += "пониженный уровень масла\n";
-   if (errs.sl3)
-       str_errs += "аварийный уровень масла\n";
-   if (errs.sl4)
-       str_errs += "верхний уровень перелив\n";
-//    if (errs.sl5)
-//        str_errs += "нижний уровень перелив\n";
-   if (errs.sp1)
-       str_errs += "фильтр всасывающий М1 загрязнен\n";
-   if (errs.sp2)
-       str_errs += "фильтр всасывающий М2 загрязнен\n";
-   if (errs.sp3)
-       str_errs += "фильтр всасывающий М3 загрязнен\n";
-   if (errs.sp4)
-       str_errs += "фильтр всасывающий М3 загрязнен\n";
-   if (errs.sp5)
-       str_errs += "фильтр всасывающий М4 загрязнен\n";
-   if (errs.sp6)
-       str_errs += "фильтр всасывающий М5 загрязнен\n";
-   if (errs.sp7)
-       str_errs += "фильтр тонкой очистки М1 загрязнен\n";
-   if (errs.sp8)
-       str_errs += "фильтр грубой очистки М1 загрязнен\n";
-   if (errs.sp9)
-       str_errs += "фильтр тонкой очистки М2 загрязнен\n";
-   if (errs.sp10)
-       str_errs += "фильтр грубой очистки М2 загрязнен\n";
-   if (errs.sp11)
-       str_errs += "фильтр тонкой очистки М4 загрязнен\n";
-   if (errs.sp12)
-       str_errs += "фильтр грубой очистки М3 загрязнен\n";
-   if (errs.sp13)
-       str_errs += "фильтр грубой очистки М3 загрязнен\n";
-   if (errs.sp14)
-       str_errs += "фильтр контура охлаждения загрязнен\n";
-   if (errs.sp15)
-       str_errs += "фильтр тонкой очистки М12 загрязнен\n";
-   if (errs.sq1)
-       str_errs += "кран М1 закрыт\n";
-   if (errs.sq3)
-       str_errs += "кран М2 закрыт\n";
-   if (errs.sq5)
-       str_errs += "кран М3 закрыт\n";
-   if (errs.sq7)
-       str_errs += "кран М3 закрыт\n";
-   if (errs.sq9)
-       str_errs += "кран М4 закрыт\n";
-   if (errs.sq11)
-       str_errs += "кран М5 закрыт\n";
-   if (errs.sq13)
-       str_errs += "кран дренажа М1 закрыт\n";
-   if (errs.sq14)
-       str_errs += "кран дренажа М2 закрыт\n";
-   if (errs.sq15)
-       str_errs += "кран дренажа М4 закрыт\n";
-   if (errs.fault_m1)
-       str_errs += "нет включения М1\n";
-   if (errs.fault_m2)
-       str_errs += "нет включения М2\n";
-   if (errs.fault_m3)
-       str_errs += "нет включения М3\n";
-   if (errs.fault_m4)
-       str_errs += "нет включения М4\n";
-   if (errs.fault_m5)
-       str_errs += "нет включения М5\n";
-   if (errs.fault_m6)
-       str_errs += "нет включения М6\n";
-   if (errs.fault_m8)
-       str_errs += "нет включения М8\n";
-   if (errs.fault_m10)
-       str_errs += "нет включения М10\n";
-   if (errs.fault_m12)
-       str_errs += "нет включения М12\n";
-   if (errs.fault_phasing)
-       str_errs += "не правильная фазировка\n";
-   if (errs.p_no)
-       str_errs += "давление в системе не установилось\n";
-   if (errs.p_upr_no)
-       str_errs += "давление в канале Х не установилось\n";
-   if (errs.q_no)
-       str_errs += "расход не установился\n";
-   if (errs.v_no)
-       str_errs += "Напряжение не в допуске\n";
-   if (errs.fault_p_op12)
-       str_errs += "Аварийное давление\n";
-   if (errs.fault_p_op22)
-       str_errs += "Аварийное давление\n";
+//    if (errs.sl1) str_errs += "уровень масла в норме\n";
+   if (errs.sl2) str_errs += "пониженный уровень масла\n";
+   if (errs.sl3) str_errs += "аварийный уровень масла\n";
+   if (errs.sl4) str_errs += "верхний уровень перелив\n";
+//    if (errs.sl5) str_errs += "нижний уровень перелив\n";
+   if (errs.sp1) str_errs += "фильтр всасывающий М1 загрязнен\n";
+   if (errs.sp2) str_errs += "фильтр всасывающий М2 загрязнен\n";
+   if (errs.sp3) str_errs += "фильтр всасывающий М3 загрязнен\n";
+   if (errs.sp4) str_errs += "фильтр всасывающий М3 загрязнен\n";
+   if (errs.sp5) str_errs += "фильтр всасывающий М4 загрязнен\n";
+   if (errs.sp6) str_errs += "фильтр всасывающий М5 загрязнен\n";
+   if (errs.sp7) str_errs += "фильтр тонкой очистки М1 загрязнен\n";
+   if (errs.sp8) str_errs += "фильтр грубой очистки М1 загрязнен\n";
+   if (errs.sp9) str_errs += "фильтр тонкой очистки М2 загрязнен\n";
+   if (errs.sp10) str_errs += "фильтр грубой очистки М2 загрязнен\n";
+   if (errs.sp11) str_errs += "фильтр тонкой очистки М4 загрязнен\n";
+   if (errs.sp12) str_errs += "фильтр грубой очистки М3 загрязнен\n";
+   if (errs.sp13) str_errs += "фильтр грубой очистки М3 загрязнен\n";
+   if (errs.sp14) str_errs += "фильтр контура охлаждения загрязнен\n";
+   if (errs.sp15) str_errs += "фильтр тонкой очистки М12 загрязнен\n";
+   if (errs.sq1) str_errs += "кран М1 закрыт\n";
+   if (errs.sq3) str_errs += "кран М2 закрыт\n";
+   if (errs.sq5) str_errs += "кран М3 закрыт\n";
+   if (errs.sq7) str_errs += "кран М3 закрыт\n";
+   if (errs.sq9) str_errs += "кран М4 закрыт\n";
+   if (errs.sq11) str_errs += "кран М5 закрыт\n";
+   if (errs.sq13) str_errs += "кран дренажа М1 закрыт\n";
+   if (errs.sq14) str_errs += "кран дренажа М2 закрыт\n";
+   if (errs.sq15) str_errs += "кран дренажа М4 закрыт\n";
+   if (errs.fault_m1) str_errs += "нет включения М1\n";
+   if (errs.fault_m2) str_errs += "нет включения М2\n";
+   if (errs.fault_m3) str_errs += "нет включения М3\n";
+   if (errs.fault_m4) str_errs += "нет включения М4\n";
+   if (errs.fault_m5) str_errs += "нет включения М5\n";
+   if (errs.fault_m6) str_errs += "нет включения М6\n";
+   if (errs.fault_m8) str_errs += "нет включения М8\n";
+   if (errs.fault_m10) str_errs += "нет включения М10\n";
+   if (errs.fault_m12) str_errs += "нет включения М12\n";
+   if (errs.fault_phasing) str_errs += "не правильная фазировка\n";
+   if (errs.p_no) str_errs += "давление в системе не установилось\n";
+   if (errs.p_upr_no) str_errs += "давление в канале Х не установилось\n";
+   if (errs.q_no) str_errs += "расход не установился\n";
+   if (errs.v_no) str_errs += "Напряжение не в допуске\n";
+   if (errs.fault_p_op12) str_errs += "Аварийное давление\n";
+   if (errs.fault_p_op22) str_errs += "Аварийное давление\n";
+
+   if (errs.BP1_Err )str_errs += "Обрыв/неиспр-сть датчика давления после М1/М2\n";
+   if (errs.BP2_Err )str_errs += "Обрыв/неиспр-сть датчика давления на сливе испытуемого аппарата\n";
+   if (errs.BP3_Err )str_errs += "Обрыв/неиспр-сть датчика давления в полости А\n";
+   if (errs.BP4_Err )str_errs += "Обрыв/неиспр-сть датчика давления в полости В\n";
+   if (errs.BP5_Err )str_errs += "Обрыв/неиспр-сть датчика давления в полости Р\n";
+   if (errs.BP6_Err )str_errs += "Обрыв/неиспр-сть датчика давления в полости Х\n";
+   if (errs.BT1_Err )str_errs += "Обрыв/неиспр-сть датчика температуры масла в баке 1\n";
+   if (errs.BV1_Err )str_errs += "Обрыв/неиспр-сть датчика расхода в полости Р (0-60л/мин)\n";
+   if (errs.BV2_Err )str_errs += "Обрыв/неиспр-сть датчика расхода в полости Р (60-1000л/мин)\n";
+   if (errs.BV3_Err )str_errs += "Обрыв/неиспр-сть датчика расхода утечек (0,5-25л/мин)\n";
+
 
    return str_errs;
 }
@@ -132,10 +99,12 @@ QString db73_errs()
    if (errs.SQ21_warning) str_errs+="нет закрытия кожуха муфты\n";
    if (errs.Q_NO_Istablished) str_errs+="Расход в регуляторе не установился\n";
    if (errs.P_NO_Istablished) str_errs+="Давление в регуляторе не установилось\n";
-   if (errs.OP40_Q_Nul) str_errs+="Расход в нуле\n";
-   if (errs.OP40_P_Nul) str_errs+="Давленине в нуле\n";
-   if (errs.OP40_Qr_NO_Dopusk1) str_errs+="Расход рабочий не в допуске (функц-ние)\n";
-   if (errs.OP40_Qr_NO_Dopusk2) str_errs+="Расход рабочий не в допуске (функц-ние)\n";
+   if (errs.OP40_Q_Nul_S1) str_errs+="Расход в нуле секция 1\n";
+   if (errs.OP40_Q_Nul_S2) str_errs+="Расход в нуле секция 2\n";
+   if (errs.OP40_P_Nul_S1) str_errs+="Давленине в нуле секция 1\n";
+   if (errs.OP40_P_Nul_S2) str_errs+="Давленине в нуле секция 2\n";
+   if (errs.OP40_Qr_NO_Dopusk1) str_errs+="Расход рабочий не в допуске секция 1 \"обкатка\"\n";
+   if (errs.OP40_Qr_NO_Dopusk2) str_errs+="Расход рабочий не в допуске секция 2 \"обкатка\"\n";
    if (errs.OP41_Qr_NO_Dopusk) str_errs+="Расход рабочий не в допуске (прочность)\n";
    if (errs.OP42_Qr_NO_Dopusk) str_errs+="Расход рабочий не в допуске (гермет-ть)\n";
    if (errs.OP48_Qd_NO_Dopusk) str_errs+="Расход в дренаже не в допуске\n";
@@ -147,6 +116,23 @@ QString db73_errs()
    if (errs.Pressure1NotSet) str_errs += "Давление в секции 1 не установилось\n";
    if (errs.Pressure2NotSet) str_errs += "Давление в секции 2 не установилось\n";
    if (errs.ControlPressureNotSet) str_errs += "Давление управления не установилось\n";
+   if (errs.SensPressA) str_errs +=               "Обрыв/неисправность датчика давления контура А\n";
+   if (errs.SensPressB) str_errs +=               "Обрыв/неисправность датчика давления контура В\n";
+   if (errs.SensPressC) str_errs +=               "Обрыв/неисправность датчика давления контура С\n";
+   if (errs.SensPressPumpControl) str_errs +=     "Обрыв неисправность датчика давления управления насосом\n";
+   if (errs.SensPressEngineControl) str_errs +=   "Обрыв/неисправность датчика давления управления гидромотором\n";
+   if (errs.SensPressIn) str_errs +=              "Обрыв/неисправность датчика давления на всасывании\n";
+   if (errs.SensPressOut) str_errs +=             "Обрыв/неисправность датчика давления в дренаже насоса\n";
+   if (errs.SensTempIn) str_errs +=               "Обрыв/неисправность датчика температуры масла на всасывании\n";
+   if (errs.SensTempFeed) str_errs +=             "Обрыв/неисправность датчика температуры масла модуля питания\n";
+   if (errs.SensLevelFeed) str_errs +=            "Обрыв/неисправность датчика уровня масла модуля питания\n";
+   if (errs.SensTorque) str_errs +=               "Обрыв/неисправность датчика момента\n";
+   if (errs.SensSpeenSpeed) str_errs +=           "Обрыв/неисправность датчика оборотов\n";
+   if (errs.M13_Fault) str_errs += "Нет включения М13\n";
+   if (errs.M14_Fault) str_errs += "Нет включения М14\n";
+   if (errs.M15_Fault) str_errs += "Нет включения М15\n";
+   if (errs.M16_17_Fault) str_errs += "Нет включения М16,17\n";
+   if (errs.M18_19_Fault) str_errs += "Нет включения М18,19\n";
 
    return str_errs;
 }

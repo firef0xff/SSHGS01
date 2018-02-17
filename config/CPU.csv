@@ -354,6 +354,16 @@ DB40.q_no;DB40,X7.1;RO;TST=;CMT=расход не установился
 DB40.v_no;DB40,X7.2;RO;TST=;CMT=Напряжение не в допуске
 DB40.fault_p_op12;DB40,X7.3;RO;TST=;CMT=Аварийное давление
 DB40.fault_p_op22;DB40,X7.4;RO;TST=;CMT=Аварийное давление
+DB40.BP1_Err;DB40,X7.5;RO;TST=;CMT=Обрыв/неиспр-сть датчика давления после М1/М2
+DB40.BP2_Err;DB40,X7.6;RO;TST=;CMT=Обрыв/неиспр-сть датчика давления на сливе испытуемого аппарата
+DB40.BP3_Err;DB40,X7.7;RO;TST=;CMT=Обрыв/неиспр-сть датчика давления в полости А
+DB40.BP4_Err;DB40,X8.0;RO;TST=;CMT=Обрыв/неиспр-сть датчика давления в полости В
+DB40.BP5_Err;DB40,X8.1;RO;TST=;CMT=Обрыв/неиспр-сть датчика давления в полости Р
+DB40.BP6_Err;DB40,X8.2;RO;TST=;CMT=Обрыв/неиспр-сть датчика давления в полости Х
+DB40.BT1_Err;DB40,X8.3;RO;TST=;CMT=Обрыв/неиспр-сть датчика температуры масла в баке 1
+DB40.BV1_Err;DB40,X8.4;RO;TST=;CMT=Обрыв/неиспр-сть датчика расхода в полости Р (0-60л/мин)
+DB40.BV2_Err;DB40,X8.5;RO;TST=;CMT=Обрыв/неиспр-сть датчика расхода в полости Р (60-1000л/мин)
+DB40.BV3_Err;DB40,X8.6;RO;TST=;CMT=Обрыв/неиспр-сть датчика расхода утечек (0,5-25л/мин)
 DB50.ReadyToWork;MX49.0;RO;TST=;CMT=бит готовности системы к работе
 DB50.BP1;DB50,REAL2;RO;TST=;CMT=давление после М1/М2 (real)
 DB50.BP2;DB50,REAL6;RO;TST=;CMT=давление на сливе испытуемого аппарата (real)
@@ -627,13 +637,20 @@ DB73.SQ20_warning;DB73,X3.6;RO;TST=;CMT=нет закрытия защитного кожуха
 DB73.SQ21_warning;DB73,X3.7;RO;TST=;CMT=нет закрытия кожуха муфты
 DB73.Q_NO_Istablished;DB73,X4.0;RO;TST=;CMT=Расход в регуляторе не установился
 DB73.P_NO_Istablished;DB73,X4.1;RO;TST=;CMT=Давление в регуляторе не установилось
-DB73.OP40_Q_Nul;DB73,X4.2;RO;TST=;CMT=Расход в нуле
-DB73.OP40_P_Nul;DB73,X4.3;RO;TST=;CMT=Давленине в нуле
-DB73.OP40_Qr_NO_Dopusk1;DB73,X4.4;RO;TST=;CMT=Расход рабочий не в допуске (функц-ние)
-DB73.OP40_Qr_NO_Dopusk2;DB73,X5.2;RO;TST=;CMT=Расход рабочий не в допуске (функц-ние)
+DB73.OP40_Q_Nul_S1;DB73,X4.2;RO;TST=;CMT=Расход в нуле секция 1
+DB73.OP40_Q_Nul_S2;DB73,X5.0;RO;TST=;CMT=Расход в нуле секция 2
+DB73.OP40_P_Nul_S1;DB73,X4.3;RO;TST=;CMT=Давленине в нуле секция 1
+DB73.OP40_P_Nul_S2;DB73,X5.1;RO;TST=;CMT=Давленине в нуле секция 2
+DB73.OP40_Qr_NO_Dopusk1;DB73,X4.4;RO;TST=;CMT=Расход рабочий не в допуске секция 1 "обкатка"
+DB73.OP40_Qr_NO_Dopusk2;DB73,X5.2;RO;TST=;CMT=Расход рабочий не в допуске секция 2 "обкатка"
 DB73.OP41_Qr_NO_Dopusk;DB73,X4.5;RO;TST=;CMT=Расход рабочий не в допуске (прочность)
 DB73.OP42_Qr_NO_Dopusk;DB73,X4.6;RO;TST=;CMT=Расход рабочий не в допуске (гермет-ть)
 DB73.OP48_Qd_NO_Dopusk;DB73,X4.7;RO;TST=;CMT=Расход в дренаже не в допуске
+DB73.M13_Fault;DB73,X5.3;RO;TST=;CMT=Нет включения М13
+DB73.M14_Fault;DB73,X5.4;RO;TST=;CMT=Нет включения М14
+DB73.M15_Fault;DB73,X5.5;RO;TST=;CMT=Нет включения М15
+DB73.M16_17_Fault;DB73,X5.6;RO;TST=;CMT=Нет включения М16,17
+DB73.M18_19_Fault;DB73,X5.7;RO;TST=;CMT=Нет включения М18,19
 DB73.LevelMaslaAlarmPump;MX123.7;RO;TST=;CMT=аварийный уровень в баке масла 2
 DB73.TempMaslaAlarmPump1;MX150.1;RO;TST=;CMT=аварийная температура масла в баке 1
 DB73.TempMaslaAlarmPump2;MX122.2;RO;TST=;CMT=аварийная температура масла в баке 2
@@ -642,6 +659,18 @@ DB73.SpeenSpeedNotSet;DB73,X6.1;RO;TST=;CMT=Обороты не установились
 DB73.Pressure1NotSet;DB73,X6.2;RO;TST=;CMT=Давление в секции 1 не установилось
 DB73.Pressure2NotSet;DB73,X6.3;RO;TST=;CMT=Давление в секции 2 не установилось
 DB73.ControlPressureNotSet;DB73,X6.4;RO;TST=;CMT=Давление управления не установилось
+DB73.SensPressA;DB73,X6.5;RO;TST=;CMT=Обрыв/неисправность датчика давления контура А
+DB73.SensPressB;DB73,X6.6;RO;TST=;CMT=Обрыв/неисправность датчика давления контура В
+DB73.SensPressC;DB73,X6.7;RO;TST=;CMT=Обрыв/неисправность датчика давления контура С
+DB73.SensPressPumpControl;DB73,X7.0;RO;TST=;CMT=Обрыв неисправность датчика давления управления насосом
+DB73.SensPressEngineControl;DB73,X7.1;RO;TST=;CMT=Обрыв/неисправность датчика давления управления гидромотором
+DB73.SensPressIn;DB73,X7.2;RO;TST=;CMT=Обрыв/неисправность датчика давления на всасывании
+DB73.SensPressOut;DB73,X7.3;RO;TST=;CMT=Обрыв/неисправность датчика давления в дренаже насоса
+DB73.SensTempIn;DB73,X7.4;RO;TST=;CMT=Обрыв/неисправность датчика температуры масла на всасывании
+DB73.SensTempFeed;DB73,X7.5;RO;TST=;CMT=Обрыв/неисправность датчика температуры масла модуля питания
+DB73.SensLevelFeed;DB73,X7.6;RO;TST=;CMT=Обрыв/неисправность датчика уровня масла модуля питания
+DB73.SensTorque;DB73,X7.7;RO;TST=;CMT=Обрыв/неисправность датчика момента
+DB73.SensSpeenSpeed;DB73,X8.0;RO;TST=;CMT=Обрыв/неисправность датчика оборотов
 DB82.Start_Stop;DB82,X2.0;RW;TST=;CMT=Пуск/стоп основные насосы
 DB82.PumpManual;MX155.0;RW;TST=;CMT=включение ручного режима
 DB82.YA27;MX155.1;RW;TST=;CMT=включение клапана YA27
