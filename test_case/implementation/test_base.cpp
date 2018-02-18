@@ -191,6 +191,7 @@ void TestCommonData::Wait( bool& work, bool& done)
             started = true;
 
         auto &mem = cpu::CpuMemory::Instance().M3;
+        mem.Read();
         if (mem.StopOnError)
            break;
 
