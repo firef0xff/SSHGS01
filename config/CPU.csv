@@ -691,7 +691,7 @@ DB82.Voltage_man;DB82,REAL32;RW;TST=;CMT=напряжение питания дискретных катушек
 DB82.Type_Voltage_man;DB82,REAL36;RW;TST=;CMT=Тип напряжения (постоянное/переменное)
 M2.Pump_Continue;MX127.1;RW;TST=;CMT=продолжить тест
 M2.Pump_Fail;MX128.6;RW;TST=;CMT=завершить тест
-M3.OP49_Continue;MX127.1;RW;TST=;CMT=продолжить выполнение теста
+M3.StopOnError;MX195.0;RW;TST=;CMT=прервать выполнение теста из-за ошибок
 DB90.Pressure_S1;DB90,REAL0,1000;RO;TST=;CMT=массив значений давления в секции 1
 DB90.Pressure_S2;DB91,REAL0,1000;RO;TST=;CMT=массив значений давления в секции 2
 DB90.Consumption_S1;DB92,REAL0,1000;RO;TST=;CMT=массив значений расхода в секции 1

@@ -45,7 +45,7 @@ public:
     void Write();
     void Read();
 
-    bool& OP49_Continue;          //m127.7 продолжить тест
+    bool& StopOnError;          //m127.7 продолжить тест
 
 private:
 
@@ -64,7 +64,7 @@ private:
 
     wchar_t const* mAdresses[ BOOL_COUNT ] =
     {
-        L"CPU/M3.OP49_Continue", //m127.7 продолжить тест
+        L"CPU/M3.StopOnError", //m127.7 продолжить тест
     };
 };
 

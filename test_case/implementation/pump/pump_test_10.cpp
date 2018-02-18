@@ -357,8 +357,9 @@ void PumpTest10::UpdateData()
       mKPD[k].push_back( mem.KPD[i] );
    }
 
-   auto& cnt = cpu::CpuMemory::Instance().M3;
-   cnt.OP49_Continue = true;
+   auto& cnt = cpu::CpuMemory::Instance().M2;
+   cnt.Pump_Continue = true;
+   cnt.Pump_Fail = false;
    cnt.Write();
 }
 

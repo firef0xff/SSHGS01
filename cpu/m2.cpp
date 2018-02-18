@@ -29,7 +29,7 @@ void M2::Write()
 
 
 M3::M3():
-    OP49_Continue(mBoolData[0])
+    StopOnError(mBoolData[0])
 {
     memset( mBoolData, 0, sizeof(mBoolData) );
     mGroupID = opc::miniOPC::Instance().AddGroup( L"M3", mAdresses, BOOL_COUNT );
