@@ -29,10 +29,11 @@ bool PumpTest2::Run()
 
    mContol.Reset();
 
+   mResult = true;
    Start();
    Wait( mBits.OP41_Work, mBits.OP41_End );
    if ( IsStopped() )
-      return false;
+      mResult = false;
    return Success();
 }
 
