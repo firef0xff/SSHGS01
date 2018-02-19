@@ -92,13 +92,13 @@ void TestForm::on_buttonBox_accepted()
 
 void TestForm::CheckRights()
 {
-    if ( app::Settings::Instance().UserAccess() == app::User )
-    {
-        foreach (ControlPtr check_box, mControls)
-        {
-            check_box->setEnabled( false );
-        }
-    }
+//    if ( app::Settings::Instance().UserAccess() == app::User )
+//    {
+//        foreach (ControlPtr check_box, mControls)
+//        {
+//            check_box->setEnabled( false );
+//        }
+//    }
 
     if ( app::Settings::Instance().UserAccess() != app::UserLevel::Uncknown )
     {

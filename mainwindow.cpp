@@ -180,6 +180,7 @@ void MainWindow::CheckRights( bool f_enabled )
    ui->act_test_case4->setEnabled( enabled );
    ui->act_test_case5->setEnabled( enabled );
    ui->ManualControl->setEnabled( enabled );
+   ui->ManualControl2->setEnabled( enabled );
 
    ui->TestCase1->setEnabled( enabled );
    ui->TestCase2->setEnabled( enabled );
@@ -206,6 +207,7 @@ void MainWindow::CheckRights( bool f_enabled )
       if ( app::Settings::Instance().UserAccess() != app::Master )
       {
          ui->ManualControl->setEnabled( false );
+         ui->ManualControl2->setEnabled( false );
          ui->TestCase1->setEnabled( false );
          ui->TestCase2->setEnabled( false );
          ui->TestCase3->setEnabled( false );

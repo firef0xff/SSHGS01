@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>748</width>
-    <height>678</height>
+    <height>550</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -352,7 +352,56 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="4" rowspan="9">
+      <item row="2" column="0" colspan="4">
+       <layout class="QGridLayout" name="gridLayout_5">
+        <item row="0" column="0">
+         <widget class="QLabel" name="l_volume_kpd">
+          <property name="text">
+           <string>Объемный КПД насоса</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QDoubleSpinBox" name="VolumeKPD">
+          <property name="toolTip">
+           <string>0...1</string>
+          </property>
+          <property name="toolTipDuration">
+           <number>1000</number>
+          </property>
+          <property name="maximum">
+           <double>1.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.010000000000000</double>
+          </property>
+          <property name="value">
+           <double>0.950000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QLabel" name="l_drainage">
+          <property name="text">
+           <string>Дренаж насоса при
+номинальном давлении и
+номинальном расходе, л/мин</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="QLineEdit" name="Drainage">
+          <property name="toolTip">
+           <string>0.7...90 л/мин</string>
+          </property>
+          <property name="toolTipDuration">
+           <number>1000</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="4" rowspan="8">
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
          <widget class="QGroupBox" name="Frequency">
@@ -572,7 +621,7 @@
            <item row="4" column="1">
             <widget class="QLineEdit" name="SignalLevel">
              <property name="toolTip">
-              <string>0...4000 мА</string>
+              <string>0...1400 мА</string>
              </property>
              <property name="toolTipDuration">
               <number>500</number>
@@ -597,61 +646,12 @@
         </item>
        </layout>
       </item>
-      <item row="0" column="3">
+      <item row="0" column="3" colspan="2">
        <widget class="QComboBox" name="Model">
         <property name="editable">
          <bool>true</bool>
         </property>
        </widget>
-      </item>
-      <item row="2" column="0" colspan="4">
-       <layout class="QGridLayout" name="gridLayout_5">
-        <item row="0" column="0">
-         <widget class="QLabel" name="l_volume_kpd">
-          <property name="text">
-           <string>Объемный КПД насоса</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QDoubleSpinBox" name="VolumeKPD">
-          <property name="toolTip">
-           <string>0...1</string>
-          </property>
-          <property name="toolTipDuration">
-           <number>1000</number>
-          </property>
-          <property name="maximum">
-           <double>1.000000000000000</double>
-          </property>
-          <property name="singleStep">
-           <double>0.010000000000000</double>
-          </property>
-          <property name="value">
-           <double>0.950000000000000</double>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <widget class="QLabel" name="l_drainage">
-          <property name="text">
-           <string>Дренаж насоса при
-номинальном давлении и
-номинальном расходе, л/мин</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="3">
-         <widget class="QLineEdit" name="Drainage">
-          <property name="toolTip">
-           <string>0.7...90 л/мин</string>
-          </property>
-          <property name="toolTipDuration">
-           <number>1000</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
       </item>
      </layout>
      <zorder>User</zorder>
@@ -672,126 +672,11 @@
       <string>Параметы испытаний</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="1">
-       <widget class="QSpinBox" name="FuncTestTime">
-        <property name="toolTip">
-         <string>0...360 сек</string>
-        </property>
-        <property name="toolTipDuration">
-         <number>1000</number>
-        </property>
-        <property name="maximum">
-         <number>360</number>
-        </property>
-        <property name="value">
-         <number>10</number>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QLabel" name="l_x">
-        <property name="text">
-         <string>Время набора требуемого
-давления, сек (X)</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QSpinBox" name="Y">
-        <property name="toolTip">
-         <string>1...60 сек</string>
-        </property>
-        <property name="toolTipDuration">
-         <number>1000</number>
-        </property>
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <number>60</number>
-        </property>
-        <property name="value">
-         <number>2</number>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="0">
        <widget class="QLabel" name="l_func_test_time">
         <property name="text">
          <string>Продолжительность испытаний
 функционирования, сек</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="l_b">
-        <property name="text">
-         <string>Продолжительность испытаний
-функциональные зависимости, сек (В)</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2">
-       <widget class="QLabel" name="l_z">
-        <property name="text">
-         <string>Время стабилизации потока, сек (Z)</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="1">
-       <widget class="QDoubleSpinBox" name="A">
-        <property name="toolTip">
-         <string>0...1</string>
-        </property>
-        <property name="toolTipDuration">
-         <number>1000</number>
-        </property>
-        <property name="minimum">
-         <double>0.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>20.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>1.000000000000000</double>
-        </property>
-        <property name="value">
-         <double>5.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="3">
-       <widget class="QDoubleSpinBox" name="A1">
-        <property name="toolTip">
-         <string>0...1</string>
-        </property>
-        <property name="toolTipDuration">
-         <number>1000</number>
-        </property>
-        <property name="maximum">
-         <double>20.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>1.000000000000000</double>
-        </property>
-        <property name="value">
-         <double>5.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="l_herm_test_time">
-        <property name="text">
-         <string>Продолжительность испытаний
-наружной герметичности, сек</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="0">
-       <widget class="QLabel" name="l_e">
-        <property name="text">
-         <string>Точность для испытаний
-функциональные зависимости, сек (Е)</string>
         </property>
        </widget>
       </item>
@@ -827,86 +712,19 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="l_y">
-        <property name="text">
-         <string>Время набора требуемой
-частоты вращения, сек (Y)</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="3">
-       <widget class="QSpinBox" name="X">
+      <item row="0" column="1">
+       <widget class="QSpinBox" name="FuncTestTime">
         <property name="toolTip">
-         <string>1...60 сек</string>
+         <string>0...360 сек</string>
         </property>
         <property name="toolTipDuration">
          <number>1000</number>
-        </property>
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <number>60</number>
-        </property>
-        <property name="value">
-         <number>5</number>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="1">
-       <widget class="QDoubleSpinBox" name="E">
-        <property name="toolTip">
-         <string>0.5...60 сек</string>
-        </property>
-        <property name="toolTipDuration">
-         <number>1000</number>
-        </property>
-        <property name="minimum">
-         <double>0.500000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>60.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>0.500000000000000</double>
-        </property>
-        <property name="value">
-         <double>1.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="l_a">
-        <property name="text">
-         <string>Коэффициент функционирования, % (А)</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QSpinBox" name="B">
-        <property name="toolTip">
-         <string>1...360 сек</string>
-        </property>
-        <property name="toolTipDuration">
-         <number>1000</number>
-        </property>
-        <property name="minimum">
-         <number>10</number>
         </property>
         <property name="maximum">
          <number>360</number>
         </property>
         <property name="value">
          <number>10</number>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="2">
-       <widget class="QLabel" name="l_a1">
-        <property name="text">
-         <string>Коэффициент функционирования
-для дренажа, % (А1)</string>
         </property>
        </widget>
       </item>
@@ -918,49 +736,53 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="3">
-       <widget class="QSpinBox" name="Z">
-        <property name="toolTip">
-         <string>1...600</string>
-        </property>
-        <property name="toolTipDuration">
-         <number>1000</number>
-        </property>
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <number>600</number>
-        </property>
-        <property name="value">
-         <number>5</number>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="2">
-       <widget class="QLabel" name="l_work_temperature">
+      <item row="1" column="0">
+       <widget class="QLabel" name="l_herm_test_time">
         <property name="text">
-         <string>Рабочая температура масла
-в баке, C</string>
+         <string>Продолжительность испытаний
+наружной герметичности, сек</string>
         </property>
        </widget>
       </item>
-      <item row="5" column="3">
-       <widget class="QSpinBox" name="WorkTemperature">
+      <item row="0" column="4">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="3">
+       <widget class="QDoubleSpinBox" name="A">
         <property name="toolTip">
-         <string>1...600</string>
+         <string>0...1</string>
         </property>
         <property name="toolTipDuration">
          <number>1000</number>
         </property>
         <property name="minimum">
-         <number>0</number>
+         <double>0.000000000000000</double>
         </property>
         <property name="maximum">
-         <number>150</number>
+         <double>20.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>1.000000000000000</double>
         </property>
         <property name="value">
-         <number>35</number>
+         <double>5.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLabel" name="l_a">
+        <property name="text">
+         <string>Коэффициент функционирования, % (А)</string>
         </property>
        </widget>
       </item>

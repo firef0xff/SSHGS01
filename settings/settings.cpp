@@ -230,6 +230,17 @@ QString Settings::ComAddr() const
     return mDocument.object().value("ComAddr").toString();
 }
 
+void Settings::LubMon( QString const& v)
+{
+   auto obj = mDocument.object();
+   obj.insert( "LubMon", v );
+   mDocument.setObject( obj );
+}
+QString Settings::LubMon() const
+{
+    return mDocument.object().value("LubMon").toString();
+}
+
 bool Settings::CheckUser( QString const& card_id )
 {
    if (mLockUserChecking)

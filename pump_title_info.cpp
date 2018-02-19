@@ -49,7 +49,60 @@ PumpTitleInfo::PumpTitleInfo(bool new_mode, QWidget *parent) :
 void PumpTitleInfo::CheckRights()
 {
    ui->User->setText( app::Settings::Instance().User() );
-   if ( app::Settings::Instance().UserAccess() != app::UserLevel::Uncknown )
+
+   auto access = app::Settings::Instance().UserAccess();
+   bool enable = access != app::User;
+
+   ui->User->setEnabled( enable );
+   ui->SerNo->setEnabled( enable );
+   ui->Model->setEnabled( enable );
+
+   ui->Spin->setEnabled( enable );
+   ui->ElectricControl->setEnabled( enable );
+   ui->Voltage->setEnabled( enable );
+   ui->AcDc->setEnabled( enable );
+   ui->SignalLevel->setEnabled( enable );
+
+   ui->HydroControl->setEnabled( enable );
+   ui->MaxControlPressure->setEnabled( enable );
+
+
+   ui->WorkVolume->setEnabled( enable );
+   ui->MinPressure->setEnabled( enable );
+   ui->NomPressure->setEnabled( enable );
+   ui->MaxPressure->setEnabled( enable );
+
+
+   ui->Section2->setEnabled( enable );
+   ui->WorkVolume_2->setEnabled( enable );
+   ui->MinPressure_2->setEnabled( enable );
+   ui->NomPressure_2->setEnabled( enable );
+   ui->MaxPressure_2->setEnabled( enable );
+
+   ui->MinFrequency->setEnabled( enable );
+   ui->NomFrequency->setEnabled( enable );
+   ui->MaxFrequency->setEnabled( enable );
+
+   ui->VolumeKPD->setEnabled( enable );
+
+   ui->Drainage->setEnabled( enable );
+
+   ui->FuncTestTime->setEnabled( enable );
+   ui->StrongTestTime->setEnabled( enable );
+   ui->HermTestTime->setEnabled( enable );
+   ui->ControlMode->setEnabled( enable );
+   ui->ConturA1->setEnabled( enable );
+   ui->ConturB1->setEnabled( enable );
+   ui->ConturC1->setEnabled( enable );
+   ui->ConturA2->setEnabled( enable );
+   ui->ConturB2->setEnabled( enable );
+   ui->ConturC2->setEnabled( enable );
+
+
+   ui->A->setEnabled( access == app::Admin );
+
+
+   if ( access != app::UserLevel::Uncknown )
    {
       ui->AnsverBox->setStandardButtons( QDialogButtonBox::Ok | QDialogButtonBox::Cancel );
       setEnabled(true);
@@ -186,16 +239,9 @@ bool PumpTitleInfo::SaveInputParams()
    res *= ParamChecker( ui->l_strong_test_time, params.StrongTestTime( ui->StrongTestTime->text() ) );
    res *= ParamChecker( ui->l_herm_test_time,   params.HermTestTime( ui->HermTestTime->text() ) );
 
-   res *= ParamChecker( ui->l_x,    params.X( ui->X->text() ) );
-   res *= ParamChecker( ui->l_y,    params.Y( ui->Y->text() ) );
-   res *= ParamChecker( ui->l_z,    params.Z( ui->Z->text() ) );
    res *= ParamChecker( ui->l_a,    params.A( ui->A->text() ) );
-   res *= ParamChecker( ui->l_a1,   params.A1( ui->A1->text() ) );
-   res *= ParamChecker( ui->l_e,    params.E( ui->E->text() ) );
-   res *= ParamChecker( ui->l_b,    params.B( ui->B->text() ) );
 
    res *= ParamChecker( ui->l_cotrol_mode,    params.TypeControl( ui->ControlMode->currentText() ) );
-   res *= ParamChecker( ui->l_work_temperature,    params.WorkTemperature( ui->WorkTemperature->text() ) );
 
    bool a1 = ui->ConturA1->isChecked();
    bool b1 = ui->ConturB1->isChecked();
@@ -275,16 +321,9 @@ void PumpTitleInfo::FromParams()
    ui->StrongTestTime->setValue( params.StrongTestTime() );
    ui->HermTestTime->setValue( params.HermTestTime() );
 
-   ui->X->setValue( params.X() );
-   ui->Y->setValue( params.Y() );
-   ui->Z->setValue( params.Z() );
    ui->A->setValue( params.A() );
-   ui->A1->setValue( params.A1() );
-   ui->E->setValue( params.E() );
-   ui->B->setValue( params.B() );
 
    ui->ControlMode->setCurrentText( test::ToString( params.TypeControl() ) );
-   ui->WorkTemperature->setValue( params.WorkTemperature() );
 
    ui->ConturA1->setChecked( params.ConturA1() );
    ui->ConturB1->setChecked( params.ConturB1() );

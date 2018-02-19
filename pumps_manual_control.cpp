@@ -3,6 +3,8 @@
 #include "test_case/implementation/test_base.h"
 #include "settings/settings.h"
 #include <QMessageBox>
+#include <QProcess>
+#include <QFile>
 
 PumpsManualControlUpdater::PumpsManualControlUpdater():
     mStopSignal(false)
@@ -16,6 +18,9 @@ void PumpsManualControlUpdater::run()
         cpu::CpuMemory::Instance().DB50.Read();
         cpu::CpuMemory::Instance().DB70.Read();
         cpu::CpuMemory::Instance().DB73.Read();
+        auto &mem = cpu::CpuMemory::Instance().M4;
+        std::unique_lock< std::mutex > lock(mem.Mutex);
+        mem.Read();
         emit update();
         msleep(500);
     }
@@ -160,7 +165,8 @@ void PumpsManualControl::UpdateData()
 }
 void PumpsManualControl::SynkControls()
 {
-
+   auto &mem = cpu::CpuMemory::Instance().M4;
+   UpdateButton( ui->TestStart, mem.LubMonStart );
 }
 void PumpsManualControl::UpdateButton( QAbstractButton *btn, bool checked )
 {
@@ -509,4 +515,31 @@ void  PumpsManualControl::CheckRights()
       setEnabled(false);
       Stop();
    }
+}
+
+void PumpsManualControl::on_TestStart_clicked()
+{
+   auto &mem = cpu::CpuMemory::Instance().M4;
+   std::unique_lock< std::mutex > lock(mem.Mutex);
+   mem.LubMonStart = true;
+   mem.LubMonStop = false;
+   mem.Write();
+
+   QString exe = "\"" + app::Settings::Instance().LubMon() +"\"";
+
+   if ( !QProcess::startDetached( exe ) )
+   {
+      mErrors += "Не удалось запустить " + exe + "\n";
+      on_Alarm_clicked();
+   }
+
+
+}
+
+void PumpsManualControl::on_TestStop_clicked()
+{
+   auto &mem = cpu::CpuMemory::Instance().M4;
+   std::unique_lock< std::mutex > lock(mem.Mutex);
+   mem.LubMonStop = false;
+   mem.Write();
 }

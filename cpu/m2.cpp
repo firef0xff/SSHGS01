@@ -57,6 +57,38 @@ void M3::Read()
    }
    opc::miniOPC::Instance().OpcMassFree( mGroupID, rez );
 }
+
+
+M4::M4():
+    LubMonStart(mBoolData[0]),
+    LubMonStop(mBoolData[1])
+{
+    memset( mBoolData, 0, sizeof(mBoolData) );
+    mGroupID = opc::miniOPC::Instance().AddGroup( L"M4", mAdresses, BOOL_COUNT );
+}
+
+void M4::Write()
+{
+   HRESULT res = E_FAIL;
+   while ( res == E_FAIL )
+       res = opc::miniOPC::Instance().WriteMass( mGroupID, 0, BOOL_COUNT, static_cast<void*>( mBoolData ), opc::tBOOL );
+
+}
+void M4::Read()
+{
+   OPCITEMSTATE* rez = opc::miniOPC::Instance().Read( mGroupID );
+   if (!rez)
+   {
+       //ошибка подключения..
+       return;
+   }
+   for (size_t i = 0; i < BOOL_COUNT; i++)
+   {
+       if ( i < BOOL_COUNT )
+           mBoolData[ i ] = rez[i].vDataValue.boolVal;
+   }
+   opc::miniOPC::Instance().OpcMassFree( mGroupID, rez );
+}
 }//namespace data
 }//namespace cpu
 

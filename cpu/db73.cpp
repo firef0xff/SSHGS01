@@ -31,7 +31,7 @@ DB73::DB73():
    OP40_P_Nul_S2( mBoolData[21] ),//Давленине в нуле
    OP40_Qr_NO_Dopusk1( mBoolData[22] ),//Расход рабочий не в допуске (функц-ние)
    OP40_Qr_NO_Dopusk2( mBoolData[23] ),//Расход рабочий не в допуске (функц-ние)
-   OP41_Qr_NO_Dopusk( mBoolData[24] ),//Расход рабочий не в допуске (прочность)
+   CriticalOilLvl( mBoolData[24] ),//Расход рабочий не в допуске (прочность)
    OP42_Qr_NO_Dopusk( mBoolData[25] ),//Расход рабочий не в допуске (гермет-ть)
    OP48_Qd_NO_Dopusk( mBoolData[26] ),//Расход в дренаже не в допуске
    LevelMaslaAlarmPump( mBoolData[27] ), //аварийный уровень в баке масла 2

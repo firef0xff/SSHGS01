@@ -23,5 +23,6 @@ private slots:
     void on_toolButton_2_clicked();
     void on_buttonBox_rejected();
     void on_buttonBox_accepted();
+    void on_toolButton_3_clicked();
 };
 

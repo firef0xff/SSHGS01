@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>497</width>
-    <height>170</height>
+    <width>419</width>
+    <height>205</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,6 +16,33 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QGridLayout" name="gridLayout">
+     <item row="1" column="1">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLineEdit" name="TestingParams">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+         <property name="clearButtonEnabled">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="TestParamsButton">
+         <property name="text">
+          <string>...</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
      <item row="0" column="1">
       <widget class="QComboBox" name="LogLevel">
        <item>
@@ -45,17 +72,10 @@
        </item>
       </widget>
      </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label">
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>Дериктория результатов тестирования</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Дериктория параметров тестирования</string>
+        <string>Используемый основной насос</string>
        </property>
       </widget>
      </item>
@@ -73,32 +93,8 @@
        </item>
       </layout>
      </item>
-     <item row="1" column="1">
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QLineEdit" name="TestingParams">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="readOnly">
-          <bool>true</bool>
-         </property>
-         <property name="clearButtonEnabled">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="TestParamsButton">
-         <property name="text">
-          <string>...</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
+     <item row="4" column="1">
+      <widget class="QLineEdit" name="ComAddr"/>
      </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label_3">
@@ -107,10 +103,17 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label_4">
+     <item row="2" column="0">
+      <widget class="QLabel" name="label">
        <property name="text">
-        <string>Используемый основной насос</string>
+        <string>Дериктория результатов тестирования</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Дериктория параметров тестирования</string>
        </property>
       </widget>
      </item>
@@ -135,8 +138,26 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
-      <widget class="QLineEdit" name="ComAddr"/>
+     <item row="5" column="0">
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string>Контроль чистоты раб. жидкости</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QLineEdit" name="Lubmon"/>
+       </item>
+       <item>
+        <widget class="QToolButton" name="toolButton_3">
+         <property name="text">
+          <string>...</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>

@@ -81,6 +81,10 @@ private slots:
     void on_YB8_val_textChanged(const QString &arg1);
     void on_YB9_val_textChanged(const QString &arg1);
 
+    void on_TestStart_clicked();
+
+    void on_TestStop_clicked();
+
 private:
 
    void SetColor(QWidget *label, QColor cl );

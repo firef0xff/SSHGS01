@@ -23,6 +23,7 @@ settings_wnd::settings_wnd(QWidget *parent) :
     ui->TestingResults->setText( app::Settings::Instance().ResultPath() );
     ui->MainPump->setCurrentIndex( ui->MainPump->findText( app::Settings::Instance().MainPupm() ) );
     ui->ComAddr->setText( app::Settings::Instance().ComAddr() );
+    ui->Lubmon->setText( app::Settings::Instance().LubMon() );
 }
 
 settings_wnd::~settings_wnd()
@@ -69,6 +70,20 @@ void settings_wnd::on_buttonBox_accepted()
     app::Settings::Instance().ResultPath( ui->TestingResults->text() );
     app::Settings::Instance().MainPupm( ui->MainPump->currentText() );
     app::Settings::Instance().ComAddr( ui->ComAddr->text() );
+    app::Settings::Instance().LubMon( ui->Lubmon->text() );
     app::Settings::Instance().Save();
     close();
+}
+
+void settings_wnd::on_toolButton_3_clicked()
+{
+   QString file_name;
+   QFileDialog dlg;
+   dlg.setFileMode( QFileDialog::ExistingFile );
+   dlg.setViewMode( QFileDialog::Detail );
+   if ( dlg.exec() )
+       file_name = dlg.selectedFiles().front();
+
+   if( !file_name.isEmpty() )
+      ui->Lubmon->setText( file_name );
 }

@@ -14806,22 +14806,6 @@ background-color: rgb(255, 255, 0);
        </property>
       </widget>
      </item>
-     <item row="16" column="4">
-      <spacer name="verticalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>70</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
      <item row="11" column="0" rowspan="4" colspan="2">
       <widget class="QGroupBox" name="Temperature_2">
        <property name="title">
@@ -17463,6 +17447,63 @@ background-color: rgb(255, 255, 0);
         </size>
        </property>
       </spacer>
+     </item>
+     <item row="15" column="5">
+      <spacer name="verticalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Fixed</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>70</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="15" column="0" rowspan="2" colspan="5">
+      <widget class="QGroupBox" name="groupBox">
+       <property name="title">
+        <string>Проверка чистоты раб. жидкости</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_5">
+        <item row="0" column="0">
+         <widget class="QPushButton" name="TestStart">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Старт</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QPushButton" name="TestStop">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Стоп</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </item>
     </layout>
    </item>

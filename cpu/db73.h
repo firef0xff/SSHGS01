@@ -38,7 +38,7 @@ public:
    bool& OP40_P_Nul_S2; //Давленине в нуле
    bool& OP40_Qr_NO_Dopusk1; //Расход рабочий не в допуске (функц-ние)
    bool& OP40_Qr_NO_Dopusk2; //Расход рабочий не в допуске (функц-ние)
-   bool& OP41_Qr_NO_Dopusk; //Расход рабочий не в допуске (прочность)
+   bool& CriticalOilLvl; //Аварийный уровень масла в баке модуля питания
    bool& OP42_Qr_NO_Dopusk; //Расход рабочий не в допуске (гермет-ть)
    bool& OP48_Qd_NO_Dopusk; //Расход в дренаже не в допуске
    bool& LevelMaslaAlarmPump; //аварийный уровень в баке масла 2
@@ -109,7 +109,7 @@ private:
       L"CPU/DB73.OP40_P_Nul_S2",
       L"CPU/DB73.OP40_Qr_NO_Dopusk1",
       L"CPU/DB73.OP40_Qr_NO_Dopusk2",
-      L"CPU/DB73.OP41_Qr_NO_Dopusk",
+      L"CPU/DB73.CriticalOilLvl",  //Аварийный уровень масла в баке модуля питания
       L"CPU/DB73.OP42_Qr_NO_Dopusk",
       L"CPU/DB73.OP48_Qd_NO_Dopusk",
       L"CPU/DB73.LevelMaslaAlarmPump",

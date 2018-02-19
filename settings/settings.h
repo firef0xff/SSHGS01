@@ -61,6 +61,9 @@ public:
     void ComAddr( QString const& v);
     QString ComAddr() const;
 
+    void LubMon( QString const& v);
+    QString LubMon() const;
+
     void LockChecking( bool v );
 private:
     Settings();

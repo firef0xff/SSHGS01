@@ -105,7 +105,7 @@ QString db73_errs()
    if (errs.OP40_P_Nul_S2) str_errs+="Давленине в нуле секция 2\n";
    if (errs.OP40_Qr_NO_Dopusk1) str_errs+="Расход рабочий не в допуске секция 1 \"обкатка\"\n";
    if (errs.OP40_Qr_NO_Dopusk2) str_errs+="Расход рабочий не в допуске секция 2 \"обкатка\"\n";
-   if (errs.OP41_Qr_NO_Dopusk) str_errs+="Расход рабочий не в допуске (прочность)\n";
+   if (errs.CriticalOilLvl) str_errs+="Аварийный уровень масла в баке модуля питания\n";
    if (errs.OP42_Qr_NO_Dopusk) str_errs+="Расход рабочий не в допуске (гермет-ть)\n";
    if (errs.OP48_Qd_NO_Dopusk) str_errs+="Расход в дренаже не в допуске\n";
    if (errs.LevelMaslaAlarmPump) str_errs += "Аварийный уровень в баке масла 2\n";

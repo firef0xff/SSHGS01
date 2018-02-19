@@ -1,6 +1,7 @@
 #pragma once
 #include "data_block_base.h"
 #include <inttypes.h>
+#include <mutex>
 
 namespace cpu
 {
@@ -68,6 +69,36 @@ private:
     };
 };
 
+class M4 : public InOut
+{
+public:
+    void Write();
+    void Read();
+
+    bool& LubMonStart;
+    bool& LubMonStop;
+    std::mutex Mutex;
+private:
+
+    friend class cpu::CpuMemory;
+    M4();
+    M4( const M4& ) = delete;
+    void operator = ( const M4& ) = delete;
+
+    enum
+    {
+        BOOL_COUNT = 2
+    };
+
+    bool mBoolData[ BOOL_COUNT ];
+    uint64_t mGroupID = 0;
+
+    wchar_t const* mAdresses[ BOOL_COUNT ] =
+    {
+        L"CPU/M4.LubMonStart",
+        L"CPU/M4.LubMonStop",
+    };
+};
 
 }//namespace data
 

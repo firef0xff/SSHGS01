@@ -139,7 +139,7 @@ class PumpTest10::GrapfData
 public:
    GrapfData( PumpTest10 const* test, QString compare_width )
    {
-      mColorMap = { Qt::blue, Qt::darkBlue, Qt::gray, Qt::darkGray };
+      mColorMap = { Qt::blue, Qt::red, Qt::darkBlue, Qt::darkRed };
       mData.resize(6);
       //поиск данных теста
       PumpTest10::Source pressure_S1;
@@ -562,6 +562,9 @@ bool PumpTest10::Draw(QPainter& painter, QRect &free_rect , const QString &compa
                double x_step = 0;
                double y_step = 0;
 
+               double delta = (y_range.x() - y_range.y())/4;
+               y_range.setX(y_range.x() + delta );
+               y_range.setY(y_range.y() - delta );
                ff0x::DataLength( x_range,x_grapf_range, x_step );
                ff0x::DataLength( y_range,y_grapf_range, y_step );
 
