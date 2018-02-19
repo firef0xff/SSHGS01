@@ -2,6 +2,7 @@
 #include <QJsonObject>
 #include "../test_params_pumps.h"
 #include "../../../../mylib/Widgets/GraphBuilder/graph_builder.h"
+#include <thread>
 namespace test
 {
 namespace pump
@@ -319,6 +320,7 @@ void PumpTest10::UpdateData()
 
    ready_for_ready = false;
 
+   std::this_thread::sleep_for( std::chrono::seconds( 5 ) );
 
    auto& mem = cpu::CpuMemory::Instance().DB90;
    mem.Read();
