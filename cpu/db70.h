@@ -15,6 +15,7 @@ public:
 
    int& Och_M; //ошибка масштабирования
    int& Och_DM; //ошибка демасштабирования
+   int& MotoClock; //мотопробег
 
    float& BP7; //давление в контуре А (real)
    float& BP8; //давление в контуре В (real)
@@ -60,7 +61,7 @@ private:
 
    enum
    {
-       INT_COUNT = 2,
+       INT_COUNT = 3,
        FLOAT_COUNT = 34
    };
 
@@ -71,6 +72,7 @@ private:
    wchar_t const* mAdresses[ INT_COUNT + FLOAT_COUNT ] = {
       L"CPU/DB70.Och_M",
       L"CPU/DB70.Och_DM",
+      L"CPU/DB70.MotoClock",
 
       L"CPU/DB70.BP7",
       L"CPU/DB70.BP8",

@@ -2,6 +2,7 @@
 #include "ui_manual_control.h"
 #include "test_case/test_params.h"
 #include "settings/settings.h"
+#include "test_case/implementation/test_base.h"
 #include <QMessageBox>
 
 ManualControlUpdater::ManualControlUpdater():
@@ -13,6 +14,8 @@ void ManualControlUpdater::run()
     while ( !mStopSignal )
     {
         cpu::CpuMemory::Instance().DB50.Read();
+        cpu::CpuMemory::Instance().DB73.Read();
+        cpu::CpuMemory::Instance().DB40.Read();
         cpu::CpuMemory::Instance().I1.Read();
         emit update();
         msleep(500);
@@ -208,6 +211,22 @@ void ManualControl::onUpdateControls()
 {
     UpdateMarks();
     UpdateData();
+
+    auto errs = test::ErrMsg();
+    if ( errs == mErrors )
+       return;
+
+   mErrors = errs;
+   if (mErrors.isEmpty())
+      return;
+
+   QMessageBox msg;
+   msg.setWindowTitle( "Ошибки тестирования" );
+   msg.setText( mErrors );
+   msg.addButton( QMessageBox::Ok );
+   msg.setModal( true );
+   msg.exec();
+   cpu::CpuMemory::Instance().M1.SetKvitir_Osch(true);
 }
 
 void ManualControl::ShowError( QString const& err, bool show )

@@ -49,6 +49,7 @@ M1::M1():
     RC1(mBoolData[40]),          //MX45.6 1 катушка
     RC2(mBoolData[41]),          //MX45.7 2 катушки
     Kvitir_Osch(mBoolData[42]),   //MX58.2 подтверждение сообщения
+    CleanMotoClock(mBoolData[43]),//m158.3 сброс моточасов
 
 
     Err_clear(mBoolData[35])    //MX44.7 сброс не правильной комбинации...
@@ -302,6 +303,12 @@ void M1::SetKvitir_Osch( bool v )
 {
     Kvitir_Osch = v;
     SendBit( Kvitir_Osch, 42 );
+}
+
+void M1::SetCleanMotoClock(bool v)
+{
+   CleanMotoClock = v;
+   SendBit( CleanMotoClock, 43 );
 }
 
 }//namespace data

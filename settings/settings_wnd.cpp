@@ -2,6 +2,7 @@
 #include "ui_settings_wnd.h"
 #include "settings.h"
 #include <QFileDialog>
+#include "cpu/cpu_memory.h"
 
 settings_wnd::settings_wnd(QWidget *parent) :
     ChildWidget(parent),
@@ -86,4 +87,9 @@ void settings_wnd::on_toolButton_3_clicked()
 
    if( !file_name.isEmpty() )
       ui->Lubmon->setText( file_name );
+}
+
+void settings_wnd::on_Motoclock_clicked()
+{
+   cpu::CpuMemory::Instance().M1.SetCleanMotoClock(true);
 }

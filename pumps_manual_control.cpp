@@ -18,6 +18,7 @@ void PumpsManualControlUpdater::run()
         cpu::CpuMemory::Instance().DB50.Read();
         cpu::CpuMemory::Instance().DB70.Read();
         cpu::CpuMemory::Instance().DB73.Read();
+        cpu::CpuMemory::Instance().DB82R.Read();
         auto &mem = cpu::CpuMemory::Instance().M4;
         std::unique_lock< std::mutex > lock(mem.Mutex);
         mem.Read();
@@ -119,6 +120,7 @@ void PumpsManualControl::UpdateData()
 {
    auto & mem = cpu::CpuMemory::Instance().DB70;
    auto & mem1 = cpu::CpuMemory::Instance().DB50;
+   auto &mem2 = cpu::CpuMemory::Instance().DB82R;
 
    auto Round= []( float val )
    {
@@ -148,6 +150,11 @@ void PumpsManualControl::UpdateData()
    ui->YB12->setValue(mem.R2);
    ui->YB13->setValue(mem.R3);
    ui->OilLvl->setValue(mem.BL1);
+
+   ui->V1r->display(Round( mem2.Q1_man ));
+   ui->V2r->display(Round( mem2.Q2_man ));
+   ui->MotoClock->display(Round( mem.MotoClock ));
+
    QPalette p = ui->OilLvl->palette();
    int percent = ui->OilLvl->value() *100 / ( ui->OilLvl->maximum() - ui->OilLvl->minimum() );
    QString c;
@@ -365,23 +372,23 @@ void PumpsManualControl::CheckDR1t()
    if ( cnt == 2 )
       max_power += power( q2, n, p2 );
 
-   if ( max_power <= 110 )
-   {
+//   if ( max_power <= 110 )
+//   {
       mem.YB7_man = p7;
       mem.YB8_man = p8;
       mem.YB9_man = p9;
       mem.Q1_man = q1;
       mem.Q2_man = q2;
       mem.Write();
-      return;
-   }
+//      return;
+//   }
 
-   QMessageBox msg;
-   msg.setWindowTitle( "Ошибки тестирования" );
-   msg.setText( "Превышено ограничение в 110кВт\nНеобходимая мощность " + QString::number(max_power) + "кВт" );
-   msg.addButton( QMessageBox::Ok );
-   msg.setModal( true );
-   msg.exec();
+//   QMessageBox msg;
+//   msg.setWindowTitle( "Ошибки тестирования" );
+//   msg.setText( "Превышено ограничение в 110кВт\nНеобходимая мощность " + QString::number(max_power) + "кВт" );
+//   msg.addButton( QMessageBox::Ok );
+//   msg.setModal( true );
+//   msg.exec();
 }
 void PumpsManualControl::on_YB7_val_returnPressed()
 {
@@ -454,6 +461,7 @@ void PumpsManualControl::on_Alarm_clicked()
    msg.addButton( QMessageBox::Ok );
    msg.setModal( true );
    msg.exec();
+   cpu::CpuMemory::Instance().M1.SetKvitir_Osch(true);
 }
 
 void PumpsManualControl::CheckYb()
@@ -540,6 +548,6 @@ void PumpsManualControl::on_TestStop_clicked()
 {
    auto &mem = cpu::CpuMemory::Instance().M4;
    std::unique_lock< std::mutex > lock(mem.Mutex);
-   mem.LubMonStop = false;
+   mem.LubMonStop = true;
    mem.Write();
 }

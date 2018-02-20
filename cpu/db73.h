@@ -70,6 +70,10 @@ public:
    bool& M16_17_Fault; //Нет включения М16,17
    bool& M18_19_Fault; //Нет включения М18,19
 
+   bool& StandPower;  //Превышена допустимая мощность стенда, начните работать заново на меньших значениях давления, оборотах
+   bool& OutExpenditure;  //Аварийный расход в дренаже >90л/мин
+   bool& OutPressure;  //Аварийное давление в дренаже
+
 private:
    friend class cpu::CpuMemory;
    DB73();
@@ -78,7 +82,7 @@ private:
 
    enum
    {
-       BOOL_COUNT = 52
+       BOOL_COUNT = 55
    };
 
    bool mBoolData[ BOOL_COUNT ];
@@ -140,6 +144,11 @@ private:
       L"CPU/DB73.M15_Fault",//Нет включения М15
       L"CPU/DB73.M16_17_Fault",//Нет включения М16,17
       L"CPU/DB73.M18_19_Fault",//Нет включения М18,19
+
+      L"DB73.StandPower", //Превышена допустимая мощность стенда, начните работать заново на меньших значениях давления, оборотах
+      L"DB73.OutExpenditure", //Аварийный расход в дренаже >90л/мин
+      L"DB73.OutPressure", //Аварийное давление в дренаже
+
    };
 };
 

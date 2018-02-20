@@ -58,7 +58,10 @@ DB73::DB73():
    M14_Fault( mBoolData[48] ), //Нет включения М14
    M15_Fault( mBoolData[49] ), //Нет включения М15
    M16_17_Fault( mBoolData[50] ), //Нет включения М16,17
-   M18_19_Fault( mBoolData[51] ) //Нет включения М18,19
+   M18_19_Fault( mBoolData[51] ), //Нет включения М18,19
+   StandPower( mBoolData[52] ),  //Превышена допустимая мощность стенда, начните работать заново на меньших значениях давления, оборотах
+   OutExpenditure( mBoolData[53] ),  //Аварийный расход в дренаже >90л/мин
+   OutPressure( mBoolData[54] )  //Аварийное давление в дренаже
 
 {
    memset( mBoolData, 0, sizeof(mBoolData) );

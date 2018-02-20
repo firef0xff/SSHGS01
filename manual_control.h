@@ -40,6 +40,7 @@ private:
     cpu::data::M1     &mControlBits;
     cpu::data::I1     &mErrorBits;
     ManualControlUpdater Updater;
+    QString mErrors;
     bool err_state = false;
 
     void closeEvent( QCloseEvent *e );

@@ -457,6 +457,7 @@ M1.CR;MX45.5;RW;TST=;CMT=управление без карты
 M1.RC1;MX45.6;RW;TST=;CMT=1 катушка
 M1.RC2;MX45.7;RW;TST=;CMT=2 катушки
 M1.Kvitir_Osch;MX58.2;RW;TST=;CMT=подтверждение сообщения
+M1.CleanMotoClock;MX158.3;RW;TST=;CMT=сброс моточасов
 I1.SQ1;IX0.0;RO;TST=;CMT=кран насоса М1
 I1.SQ3;IX0.2;RO;TST=;CMT=кран насоса М2
 I1.SQ5;IX0.4;RO;TST=;CMT=кран насоса М3.2
@@ -523,6 +524,7 @@ DB70.YB13;DB70,REAL128;RO;TST=;CMT=задание расхода на насос (real)
 DB70.reserv4;DB70,REAL132;RO;TST=;CMT=
 DB70.reserv5;DB70,REAL136;RO;TST=;CMT=
 DB70.Och_DM;DB70,W140;RO;TST=;CMT=ошибка демасштабирования
+DB70.MotoClock;DB72,W128;RO;TST=;CMT=мотопробег
 DB71.Number_of_sections;DB71,X2.0;RW;TST=;CMT=Количество секций в насосе (1/2)
 DB71.Direction_of_rotation;DB71,X2.1;RW;TST=;CMT=Направление вращения (левое/правое)
 DB71.Electronic_control;DB71,X2.2;RW;TST=;CMT=Наличие электр-го управления
@@ -677,6 +679,9 @@ DB73.SensTempFeed;DB73,X7.5;RO;TST=;CMT=Обрыв/неисправность датчика температуры 
 DB73.SensLevelFeed;DB73,X7.6;RO;TST=;CMT=Обрыв/неисправность датчика уровня масла модуля питания
 DB73.SensTorque;DB73,X7.7;RO;TST=;CMT=Обрыв/неисправность датчика момента
 DB73.SensSpeenSpeed;DB73,X8.0;RO;TST=;CMT=Обрыв/неисправность датчика оборотов
+DB73.StandPower;DB73,X8.1;RO;TST=;CMT=Превышена допустимая мощность стенда, начните работать заново на меньших значениях давления, оборотах
+DB73.OutExpenditure;DB73,X8.2;RO;TST=;CMT=Аварийный расход в дренаже >90л/мин
+DB73.OutPressure;DB73,X8.3;RO;TST=;CMT=Аварийное давление в дренаже
 DB82.Start_Stop;DB82,X2.0;RW;TST=;CMT=Пуск/стоп основные насосы
 DB82.PumpManual;MX155.0;RW;TST=;CMT=включение ручного режима
 DB82.YA27;MX155.1;RW;TST=;CMT=включение клапана YA27

@@ -24,5 +24,6 @@ private slots:
     void on_buttonBox_rejected();
     void on_buttonBox_accepted();
     void on_toolButton_3_clicked();
+    void on_Motoclock_clicked();
 };
 

@@ -133,6 +133,10 @@ QString db73_errs()
    if (errs.M15_Fault) str_errs += "Нет включения М15\n";
    if (errs.M16_17_Fault) str_errs += "Нет включения М16,17\n";
    if (errs.M18_19_Fault) str_errs += "Нет включения М18,19\n";
+   if (errs.StandPower) str_errs += "Превышена допустимая мощность стенда, начните работать заново на меньших значениях давления, оборотах\n";
+   if (errs.OutExpenditure) str_errs += "Аварийный расход в дренаже >90л/мин\n";
+   if (errs.OutPressure) str_errs += "Аварийное давление в дренаже\n";
+
 
    return str_errs;
 }

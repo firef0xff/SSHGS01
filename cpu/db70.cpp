@@ -10,6 +10,7 @@ namespace data
 DB70::DB70():
    Och_M(mIntData[0]), //ошибка масштабирования
    Och_DM(mIntData[1]), //ошибка демасштабирования
+   MotoClock(mIntData[2]), //мотопробег
 
    BP7(mFloatData[0]), //давление в контуре А (real)
    BP8(mFloatData[1]), //давление в контуре В (real)
