@@ -413,7 +413,7 @@ DB60.OP15_25_count;DB60,INT136;RO;TST=;CMT=количестви измерений для заданий 15 и
 DB60.OP15_25_Opor_1;DB60,X210.0;RO;TST=;CMT=
 DB60.OP15_25_Opor_2;DB60,X210.1;RO;TST=;CMT=
 DB60.OP15_25_Opor_3;DB60,X210.2;RO;TST=;CMT=
-DB60.OP15_25_Continum;DB60,X210.3;RO;TST=;CMT=
+DB60.OP15_25_Continum;DB60,X210.3;RW;TST=;CMT=
 M1.YA1;MX40.0;RW;TST=;CMT=Разгрузка управл.насоса для М1 м3
 M1.YA2;MX40.1;RW;TST=;CMT=Разгрузка управл.насоса для М2 м3
 M1.YA3;MX40.2;RW;TST=;CMT=Разгрузка насоса управления м4
